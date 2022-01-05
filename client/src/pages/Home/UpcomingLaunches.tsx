@@ -1,4 +1,4 @@
-import CollectionCard from "components/Cards/CollectionCard";
+import UpcomingCard from "components/Cards/UpcomingCard";
 import React, { useState } from "react";
 import { Collection } from "types/collection";
 import dummy from "./dummy.json";
@@ -22,12 +22,12 @@ export default function UpcomingLaunches() {
   const [list, setList] = useState<Collection[]>(prepareData());
 
   return (
-    <section className="flex justify-center w-full my-10">
+    <section className="flex justify-center w-full mt-10">
       <div className="w-full md:w-5/6 2xl:w-4/6 px-4">
-        <p className="text-4xl text-white">Upcoming Launches</p>
-        <div className="grid grid-col-1 md:grid-cols-3 gap-2 mt-4">
+        <p className="text-4xl text-white mb-2">Upcoming Launches</p>
+        <div className="grid grid-col-1 md:grid-cols-3 gap-2">
           {list.map((item, index) => {
-            return <CollectionCard collection={item} index={index} />;
+            return <UpcomingCard collection={item} index={index} />;
           })}
         </div>
       </div>

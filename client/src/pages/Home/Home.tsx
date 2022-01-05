@@ -1,5 +1,6 @@
 import React from "react";
 import FeaturedCarousel from "./FeaturedCarousel";
+import NewCollections from "./NewCollections";
 import UpcomingLaunches from "./UpcomingLaunches";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <div className="flex flex-column w-full">
       <FeaturedCarousel />
       <UpcomingLaunches />
+      <NewCollections />
     </div>
   );
 }
