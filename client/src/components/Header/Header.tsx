@@ -1,10 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import WalletSuite from "components/WalletSuite/WalletSuite";
 import React from "react";
 import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdClose, MdMenu, MdOutlineLanguage } from "react-icons/md";
 import { RiSearchLine } from "react-icons/ri";
 import "./Header.css";
+
+const languages = [
+  "English",
+  "한국어",
+  "日本語",
+  "Türkçe",
+  "Tiếng Việt",
+  "Русский",
+];
 
 export default function Header() {
   const [navShown, setNavShown] = useState(false);
@@ -82,7 +92,7 @@ export default function Header() {
               </li>
               <li className="order-2 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link uppercase lg:text-xs font-light tracking-wider fw-300"
+                  className="nav-link uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -119,7 +129,7 @@ export default function Header() {
               </li>
               <li className="order-2 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300"
+                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -157,7 +167,7 @@ export default function Header() {
               </li>
               <li className="order-4 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300"
+                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="/me?tab=my-items"
                 >
                   Sell
@@ -165,7 +175,7 @@ export default function Header() {
               </li>
               <li className="nav-item dropdown nav-item--main-nav whitespace-nowrap order-6">
                 <a
-                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300"
+                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -291,58 +301,22 @@ export default function Header() {
                   className="dropdown-menu p0 w-full"
                   aria-labelledby="navbarDropdown"
                 >
-                  <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
-                    <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
-                      English
-                    </div>
-                  </li>
-                  <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
-                    <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
-                      한국어
-                    </div>
-                  </li>
-                  <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
-                    <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
-                      日本語
-                    </div>
-                  </li>
-                  <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
-                    <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
-                      Türkçe
-                    </div>
-                  </li>
-                  <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
-                    <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
-                      Tiếng Việt
-                    </div>
-                  </li>
-                  <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
-                    <div className="nav-link subnav-nav-link">Русский</div>
-                  </li>
+                  {languages.map((language) => {
+                    return (
+                      <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
+                        <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
+                          {language}
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               </li>
               <li
                 className="order-12 nav-item nav-item--main-nav ps-0 flex-shrink-0"
                 id="wallet-connect-btn"
               >
-                <div className="me-dropdown-container">
-                  <div className="cursor-pointer position-relative">
-                    <div className="flex items-center ButtonGroup_group__2mJyT">
-                      <button className="inline-flex justify-center items-center rounded-md text-white-1 BorderedButton_btn__2Glkn">
-                        <span className="h-full flex items-center">
-                          <img
-                            src="data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBoZWlnaHQ9IjM0IiB3aWR0aD0iMzQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iLjUiIHgyPSIuNSIgeTE9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1MzRiYjEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM1NTFiZjkiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDE9Ii41IiB4Mj0iLjUiIHkxPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZmZmIiBzdG9wLW9wYWNpdHk9Ii44MiIvPjwvbGluZWFyR3JhZGllbnQ+PGNpcmNsZSBjeD0iMTciIGN5PSIxNyIgZmlsbD0idXJsKCNhKSIgcj0iMTciLz48cGF0aCBkPSJtMjkuMTcwMiAxNy4yMDcxaC0yLjk5NjljMC02LjEwNzQtNC45NjgzLTExLjA1ODE3LTExLjA5NzUtMTEuMDU4MTctNi4wNTMyNSAwLTEwLjk3NDYzIDQuODI5NTctMTEuMDk1MDggMTAuODMyMzctLjEyNDYxIDYuMjA1IDUuNzE3NTIgMTEuNTkzMiAxMS45NDUzOCAxMS41OTMyaC43ODM0YzUuNDkwNiAwIDEyLjg0OTctNC4yODI5IDEzLjk5OTUtOS41MDEzLjIxMjMtLjk2MTktLjU1MDItMS44NjYxLTEuNTM4OC0xLjg2NjF6bS0xOC41NDc5LjI3MjFjMCAuODE2Ny0uNjcwMzggMS40ODQ3LTEuNDkwMDEgMS40ODQ3LS44MTk2NCAwLTEuNDg5OTgtLjY2ODMtMS40ODk5OC0xLjQ4NDd2LTIuNDAxOWMwLS44MTY3LjY3MDM0LTEuNDg0NyAxLjQ4OTk4LTEuNDg0Ny44MTk2MyAwIDEuNDkwMDEuNjY4IDEuNDkwMDEgMS40ODQ3em01LjE3MzggMGMwIC44MTY3LS42NzAzIDEuNDg0Ny0xLjQ4OTkgMS40ODQ3LS44MTk3IDAtMS40OS0uNjY4My0xLjQ5LTEuNDg0N3YtMi40MDE5YzAtLjgxNjcuNjcwNi0xLjQ4NDcgMS40OS0xLjQ4NDcuODE5NiAwIDEuNDg5OS42NjggMS40ODk5IDEuNDg0N3oiIGZpbGw9InVybCgjYikiLz48L3N2Zz4K"
-                            alt="Phantom icon"
-                            className="w-5"
-                          />
-                        </span>
-                      </button>
-                      <button className="inline-flex justify-center items-center rounded-md text-white-1 BorderedButton_btn__2Glkn">
-                        14hChT3R...
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <WalletSuite />
               </li>
             </ul>
           </div>

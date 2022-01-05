@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import chainReducer from "../services/chain/chainSlice";
+import walletReducer from "../services/wallet/walletSlice";
 
 export const store = configureStore({
   reducer: {
-    //auth: authReducer,
-    //future: futureReducer,
+    wallet: walletReducer,
+    chain: chainReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([]),
 });

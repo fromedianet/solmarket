@@ -151,11 +151,6 @@ li {
   padding: 0 2rem;
 }
 
-.me-dropdown-container {
-  font-family: var(--dropdown__font-family);
-  font-size: var(--dropdown__font-size);
-}
-
 .subnav-nav-link {
   padding-top: 1rem;
   padding-bottom: 1rem;
