@@ -1,6 +1,7 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { app } from "../types/routes";
+import Home from "pages/Home/Home";
 
 export default function Views() {
   return (
@@ -14,14 +15,6 @@ export default function Views() {
       <Route path={`${app.settings}`} element={<Settings />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
-  );
-}
-
-function Home() {
-  return (
-    <div className="w-full h-full bg-violet-500	">
-      <p>Home</p>
-    </div>
   );
 }
 

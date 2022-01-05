@@ -1,0 +1,30 @@
+import React from "react";
+import { Card } from "react-bootstrap";
+import "./index.css";
+
+export default function CollectionCard({ collection, index }: any) {
+  return (
+    <a key={index} href={collection.link}>
+      <Card className="round-3xl bg-gray-900 hover:bg-purple-700 collection-card">
+        <Card.Img
+          variant="top"
+          src={collection.image}
+          className="aspect-video object-cover collection-img"
+        />
+        <Card.Body>
+          <Card.Title className="text-gray-100 text-xl text-center text">
+            {collection.name}
+          </Card.Title>
+          <Card.Text className="text-gray-400 text-sm text-center text">
+            {collection.description}
+          </Card.Text>
+          {collection.date && (
+            <Card.Text className="text-gray-300 text-center">
+              {collection.date}
+            </Card.Text>
+          )}
+        </Card.Body>
+      </Card>
+    </a>
+  );
+}
