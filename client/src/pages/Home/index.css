@@ -7,6 +7,11 @@
   overflow: hidden;
 }
 
+.explore-items {
+  max-height: 1000px;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .carousel-img {
     height: 400px;

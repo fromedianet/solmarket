@@ -1,6 +1,6 @@
 import CollectionCard from "components/Cards/CollectionCard";
 import React, { useState } from "react";
-import { Collection } from "types/collection";
+import { Collection } from "types/itemTypes";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import dummy from "./dummy.json";

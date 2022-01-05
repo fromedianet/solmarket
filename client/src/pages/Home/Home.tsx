@@ -1,4 +1,5 @@
 import React from "react";
+import ExploreItems from "./ExploreItems";
 import FeaturedCarousel from "./FeaturedCarousel";
 import NewCollections from "./NewCollections";
 import PopularCollections from "./PopularCollections";
@@ -11,6 +12,7 @@ export default function Home() {
       <UpcomingLaunches />
       <NewCollections />
       <PopularCollections />
+      <ExploreItems />
     </div>
   );
 }

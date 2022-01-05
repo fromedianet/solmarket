@@ -1,34 +1,33 @@
-import CollectionCard from "components/Cards/CollectionCard";
+import ExploreCard from "components/Cards/ExploreCard";
 import React, { useState } from "react";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { Collection } from "types/itemTypes";
-import dummy from "./dummy.json";
+import { Item } from "types/itemTypes";
+import dummy from "./dummy2.json";
 import "./index.css";
 
-export default function PopularCollections() {
+export default function ExploreItems() {
   const prepareData = () => {
-    let newList: Collection[] = [];
+    let newList: Item[] = [];
     dummy.data.forEach((el) => {
-      const item: Collection = {
+      const item: Item = {
         name: el.name,
-        description: el.description,
-        type: el.type,
+        id: el.id,
         image: el.image,
-        link: el.link,
+        price: el.price,
+        address: el.address,
       };
       newList.push(item);
     });
     return newList;
   };
 
-  const [list, setList] = useState<Collection[]>(prepareData());
-  const handleDragStart = (e: any) => e.preventDefault();
+  const [list, setList] = useState<Item[]>(prepareData());
 
   return (
     <section className="flex justify-center w-full mt-10">
       <div className="w-full md:w-5/6 2xl:w-4/6 px-4">
         <div className="flex flex-row justify-between items-center">
-          <p className="text-4xl text-white mb-2">Popular Connections</p>
+          <p className="text-4xl text-white mb-2">Explore Items</p>
           <a href="/marketplace" className="text-gray-100">
             <div className="flex flex-row items-center">
               <p>See All</p>
@@ -36,15 +35,9 @@ export default function PopularCollections() {
             </div>
           </a>
         </div>
-        <div className="grid grid-col-1 md:grid-cols-4 gap-2 popular-collections">
+        <div className="grid grid-col-1 md:grid-cols-4 gap-2 explore-items">
           {list.map((item, index) => {
-            return (
-              <CollectionCard
-                collection={item}
-                index={index}
-                handleDragStart={handleDragStart}
-              />
-            );
+            return <ExploreCard item={item} index={index} />;
           })}
         </div>
       </div>

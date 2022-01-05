@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Carousel } from "react-bootstrap";
-import { Collection } from "types/collection";
+import { Collection } from "types/itemTypes";
 import dummy from "./dummy.json";
 import "./index.css";
 

@@ -1,6 +1,6 @@
 import UpcomingCard from "components/Cards/UpcomingCard";
 import React, { useState } from "react";
-import { Collection } from "types/collection";
+import { Collection } from "types/itemTypes";
 import dummy from "./dummy.json";
 
 export default function UpcomingLaunches() {
