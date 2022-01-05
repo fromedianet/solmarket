@@ -1,6 +1,7 @@
 import React from "react";
 import FeaturedCarousel from "./FeaturedCarousel";
 import NewCollections from "./NewCollections";
+import PopularCollections from "./PopularCollections";
 import UpcomingLaunches from "./UpcomingLaunches";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       <FeaturedCarousel />
       <UpcomingLaunches />
       <NewCollections />
+      <PopularCollections />
     </div>
   );
 }

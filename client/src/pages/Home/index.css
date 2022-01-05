@@ -2,6 +2,11 @@
   height: 590px;
 }
 
+.popular-collections {
+  max-height: 750px;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .carousel-img {
     height: 400px;
