@@ -22,3 +22,13 @@ section {
   background-attachment: fixed;
   background-position: 50%;
 }
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  background: linear-gradient(180deg,#0d0615,#1a1726);
+}

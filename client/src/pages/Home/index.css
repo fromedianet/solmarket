@@ -1,9 +1,3 @@
-.main {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 .home-page {
   background: linear-gradient(180deg,#0d0615,#1a1726);
 }
@@ -19,7 +13,6 @@
 
 .featured-carousel-section {
   background-size: cover;
-  margin-top: -80px;
   box-sizing: border-box;
   height: 576px;
 }

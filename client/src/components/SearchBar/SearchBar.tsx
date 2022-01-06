@@ -10,6 +10,7 @@ export default function SearchBar({
   controlClass,
   containerClass,
   inputClass,
+  onChange,
   otherProps,
 }: any) {
   return (
@@ -20,6 +21,7 @@ export default function SearchBar({
           type="text"
           value={value}
           placeholder={placeholder}
+          onChange={onChange}
           {...otherProps}
         />
       </div>

@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "name": "Space Runners",
+      "description": "Space Runners is the first NFT Metaverse Fashion brand in collaboration with artists and brands, designing digitally wearable NFTs through Augmented Reality (AR) and plug-in's into the Metaverse as items.",
+      "type": "explore",
+      "image": "https://dl.airtable.com/.attachmentThumbnails/1bc6cfa2e28511eff1ce3525b3992b00/1f9b9402",
+      "link": "marketplace/space-runners"
+    },
+    {
+      "name": "Cyberpunk in Style",
+      "description": "Exploration on looks of the future by Valentine Panchin 2022",
+      "type": "bid",
+      "image": "https://i.imgur.com/MHFRLiE.jpg",
+      "link": "auction/cyberpunk"
+    },
+    {
+      "name": "DazedDucks Metagalactic Club",
+      "description": "DazedDucks Metagalactic Club is a collection of 10,000 hand-drawn, algorithmically generated NFTs granting exclusive access to a HODL-To-Earn DAO.",
+      "type": "explore",
+      "image": "https://i.imgur.com/bM2qzHh.png",
+      "link": "marketplace/metagalactic"
+    },
+    {
+      "name": "Shadowy Super Coder DAO",
+      "description": "Shadowy Super Coder DAO by GenesysGo",
+      "type": "explore",
+      "image": "https://dl.airtable.com/.attachmentThumbnails/3ed91a26d598e670fc9c98254a6d294c/fc53badf",
+      "link": "marketplace/shadowy-super"
+    },
+    {
+      "name": "Space Runners",
+      "description": "Space Runners is the first NFT Metaverse Fashion brand in collaboration with artists and brands, designing digitally wearable NFTs through Augmented Reality (AR) and plug-in's into the Metaverse as items.",
+      "type": "explore",
+      "image": "https://dl.airtable.com/.attachmentThumbnails/1bc6cfa2e28511eff1ce3525b3992b00/1f9b9402",
+      "link": "marketplace/space-runners"
+    },
+    {
+      "name": "Cyberpunk in Style",
+      "description": "Exploration on looks of the future by Valentine Panchin 2022",
+      "type": "bid",
+      "image": "https://i.imgur.com/MHFRLiE.jpg",
+      "link": "auction/cyberpunk"
+    },
+    {
+      "name": "DazedDucks Metagalactic Club",
+      "description": "DazedDucks Metagalactic Club is a collection of 10,000 hand-drawn, algorithmically generated NFTs granting exclusive access to a HODL-To-Earn DAO.",
+      "type": "explore",
+      "image": "https://i.imgur.com/bM2qzHh.png",
+      "link": "marketplace/metagalactic"
+    },
+    {
+      "name": "Shadowy Super Coder DAO",
+      "description": "Shadowy Super Coder DAO by GenesysGo",
+      "type": "explore",
+      "image": "https://dl.airtable.com/.attachmentThumbnails/3ed91a26d598e670fc9c98254a6d294c/fc53badf",
+      "link": "marketplace/shadowy-super"
+    }
+  ]
+}

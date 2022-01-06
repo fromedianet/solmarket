@@ -3,6 +3,27 @@ header {
   z-index: 999;
 }
 
+header .navbar {
+  padding: 0!important;
+}
+
+.navbar-expand-lg {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  pointer-events: auto;
+  transition: rgba(166,175,189,.3) .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
+  transition: rgba(166,175,189,.3) .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s!important;
+  transition: rgba(166,175,189,.3) .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
+}
+
+.navbar-sticky {
+  background: #120c18;
+  box-shadow: 0 2px 28px 0 rgb(0 0 0 / 9%);
+  border-bottom: 1px solid #1c1326;
+}
+
 li {
   margin: 0.5rem 0;
   font-size: 1rem;

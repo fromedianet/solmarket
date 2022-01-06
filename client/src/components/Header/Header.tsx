@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useState } from "react";
 import SearchBar from "components/SearchBar/SearchBar";
 import WalletSuite from "components/WalletSuite/WalletSuite";
-import React from "react";
-import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdClose, MdMenu, MdOutlineLanguage } from "react-icons/md";
-import { RiSearchLine } from "react-icons/ri";
 import "./Header.css";
 
 const languages = [
