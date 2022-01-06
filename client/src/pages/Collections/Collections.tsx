@@ -46,7 +46,7 @@ export default function Collections() {
   };
 
   return (
-    <div className="main page">
+    <div className="main page collection-page">
       <Header />
       <section className="mt-20">
         <div className="container">

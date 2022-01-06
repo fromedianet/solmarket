@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { app } from "../types/routes";
 import Home from "pages/Home/Home";
 import Collections from "pages/Collections/Collections";
+import MarketPlace from "pages/MarketPlace/MarketPlace";
 
 export default function Views() {
   return (
@@ -16,14 +17,6 @@ export default function Views() {
       <Route path={`${app.settings}`} element={<Settings />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
-  );
-}
-
-function MarketPlace() {
-  return (
-    <div className="w-full h-full bg-violet-500	">
-      <p>MarketPlace</p>
-    </div>
   );
 }
 

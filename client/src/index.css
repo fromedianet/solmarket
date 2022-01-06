@@ -29,6 +29,25 @@ section {
   flex-direction: column;
 }
 
-.page {
-  background: linear-gradient(180deg,#0d0615,#1a1726);
+.bg-color-primary {
+  background-color: #09080d;
+}
+
+.bg-color-secondary {
+  background-color: #1c1929;
+}
+
+.bg-color-third {
+  background-color: #1c1929;
+}
+
+.tw-text-secondary {
+  color: #b4abba;
+}
+
+.p-color-primary {
+  color: #8e8e8e;
+}
+.p-color-secondary{
+  color: #b4abba;
 }

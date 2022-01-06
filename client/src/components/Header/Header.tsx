@@ -17,6 +17,12 @@ const languages = [
 
 export default function Header() {
   const [navShown, setNavShown] = useState(false);
+  const [searchWord, setSearchWord] = useState("");
+
+  const handleSearch = (event: any) => {
+    const searchText = event?.target?.value;
+    setSearchWord(searchText);
+  };
 
   const toggleNav = () => {
     setNavShown((prevState) => !prevState);
@@ -62,7 +68,7 @@ export default function Header() {
               <li className="nav-item nav-item--main-nav flex-grow md:w-full sm:px-4 md:p-0 lg:mr-8 ">
                 <div className="nav-item--search-bar w-full px-4 lg:px-0">
                   <SearchBar
-                    value=""
+                    value={searchWord}
                     placeholder="Search Collections"
                     iconSize="1.5em"
                     iconColor="rgb(89, 82, 128)"
@@ -70,6 +76,7 @@ export default function Header() {
                     autoComplete="off"
                     autoCorrect="off"
                     spellCheck="false"
+                    onChange={handleSearch}
                     tabIndex={0}
                     aria-autocomplete="list"
                     aria-expanded="false"
