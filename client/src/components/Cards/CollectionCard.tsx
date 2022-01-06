@@ -2,13 +2,9 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import "./index.css";
 
-export default function CollectionCard({
-  collection,
-  index,
-  handleDragStart,
-}: any) {
+export default function CollectionCard({ collection, handleDragStart }: any) {
   return (
-    <div className="mx-1" key={index}>
+    <div className="mx-1">
       <a
         href={collection.link}
         onDragStart={handleDragStart}

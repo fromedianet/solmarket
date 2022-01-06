@@ -37,7 +37,7 @@ export default function NewCollections() {
       return (
         <CollectionCard
           collection={item}
-          index={index}
+          key={index}
           handleDragStart={handleDragStart}
         />
       );

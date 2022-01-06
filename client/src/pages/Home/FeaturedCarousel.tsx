@@ -23,7 +23,7 @@ export default function FeaturedCarousel() {
   const [list, setList] = useState<Collection[]>(prepareData());
 
   return (
-    <section className="w-full overflow-hidden">
+    <section className="featured-carousel-section">
       <Carousel className="w-full" prevIcon={null} nextIcon={null}>
         {list.map((item, index) => {
           return (

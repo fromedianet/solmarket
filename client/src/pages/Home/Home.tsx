@@ -1,3 +1,4 @@
+import Header from "components/Header/Header";
 import React from "react";
 import ExploreItems from "./ExploreItems";
 import FeaturedCarousel from "./FeaturedCarousel";
@@ -7,7 +8,8 @@ import UpcomingLaunches from "./UpcomingLaunches";
 
 export default function Home() {
   return (
-    <div className="flex flex-column w-full">
+    <div className="main home-page">
+      <Header />
       <FeaturedCarousel />
       <UpcomingLaunches />
       <NewCollections />

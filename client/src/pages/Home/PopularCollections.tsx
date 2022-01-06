@@ -41,7 +41,7 @@ export default function PopularCollections() {
             return (
               <CollectionCard
                 collection={item}
-                index={index}
+                key={index}
                 handleDragStart={handleDragStart}
               />
             );

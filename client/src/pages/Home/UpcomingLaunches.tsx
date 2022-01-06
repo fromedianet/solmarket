@@ -27,7 +27,7 @@ export default function UpcomingLaunches() {
         <p className="text-4xl text-white mb-2">Upcoming Launches</p>
         <div className="grid grid-col-1 md:grid-cols-3 gap-2">
           {list.map((item, index) => {
-            return <UpcomingCard collection={item} index={index} />;
+            return <UpcomingCard collection={item} key={index} />;
           })}
         </div>
       </div>

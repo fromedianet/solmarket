@@ -1,3 +1,29 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-page {
+  background: linear-gradient(180deg,#0d0615,#1a1726);
+}
+
+.w-200px {
+  width: 200px;
+}
+
+.tw-text-white-1 {
+  --tw-text-opacity: 1;
+  color: rgba(248,247,248,var(--tw-text-opacity));
+}
+
+.featured-carousel-section {
+  background-size: cover;
+  margin-top: -80px;
+  box-sizing: border-box;
+  height: 576px;
+}
+
 .carousel-img {
   height: 590px;
 }

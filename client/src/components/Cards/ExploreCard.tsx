@@ -3,9 +3,9 @@ import { Card } from "react-bootstrap";
 import CheckIcon from "assets/icons/check.svg";
 import "./index.css";
 
-export default function ExploreCard({ item, index }: any) {
+export default function ExploreCard({ item }: any) {
   return (
-    <Card className="explore-card" key={index}>
+    <Card className="explore-card">
       <Card.Img
         variant="top"
         src={item.image}

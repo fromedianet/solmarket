@@ -37,7 +37,7 @@ export default function ExploreItems() {
         </div>
         <div className="grid grid-col-1 md:grid-cols-4 gap-2 explore-items">
           {list.map((item, index) => {
-            return <ExploreCard item={item} index={index} />;
+            return <ExploreCard item={item} key={index} />;
           })}
         </div>
       </div>
