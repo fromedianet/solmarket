@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import SearchBar from "components/SearchBar/SearchBar";
 import WalletSuite from "components/WalletSuite/WalletSuite";
 import React from "react";
 import { useState } from "react";
@@ -62,32 +63,24 @@ export default function Header() {
             <ul className="navbar-nav flex items-center flex-grow justify-end">
               <li className="nav-item nav-item--main-nav flex-grow md:w-full sm:px-4 md:p-0 lg:mr-8 ">
                 <div className="nav-item--search-bar w-full px-4 lg:px-0">
-                  <div className="header-search__control">
-                    <div className="header-search__value-container">
-                      <input
-                        className="header-search__input"
-                        id="header-search-input"
-                        type="text"
-                        placeholder="Search Collections"
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        spellCheck="false"
-                        tabIndex={0}
-                        aria-autocomplete="list"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="header-search-listbox"
-                        aria-owns="header-search-listbox"
-                        role="combobox"
-                        aria-describedby="react-select-2-placeholder"
-                        value=""
-                      />
-                    </div>
-                    <div className="mr-1">
-                      <RiSearchLine size="1.5em" color="rgb(89, 82, 128)" />
-                    </div>
-                  </div>
+                  <SearchBar
+                    value=""
+                    placeholder="Search Collections"
+                    iconSize="1.5em"
+                    iconColor="rgb(89, 82, 128)"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck="false"
+                    tabIndex={0}
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-controls="header-search-listbox"
+                    aria-owns="header-search-listbox"
+                    role="combobox"
+                    aria-describedby="react-select-2-placeholder"
+                  />
                 </div>
               </li>
               <li className="order-2 nav-item dropdown nav-item--main-nav whitespace-nowrap">

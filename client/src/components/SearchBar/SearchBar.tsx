@@ -3,13 +3,14 @@ import { RiSearchLine } from "react-icons/ri";
 import "./index.css";
 
 export default function SearchBar({
+  value,
   placeholder,
-  otherProps,
   iconSize,
   iconColor,
   controlClass,
   containerClass,
   inputClass,
+  otherProps,
 }: any) {
   return (
     <div className={`search__control ${controlClass}`}>
@@ -17,6 +18,7 @@ export default function SearchBar({
         <input
           className={`search__input ${inputClass}`}
           type="text"
+          value={value}
           placeholder={placeholder}
           {...otherProps}
         />
