@@ -5,6 +5,7 @@ import { FiList } from "react-icons/fi";
 import { RiPulseLine } from "react-icons/ri";
 import "./index.css";
 import CollectionSidebar from "./CollectionSidebar";
+import CollectionList from "./CollectionList";
 
 export default function MarketPlace({ id }: any) {
   const [itemsSelected, setItemsSelected] = useState(true);
@@ -38,6 +39,9 @@ export default function MarketPlace({ id }: any) {
         </div>
         <div className="flex relative">
           <CollectionSidebar />
+          <div className="flex-auto max-w-full pt-8">
+            {itemsSelected ? <CollectionList /> : <div></div>}
+          </div>
         </div>
       </section>
     </div>

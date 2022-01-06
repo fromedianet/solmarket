@@ -69,3 +69,12 @@ section {
 .p-color-secondary{
   color: #b4abba;
 }
+.text-color-primary {
+  color: #f3f4f6;
+}
+.text-color-secondary {
+  color: #9ca3af;
+}
+.text-color-third {
+  color: #8e8e8e;
+}

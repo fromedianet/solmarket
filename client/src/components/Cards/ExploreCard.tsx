@@ -13,7 +13,7 @@ export default function ExploreCard({ item }: any) {
       />
       <Card.Body className="p-2">
         <a href={`item-details/${item.address}`}>
-          <span className="text-gray-100 text-base text">{`${item.name} ${item.id}`}</span>
+          <span className="text-color-primary text-base text">{`${item.name} ${item.id}`}</span>
         </a>
         <a
           href={`/marketplace/${item.key}`}
@@ -26,7 +26,7 @@ export default function ExploreCard({ item }: any) {
             <img loading="lazy" src={CheckIcon} alt="check" />
           </span>
         </a>
-        <Card.Text className="text-gray-100 text-base text">
+        <Card.Text className="text-color-primary text-base text">
           {item.price} SOL
         </Card.Text>
         <div className="flex flex-row justify-between border-t border-gray-800 py-1 mt-1">

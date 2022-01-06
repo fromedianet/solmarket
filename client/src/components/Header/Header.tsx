@@ -33,7 +33,7 @@ export default function Header() {
       <nav
         data-aos="zoom-out"
         data-aos-delay="900"
-        className="navbar navbar-expand-lg"
+        className="navbar navbar-expand-lg text-color-primary"
       >
         <div className="container header">
           <a className="navbar-brand mr-8" href="/">

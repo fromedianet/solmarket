@@ -28,8 +28,10 @@ export default function PopularCollections() {
     <section className="flex justify-center w-full mt-10">
       <div className="w-full md:w-5/6 2xl:w-4/6 px-4">
         <div className="flex flex-row justify-between items-center">
-          <p className="text-4xl text-white mb-2">Popular Connections</p>
-          <a href="/marketplace" className="text-gray-100">
+          <p className="text-4xl text-color-primary mb-2">
+            Popular Connections
+          </p>
+          <a href="/marketplace" className="text-color-primary">
             <div className="flex flex-row items-center">
               <p>See All</p>
               <MdKeyboardArrowRight size={30} />

@@ -48,7 +48,7 @@ export default function NewCollections() {
   return (
     <section className="flex justify-center w-full mt-10">
       <div className="w-full md:w-5/6 2xl:w-4/6 px-4 mb-2">
-        <p className="text-4xl text-white">New Collections</p>
+        <p className="text-4xl text-color-primary">New Collections</p>
         <AliceCarousel
           mouseTracking
           items={getItems()}

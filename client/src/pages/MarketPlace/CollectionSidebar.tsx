@@ -9,7 +9,7 @@ import {
   FiMinus,
   FiPlus,
 } from "react-icons/fi";
-import dummy from "./dummy.json";
+import dummy from "./dummyAttributes.json";
 import "./CollectionSidebar.css";
 
 type Details = {
@@ -77,7 +77,7 @@ export default function CollectionSidebar() {
                 className="flex tw-p-4 text-lg bg-card-dark border-gray-500 border-solid border-b sticky top-0 cursor-pointer"
                 onClick={() => setCollapsed(true)}
               >
-                <div className="flex-1 self-start collectionSidebar__title">
+                <div className="flex-1 self-start collectionSidebar__title text-color-third">
                   Filters
                 </div>
                 <div className="cursor-pointer ml-auto collectionSidebar__collapse hover:opacity-80">
@@ -94,7 +94,7 @@ export default function CollectionSidebar() {
                     aria-controls="collapsePrice"
                   >
                     <FiList />
-                    <div className="me-collapsable__title ml-2">
+                    <div className="me-collapsable__title ml-2 text-color-third">
                       Price filter
                     </div>
                     <div className="ml-auto">
@@ -106,7 +106,7 @@ export default function CollectionSidebar() {
                       <div className="me-dropdown-container mb-12px">
                         <div className="cursor-pointer relative">
                           <input
-                            className="no-border"
+                            className="no-border text-color-primary"
                             value="SOL"
                             disabled={true}
                           />
@@ -147,7 +147,7 @@ export default function CollectionSidebar() {
                     aria-controls="collapseAttributes"
                   >
                     <FiList />
-                    <div className="me-collapsable__title ml-2">
+                    <div className="me-collapsable__title ml-2 text-color-third">
                       Attributes filter
                     </div>
                     <div className="ml-auto">
@@ -159,13 +159,13 @@ export default function CollectionSidebar() {
                       {attributes.map((item, index) => {
                         return (
                           <Accordion.Item eventKey={index.toString()}>
-                            <Accordion.Header>
+                            <Accordion.Header className="text-color-third">
                               {item.trait_type}
                             </Accordion.Header>
                             <AccordionBody className="tw-accordion-body">
                               {item.data.map((subItem) => {
                                 return (
-                                  <div className="flex flex-row justify-between subitem p-2">
+                                  <div className="flex flex-row justify-between subitem p-2 text-color-third">
                                     <p>{subItem.value}</p>
                                     <p>{subItem.floor}</p>
                                   </div>

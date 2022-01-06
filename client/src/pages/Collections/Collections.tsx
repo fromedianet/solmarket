@@ -5,8 +5,8 @@ import useInfiniteScroll from "hooks/useInfiniteScroll";
 import "./index.css";
 import CollectionCard from "components/Cards/CollectionCard";
 import { Collection } from "types/itemTypes";
-import EmptyImage from "assets/images/empty.svg";
 import dummy from "./dummy.json";
+import Empty from "components/Empty/Empty";
 
 export default function Collections() {
   const prepareData = () => {
@@ -51,7 +51,7 @@ export default function Collections() {
       <section className="mt-20">
         <div className="container">
           <div className="text-center">
-            <p className="font-bold text-white text-2xl md:text-5xl md:mt-20">
+            <p className="font-bold text-color-primary text-2xl md:text-5xl md:mt-20">
               Explore all collections
             </p>
           </div>
@@ -77,17 +77,10 @@ export default function Collections() {
                 })}
               </div>
             ) : (
-              <div className="empty-container flex flex-column w-full items-center pb-4">
-                <img src={EmptyImage} alt="no data" />
-                <p className="text-4xl text-white">Oops!</p>
-                <p className="text-base text-gray-600">
-                  It seems there’s no item you’re looking for. Give it another
-                  shot!
-                </p>
-              </div>
+              <Empty />
             )}
             {isFetching && (
-              <p className="text-white text-base mt-4 mb-4">
+              <p className="text-color-primary text-base mt-4 mb-4">
                 Fetching more collections...
               </p>
             )}

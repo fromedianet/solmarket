@@ -10,17 +10,17 @@ export default function CollectionCard({ collection, handleDragStart }: any) {
         onDragStart={handleDragStart}
         role="presentation"
       >
-        <Card className="bg-gray-900 hover:bg-purple-700 collection-card">
+        <Card className="collection-card">
           <Card.Img
             variant="top"
             src={collection.image}
             className="aspect-square object-cover card-img"
           />
           <Card.Body>
-            <Card.Title className="text-gray-100 text-xl text-center text">
+            <Card.Title className="text-color-primary text-xl text-center text">
               {collection.name}
             </Card.Title>
-            <Card.Text className="text-gray-400 text-sm text-center text">
+            <Card.Text className="text-color-secondary text-sm text-center text">
               {collection.description}
             </Card.Text>
           </Card.Body>

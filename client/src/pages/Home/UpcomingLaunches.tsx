@@ -24,7 +24,7 @@ export default function UpcomingLaunches() {
   return (
     <section className="flex justify-center w-full mt-10">
       <div className="w-full md:w-5/6 2xl:w-4/6 px-4">
-        <p className="text-4xl text-white mb-2">Upcoming Launches</p>
+        <p className="text-4xl text-color-primary mb-2">Upcoming Launches</p>
         <div className="grid grid-col-1 md:grid-cols-3 gap-2">
           {list.map((item, index) => {
             return <UpcomingCard collection={item} key={index} />;

@@ -17,7 +17,7 @@ export default function CollectionInfo({ info }: any) {
           alt="avatar"
         />
       </div>
-      <h1 className="text-4xl mt-4 max-w-2xl text-center text-white mb-4">
+      <h1 className="text-4xl mt-4 max-w-2xl text-center text-color-primary mb-4">
         Space Runners
       </h1>
       <div
@@ -75,7 +75,7 @@ export default function CollectionInfo({ info }: any) {
               </div>
               <div className="modal-body">
                 <div className="d-flex flex-column">
-                  <div className="text-white-1 font-bold">
+                  <div className="text-color-primary font-bold">
                     I think this collection is
                   </div>
                   <div className="me-dropdown-container mt-2 theme-me-dark-1">
@@ -120,7 +120,7 @@ export default function CollectionInfo({ info }: any) {
                   ></textarea>
                   <button
                     type="button"
-                    className="inline-flex justify-center items-center rounded-md text-white-1 PlainButton_btn__24zB_ mt-8 PlainButton_disabled__YnGJP PlainButton_primary__34OCV"
+                    className="inline-flex justify-center items-center rounded-md text-color-primary PlainButton_btn__24zB_ mt-8 PlainButton_disabled__YnGJP PlainButton_primary__34OCV"
                   >
                     Report
                   </button>
@@ -136,10 +136,10 @@ export default function CollectionInfo({ info }: any) {
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
                 <FiCopy size={16} color="white" />
-                <span className="text-xs uppercase tracking-wide truncate tw-text-secondary">
+                <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Floor Price
                 </span>
-                <span className="text-white text-base truncate attribute-value">
+                <span className="text-color-primary text-base truncate attribute-value">
                   7.10 SOL
                 </span>
               </div>
@@ -147,10 +147,10 @@ export default function CollectionInfo({ info }: any) {
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
                 <FiCopy size={16} color="white" />
-                <span className="text-xs uppercase tracking-wide truncate tw-text-secondary">
+                <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Total Volume (ALL Time, ALL Marketplaces)
                 </span>
-                <span className="text-white text-base truncate attribute-value">
+                <span className="text-color-primary text-base truncate attribute-value">
                   25884.16 SOL
                 </span>
               </div>
@@ -158,10 +158,10 @@ export default function CollectionInfo({ info }: any) {
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
                 <FiCopy size={16} color="white" />
-                <span className="text-xs uppercase tracking-wide truncate tw-text-secondary">
+                <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Avg Sale Price (Last 24HR)
                 </span>
-                <span className="text-white text-base truncate attribute-value">
+                <span className="text-color-primary text-base truncate attribute-value">
                   18.52 SOL
                 </span>
               </div>
@@ -169,10 +169,10 @@ export default function CollectionInfo({ info }: any) {
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
                 <FiCopy size={16} color="white" />
-                <span className="text-xs uppercase tracking-wide truncate tw-text-secondary">
+                <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Total Listed Count
                 </span>
-                <span className="text-white text-base truncate attribute-value">
+                <span className="text-color-primary text-base truncate attribute-value">
                   680
                 </span>
               </div>
