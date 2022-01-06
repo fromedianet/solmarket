@@ -33,3 +33,17 @@
   width: 1rem;
   display: none;
 }
+.tab-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  padding: 10px 20px;
+  color: #9ca3af;
+}
+.tab-btn.selected {
+  border-bottom: 2px solid #e93a88;
+  color: #efefef;
+}
