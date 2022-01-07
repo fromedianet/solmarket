@@ -100,8 +100,8 @@ export default function CollectionList() {
         <div className="flex flex-column items-center mt-4">
           {data.length > 0 ? (
             <div className="row items">
-              {data.map((item) => {
-                return <ItemCard item={item} />;
+              {data.map((item, index) => {
+                return <ItemCard item={item} key={index} />;
               })}
             </div>
           ) : (

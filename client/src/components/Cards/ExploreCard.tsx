@@ -33,7 +33,7 @@ export default function ExploreCard({ item }: any) {
             </Card.Text>
           </div>
           <div className="flex justify-center border-t border-gray-800 p-2">
-            <button className="me-btn bg-gray-700 hover:bg-purple-600 text-color-primary flex-1 me-2">
+            <button className="me-btn bg-gray-700 hover:bg-purple-600 text-color-primary flex-1 mr-2">
               Make offer
             </button>
             <div className="gradientBorderWrapper flex-1">

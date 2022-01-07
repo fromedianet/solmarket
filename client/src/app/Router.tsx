@@ -4,6 +4,7 @@ import { app } from "../types/routes";
 import Home from "pages/Home/Home";
 import Collections from "pages/Collections/Collections";
 import MarketPlace from "pages/MarketPlace/MarketPlace";
+import ItemDetails from "pages/ItemDetails/ItemDetails";
 
 export default function Views() {
   return (
@@ -15,6 +16,7 @@ export default function Views() {
       <Route path={`${app.launchpad}`} element={<Launchpad />} />
       <Route path={`${app.sell}`} element={<Sell />} />
       <Route path={`${app.settings}`} element={<Settings />} />
+      <Route path={`${app.itemDetails}`} element={<ItemDetails />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   );

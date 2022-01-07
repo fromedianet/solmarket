@@ -71,7 +71,7 @@ export default function Collections() {
           </div>
           <div className="flex flex-column items-center mt-4">
             {data.length > 0 ? (
-              <div className="grid grid-col-1 md:grid-cols-4 gap-2">
+              <div className="row items">
                 {data.map((item) => {
                   return <CollectionCard collection={item} />;
                 })}

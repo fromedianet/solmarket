@@ -5,7 +5,7 @@ import "./index.css";
 
 export default function ItemCard({ item }: any) {
   return (
-    <div className="col-12 col-sm-6 col-lg-4 col-xl-2 flex justify-center item mb-4">
+    <div className="col-12 col-sm-6 col-lg-4 col-xl-3 flex justify-center item mb-4">
       <Card className="explore-card">
         <Card.Img
           variant="top"

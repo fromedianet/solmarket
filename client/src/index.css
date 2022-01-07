@@ -40,7 +40,9 @@ section {
 .bg-color-third {
   background-color: #1c1929;
 }
-
+.bg-pink-gradient {
+  background: linear-gradient(123.73deg,#900ce9 22%,#f94e9b 80.67%);
+}
 .bg-card-dark {
   background-color: rgb(22, 21, 26);
 }
@@ -74,4 +76,10 @@ section {
 }
 .text-color-third {
   color: #8e8e8e;
+}
+.text-color-pink {
+  color: #B450F7;
+}
+.text-color-pink-light {
+  color: #f2e2fe;
 }

@@ -1,0 +1,115 @@
+.item-details-area {
+  margin-top: 100px;
+}
+.container {
+  padding: 0;
+  max-width: 1170px;
+}
+.item-details-area .item-info {
+  border-radius: 24px;
+  overflow: hidden;
+}
+.item-details-area .item-thumb {
+  max-width: 568px;
+  max-height: 568px;
+  overflow: hidden;
+}
+.item-details-area .item-info img {
+  border-radius: 8px;
+}
+.item-details-area .item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tw-accordion-body {
+  margin-top: 4px;
+  background-color: #1c1929;
+  border-radius: 4px;
+  padding: 8px !important;
+  color: #9ca3af;
+}
+.attr-accordion-body {
+  margin-top: 4px;
+  border: 1px solid #2b273f;
+  border-radius: 4px;
+  padding: 0px !important;
+}
+.collection-mark {
+  color: #b450f7!important;
+}
+.me-dropdown-container .dropdown.visible {
+  display: flex;
+  flex-direction: column;
+}
+.me-dropdown-container .dropdown {
+  z-index: 9999;
+  display: none;
+  background: #09080d;
+  border: 1px solid #2b273f;
+  box-shadow: 2px 2px 8px rgb(0 0 0 / 20%), 2px 4px 12px rgb(0 0 0 / 15%);
+  border-radius: 8px;
+  position: absolute;
+  inset: 0px auto auto 0px;
+  width: 250px;
+  transform: translate3d(285px, 463px, 0px);
+}
+.social-share .dropdown-toggle::after {
+  display: none;
+}
+.social-share .dropdown-title {
+  color: #b450f7;
+}
+.social-share .dropdown-menu {
+  padding: 4px;
+  background-color: #09080d;
+  border: 1px solid #2b273f;
+  color: #f3f4f6;
+}
+.social-share .dropdown-menu .dropdown-item {
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  color: #f3f4f6;
+}
+.social-share .dropdown-menu .dropdown-item.active {
+  background-color: transparent;
+}
+.social-share .dropdown-menu .dropdown-item:hover {
+  background-color: transparent;
+  color: #9ca3af;
+}
+.me-btn {
+  position: relative;
+  width: 250px;
+  font-size: 16px;
+  color: #fff;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  moz-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+.gradientBorderWrapper {
+  display: inline-block;
+  padding: 1px;
+  border-radius: 6px;
+  background: linear-gradient(123.73deg,#7a00cc 22%,#f72c87 80.67%);
+}
+.me-btn.gradientBorder {
+  background: #161320;
+  background-clip: padding-box!important;
+}
+@media (max-width: 1199px) {
+  body .container {
+    padding: 0 10px;
+    max-width: 100%;
+  }
+}
+@media (max-width: 767.98px) {
+  .item-details-area {
+    padding-top: 0px;
+  }
+}
