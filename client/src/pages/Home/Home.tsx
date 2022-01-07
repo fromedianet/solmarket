@@ -12,7 +12,7 @@ export default function Home() {
       <Header />
       <FeaturedCarousel />
       <UpcomingLaunches />
-      <NewCollections />
+      {/* <NewCollections /> */}
       <PopularCollections />
       <ExploreItems />
     </div>

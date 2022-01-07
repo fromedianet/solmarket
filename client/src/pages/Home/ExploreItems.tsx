@@ -25,17 +25,21 @@ export default function ExploreItems() {
 
   return (
     <section className="flex justify-center w-full mt-10">
-      <div className="w-full md:w-5/6 2xl:w-4/6 px-4">
-        <div className="flex flex-row justify-between items-center">
-          <p className="text-4xl text-color-primary mb-2">Explore Items</p>
-          <a href="/marketplace" className="text-color-primary">
-            <div className="flex flex-row items-center">
-              <p>See All</p>
-              <MdKeyboardArrowRight size={30} />
-            </div>
-          </a>
+      <div className="w-full card-section">
+        <div className="row">
+          <div className="col-12 m-0 mb-3 flex justify-between items-end">
+            <p className="text-3xl text-bold text-color-primary mt-3 mb-0">
+              Explore Items
+            </p>
+            <a href="/marketplace" className="text-base text-color-primary">
+              <div className="inline-flex relative items-center ">
+                <p>See All</p>
+                <MdKeyboardArrowRight size={30} />
+              </div>
+            </a>
+          </div>
         </div>
-        <div className="grid grid-col-1 md:grid-cols-4 gap-2 explore-items">
+        <div className="row items explore-items">
           {list.map((item, index) => {
             return <ExploreCard item={item} key={index} />;
           })}

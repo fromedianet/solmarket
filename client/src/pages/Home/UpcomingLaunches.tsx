@@ -22,10 +22,16 @@ export default function UpcomingLaunches() {
   const [list, setList] = useState<Collection[]>(prepareData());
 
   return (
-    <section className="flex justify-center w-full mt-10">
-      <div className="w-full md:w-5/6 2xl:w-4/6 px-4">
-        <p className="text-4xl text-color-primary mb-2">Upcoming Launches</p>
-        <div className="grid grid-col-1 md:grid-cols-3 gap-2">
+    <section className="flex justify-center w-full mt-3">
+      <div className="w-full card-section">
+        <div className="row">
+          <div className="col-12 m-0 mb-3 flex justify-between items-end">
+            <p className="text-3xl text-bold text-color-primary mt-3 mb-0">
+              Upcoming Launches
+            </p>
+          </div>
+        </div>
+        <div className="row items">
           {list.map((item, index) => {
             return <UpcomingCard collection={item} key={index} />;
           })}

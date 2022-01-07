@@ -99,7 +99,7 @@ export default function CollectionList() {
       <div className="mt-4 flex flex-col">
         <div className="flex flex-column items-center mt-4">
           {data.length > 0 ? (
-            <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+            <div className="row items">
               {data.map((item) => {
                 return <ItemCard item={item} />;
               })}

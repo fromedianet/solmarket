@@ -47,15 +47,23 @@ export default function NewCollections() {
 
   return (
     <section className="flex justify-center w-full mt-10">
-      <div className="w-full md:w-5/6 2xl:w-4/6 px-4 mb-2">
-        <p className="text-4xl text-color-primary">New Collections</p>
-        <AliceCarousel
-          mouseTracking
-          items={getItems()}
-          responsive={responsive}
-          controlsStrategy="responsive"
-          disableButtonsControls={true}
-        />
+      <div className="w-full card-section">
+        <div className="row">
+          <div className="col-12 m-0 mb-3 flex justify-between items-end">
+            <p className="text-3xl text-bold text-color-primary">
+              New Collections
+            </p>
+          </div>
+        </div>
+        <div className="row items">
+          <AliceCarousel
+            mouseTracking
+            items={getItems()}
+            responsive={responsive}
+            controlsStrategy="responsive"
+            disableButtonsControls={true}
+          />
+        </div>
       </div>
     </section>
   );
