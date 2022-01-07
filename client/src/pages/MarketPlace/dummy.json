@@ -1,60 +1,53 @@
 {
   "data": [
     {
-      "name": "Space Runners",
-      "description": "Space Runners is the first NFT Metaverse Fashion brand in collaboration with artists and brands, designing digitally wearable NFTs through Augmented Reality (AR) and plug-in's into the Metaverse as items.",
-      "type": "explore",
-      "image": "https://dl.airtable.com/.attachmentThumbnails/1bc6cfa2e28511eff1ce3525b3992b00/1f9b9402",
-      "link": "marketplace/space-runners"
+      "name": "Sol Airdrop Pass",
+      "id": "#676",
+      "image": "https://cdn.magiceden.io/rs:fill:400:400:0:0/plain/https://arweave.net/WJKpeg4bHt3w5M_eop_8mszatCcXE2hQO7xYqgp-TIs",
+      "price": 0.5,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
     },
     {
-      "name": "Cyberpunk in Style",
-      "description": "Exploration on looks of the future by Valentine Panchin 2022",
-      "type": "bid",
-      "image": "https://i.imgur.com/MHFRLiE.jpg",
-      "link": "auction/cyberpunk"
+      "name": "DD",
+      "id": "#98",
+      "image": "https://cdn.magiceden.io/rs:fill:400:400:0:0/plain/https://www.arweave.net/fbtSLP2nivcuayF_tNDB-dq4iE3yboL2xy4xSTOLbMU?ext=png",
+      "price": 0.87,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
     },
     {
-      "name": "DazedDucks Metagalactic Club",
-      "description": "DazedDucks Metagalactic Club is a collection of 10,000 hand-drawn, algorithmically generated NFTs granting exclusive access to a HODL-To-Earn DAO.",
-      "type": "explore",
-      "image": "https://i.imgur.com/bM2qzHh.png",
-      "link": "marketplace/metagalactic"
+      "name": "Refined Ape Block Party",
+      "id": "#1640",
+      "image": "https://cdn.magiceden.io/rs:fill:400:400:0:0/plain/https://www.arweave.net/5fg_21dwfrr2_7XXa20e5OhJXZkqoxNOfPP5naXxfbE?ext=png",
+      "price": 2.5,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
     },
     {
-      "name": "Shadowy Super Coder DAO",
-      "description": "Shadowy Super Coder DAO by GenesysGo",
-      "type": "explore",
-      "image": "https://dl.airtable.com/.attachmentThumbnails/3ed91a26d598e670fc9c98254a6d294c/fc53badf",
-      "link": "marketplace/shadowy-super"
+      "name": "Dazed Duck",
+      "id": "#155",
+      "image": "https://cdn.magiceden.io/rs:fill:400:400:0:0/plain/https://www.arweave.net/5DXNN80lwoZ9hi7CEb-lpxqMSuvQapB662pX41P_Izs?ext=png",
+      "price": 10,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
     },
     {
-      "name": "Space Runners",
-      "description": "Space Runners is the first NFT Metaverse Fashion brand in collaboration with artists and brands, designing digitally wearable NFTs through Augmented Reality (AR) and plug-in's into the Metaverse as items.",
-      "type": "explore",
-      "image": "https://dl.airtable.com/.attachmentThumbnails/1bc6cfa2e28511eff1ce3525b3992b00/1f9b9402",
-      "link": "marketplace/space-runners"
-    },
-    {
-      "name": "Cyberpunk in Style",
-      "description": "Exploration on looks of the future by Valentine Panchin 2022",
-      "type": "bid",
-      "image": "https://i.imgur.com/MHFRLiE.jpg",
-      "link": "auction/cyberpunk"
-    },
-    {
-      "name": "DazedDucks Metagalactic Club",
-      "description": "DazedDucks Metagalactic Club is a collection of 10,000 hand-drawn, algorithmically generated NFTs granting exclusive access to a HODL-To-Earn DAO.",
-      "type": "explore",
-      "image": "https://i.imgur.com/bM2qzHh.png",
-      "link": "marketplace/metagalactic"
+      "name": "Space Runner",
+      "id": "#25",
+      "image": "https://arweave.net/bWZzAGsDUOWkEMjJMoycT0yGMFsnBCykSqa8uSspshM?ext=gif",
+      "price": 0.9,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
     },
     {
       "name": "Shadowy Super Coder DAO",
-      "description": "Shadowy Super Coder DAO by GenesysGo",
-      "type": "explore",
-      "image": "https://dl.airtable.com/.attachmentThumbnails/3ed91a26d598e670fc9c98254a6d294c/fc53badf",
-      "link": "marketplace/shadowy-super"
+      "id": "#2550",
+      "image": "https://cdn.magiceden.io/rs:fill:400:400:0:0/plain/https://www.arweave.net/b_8BmLf0mGZfGu_r7iFey-a7Tx8ZtfZwPP0_qj1KqEI?ext=png",
+      "price": 0.7,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
+    },
+    {
+      "name": "Cyberpunk",
+      "id": "#122",
+      "image": "https://cdn.magiceden.io/rs:fill:400:400:0:0/plain/https://www.arweave.net/PiFgHCm9OhKIFIq_Ys-ZQzaLsoCtY_Fx9qs2kzjwv6M?ext=png",
+      "price": 3.5,
+      "address": "ETY7Ynf9zhqVGcsGhstdFgBEJBqpydeaoDRzV5W4WySy"
     }
   ]
 }

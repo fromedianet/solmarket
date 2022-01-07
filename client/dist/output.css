@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.0.9 | MIT License | https://tailwindcss.com
+! tailwindcss v3.0.11 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -433,4 +433,74 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+section {
+  width: 100%;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: 50%;
+}
+
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg-color-primary {
+  background-color: #09080d;
+}
+
+.bg-color-secondary {
+  background-color: #1c1929;
+}
+
+.bg-color-third {
+  background-color: #1c1929;
+}
+
+.bg-card-dark {
+  background-color: rgb(22, 21, 26);
+}
+
+.border-gray-500 {
+  border-color: rgb(51,39,63);
+}
+
+.tw-pb-4 {
+  padding-bottom: 1rem;
+}
+
+.tw-px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.p-12px {
+  padding: 12px!important;
+}
+
+.mb-12px {
+  margin-bottom: 12px!important;
+}
+
+.p-color-primary {
+  color: #8e8e8e;
+}
+
+.p-color-secondary{
+  color: #b4abba;
+}
+
+.text-color-primary {
+  color: #f3f4f6;
+}
+
+.text-color-secondary {
+  color: #9ca3af;
+}
+
+.text-color-third {
+  color: #8e8e8e;
 }

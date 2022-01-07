@@ -12,10 +12,10 @@ export default function UpcomingCard({ collection }: any) {
           className="aspect-video object-cover card-img"
         />
         <Card.Body>
-          <Card.Title className="text-color-primary text-xl text-center text">
+          <Card.Title className="text-color-primary text-xl text-center line-clamp-2">
             {collection.name}
           </Card.Title>
-          <Card.Text className="text-color-secondary text-sm text-center text">
+          <Card.Text className="text-color-secondary text-sm text-center line-clamp-2">
             {collection.description}
           </Card.Text>
           {collection.date && (

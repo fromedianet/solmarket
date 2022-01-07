@@ -40,7 +40,11 @@ export default function MarketPlace({ id }: any) {
         <div className="flex relative">
           <CollectionSidebar />
           <div className="flex-auto max-w-full pt-8">
-            {itemsSelected ? <CollectionList /> : <div></div>}
+            {itemsSelected ? (
+              <CollectionList />
+            ) : (
+              <div className="text-color-primary text-2xl">Coming soon...</div>
+            )}
           </div>
         </div>
       </section>

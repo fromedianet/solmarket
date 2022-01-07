@@ -4,7 +4,7 @@ import "./index.css";
 
 export default function CollectionCard({ collection, handleDragStart }: any) {
   return (
-    <div className="mx-1">
+    <div className="mx-1 flex justify-center">
       <a
         href={collection.link}
         onDragStart={handleDragStart}
@@ -17,10 +17,10 @@ export default function CollectionCard({ collection, handleDragStart }: any) {
             className="aspect-square object-cover card-img"
           />
           <Card.Body>
-            <Card.Title className="text-color-primary text-xl text-center text">
+            <Card.Title className="text-color-primary text-xl text-center line-clamp-2">
               {collection.name}
             </Card.Title>
-            <Card.Text className="text-color-secondary text-sm text-center text">
+            <Card.Text className="text-color-secondary text-sm text-center line-clamp-2">
               {collection.description}
             </Card.Text>
           </Card.Body>

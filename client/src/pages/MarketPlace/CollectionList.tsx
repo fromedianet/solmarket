@@ -5,30 +5,30 @@ import { FiRefreshCw } from "react-icons/fi";
 import { BsFillGrid3X3GapFill, BsFillGridFill } from "react-icons/bs";
 import useInfiniteScroll from "hooks/useInfiniteScroll";
 import "./CollectionList.css";
-import { Collection } from "types/itemTypes";
+import { Item } from "types/itemTypes";
 import dummy from "./dummy.json";
-import CollectionCard from "components/Cards/CollectionCard";
 import Empty from "components/Empty/Empty";
+import ItemCard from "components/Cards/ItemCard";
 
 export default function CollectionList() {
   const [searchKey, setSearchKey] = useState("");
   const prepareData = () => {
-    let newList: Collection[] = [];
+    let newList: Item[] = [];
     dummy.data.forEach((el) => {
-      const item: Collection = {
+      const item: Item = {
         name: el.name,
-        description: el.description,
-        type: el.type,
+        id: el.id,
         image: el.image,
-        link: el.link,
+        price: el.price,
+        address: el.address,
       };
       newList.push(item);
     });
     return newList;
   };
 
-  const [list, setList] = useState<Collection[]>(prepareData());
-  const [data, setData] = useState<Collection[]>(list);
+  const [list, setList] = useState<Item[]>(prepareData());
+  const [data, setData] = useState<Item[]>(list);
   const fetchList = () => {
     console.log("fetch");
   };
@@ -38,9 +38,8 @@ export default function CollectionList() {
   const searchCollections = (event: any) => {
     const searchText = event?.target?.value;
     const filteredList = list.filter(
-      (item: Collection) =>
-        item.name.toLowerCase().indexOf(searchText.toLowerCase()) >= 0 ||
-        item.description.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
+      (item: Item) =>
+        item.name.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
     );
     setData(filteredList);
     setSearchKey(searchText);
@@ -70,12 +69,16 @@ export default function CollectionList() {
           <div className="flex-1 mt-3 md:mr-3 md-mt-0">
             <DropdownButton
               id="dropdown-basic-button"
-              title="Dropdown button"
+              title="Recently Listed"
               className="me-dropdown"
             >
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+              <Dropdown.Item href="#/action-1">Recently Listed</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">
+                Price: Low to High
+              </Dropdown.Item>
+              <Dropdown.Item href="#/action-3">
+                Price: High to Low
+              </Dropdown.Item>
             </DropdownButton>
           </div>
           <div className="flex mt-3 md-mt-0">
@@ -98,7 +101,7 @@ export default function CollectionList() {
           {data.length > 0 ? (
             <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
               {data.map((item) => {
-                return <CollectionCard collection={item} />;
+                return <ItemCard item={item} />;
               })}
             </div>
           ) : (
