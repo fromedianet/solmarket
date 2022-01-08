@@ -5,6 +5,7 @@ import twitterImage from "assets/images/twitter2.svg";
 import discordImage from "assets/images/discord2.svg";
 import flagImage from "assets/images/flag2.svg";
 import ReadMore from "components/ReadMore/ReadMore";
+import CopyArea from "components/CopyArea/CopyArea";
 
 export default function CollectionInfo({ info }: any) {
   return (
@@ -135,7 +136,7 @@ export default function CollectionInfo({ info }: any) {
           <div className="row attributes attributes-row">
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
-                <FiCopy size={16} color="white" />
+                <CopyArea value="7.10" />
                 <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Floor Price
                 </span>
@@ -146,7 +147,7 @@ export default function CollectionInfo({ info }: any) {
             </div>
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
-                <FiCopy size={16} color="white" />
+                <CopyArea value="25884.16" />
                 <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Total Volume (ALL Time, ALL Marketplaces)
                 </span>
@@ -157,7 +158,7 @@ export default function CollectionInfo({ info }: any) {
             </div>
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
-                <FiCopy size={16} color="white" />
+                <CopyArea value="18.52" />
                 <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Avg Sale Price (Last 24HR)
                 </span>
@@ -168,7 +169,7 @@ export default function CollectionInfo({ info }: any) {
             </div>
             <div className="col-lg-3 col-6 attributes-column">
               <div className="p-3 bg-color-third flex flex-column rounded-xl h-100 relative attributes-main">
-                <FiCopy size={16} color="white" />
+                <CopyArea value="680" />
                 <span className="text-xs uppercase tracking-wide truncate p-color-secondary">
                   Total Listed Count
                 </span>

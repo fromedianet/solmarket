@@ -30,7 +30,7 @@ export default function ItemInfo() {
             />
           </div>
         </div>
-        <div className="none lg:block">
+        <div className="hidden lg:block">
           <Accordion defaultActiveKey="0" className="mt-2">
             <Accordion.Item eventKey="0">
               <Accordion.Header className="text-color-third">
@@ -170,7 +170,7 @@ export default function ItemInfo() {
               </AccordionBody>
             </Accordion.Item>
           </Accordion>
-          <div className="block lg:none">
+          <div className="block lg:hidden">
             <Accordion defaultActiveKey="0" className="mt-2">
               <Accordion.Item eventKey="0">
                 <Accordion.Header className="text-color-third">

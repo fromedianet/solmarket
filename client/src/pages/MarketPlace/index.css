@@ -33,6 +33,9 @@
   width: 1rem;
   display: none;
 }
+.attributes-main:hover svg {
+  display: block;
+}
 .tab-btn {
   display: flex;
   flex-direction: row;

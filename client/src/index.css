@@ -18,6 +18,7 @@ code {
 
 section {
   width: 100%;
+  padding: 50px 0;
   background-size: cover;
   background-attachment: fixed;
   background-position: 50%;
@@ -82,4 +83,12 @@ section {
 }
 .text-color-pink-light {
   color: #f2e2fe;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+.attributes-row {
+  padding-right: 0.75rem;
 }

@@ -5,6 +5,7 @@ import Home from "pages/Home/Home";
 import Collections from "pages/Collections/Collections";
 import MarketPlace from "pages/MarketPlace/MarketPlace";
 import ItemDetails from "pages/ItemDetails/ItemDetails";
+import Profile from "pages/Profile/Profile";
 
 export default function Views() {
   return (
@@ -14,9 +15,11 @@ export default function Views() {
       <Route path={`${app.marketplace}/:id`} element={<MarketPlace />} />
       <Route path={`${app.stats}`} element={<Stats />} />
       <Route path={`${app.launchpad}`} element={<Launchpad />} />
-      <Route path={`${app.sell}`} element={<Sell />} />
+      <Route path={`${app.sell}`} element={<Profile />} />
       <Route path={`${app.settings}`} element={<Settings />} />
       <Route path={`${app.itemDetails}`} element={<ItemDetails />} />
+      <Route path={`${app.myItems}`} element={<Profile />} />
+      <Route path={`${app.listedItems}`} element={<Profile />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   );

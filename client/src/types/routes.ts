@@ -7,4 +7,6 @@ export enum app {
   settings = "settings",
   marketplace = "marketplace",
   itemDetails = "item-details",
+  myItems = "me",
+  listedItems = "me",
 }
