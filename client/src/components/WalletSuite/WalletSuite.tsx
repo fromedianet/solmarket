@@ -3,32 +3,66 @@ import {
   useGlobalModalContext,
   MODAL_TYPES,
 } from "providers/GlobalModalProvider";
-import { useGetPhantom } from "wallets/Phantom";
+import { useGetPhantom, useSetPhantom } from "wallets/Phantom";
 import { maskAddress } from "utils/helpers";
+import { AiOutlineCopy, AiOutlineDisconnect } from "react-icons/ai";
 import PhantomIcon from "assets/icons/wallets/phantom.svg";
 import "./index.css";
 
 export default function WalletSuite() {
   const { showModal } = useGlobalModalContext();
-  const { connected, publicKey } = useGetPhantom();
+  const { connected, loading, publicKey } = useGetPhantom();
+  const { disconnect } = useSetPhantom();
   const toggleConnector = () => {
     showModal(MODAL_TYPES.CONNECT_MODAL);
+  };
+
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(publicKey);
   };
 
   return (
     <div className="wallet-suite-container">
       {!connected ? (
         <button onClick={toggleConnector}>
-          <span>Connect</span>
+          <span>{loading ? "Loading..." : "Connect"}</span>
         </button>
       ) : (
-        <button onClick={() => {}}>
+        <button
+          id="navbarDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          onClick={() => {}}
+        >
           <i className="icon">
             <img src={PhantomIcon} alt="phantom-icon" />
           </i>
           {maskAddress(publicKey)}
         </button>
       )}
+      <ul
+        className="dropdown-menu p-0 wallet-suite-menu"
+        aria-labelledby="navbarDropdown"
+      >
+        <li
+          className="nav-item dropdown wallet-suite-menu-item"
+          onClick={handleCopyAddress}
+        >
+          <i className="menu-item-icon">
+            <AiOutlineCopy size={24} />
+          </i>
+          Copy address
+        </li>
+        <li
+          className="nav-item dropdown wallet-suite-menu-item"
+          onClick={disconnect}
+        >
+          <i className="menu-item-icon">
+            <AiOutlineDisconnect size={24} />
+          </i>
+          Disconnect
+        </li>
+      </ul>
     </div>
   );
 }

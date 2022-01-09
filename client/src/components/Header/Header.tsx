@@ -100,7 +100,7 @@ export default function Header() {
                   Apply
                 </a>
                 <ul
-                  className="dropdown-menu p0 w-200px"
+                  className="dropdown-menu p-0 w-200px"
                   aria-labelledby="navbarDropdown"
                 >
                   <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
@@ -127,7 +127,7 @@ export default function Header() {
               </li>
               <li className="order-4 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
+                  className="nav-link pl-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -137,7 +137,7 @@ export default function Header() {
                   Browse
                 </a>
                 <ul
-                  className="dropdown-menu p0 w-full "
+                  className="dropdown-menu p-0 w-full "
                   aria-labelledby="navbarDropdown"
                 >
                   <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
@@ -165,7 +165,7 @@ export default function Header() {
               </li>
               <li className="order-5 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
+                  className="nav-link pl-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="/me?tab=my-items"
                 >
                   Sell
@@ -173,7 +173,7 @@ export default function Header() {
               </li>
               <li className="order-5 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link ps-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
+                  className="nav-link pl-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -183,7 +183,7 @@ export default function Header() {
                   Community
                 </a>
                 <ul
-                  className="dropdown-menu p0 w-full"
+                  className="dropdown-menu p-0 w-full"
                   aria-labelledby="navbarDropdown"
                 >
                   <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
@@ -248,7 +248,7 @@ export default function Header() {
               </li>
               <li className="order-5 nav-item dropdown nav-item--main-nav whitespace-nowrap">
                 <a
-                  className="nav-link ps-0"
+                  className="nav-link pl-0"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -258,7 +258,7 @@ export default function Header() {
                   <FaRegUserCircle size="2em" color="currentColor" />
                 </a>
                 <ul
-                  className="dropdown-menu p0 w-full"
+                  className="dropdown-menu p-0 w-full"
                   aria-labelledby="navbarDropdown"
                 >
                   <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
@@ -286,7 +286,7 @@ export default function Header() {
               </li>
               <li className="order-5 nav-item dropdown whitespace-nowrap nav-item--main-nav">
                 <a
-                  className="nav-link ps-0"
+                  className="nav-link pl-0"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -311,7 +311,7 @@ export default function Header() {
                 </ul>
               </li>
               <li
-                className="order-5 nav-item nav-item--main-nav ps-0 flex-shrink-0"
+                className="order-5 nav-item nav-item--main-nav pl-0 flex-shrink-0"
                 id="wallet-connect-btn"
               >
                 <WalletSuite />
