@@ -37,7 +37,7 @@ export default function WalletSuite() {
           <i className="icon">
             <img src={PhantomIcon} alt="phantom-icon" />
           </i>
-          {maskAddress(publicKey)}
+          <span>{maskAddress(publicKey)}</span>
         </button>
       )}
       <ul
