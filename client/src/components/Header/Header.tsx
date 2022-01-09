@@ -66,7 +66,7 @@ export default function Header() {
           >
             <ul className="navbar-nav flex items-center flex-grow justify-end">
               <li className="nav-item nav-item--main-nav flex-grow md:w-full sm:px-4 md:p-0 lg:mr-8 ">
-                <div className="nav-item--search-bar w-full px-4 lg:px-0">
+                <div className="w-full px-4 lg:px-0">
                   <SearchBar
                     value={searchWord}
                     placeholder="Search Collections"
@@ -88,9 +88,9 @@ export default function Header() {
                   />
                 </div>
               </li>
-              <li className="order-3 nav-item dropdown nav-item--main-nav whitespace-nowrap">
+              <li className="order-3 nav-item dropdown nav-item--main-nav">
                 <a
-                  className="nav-link uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
+                  className="nav-link"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -99,11 +99,8 @@ export default function Header() {
                 >
                   Apply
                 </a>
-                <ul
-                  className="dropdown-menu p-0 w-200px"
-                  aria-labelledby="navbarDropdown"
-                >
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link"
                       target="_blank"
@@ -113,7 +110,7 @@ export default function Header() {
                       Apply for listing
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link"
                       target="_blank"
@@ -125,9 +122,9 @@ export default function Header() {
                   </li>
                 </ul>
               </li>
-              <li className="order-4 nav-item dropdown nav-item--main-nav whitespace-nowrap">
+              <li className="order-4 nav-item dropdown nav-item--main-nav">
                 <a
-                  className="nav-link pl-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
+                  className="nav-link"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -136,11 +133,8 @@ export default function Header() {
                 >
                   Browse
                 </a>
-                <ul
-                  className="dropdown-menu p-0 w-full "
-                  aria-labelledby="navbarDropdown"
-                >
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid"
                       href="/collections"
@@ -148,7 +142,7 @@ export default function Header() {
                       Collections
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid "
                       href="/stats"
@@ -156,24 +150,21 @@ export default function Header() {
                       Stats
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a className="nav-link subnav-nav-link" href="/launchpad">
                       Launchpad
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className="order-5 nav-item dropdown nav-item--main-nav whitespace-nowrap">
-                <a
-                  className="nav-link pl-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
-                  href="/me?tab=my-items"
-                >
+              <li className="order-5 nav-item dropdown nav-item--main-nav">
+                <a className="nav-link" href="/me?tab=my-items">
                   Sell
                 </a>
               </li>
-              <li className="order-5 nav-item dropdown nav-item--main-nav whitespace-nowrap">
+              <li className="order-5 nav-item dropdown nav-item--main-nav">
                 <a
-                  className="nav-link pl-0 uppercase lg:text-xs font-light tracking-wider fw-300 hover:underline"
+                  className="nav-link"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -186,7 +177,7 @@ export default function Header() {
                   className="dropdown-menu p-0 w-full"
                   aria-labelledby="navbarDropdown"
                 >
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       target="_blank"
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid"
@@ -196,7 +187,7 @@ export default function Header() {
                       twitter
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       target="_blank"
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid"
@@ -206,7 +197,7 @@ export default function Header() {
                       discord
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       target="_blank"
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid"
@@ -216,7 +207,7 @@ export default function Header() {
                       Podcast
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid"
                       href="/faq"
@@ -224,7 +215,7 @@ export default function Header() {
                       FAQ
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid"
                       target="_blank"
@@ -234,7 +225,7 @@ export default function Header() {
                       Blog
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link"
                       target="_blank"
@@ -246,9 +237,9 @@ export default function Header() {
                   </li>
                 </ul>
               </li>
-              <li className="order-5 nav-item dropdown nav-item--main-nav whitespace-nowrap">
+              <li className="order-5 nav-item dropdown nav-item--main-nav">
                 <a
-                  className="nav-link pl-0"
+                  className="nav-link"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -257,11 +248,8 @@ export default function Header() {
                 >
                   <FaRegUserCircle size="2em" color="currentColor" />
                 </a>
-                <ul
-                  className="dropdown-menu p-0 w-full"
-                  aria-labelledby="navbarDropdown"
-                >
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link border-gray-700 border-b border-solid "
                       href="/me?tab=my-items"
@@ -269,7 +257,7 @@ export default function Header() {
                       My items
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a
                       className="nav-link subnav-nav-link"
                       href="/me?tab=listed-items"
@@ -277,16 +265,16 @@ export default function Header() {
                       Listed items
                     </a>
                   </li>
-                  <li className="nav-item dropdown whitespace-nowrap nav-item--inner hover:bg-indigo-700">
+                  <li className="nav-item dropdown nav-item--inner">
                     <a className="nav-link subnav-nav-link" href="/settings">
                       Settings
                     </a>
                   </li>
                 </ul>
               </li>
-              <li className="order-5 nav-item dropdown whitespace-nowrap nav-item--main-nav">
+              <li className="order-5 nav-item dropdown nav-item--main-nav">
                 <a
-                  className="nav-link pl-0"
+                  className="nav-link"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -295,13 +283,10 @@ export default function Header() {
                 >
                   <MdOutlineLanguage size="2em" color="currentColor" />
                 </a>
-                <ul
-                  className="dropdown-menu p-0 w-full"
-                  aria-labelledby="navbarDropdown"
-                >
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   {languages.map((language) => {
                     return (
-                      <li className="nav-item dropdown whitespace-nowrap cursor-pointer nav-item--inner hover:bg-indigo-700">
+                      <li className="nav-item dropdown cursor-pointer nav-item--inner">
                         <div className="nav-link subnav-nav-link border-gray-700 border-b border-solid">
                           {language}
                         </div>
@@ -311,7 +296,7 @@ export default function Header() {
                 </ul>
               </li>
               <li
-                className="order-5 nav-item nav-item--main-nav pl-0 flex-shrink-0"
+                className="order-5 nav-item nav-item--main-nav"
                 id="wallet-connect-btn"
               >
                 <WalletSuite />
