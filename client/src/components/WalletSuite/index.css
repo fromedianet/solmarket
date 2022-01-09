@@ -1,0 +1,43 @@
+.wallet-suite-container {
+  position: relative;
+  display: flex;
+  border: 1px solid #900ce9;
+  border-radius: 6px;
+  margin-left: auto;
+}
+.wallet-suite-container:hover {
+  background-color: #900ce9;
+}
+.wallet-suite-container button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 16px;
+  color: #f8f7f8;
+  font-size: 16px;
+}
+.wallet-suite-container .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+.dropdown-menu.wallet-suite-menu {
+  margin-top: 4px;
+  padding: 6px 16px!important;
+  background-color: #09080d!important;
+  color: #f8f7f8;
+}
+.wallet-suite-menu-item {
+  display: flex!important;
+  flex-direction: row;
+  align-items: center;
+  width: 160px;
+  height: 40px;
+}
+.wallet-suite-menu-item:hover {
+  opacity: .7;
+}
+.wallet-suite-menu-item .menu-item-icon {
+  color: #900ce9;
+  margin-right: 8px;
+}

@@ -7,7 +7,7 @@ export type State = {
   loading: boolean;
   connected: boolean;
   balance: number;
-  address: string;
+  publicKey: string;
   provider: any | null;
 };
 export type Setters = {
