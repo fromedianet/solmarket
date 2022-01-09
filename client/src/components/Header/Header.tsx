@@ -296,7 +296,7 @@ export default function Header() {
                   <MdOutlineLanguage size="2em" color="currentColor" />
                 </a>
                 <ul
-                  className="dropdown-menu p0 w-full"
+                  className="dropdown-menu p-0 w-full"
                   aria-labelledby="navbarDropdown"
                 >
                   {languages.map((language) => {

@@ -1,0 +1,22 @@
+.wallet-suite-container {
+  display: flex;
+  border: 1px solid #900ce9;
+  border-radius: 6px;
+  margin-left: auto;
+}
+.wallet-suite-container:hover {
+  background-color: #900ce9;
+}
+.wallet-suite-container button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 12px;
+  color: #f8f7f8;
+  font-size: 14px;
+}
+.wallet-suite-container .icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}

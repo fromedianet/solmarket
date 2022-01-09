@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
-import { useGetter } from "store/accessors";
-import { Wallets } from "services/wallet/types";
+import React from "react";
+import {
+  useGlobalModalContext,
+  MODAL_TYPES,
+} from "providers/GlobalModalProvider";
+import { useGetPhantom } from "wallets/Phantom";
+import { maskAddress } from "utils/helpers";
+import PhantomIcon from "assets/icons/wallets/phantom.svg";
+import "./index.css";
 
 export default function WalletSuite() {
-  const [connectorsShown, showConnectors] = useState(false);
-  const { activeWallet, isLoading } = useGetter((state) => state.wallet);
-  const isConnected = activeWallet !== Wallets.none;
-  const toggleConnector = () => showConnectors((p) => !p);
-  const hideConnectors = () => showConnectors(false);
-
-  // close modal after connecting
-  useEffect(() => {
-    isConnected && showConnectors(false);
-    //eslint-disable-next-line
-  }, [isConnected]);
+  const { showModal } = useGlobalModalContext();
+  const { connected, publicKey } = useGetPhantom();
+  const toggleConnector = () => {
+    showModal(MODAL_TYPES.CONNECT_MODAL);
+  };
 
   return (
-    <div className="flex border-1 border-purple-700 hover:bg-purple-700 rounded-md ml-auto">
-      {!isConnected && (
-        <button
-          className="flex py-2 px-3 items-center text-white  "
-          disabled={isLoading}
-          onClick={toggleConnector}
-        >
-          <span>{isLoading ? "Loading" : "Connect"}</span>
+    <div className="wallet-suite-container">
+      {!connected ? (
+        <button onClick={toggleConnector}>
+          <span>Connect</span>
+        </button>
+      ) : (
+        <button onClick={() => {}}>
+          <i className="icon">
+            <img src={PhantomIcon} alt="phantom-icon" />
+          </i>
+          {maskAddress(publicKey)}
         </button>
       )}
     </div>

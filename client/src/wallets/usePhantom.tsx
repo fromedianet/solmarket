@@ -9,7 +9,7 @@ enum events {
   load = "load",
 }
 
-const dwindow: DWindow = (window as any).phantom;
+const dwindow: DWindow = window as any;
 export default function usePhantom() {
   //connect only if there's no active wallet
   const last_action = retrieve_action();
@@ -18,7 +18,7 @@ export default function usePhantom() {
   const [connected, setConnected] = useState(false);
   const [provider, setProvider] = useState(null);
   const [balance, setBalance] = useState<number>(0);
-  const [address, setAddress] = useState("");
+  const [publicKey, setPublicKey] = useState("");
 
   useEffect(() => {
     const [present, phantom] = get_phantom();
@@ -71,7 +71,7 @@ export default function usePhantom() {
   };
 
   const onDisconnect = () => {
-    setAddress("");
+    setPublicKey("");
     setConnected(false);
     setBalance(0);
     //disconnect() triggers loading, this listener ends loading
@@ -82,7 +82,7 @@ export default function usePhantom() {
     const [, phantom] = get_phantom();
     const connection = new Connection(clusterApiUrl(chainIDs.sol_dev));
     const lamports = await connection.getBalance(pub_key);
-    setAddress(pub_key.toString());
+    setPublicKey(pub_key.toString());
     setProvider(phantom);
     setBalance(lamports);
     setConnected(true);
@@ -124,7 +124,7 @@ export default function usePhantom() {
 
   return {
     setters: { connect, disconnect },
-    state: { loading, balance, address, connected, provider },
+    state: { loading, balance, publicKey, connected, provider },
   };
 }
 
@@ -139,6 +139,7 @@ function retrieve_action(): Action {
 }
 
 export function get_phantom(): [boolean, any] {
+  console.log(dwindow?.phantom);
   return [!!dwindow?.phantom?.solana, dwindow?.phantom?.solana];
 }
 
