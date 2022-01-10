@@ -73,10 +73,6 @@ li {
   overflow-y: scroll;
 }
 
-.navbar-nav {
-  /* display: inline-block; */
-}
-
 .navbar-nav .nav-item {
   vertical-align: middle;
 }
@@ -128,7 +124,7 @@ li {
   padding: 0 2rem;
 }
 .nav-item--inner:hover {
-  background-color: #900ce9;
+  background-color: #2b273f;
 }
 
 .subnav-nav-link {

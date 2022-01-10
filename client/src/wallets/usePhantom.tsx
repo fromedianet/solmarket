@@ -139,7 +139,6 @@ function retrieve_action(): Action {
 }
 
 export function get_phantom(): [boolean, any] {
-  console.log(dwindow?.phantom);
   return [!!dwindow?.phantom?.solana, dwindow?.phantom?.solana];
 }
 
