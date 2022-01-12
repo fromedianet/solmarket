@@ -54,22 +54,22 @@ export function MetaProvider({ children = null as any }) {
   const loadedMetadataLength = useRef(0);
 
   const updateMints = useCallback(
-    async metadataByMint => {
-      try {
-        const { metadata, mintToMetadata } = await queryExtendedMetadata(
-          connection,
-          metadataByMint,
-        );
-        setState(current => ({
-          ...current,
-          metadata,
-          metadataByMint: mintToMetadata,
-        }));
-      } catch (er) {
-        console.error(er);
-      }
-    },
-    [setState],
+    // async metadataByMint => {
+    //   try {
+    //     const { metadata, mintToMetadata } = await queryExtendedMetadata(
+    //       connection,
+    //       metadataByMint,
+    //     );
+    //     setState(current => ({
+    //       ...current,
+    //       metadata,
+    //       metadataByMint: mintToMetadata,
+    //     }));
+    //   } catch (er) {
+    //     console.error(er);
+    //   }
+    // },
+    // [setState],
   );
   async function pullAllMetadata() {
     if (isLoading) return false;
@@ -81,13 +81,13 @@ export function MetaProvider({ children = null as any }) {
     } else if (!state.store) {
       setIsLoading(true);
     }
-    setIsLoading(true);
+    // setIsLoading(true);
 
-    const nextState = await pullStoreMetadata(connection, state);
+    // const nextState = await pullStoreMetadata(connection, state);
 
-    setIsLoading(false);
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
+    // setIsLoading(false);
+    // setState(nextState);
+    // await updateMints(nextState.metadataByMint);
     return [];
   }
 
@@ -101,17 +101,17 @@ export function MetaProvider({ children = null as any }) {
     } else if (!state.store) {
       setIsLoading(true);
     }
-    const nextState = await pullAuctionSubaccounts(
-      connection,
-      auctionAddress,
-      state,
-    );
+    // const nextState = await pullAuctionSubaccounts(
+    //   connection,
+    //   auctionAddress,
+    //   state,
+    // );
 
-    console.log('-----> Pulling all payout tickets');
-    await pullPayoutTickets(connection, nextState);
+    // console.log('-----> Pulling all payout tickets');
+    // await pullPayoutTickets(connection, nextState);
 
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
+    // setState(nextState);
+    // await updateMints(nextState.metadataByMint);
     return [];
   }
 
@@ -125,14 +125,14 @@ export function MetaProvider({ children = null as any }) {
     } else if (!state.store) {
       setIsLoading(true);
     }
-    const nextState = await pullAuctionSubaccounts(
-      connection,
-      auctionAddress,
-      state,
-    );
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
-    return nextState;
+    // const nextState = await pullAuctionSubaccounts(
+    //   connection,
+    //   auctionAddress,
+    //   state,
+    // );
+    // setState(nextState);
+    // await updateMints(nextState.metadataByMint);
+    // return nextState;
   }
 
   async function pullItemsPage(
@@ -142,12 +142,12 @@ export function MetaProvider({ children = null as any }) {
       return;
     }
 
-    const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
-    const packsState = shouldEnableNftPacks
-      ? await pullPacks(connection, state, wallet?.publicKey)
-      : state;
+    // const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
+    // const packsState = shouldEnableNftPacks
+    //   ? await pullPacks(connection, state, wallet?.publicKey)
+    //   : state;
 
-    await pullUserMetadata(userTokenAccounts, packsState);
+    // await pullUserMetadata(userTokenAccounts, packsState);
   }
 
   async function pullPackPage(
@@ -158,14 +158,14 @@ export function MetaProvider({ children = null as any }) {
       return;
     }
 
-    const packState = await pullPack({
-      connection,
-      state,
-      packSetKey,
-      walletKey: wallet?.publicKey,
-    });
+    // const packState = await pullPack({
+    //   connection,
+    //   state,
+    //   packSetKey,
+    //   walletKey: wallet?.publicKey,
+    // });
 
-    await pullUserMetadata(userTokenAccounts, packState);
+    // await pullUserMetadata(userTokenAccounts, packState);
   }
 
   async function pullUserMetadata(
@@ -175,14 +175,14 @@ export function MetaProvider({ children = null as any }) {
     setIsLoadingMetadata(true);
     loadedMetadataLength.current = userTokenAccounts.length;
 
-    const nextState = await pullYourMetadata(
-      connection,
-      userTokenAccounts,
-      tempState || state,
-    );
-    await updateMints(nextState.metadataByMint);
+    // const nextState = await pullYourMetadata(
+    //   connection,
+    //   userTokenAccounts,
+    //   tempState || state,
+    // );
+    // await updateMints(nextState.metadataByMint);
 
-    setState(nextState);
+    // setState(nextState);
     setIsLoadingMetadata(false);
   }
 
@@ -198,12 +198,12 @@ export function MetaProvider({ children = null as any }) {
     }
     console.log('------->Query started');
 
-    const nextState = await loadAccounts(connection);
+    // const nextState = await loadAccounts(connection);
 
     console.log('------->Query finished');
 
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
+    // setState(nextState);
+    // await updateMints(nextState.metadataByMint);
     return;
   }
 
@@ -233,11 +233,11 @@ export function MetaProvider({ children = null as any }) {
 
     if (nextState.storeIndexer.length) {
       if (USE_SPEED_RUN) {
-        nextState = await limitedLoadAccounts(connection);
+        // nextState = await limitedLoadAccounts(connection);
 
         console.log('------->Query finished');
 
-        setState(nextState);
+        // setState(nextState);
 
         //@ts-ignore
         window.loadingData = false;
@@ -283,13 +283,13 @@ export function MetaProvider({ children = null as any }) {
       }
     } else {
       console.log('------->No pagination detected');
-      nextState = !USE_SPEED_RUN
-        ? await loadAccounts(connection)
-        : await limitedLoadAccounts(connection);
+      // nextState = !USE_SPEED_RUN
+      //   ? await loadAccounts(connection)
+      //   : await limitedLoadAccounts(connection);
 
       console.log('------->Query finished');
 
-      setState(nextState);
+      // setState(nextState);
 
       //@ts-ignore
       window.loadingData = false;
@@ -299,19 +299,19 @@ export function MetaProvider({ children = null as any }) {
     console.log('------->set finished');
 
     if (auctionAddress && bidderAddress) {
-      nextState = await pullAuctionSubaccounts(
-        connection,
-        auctionAddress,
-        nextState,
-      );
-      setState(nextState);
+      // nextState = await pullAuctionSubaccounts(
+      //   connection,
+      //   auctionAddress,
+      //   nextState,
+      // );
+      // setState(nextState);
 
-      const auctionBidderKey = auctionAddress + '-' + bidderAddress;
-      return [
-        nextState.auctions[auctionAddress],
-        nextState.bidderPotsByAuctionAndBidder[auctionBidderKey],
-        nextState.bidderMetadataByAuctionAndBidder[auctionBidderKey],
-      ];
+      // const auctionBidderKey = auctionAddress + '-' + bidderAddress;
+      // return [
+      //   nextState.auctions[auctionAddress],
+      //   nextState.bidderPotsByAuctionAndBidder[auctionBidderKey],
+      //   nextState.bidderMetadataByAuctionAndBidder[auctionBidderKey],
+      // ];
     }
   }
 

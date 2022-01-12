@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const withPlugins = require('next-compose-plugins');
 const withLess = require('next-with-less');
 
@@ -10,8 +11,9 @@ const plugins = [
       lessLoaderOptions: {
         lessOptions: {
           modifyVars: {
-            '@primary-color': '#768BF9',
-            '@text-color': 'rgba(255, 255, 255)',
+            '@primary-color': '#09080d',
+            '@text-color': '#8e8e8e',
+            '@text-color-secondary': '#9ca3af',
             '@assetPrefix': assetPrefix || "''",
           },
           javascriptEnabled: true,

@@ -33,51 +33,42 @@ function useWalletModal() {
 }
 exports.useWalletModal = useWalletModal;
 const WalletModal = () => {
-    const { wallets, wallet: selected, select } = (0, wallet_adapter_react_1.useWallet)();
+    const { wallets, select } = (0, wallet_adapter_react_1.useWallet)();
     const { visible, setVisible } = useWalletModal();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [showWallets, setShowWallets] = (0, react_1.useState)(false);
     const close = (0, react_1.useCallback)(() => {
         setVisible(false);
         setShowWallets(false);
     }, [setVisible, setShowWallets]);
-    const phatomWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getPhantomWallet)(), []);
-    return (react_1.default.createElement(components_1.MetaplexModal, { title: "Connect Wallet", visible: visible, onCancel: close },
-        react_1.default.createElement("span", { style: {
-                color: 'rgba(255, 255, 255, 0.75)',
-                fontSize: '14px',
-                lineHeight: '14px',
-                fontFamily: 'GraphikWeb',
-                letterSpacing: '0.02em',
-                marginBottom: 14,
-            } }, "RECOMMENDED"),
-        react_1.default.createElement(antd_1.Button, { className: "phantom-button metaplex-button", onClick: () => {
-                console.log(phatomWallet.name);
-                select(phatomWallet.name);
-                close();
-            } },
-            react_1.default.createElement("img", { src: phatomWallet === null || phatomWallet === void 0 ? void 0 : phatomWallet.icon, style: { width: '1.2rem' } }),
-            "\u00A0Connect to Phantom"),
-        react_1.default.createElement(antd_1.Collapse, { ghost: true, expandIcon: panelProps => panelProps.isActive ? (react_1.default.createElement("svg", { width: "20", height: "20", viewBox: "0 0 20 20", fill: "none", xmlns: "http://www.w3.org/2000/svg" },
-                react_1.default.createElement("path", { d: "M15 7.5L10 12.5L5 7.5", stroke: "white", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" }))) : (react_1.default.createElement("svg", { width: "20", height: "20", viewBox: "0 0 20 20", fill: "none", xmlns: "http://www.w3.org/2000/svg" },
-                react_1.default.createElement("path", { d: "M7.5 5L12.5 10L7.5 15", stroke: "white", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" }))) },
-            react_1.default.createElement(Panel, { header: react_1.default.createElement("span", { style: {
-                        fontWeight: 600,
-                        fontSize: '16px',
-                        lineHeight: '16px',
-                        letterSpacing: '-0.01em',
-                        color: 'rgba(255, 255, 255, 255)',
-                    } }, "Other Wallets"), key: "1" }, wallets.map((wallet, idx) => {
-                if (wallet.name === 'Phantom')
-                    return null;
-                return (react_1.default.createElement(antd_1.Button, { key: idx, className: "metaplex-button w100", style: {
-                        marginBottom: 5,
-                    }, onClick: () => {
-                        select(wallet.name);
-                        close();
-                    } },
-                    "Connect to ",
-                    wallet.name));
-            })))));
+    const phantomWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getPhantomWallet)(), []);
+    const slopeWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getSlopeWallet)(), []);
+    const solletWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getSolletWallet)(), []);
+    const solflareWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getSolflareWallet)(), []);
+    const ledgerWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getLedgerWallet)(), []);
+    const solongWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getSolongWallet)(), []);
+    const mathWallet = (0, react_1.useMemo)(() => (0, wallet_adapter_wallets_1.getMathWallet)(), []);
+    const handleConnectWallet = (name) => {
+        console.log("wallet name", name);
+        select(name);
+        close();
+    };
+    return (react_1.default.createElement(components_1.MetaplexModal, { visible: visible, onCancel: close },
+        react_1.default.createElement("div", { className: "modal-top-content" },
+            react_1.default.createElement("img", { src: "/favicon.ico", alt: "logo", className: "logo" }),
+            react_1.default.createElement("p", { className: "text" }, "Connect Wallet")),
+        react_1.default.createElement("div", { className: "modal-btn-container" },
+            react_1.default.createElement(antd_1.Button, { className: "wallet-adapter-btn", onClick: () => handleConnectWallet(phantomWallet.name) },
+                "Phantom",
+                react_1.default.createElement("img", { src: phantomWallet === null || phantomWallet === void 0 ? void 0 : phantomWallet.icon, className: "end-icon" })),
+            react_1.default.createElement(antd_1.Collapse, { className: "modal-collapse", expandIconPosition: "right" },
+                react_1.default.createElement(Panel, { header: "Other Wallets", key: "1" }, wallets.map((wallet, index) => {
+                    if (wallet.name === 'Phantom')
+                        return null;
+                    return (react_1.default.createElement(antd_1.Button, { key: index, className: "wallet-adapter-btn", onClick: () => handleConnectWallet(wallet.name) },
+                        wallet.name,
+                        react_1.default.createElement("img", { src: wallet === null || wallet === void 0 ? void 0 : wallet.icon, className: "end-icon" })));
+                }))))));
 };
 exports.WalletModal = WalletModal;
 const WalletModalProvider = ({ children, }) => {
