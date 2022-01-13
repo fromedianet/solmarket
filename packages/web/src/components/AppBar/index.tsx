@@ -17,7 +17,7 @@ const { SubMenu } = Menu;
 const DefaultActions = ({isMobile = false} : {isMobile: boolean}) => {
   return (
     <Menu
-      style={{ width: "100%" }}
+      style={{ width: "100%", marginLeft: "16px" }}
       mode={isMobile ? "inline" : "horizontal"}
     >
       <SubMenu key="apply" title="Apply">

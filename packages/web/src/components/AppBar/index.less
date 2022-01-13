@@ -8,13 +8,13 @@ header .navbar-expand-lg {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   pointer-events: auto;
   transition: @bg-primary-color .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
   transition: @bg-primary-color .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s!important;
   transition: @bg-primary-color .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
   @media screen and (min-width: 992px) {
     flex-wrap: nowrap;
-    justify-content: flex-start;
   }
   @media screen and (max-width: 768px) {
     background-color: @bg-secondary-color;
@@ -28,6 +28,7 @@ header .navbar-expand-lg {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 1170px;
   padding: 0 24px;
 }
 .navbar-expand-lg .navbar-brand {
