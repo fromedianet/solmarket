@@ -372,7 +372,7 @@ export const Cog = () => {
               }}
             >
               {ENDPOINTS.map(({ name }) => (
-                <Select.Option value={name} key={endpoint.name}>
+                <Select.Option value={name} key={name}>
                   {name}
                 </Select.Option>
               ))}
