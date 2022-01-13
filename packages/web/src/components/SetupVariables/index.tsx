@@ -1,6 +1,6 @@
 import { CopyOutlined } from '@ant-design/icons';
 import { Button, Card } from 'antd';
-import { FC } from 'react';
+import React from 'react';
 import { useCallback, useRef } from 'react';
 
 interface Variables {
@@ -8,7 +8,7 @@ interface Variables {
   storeOwnerAddress?: string;
 }
 
-export const SetupVariables: FC<Variables> = ({
+export const SetupVariables: React.FC<Variables> = ({
   storeAddress,
   storeOwnerAddress,
 }) => {

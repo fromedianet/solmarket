@@ -27,7 +27,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
   if (!wallet || !allowWalletChange) {
     return (
       <Button
-        className={className || 'connector'}
+        className={className}
         {...rest}
         onClick={e => {
           props.onClick ? props.onClick(e) : null;
@@ -42,12 +42,12 @@ export const ConnectButton = (props: ConnectButtonProps) => {
 
   return (
     <Dropdown.Button
-      className={ className || (connected ?  'connector' : '')}
+      className={className}
       onClick={handleClick}
       disabled={connected && disabled}
       overlay={
         <Menu className={'black-dropdown'}>
-          <Menu.Item onClick={open}>Change Wallet</Menu.Item>
+          <Menu.Item onClick={open} key="1">Change Wallet</Menu.Item>
         </Menu>
       }
     >

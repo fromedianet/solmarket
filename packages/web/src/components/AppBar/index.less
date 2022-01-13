@@ -1,61 +1,178 @@
-.App-Bar {
-  padding: 0px;
-  justify-content: space-between !important;
+@import '../../styles/colors.less';
 
-  button.ant-btn:not(.connector) {
-    height: 32px;
-    background: none;
+header .navbar-expand-lg {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transition: @bg-primary-color .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
+  transition: @bg-primary-color .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s!important;
+  transition: @bg-primary-color .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
+  @media screen and (min-width: 992px) {
+    flex-wrap: nowrap;
+  }
+  @media screen and (max-width: 768px) {
+    background-color: @bg-secondary-color;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
-
-.title {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 26px;
+.navbar-expand-lg .container {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1170px;
+  padding: 0 24px;
+}
+.navbar-expand-lg .navbar-brand {
   display: flex;
   align-items: center;
-  text-align: center;
-
-  color: #ffffff;
-  padding: 10px 14px 10px 6px;
-
-  margin-bottom: 0px;
+  padding: 0;
+  white-space: nowrap;
+  margin-right: 24px;
+  min-height: 80px;
 }
-
-.divider {
-  border-left: 1px solid #282828;
-  width: 2px;
-  height: 40px;
-  margin-right: 14px;
+.navbar-expand-lg .ms-auto {
+  margin-left: auto!important;
 }
-.wallet-wrapper {
-  padding-right: 0.7rem;
-}
-.app-btn {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 19px;
-  border-width: 0px;
-}
-
-.app-bar-inner {
-  display: flex;
-  min-width: 50%;
-  justify-content: center;
-  position: relative;
-  height: auto;
-  .app-bar-item {
-    cursor: pointer;
-    padding: 0 30px;
-    color: @tungsten-60;
-    font-size: 18px;
-    a {
-      color: inherit;
-    }
-    &.active {
-      color: white;
-    }
+.navbar-expand-lg .navbar-toggler {
+  padding: 4px 12px;
+  font-size: 20px;
+  line-height: 1;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: box-shadow .15s ease-in-out;
+  @media screen and (min-width: 992px) {
+    display: none;
+    order: 1!important;
   }
+}
+.navbar-expand-lg .navbar-icon {
+  color: white;
+  width: 24px;
+  height: 24px;
+}
+.navbar-expand-lg .navbar-collapse {
+  flex-basis: 100%;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: -16px;
+  margin-right: -16px;
+  max-height: calc(100vh - 80px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  @media screen and (min-width: 992px) {
+    display: flex!important;
+    flex-basis: auto;
+    overflow: unset!important;
+  }
+  @media screen and (min-width: 768px) {
+    margin: 0;
+    height: auto;
+  }
+}
+.order-2 {
+  order: 2!important;
+}
+.navbar-expand-lg .ant-menu {
+  background-color: transparent;
+  color: @text-primary-color;
+}
+.navbar-expand-lg .ant-menu-horizontal {
+  border: none;
+}
+.navbar-expand-lg .ant-menu-item {
+  &:hover,
+  &-active,
+  &-selected {
+    color: @text-primary-color!important;
+  }
+}
+.navbar-expand-lg .ant-menu-submenu {
+  &-open,
+  &-active,
+  &-title:hover,
+  &-selected {
+    color: @text-primary-color!important;
+  }
+}
+.navbar-expand-lg .ant-menu-horizontal > .ant-menu-item {
+  &hover:after,
+  &-active::after,
+  &-open::after,
+  &-selected::after {
+    border-bottom: 2px solid white !important;
+  }
+}
+.navbar-expand-lg .ant-menu-horizontal > .ant-menu-submenu {
+  &hover:after,
+  &-active::after,
+  &-open::after,
+  &-selected::after {
+    border-bottom: 2px solid white !important;
+  }
+}
+.ant-menu-submenu:hover > .ant-menu-submenu-title > .ant-menu-submenu-expand-icon,
+.ant-menu-submenu:hover > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
+  color: @text-primary-color;
+}
+.ant-menu-submenu-popup > .ant-menu {
+  background-color: @bg-secondary-color;
+  color: @text-secondary-color;
+  border: 1px solid @bg-third-color;
+}
+.ant-menu-light .ant-menu-item {
+  &:hover,
+  &-active,
+  &-selected {
+    color: @text-primary-color!important;
+  }
+
+  &:hover {
+    background-color: rgb(255 255 255 / 8%)!important;
+  }
+}
+.ant-menu-light .ant-menu-item-selected {
+  background-color: transparent!important;
+}
+.nav-item--search-container {
+  width: 100%;
+  padding: 0 8px;
+  @media screen and (min-width: 992px) {
+    padding: 0;
+  }
+}
+.navbar-connect.ant-btn, .navbar-connect .ant-btn {
+  height: 40px;
+  background-color: transparent;
+  border: 1px solid @border-purple;
+  color: @text-primary-color;
+  &:hover {
+    background-color: @bg-purple !important;
+    color: @text-primary-color;
+  }
+}
+.ant-dropdown-menu.black-dropdown {
+  color: @text-primary-color;
+  background-color: #1f1f1f;
+  border: 1px soild @bg-third-color;
+  border-radius: 4px;
+  margin-right: 16px;
+}
+.black-dropdown .ant-dropdown-menu-item {
+  background-color: transparent;
+  color: @text-primary-color;
+}
+.wallet-info {
+  display: flex;
+  justify-content: center;
 }
