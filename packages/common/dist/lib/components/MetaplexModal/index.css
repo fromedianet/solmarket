@@ -1,21 +1,20 @@
-.ant-scrolling-effect #root > .ant-layout {
-  filter: blur(10px) brightness(0.5);
-}
-.ant-modal-content {
+.meta-modal .ant-modal-content {
+  width: 400px;
   border-radius: 12px;
-  background: #2A2A2A;
+  background: #2c2d30;
 }
-.ant-modal-header {
-  border-radius: 12px 12px 0 0;
+.meta-modal .ant-modal-header {
+  background-color: transparent;
+  border: none;
 }
-.ant-modal-body {
-  border-radius: 0 0 12px 12px;
-  background: rgba(255, 255, 255, 0.05);
+.meta-modal .ant-modal-body {
+  background: transparent;
+  width: 100%;
 }
-.ant-modal-close-x {
+.meta-modal .ant-modal-close-x {
   color: white;
 }
-.ant-modal-title {
+.meta-modal .ant-modal-title {
   color: white;
   font-weight: 600;
 }

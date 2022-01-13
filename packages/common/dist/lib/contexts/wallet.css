@@ -13,10 +13,77 @@ p {
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   padding: 36px 8px 20px;
 }
-.ant-modal-content {
-  border-radius: 12px;
+.ant-modal-body .modal-top-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.phantom-button {
-  background: white !important;
-  color: black !important;
+.ant-modal-body .modal-top-content .logo {
+  margin: 40px 0 16px 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: turquoise;
+}
+.ant-modal-body .modal-top-content .text {
+  font-size: 32px;
+  color: white;
+  font-weight: 600;
+}
+.ant-modal-body .modal-btn-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 24px;
+}
+.ant-modal-body .wallet-adapter-btn {
+  width: 100%;
+  background-color: #404144 !important;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  margin-bottom: 8px;
+}
+.ant-modal-body .wallet-adapter-btn:hover {
+  background-color: #343437 !important;
+  color: white;
+}
+.ant-modal-body .wallet-adapter-btn .end-icon {
+  margin-left: 8px;
+  width: 24px;
+  height: 24px;
+}
+.ant-collapse.modal-collapse {
+  background-color: transparent;
+  border: none;
+  margin-top: 8px;
+}
+.ant-collapse.modal-collapse > .ant-collapse-item {
+  border: none;
+}
+.ant-collapse.modal-collapse > .ant-collapse-item > .ant-collapse-header {
+  background-color: #404144;
+  border: none;
+  border-radius: 6px!important;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+.modal-collapse > .ant-collapse-item > .ant-collapse-content {
+  background-color: transparent;
+  border: none;
+}
+.modal-collapse .ant-collapse-content > .ant-collapse-content-box {
+  padding: 8px 0;
 }
