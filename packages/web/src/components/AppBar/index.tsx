@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Menu, Modal } from 'antd';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Notifications } from '../Notifications';
-import { CloseOutlined, MenuOutlined, SettingOutlined } from '@ant-design/icons';
+import { CloseOutlined, MenuOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { HowToBuyModal } from '../HowToBuyModal';
 import { SearchBar } from "../SearchBar";
 import {
@@ -40,7 +40,7 @@ const DefaultActions = ({isMobile = false} : {isMobile: boolean}) => {
         <Menu.Item key="blog">Blog</Menu.Item>
         <Menu.Item key="shop">Shop</Menu.Item>
       </SubMenu>
-      <SubMenu key="profile" icon={<SettingOutlined />}>
+      <SubMenu key="profile" icon={<UserOutlined style={{fontSize: 24}} />}>
         <Menu.Item key="my_items">My Items</Menu.Item>
         <Menu.Item key="listed_items">Listed Items</Menu.Item>
         <Menu.Item key="settings">Settings</Menu.Item>
@@ -51,6 +51,7 @@ const DefaultActions = ({isMobile = false} : {isMobile: boolean}) => {
 
 export const MetaplexMenu = ({showMenu = false} : {showMenu: boolean}) => {
   const [searchWord, setSearchWord] = useState("");
+  const { connected } = useWallet();
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const isHidden = isMobile && !showMenu;
@@ -75,16 +76,23 @@ export const MetaplexMenu = ({showMenu = false} : {showMenu: boolean}) => {
           spellCheck="false"
           onChange={handleSearch}
           tabIndex={0}
-          aria-autocomplete="list"
-          aria-expanded="false"
-          aria-haspopup="true"
-          aria-controls="header-search-listbox"
-          aria-owns="header-search-listbox"
-          role="combobox"
-          aria-describedby="react-select-2-placeholder"
         />
       </div>
       <DefaultActions isMobile={isMobile} />
+      {!connected && (
+        <ConnectButton className="navbar-connect" allowWalletChange />
+      )}
+      {connected && (
+        <>
+          <CurrentUserBadge
+            showBalance={false}
+            showAddress={true}
+            iconSize={24}
+          />
+          <Notifications />
+          <Cog />
+        </>
+      )}
     </div>
   )
 };

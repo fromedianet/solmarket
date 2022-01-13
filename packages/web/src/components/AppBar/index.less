@@ -138,54 +138,6 @@ header .navbar-expand-lg {
 .ant-menu-light .ant-menu-item-selected {
   background-color: transparent!important;
 }
-.navbar-expand-lg .navbar-nav {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  align-items: center;
-  justify-content: flex-end;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-  @media screen and (min-width: 992px) {
-    flex-direction: row;
-  }
-}
-.navbar-nav .nav-item {
-  vertical-align: middle;
-}
-.nav-item--main-nav {
-  margin: 8px auto;
-  display: flex;
-  width: 100%;
-  flex-grow: 1;
-  flex-direction: column;
-  align-items: center;
-  @media screen and (min-width: 768px) {
-    width: auto;
-  }
-  @media screen and (min-width: 992px) {
-    margin: 0 16px 0 0;
-  }
-
-  .nav-link {
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: @text-primary-color;
-  }
-}
-.nav-item--search-bar {
-  @media screen and (min-width: 992px) {
-    margin-right: 32px;
-  }
-  @media screen and (min-width: 768px) {
-    padding: 0;
-    width: 100%;
-  }
-  @media screen and (min-width: 576px) {
-    padding: 0 16px;
-  }
-}
 .nav-item--search-container {
   width: 100%;
   padding: 0 8px;
@@ -193,110 +145,22 @@ header .navbar-expand-lg {
     padding: 0;
   }
 }
-.dropdown {
-  position: relative;
-}
-.nav-item--main-nav .dropdown-menu {
-  position: static;
-  z-index: 1000;
-  left: -16px;
-  display: none;
-  min-width: 200px;
-  padding: 0;
-  margin: 0;
-  font-size: 1rem;
-  color: @text-primary-color;
-  text-align: left;
-  list-style: none;
-  background-color: @bg-secondary-color;
-  background-clip: padding-box;
-  border: 1px solid @bg-third-color;
-  border-radius: 4px;
-  box-shadow: 2px 2px 8px rgb(0 0 0 / 20%), 2px 4px 12px rgb(0 0 0 / 15%);
-  @media screen and (min-width: 992px) {
-    position: absolute;
-  }
-}
-.navbar-nav ul .nav-item {
-  display: block;
-}
-.nav-item--inner {
-  margin: 0;
-  width: auto;
-  padding: 0 32px;
-
-  @media screen and (min-width: 992px) {
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
-  @media screen and (min-width: 768px) {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-.nav-link .subnav-nav-link {
-  padding-top: 16px;
-  padding-bottom: 16px;
-  text-transform: uppercase;
-}
-.App-Bar {
-  padding: 0px;
-  justify-content: space-between !important;
-
-  button.ant-btn:not(.connector) {
-    height: 32px;
-    background: none;
-  }
-}
-
-.title {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 26px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-
-  color: #ffffff;
-  padding: 10px 14px 10px 6px;
-
-  margin-bottom: 0px;
-}
-
-.divider {
-  border-left: 1px solid #282828;
-  width: 2px;
+.navbar-connect.ant-btn, .navbar-connect .ant-btn {
   height: 40px;
-  margin-right: 14px;
-}
-.wallet-wrapper {
-  padding-right: 0.7rem;
-}
-.app-btn {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 19px;
-  border-width: 0px;
-}
-
-.app-bar-inner {
-  display: flex;
-  min-width: 50%;
-  justify-content: center;
-  position: relative;
-  height: auto;
-  .app-bar-item {
-    cursor: pointer;
-    padding: 0 30px;
-    color: @tungsten-60;
-    font-size: 18px;
-    a {
-      color: inherit;
-    }
-    &.active {
-      color: white;
-    }
+  background-color: transparent;
+  border: 1px solid @border-purple;
+  color: @text-primary-color;
+  &:hover {
+    background-color: @bg-purple !important;
+    color: @text-primary-color;
   }
+}
+.ant-dropdown-menu.black-dropdown {
+  color: @text-primary-color;
+  background-color: @bg-primary-color;
+  border: 1px soild @bg-third-color;
+}
+.black-dropdown .ant-dropdown-menu-item {
+  background-color: transparent;
+  color: @text-primary-color;
 }
