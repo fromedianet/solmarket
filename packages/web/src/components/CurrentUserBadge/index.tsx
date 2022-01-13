@@ -30,7 +30,7 @@ const btnStyle: React.CSSProperties = {
 };
 
 const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
-  const { wallet, publicKey } = useWallet();
+  const { publicKey } = useWallet();
   const { whitelistedCreatorsByCreator, store } = useMeta();
   const pubkey = publicKey?.toBase58() || '';
 
@@ -216,11 +216,6 @@ export const CurrentUserBadge = (props: {
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const balanceInUSD = balance * solPrice;
   const solMintInfo = useTokenList().tokenMap.get(WRAPPED_SOL_MINT.toString());
-  const iconStyle: React.CSSProperties = {
-    display: 'flex',
-    width: props.iconSize,
-    borderRadius: 50,
-  };
 
   let name = props.showAddress ? shortenAddress(`${publicKey}`) : '';
   const unknownWallet = wallet as any;
@@ -228,14 +223,8 @@ export const CurrentUserBadge = (props: {
     name = unknownWallet.name;
   }
 
-  let image = <Identicon address={publicKey?.toBase58()} style={iconStyle} />;
-
-  if (unknownWallet.image) {
-    image = <img src={unknownWallet.image} style={iconStyle} />;
-  }
-
   return (
-    <div className="wallet-wrapper">
+    <div className="wallet-container">
       {props.showBalance && (
         <span>
           {formatNumber.format((account?.lamports || 0) / LAMPORTS_PER_SOL)} SOL
@@ -263,6 +252,7 @@ export const CurrentUserBadge = (props: {
                 </h5>
                 <div
                   style={{
+                    display: 'flex',
                     marginBottom: 10,
                   }}
                 >
@@ -294,16 +284,16 @@ export const CurrentUserBadge = (props: {
                     marginBottom: 10,
                   }}
                 >
-                  <Button
-                    className="metaplex-button-default"
+                  {/* <Button
+                    className="popover-btn"
                     onClick={() => setShowAddFundsModal(true)}
                     style={btnStyle}
                   >
                     Add Funds
                   </Button>
-                  &nbsp;&nbsp;
+                  &nbsp;&nbsp; */}
                   <Button
-                    className="metaplex-button-default"
+                    className="popover-btn"
                     onClick={disconnect}
                     style={btnStyle}
                   >
@@ -316,19 +306,7 @@ export const CurrentUserBadge = (props: {
           />
         }
       >
-        <Button className="wallet-key">
-          {image}
-          {name && (
-            <span
-              style={{
-                marginLeft: '0.5rem',
-                fontWeight: 600,
-              }}
-            >
-              {name}
-            </span>
-          )}
-        </Button>
+        <Button>{name}</Button>
       </Popover>
       <AddFundsModal
         setShowAddFundsModal={setShowAddFundsModal}
@@ -341,22 +319,19 @@ export const CurrentUserBadge = (props: {
 };
 
 export const Cog = () => {
+  const { wallet } = useWallet();
   const { endpoint } = useConnectionConfig();
   const routerSearchParams = useQuerySearch();
   const { setVisible } = useWalletModal();
   const open = useCallback(() => setVisible(true), [setVisible]);
 
   return (
-    <div className="wallet-wrapper">
+    <div className="wallet-container">
       <Popover
         trigger="click"
         placement="bottomRight"
         content={
-          <div
-            style={{
-              width: 250,
-            }}
-          >
+          <div style={{ width: 250 }}>
             <h5
               style={{
                 color: 'rgba(255, 255, 255, 0.7)',
@@ -403,18 +378,14 @@ export const Cog = () => {
               ))}
             </Select>
 
-            <Button
-              className="metaplex-button-default"
-              style={btnStyle}
-              onClick={open}
-            >
+            <Button className="popover-btn" style={btnStyle} onClick={open}>
               Change wallet
             </Button>
           </div>
         }
       >
-        <Button className="wallet-key">
-          <img src="/cog.svg" />
+        <Button className="wallet-icon">
+          <img src={wallet?.icon} />
         </Button>
       </Popover>
     </div>

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Menu, Modal } from 'antd';
+import { Menu } from 'antd';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Notifications } from '../Notifications';
-import { CloseOutlined, MenuOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { HowToBuyModal } from '../HowToBuyModal';
+// import { Notifications } from '../Notifications';
+import { CloseOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
+// import { HowToBuyModal } from '../HowToBuyModal';
 import { SearchBar } from "../SearchBar";
 import {
   Cog,
   CurrentUserBadge,
-  CurrentUserBadgeMobile,
 } from '../CurrentUserBadge';
 import { ConnectButton } from '@oyster/common';
 import useWindowDimensions from '../../utils/layout';
@@ -79,19 +78,24 @@ export const MetaplexMenu = ({showMenu = false} : {showMenu: boolean}) => {
         />
       </div>
       <DefaultActions isMobile={isMobile} />
-      {!connected && (
-        <ConnectButton className="navbar-connect" allowWalletChange />
-      )}
-      {connected && (
-        <>
+      {/* {!connected && (
+        <HowToBuyModal buttonClassName="modal-button-default" />
+      )} */}
+      
+      {!connected ? (
+        <div className="wallet-info">
+          <ConnectButton className="navbar-connect" allowWalletChange />
+        </div>
+      ) : (
+        <div className="wallet-info">
           <CurrentUserBadge
             showBalance={false}
             showAddress={true}
             iconSize={24}
           />
-          <Notifications />
           <Cog />
-        </>
+          {/* <Notifications /> */}
+        </div>
       )}
     </div>
   )
@@ -128,25 +132,6 @@ export const AppBar = () => {
           )}
         </button>
         <MetaplexMenu showMenu={navShown}/>
-        {/* <div className="app-right">
-          {!connected && (
-            <HowToBuyModal buttonClassName="modal-button-default" />
-          )}
-          {!connected && (
-            <ConnectButton style={{ height: 48 }} allowWalletChange />
-          )}
-          {connected && (
-            <>
-              <CurrentUserBadge
-                showBalance={false}
-                showAddress={true}
-                iconSize={24}
-              />
-              <Notifications />
-              <Cog />
-            </>
-          )}
-        </div> */}
       </div>
     </div>
   );

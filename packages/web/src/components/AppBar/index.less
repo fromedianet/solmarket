@@ -16,6 +16,11 @@ header .navbar-expand-lg {
     flex-wrap: nowrap;
     justify-content: flex-start;
   }
+  @media screen and (max-width: 768px) {
+    background-color: @bg-secondary-color;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 }
 .navbar-expand-lg .container {
   display: flex;
@@ -157,10 +162,16 @@ header .navbar-expand-lg {
 }
 .ant-dropdown-menu.black-dropdown {
   color: @text-primary-color;
-  background-color: @bg-primary-color;
+  background-color: #1f1f1f;
   border: 1px soild @bg-third-color;
+  border-radius: 4px;
+  margin-right: 16px;
 }
 .black-dropdown .ant-dropdown-menu-item {
   background-color: transparent;
   color: @text-primary-color;
+}
+.wallet-info {
+  display: flex;
+  justify-content: center;
 }
