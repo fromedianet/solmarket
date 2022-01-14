@@ -1,31 +1,68 @@
-import { useEffect, useState } from "react";
-import { useGetter } from "store/accessors";
-import { Wallets } from "services/wallet/types";
+import React from "react";
+import {
+  useGlobalModalContext,
+  MODAL_TYPES,
+} from "providers/GlobalModalProvider";
+import { useGetPhantom, useSetPhantom } from "wallets/Phantom";
+import { maskAddress } from "utils/helpers";
+import { AiOutlineCopy, AiOutlineDisconnect } from "react-icons/ai";
+import PhantomIcon from "assets/icons/wallets/phantom.svg";
+import "./index.css";
 
 export default function WalletSuite() {
-  const [connectorsShown, showConnectors] = useState(false);
-  const { activeWallet, isLoading } = useGetter((state) => state.wallet);
-  const isConnected = activeWallet !== Wallets.none;
-  const toggleConnector = () => showConnectors((p) => !p);
-  const hideConnectors = () => showConnectors(false);
+  const { showModal } = useGlobalModalContext();
+  const { connected, loading, publicKey } = useGetPhantom();
+  const { disconnect } = useSetPhantom();
+  const toggleConnector = () => {
+    showModal(MODAL_TYPES.CONNECT_MODAL);
+  };
 
-  // close modal after connecting
-  useEffect(() => {
-    isConnected && showConnectors(false);
-    //eslint-disable-next-line
-  }, [isConnected]);
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(publicKey);
+  };
 
   return (
-    <div className="flex border-1 border-purple-700 hover:bg-purple-700 rounded-md ml-auto">
-      {!isConnected && (
+    <div className="wallet-suite-container">
+      {!connected ? (
+        <button onClick={toggleConnector}>
+          <span>{loading ? "Loading..." : "Connect"}</span>
+        </button>
+      ) : (
         <button
-          className="flex py-2 px-3 items-center text-white  "
-          disabled={isLoading}
-          onClick={toggleConnector}
+          id="navbarDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          onClick={() => {}}
         >
-          <span>{isLoading ? "Loading" : "Connect"}</span>
+          <i className="icon">
+            <img src={PhantomIcon} alt="phantom-icon" />
+          </i>
+          <span>{maskAddress(publicKey)}</span>
         </button>
       )}
+      <ul
+        className="dropdown-menu p-0 wallet-suite-menu"
+        aria-labelledby="navbarDropdown"
+      >
+        <li
+          className="nav-item dropdown wallet-suite-menu-item"
+          onClick={handleCopyAddress}
+        >
+          <i className="menu-item-icon">
+            <AiOutlineCopy size={24} />
+          </i>
+          Copy address
+        </li>
+        <li
+          className="nav-item dropdown wallet-suite-menu-item"
+          onClick={disconnect}
+        >
+          <i className="menu-item-icon">
+            <AiOutlineDisconnect size={24} />
+          </i>
+          Disconnect
+        </li>
+      </ul>
     </div>
   );
 }

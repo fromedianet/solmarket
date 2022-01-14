@@ -17,7 +17,7 @@ const initialState: State = {
   loading: false,
   connected: false,
   balance: 0,
-  address: "",
+  publicKey: "",
   provider: null,
 };
 const getContext = createContext<State>(initialState);

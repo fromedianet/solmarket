@@ -41,6 +41,9 @@ section {
 .bg-color-third {
   background-color: #1c1929;
 }
+.bg-color-pink {
+  background-color: #900ce9;
+}
 .bg-pink-gradient {
   background: linear-gradient(123.73deg,#900ce9 22%,#f94e9b 80.67%);
 }
