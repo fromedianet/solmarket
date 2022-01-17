@@ -206,6 +206,8 @@ export const CurrentUserBadge = (props: {
   iconSize?: number;
 }) => {
   const { wallet, publicKey, disconnect } = useWallet();
+  const { endpoint } = useConnectionConfig();
+  const routerSearchParams = useQuerySearch();
   const { account } = useNativeAccount();
   const solPrice = useSolPrice();
   const [showAddFundsModal, setShowAddFundsModal] = useState<Boolean>(false);
@@ -237,19 +239,8 @@ export const CurrentUserBadge = (props: {
         content={
           <Settings
             additionalSettings={
-              <div
-                style={{
-                  width: 250,
-                }}
-              >
-                <h5
-                  style={{
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  BALANCE
-                </h5>
+              <div className='modal-container' >
+                <h5>BALANCE</h5>
                 <div
                   style={{
                     display: 'flex',
@@ -277,6 +268,40 @@ export const CurrentUserBadge = (props: {
                     {formatUSD.format(balanceInUSD)}
                   </span>
                   &nbsp;
+                </div>
+                <div style={{ width: '100%' }}>
+                  <h5>NETWORK</h5>
+                  <Select
+                    onSelect={network => {
+                      // Reload the page, forward user selection to the URL querystring.
+                      // The app will be re-initialized with the correct network
+                      // (which will also be saved to local storage for future visits)
+                      // for all its lifecycle.
+
+                      // Because we use react-router's HashRouter, we must append
+                      // the query parameters to the window location's hash & reload
+                      // explicitly. We cannot update the window location's search
+                      // property the standard way, see examples below.
+
+                      // doesn't work: https://localhost/?network=devnet#/
+                      // works: https://localhost/#/?network=devnet
+                      const windowHash = window.location.hash;
+                      routerSearchParams.set('network', network);
+                      const nextLocationHash = `${
+                        windowHash.split('?')[0]
+                      }?${routerSearchParams.toString()}`;
+                      window.location.hash = nextLocationHash;
+                      window.location.reload();
+                    }}
+                    value={endpoint.name}
+                    bordered={false}
+                  >
+                    {ENDPOINTS.map(({ name }) => (
+                      <Select.Option value={name} key={name}>
+                        {name}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </div>
                 <div
                   style={{

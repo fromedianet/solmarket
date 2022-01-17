@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Drawer, Menu } from 'antd';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 import {

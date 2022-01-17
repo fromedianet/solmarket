@@ -28,8 +28,31 @@
     color: @text-primary-color;
   }
 }
+.ant-popover-inner-content .modal-container {
+  width: 250px;
+
+  h5 {
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.02em;
+  }
+
+  .ant-select {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+    color: white;
+
+    .ant-select-arrow {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
 .ant-select-dropdown{
   background-color: black;
+  .ant-select-item {
+    color: white;
+  }
 }
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
   background: rgba(255, 255, 255, 0.1);
@@ -44,10 +67,6 @@
 
 .ant-popover-arrow {
   display: none;
-}
-
-h5 {
-  font-weight: normal;
 }
 
 .ant-select-selector {
