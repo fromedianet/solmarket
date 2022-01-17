@@ -21,6 +21,36 @@
     .wallet-info {
       display: flex;
       align-items: center;
+
+      .profile-btn {
+        height: 40px;
+        background-color: transparent;
+        border: 1px solid @border-purple;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        margin-right: -1px;
+        padding: 0 8px;
+        font-size: 20px;
+        color: @border-purple;
+
+        &:hover {
+          background-color: @bg-purple !important;
+          color: @text-primary-color;
+        }
+      }
+
+      .connect-btn {
+        height: 40px;
+        background-color: transparent;
+        border: 1px solid @border-purple;
+        color: @text-primary-color;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        &:hover {
+          background-color: @bg-purple !important;
+          color: @text-primary-color;
+        }
+      }
     }
   }
 

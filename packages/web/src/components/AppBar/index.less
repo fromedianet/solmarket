@@ -130,124 +130,37 @@ header .navbar-expand-lg {
       .wallet-info {
         display: flex;
         align-items: center;
+
+        .profile-btn {
+          height: 40px;
+          background-color: transparent;
+          border: 1px solid @border-purple;
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+          margin-right: -1px;
+          padding: 0 8px;
+          font-size: 20px;
+          color: @border-purple;
+      
+          &:hover {
+            background-color: @bg-purple !important;
+            color: @text-primary-color;
+          }
+        }
+
+        .connect-btn {
+          height: 40px;
+          background-color: transparent;
+          border: 1px solid @border-purple;
+          color: @text-primary-color;
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+          &:hover {
+            background-color: @bg-purple !important;
+            color: @text-primary-color;
+          }
+        }
       }
     }
   }
-}
-
-.navbar-expand-lg .navbar-collapse {
-  flex-basis: 100%;
-  flex-grow: 1;
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: -16px;
-  margin-right: -16px;
-  max-height: calc(100vh - 80px);
-  overflow-x: hidden;
-  overflow-y: scroll;
-  @media screen and (min-width: 992px) {
-    display: flex!important;
-    flex-basis: auto;
-    overflow: unset!important;
-  }
-  @media screen and (min-width: 768px) {
-    margin: 0;
-    height: auto;
-  }
-}
-.order-2 {
-  order: 2!important;
-}
-.navbar-expand-lg .ant-menu {
-  background-color: transparent;
-  color: @text-primary-color;
-}
-.navbar-expand-lg .ant-menu-horizontal {
-  border: none;
-}
-.navbar-expand-lg .ant-menu-item {
-  &:hover,
-  &-active,
-  &-selected {
-    color: @text-primary-color!important;
-  }
-}
-.navbar-expand-lg .ant-menu-submenu {
-  &-open,
-  &-active,
-  &-title:hover,
-  &-selected {
-    color: @text-primary-color!important;
-  }
-}
-.navbar-expand-lg .ant-menu-horizontal > .ant-menu-item {
-  &hover:after,
-  &-active::after,
-  &-open::after,
-  &-selected::after {
-    border-bottom: 2px solid white !important;
-  }
-}
-.navbar-expand-lg .ant-menu-horizontal > .ant-menu-submenu {
-  &hover:after,
-  &-active::after,
-  &-open::after,
-  &-selected::after {
-    border-bottom: 2px solid white !important;
-  }
-}
-.ant-menu-submenu:hover > .ant-menu-submenu-title > .ant-menu-submenu-expand-icon,
-.ant-menu-submenu:hover > .ant-menu-submenu-title > .ant-menu-submenu-arrow {
-  color: @text-primary-color;
-}
-.ant-menu-submenu-popup > .ant-menu {
-  background-color: @bg-secondary-color;
-  color: @text-secondary-color;
-  border: 1px solid @bg-third-color;
-}
-.ant-menu-light .ant-menu-item {
-  &:hover,
-  &-active,
-  &-selected {
-    color: @text-primary-color!important;
-  }
-
-  &:hover {
-    background-color: rgb(255 255 255 / 8%)!important;
-  }
-}
-.ant-menu-light .ant-menu-item-selected {
-  background-color: transparent!important;
-}
-.nav-item--search-container {
-  width: 100%;
-  padding: 0 8px;
-  @media screen and (min-width: 992px) {
-    padding: 0;
-  }
-}
-.navbar-connect.ant-btn, .navbar-connect .ant-btn {
-  height: 40px;
-  background-color: transparent;
-  border: 1px solid @border-purple;
-  color: @text-primary-color;
-  &:hover {
-    background-color: @bg-purple !important;
-    color: @text-primary-color;
-  }
-}
-.ant-dropdown-menu.black-dropdown {
-  color: @text-primary-color;
-  background-color: #1f1f1f;
-  border: 1px soild @bg-third-color;
-  border-radius: 4px;
-  margin-right: 16px;
-}
-.black-dropdown .ant-dropdown-menu-item {
-  background-color: transparent;
-  color: @text-primary-color;
-}
-.wallet-info {
-  display: flex;
-  justify-content: center;
 }

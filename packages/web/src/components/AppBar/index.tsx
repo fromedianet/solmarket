@@ -1,40 +1,31 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu } from 'antd';
-import { useWallet } from '@solana/wallet-adapter-react';
-// import { Notifications } from '../Notifications';
 import { MenuOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
-// import { HowToBuyModal } from '../HowToBuyModal';
-import { SearchBar } from "../SearchBar";
-import {
-  Cog,
-  CurrentUserBadge,
-} from '../CurrentUserBadge';
 import { ConnectButton } from '@oyster/common';
-import useWindowDimensions from '../../utils/layout';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Link } from 'react-router-dom';
 import { useSetSidebarState } from '../../contexts';
-const { SubMenu } = Menu;
+import { CurrentUserBadge } from '../CurrentUserBadge';
+import { SearchBar } from "../SearchBar";
 
 export const WalletInfo = () => {
   const { connected } = useWallet();
 
   return (
     <div className="wallet">
-      {!connected ? (
-        <div className="wallet-info">
-          <ConnectButton className="navbar-connect" allowWalletChange />
-        </div>
-      ) : (
-        <div className="wallet-info">
+      <div className="wallet-info">
+        <button className='profile-btn'>
+          <UserOutlined />
+        </button>
+        {!connected ? (
+          <ConnectButton className="connect-btn" />
+        ) : (
           <CurrentUserBadge
             showBalance={false}
             showAddress={true}
             iconSize={24}
           />
-          <Cog />
-          {/* <Notifications /> */}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 };

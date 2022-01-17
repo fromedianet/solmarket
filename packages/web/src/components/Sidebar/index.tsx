@@ -10,10 +10,11 @@ import {
   ShoppingCartOutlined,
   TagOutlined,
   UsergroupAddOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ConnectButton } from '@oyster/common';
-import { Cog, CurrentUserBadge } from '../CurrentUserBadge';
+import { CurrentUserBadge } from '../CurrentUserBadge';
 import useWindowDimensions from '../../utils/layout';
 
 const { SubMenu } = Menu;
@@ -79,20 +80,20 @@ const WalletInfo = () => {
 
   return (
     <div className="wallet">
-      {!connected ? (
-        <div className="wallet-info">
-          <ConnectButton className="navbar-connect" allowWalletChange />
-        </div>
-      ) : (
-        <div className="wallet-info">
+      <div className="wallet-info">
+        <button className='profile-btn'>
+          <UserOutlined />
+        </button>
+        {!connected ? (
+          <ConnectButton className="connect-btn" />
+        ) : (
           <CurrentUserBadge
             showBalance={false}
             showAddress={true}
             iconSize={24}
           />
-          <Cog />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 };
