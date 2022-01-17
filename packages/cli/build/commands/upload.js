@@ -125,11 +125,6 @@ async function uploadV2({ files, cacheName, env, totalNFTs, storage, retainAutho
                     const manifestBuffer = Buffer.from(JSON.stringify(manifest));
                     if (allIndexesInSlice[i] >= lastPrinted + tick ||
                         allIndexesInSlice[i] === 0) {
-                        lastPrinted = i;
-                        loglevel_1.default.info(`Processing asset: ${allIndexesInSlice[i]}`);
-                    }
-                    if (allIndexesInSlice[i] >= lastPrinted + tick ||
-                        allIndexesInSlice[i] === 0) {
                         lastPrinted = allIndexesInSlice[i];
                         loglevel_1.default.info(`Processing asset: ${allIndexesInSlice[i]}`);
                     }
@@ -194,6 +189,7 @@ async function uploadV2({ files, cacheName, env, totalNFTs, storage, retainAutho
                                 cacheContent.items[keys[i]] = {
                                     ...cacheContent.items[keys[i]],
                                     onChain: true,
+                                    verifyRun: false,
                                 };
                             });
                             (0, cache_1.saveCache)(cacheName, env, cacheContent);
@@ -261,7 +257,8 @@ function getAssetManifest(dirname, assetKey) {
     const manifest = JSON.parse(fs_1.default.readFileSync(manifestPath).toString());
     manifest.image = manifest.image.replace('image', assetIndex);
     if (((_b = (_a = manifest.properties) === null || _a === void 0 ? void 0 : _a.files) === null || _b === void 0 ? void 0 : _b.length) > 0) {
-        manifest.properties.files[0].uri = (_d = (_c = manifest.properties.files[0]) === null || _c === void 0 ? void 0 : _c.uri) === null || _d === void 0 ? void 0 : _d.replace('image', assetIndex);
+        manifest.properties.files[0].uri =
+            (_d = (_c = manifest.properties.files[0]) === null || _c === void 0 ? void 0 : _c.uri) === null || _d === void 0 ? void 0 : _d.replace('image', assetIndex);
     }
     return manifest;
 }

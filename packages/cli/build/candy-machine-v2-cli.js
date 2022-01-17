@@ -199,7 +199,7 @@ programCommand('withdraw')
             try {
                 if (cg.account.lamports > 0) {
                     const tx = await (0, withdraw_1.withdrawV2)(anchorProgram, walletKeyPair, env, new web3_js_1.PublicKey(cg.pubkey), cg.account.lamports, charityPub, cpf);
-                    loglevel_1.default.info(`${cg.pubkey} has been withdrawn. \nTransaction Signarure: ${tx}`);
+                    loglevel_1.default.info(`${cg.pubkey} has been withdrawn. \nTransaction Signature: ${tx}`);
                 }
             }
             catch (e) {
@@ -213,7 +213,8 @@ programCommand('withdraw')
         loglevel_1.default.info(`Now you ${richness}, please consider supporting Open Source developers.`);
     }
 });
-programCommand('verify_assets')
+commander_1.program
+    .command('verify_assets')
     .argument('<directory>', 'Directory containing images and metadata files named from 0-n', val => {
     return fs
         .readdirSync(`${val}`)
@@ -239,30 +240,28 @@ programCommand('verify_upload')
     const candyMachine = await anchorProgram.provider.connection.getAccountInfo(new web3_js_1.PublicKey(cacheContent.program.candyMachine));
     const candyMachineObj = await anchorProgram.account.candyMachine.fetch(new web3_js_1.PublicKey(cacheContent.program.candyMachine));
     let allGood = true;
-    const keys = Object.keys(cacheContent.items).filter(k => !cacheContent.items[k].verifyRun);
+    const keys = Object.keys(cacheContent.items)
+        .filter(k => !cacheContent.items[k].verifyRun)
+        .sort((a, b) => Number(a) - Number(b));
     console.log('Key size', keys.length);
-    await Promise.all((0, various_1.chunks)(Array.from(Array(keys.length).keys()), 500).map(async (allIndexesInSlice) => {
+    await Promise.all((0, various_1.chunks)(keys, 500).map(async (allIndexesInSlice) => {
         for (let i = 0; i < allIndexesInSlice.length; i++) {
             // Save frequently.
             if (i % 100 == 0)
                 (0, cache_1.saveCache)(cacheName, env, cacheContent);
-            const key = keys[allIndexesInSlice[i]];
-            loglevel_1.default.debug('Looking at key ', allIndexesInSlice[i]);
-            const thisSlice = candyMachine.data.slice(constants_1.CONFIG_ARRAY_START_V2 +
-                4 +
-                constants_1.CONFIG_LINE_SIZE_V2 * allIndexesInSlice[i], constants_1.CONFIG_ARRAY_START_V2 +
-                4 +
-                constants_1.CONFIG_LINE_SIZE_V2 * (allIndexesInSlice[i] + 1));
+            const key = allIndexesInSlice[i];
+            loglevel_1.default.info('Looking at key ', key);
+            const thisSlice = candyMachine.data.slice(constants_1.CONFIG_ARRAY_START_V2 + 4 + constants_1.CONFIG_LINE_SIZE_V2 * key, constants_1.CONFIG_ARRAY_START_V2 + 4 + constants_1.CONFIG_LINE_SIZE_V2 * (key + 1));
             const name = (0, various_1.fromUTF8Array)([...thisSlice.slice(2, 34)]);
             const uri = (0, various_1.fromUTF8Array)([...thisSlice.slice(40, 240)]);
             const cacheItem = cacheContent.items[key];
             if (!name.match(cacheItem.name) || !uri.match(cacheItem.link)) {
                 //leaving here for debugging reasons, but it's pretty useless. if the first upload fails - all others are wrong
                 /*log.info(
-                  `Name (${name}) or uri (${uri}) didnt match cache values of (${cacheItem.name})` +
-                    `and (${cacheItem.link}). marking to rerun for image`,
-                  key,
-                );*/
+                    `Name (${name}) or uri (${uri}) didnt match cache values of (${cacheItem.name})` +
+                      `and (${cacheItem.link}). marking to rerun for image`,
+                    key,
+                  );*/
                 cacheItem.onChain = false;
                 allGood = false;
             }
@@ -598,7 +597,8 @@ programCommand('get_all_mint_addresses').action(async (directory, cmd) => {
     });
     console.log(JSON.stringify(addresses, null, 2));
 });
-programCommand('generate_art_configurations')
+commander_1.program
+    .command('generate_art_configurations')
     .argument('<directory>', 'Directory containing traits named from 0-n', val => fs.readdirSync(`${val}`))
     .action(async (files) => {
     loglevel_1.default.info('creating traits configuration file');
@@ -614,7 +614,8 @@ programCommand('generate_art_configurations')
         loglevel_1.default.info('The art configuration file was not created');
     }
 });
-programCommand('create_generative_art')
+commander_1.program
+    .command('create_generative_art')
     .option('-n, --number-of-images <string>', 'Number of images to be generated', '100')
     .option('-c, --config-location <string>', 'Location of the traits configuration file', './traits-configuration.json')
     .option('-o, --output-location <string>', 'If you wish to do image generation elsewhere, skip it and dump randomized sets to file')

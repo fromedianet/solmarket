@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateMetadata = exports.mintNFT = exports.createMetadata = void 0;
+exports.verifyCollection = exports.updateMetadata = exports.mintNFT = exports.createMetadata = void 0;
 const instructions_1 = require("../helpers/instructions");
 const transactions_1 = require("../helpers/transactions");
 const accounts_1 = require("../helpers/accounts");
@@ -34,7 +34,8 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const spl_token_1 = require("@solana/spl-token");
 const web3_js_1 = require("@solana/web3.js");
 const loglevel_1 = __importDefault(require("loglevel"));
-const createMetadata = async (metadataLink) => {
+const mpl_token_metadata_1 = require("@metaplex-foundation/mpl-token-metadata");
+const createMetadata = async (metadataLink, collection, uses) => {
     // Metadata
     let metadata;
     try {
@@ -65,18 +66,22 @@ const createMetadata = async (metadataLink) => {
         share: creator.share,
         verified: 1,
     }));
-    return new schema_1.Data({
+    return new mpl_token_metadata_1.DataV2({
         symbol: metadata.symbol,
         name: metadata.name,
         uri: metadataLink,
         sellerFeeBasisPoints: metadata.seller_fee_basis_points,
         creators: creators,
+        collection: collection
+            ? new mpl_token_metadata_1.Collection({ key: collection.toBase58(), verified: false })
+            : null,
+        uses,
     });
 };
 exports.createMetadata = createMetadata;
-const mintNFT = async (connection, walletKeypair, metadataLink, mutableMetadata = true) => {
+const mintNFT = async (connection, walletKeypair, metadataLink, mutableMetadata = true, collection = null, use = null) => {
     // Retrieve metadata
-    const data = await (0, exports.createMetadata)(metadataLink);
+    const data = await (0, exports.createMetadata)(metadataLink, collection, use);
     if (!data)
         return;
     // Create wallet from keypair
@@ -101,12 +106,20 @@ const mintNFT = async (connection, walletKeypair, metadataLink, mutableMetadata 
     instructions.push((0, instructions_1.createAssociatedTokenAccountInstruction)(userTokenAccoutAddress, wallet.publicKey, wallet.publicKey, mint.publicKey));
     // Create metadata
     const metadataAccount = await (0, accounts_1.getMetadata)(mint.publicKey);
-    let txnData = Buffer.from((0, borsh_1.serialize)(schema_1.METADATA_SCHEMA, new schema_1.CreateMetadataArgs({ data, isMutable: mutableMetadata })));
+    let txnData = Buffer.from((0, borsh_1.serialize)(new Map([
+        mpl_token_metadata_1.DataV2.SCHEMA,
+        ...schema_1.METADATA_SCHEMA,
+        ...mpl_token_metadata_1.CreateMetadataV2Args.SCHEMA,
+    ]), new mpl_token_metadata_1.CreateMetadataV2Args({ data, isMutable: mutableMetadata })));
     instructions.push((0, instructions_1.createMetadataInstruction)(metadataAccount, mint.publicKey, wallet.publicKey, wallet.publicKey, wallet.publicKey, txnData));
     instructions.push(spl_token_1.Token.createMintToInstruction(constants_1.TOKEN_PROGRAM_ID, mint.publicKey, userTokenAccoutAddress, wallet.publicKey, [], 1));
     // Create master edition
     const editionAccount = await (0, accounts_1.getMasterEdition)(mint.publicKey);
-    txnData = Buffer.from((0, borsh_1.serialize)(schema_1.METADATA_SCHEMA, new schema_1.CreateMasterEditionArgs({ maxSupply: new anchor.BN(0) })));
+    txnData = Buffer.from((0, borsh_1.serialize)(new Map([
+        mpl_token_metadata_1.DataV2.SCHEMA,
+        ...schema_1.METADATA_SCHEMA,
+        ...mpl_token_metadata_1.CreateMasterEditionV3Args.SCHEMA,
+    ]), new mpl_token_metadata_1.CreateMasterEditionV3Args({ maxSupply: new anchor.BN(0) })));
     instructions.push((0, instructions_1.createMasterEditionInstruction)(metadataAccount, editionAccount, mint.publicKey, wallet.publicKey, wallet.publicKey, wallet.publicKey, txnData));
     const res = await (0, transactions_1.sendTransactionWithRetryWithKeypair)(connection, walletKeypair, instructions, signers);
     try {
@@ -118,20 +131,22 @@ const mintNFT = async (connection, walletKeypair, metadataLink, mutableMetadata 
     // Force wait for max confirmations
     await connection.getParsedConfirmedTransaction(res.txid, 'confirmed');
     loglevel_1.default.info('NFT created', res.txid);
+    loglevel_1.default.info('\n\nNFT: Mint Address is ', mint.publicKey.toBase58());
     return metadataAccount;
 };
 exports.mintNFT = mintNFT;
-const updateMetadata = async (mintKey, connection, walletKeypair, metadataLink) => {
+const updateMetadata = async (mintKey, connection, walletKeypair, metadataLink, collection = null, uses) => {
     // Retrieve metadata
-    const data = await (0, exports.createMetadata)(metadataLink);
+    const data = await (0, exports.createMetadata)(metadataLink, collection, uses);
     if (!data)
         return;
     const metadataAccount = await (0, accounts_1.getMetadata)(mintKey);
     const signers = [];
-    const value = new schema_1.UpdateMetadataArgs({
+    const value = new mpl_token_metadata_1.UpdateMetadataV2Args({
         data,
         updateAuthority: walletKeypair.publicKey.toBase58(),
         primarySaleHappened: null,
+        isMutable: true,
     });
     const txnData = Buffer.from((0, borsh_1.serialize)(schema_1.METADATA_SCHEMA, value));
     const instructions = [
@@ -140,6 +155,23 @@ const updateMetadata = async (mintKey, connection, walletKeypair, metadataLink) 
     // Execute transaction
     const txid = await (0, transactions_1.sendTransactionWithRetryWithKeypair)(connection, walletKeypair, instructions, signers);
     console.log('Metadata updated', txid);
+    loglevel_1.default.info('\n\nUpdated NFT: Mint Address is ', mintKey.toBase58());
     return metadataAccount;
 };
 exports.updateMetadata = updateMetadata;
+const verifyCollection = async (mintKey, connection, walletKeypair, collectionMint) => {
+    const metadataAccount = await (0, accounts_1.getMetadata)(mintKey);
+    const collectionMetadataAccount = await (0, accounts_1.getMetadata)(collectionMint);
+    const collectionMasterEdition = await (0, accounts_1.getMasterEdition)(collectionMint);
+    const signers = [walletKeypair];
+    const tx = new mpl_token_metadata_1.VerifyCollection({ feePayer: walletKeypair.publicKey }, {
+        metadata: metadataAccount,
+        collectionAuthority: walletKeypair.publicKey,
+        collectionMint: collectionMint,
+        collectionMetadata: collectionMetadataAccount,
+        collectionMasterEdition: collectionMasterEdition,
+    });
+    const txid = await (0, transactions_1.sendTransactionWithRetryWithKeypair)(connection, walletKeypair, tx.instructions, signers);
+    return txid;
+};
+exports.verifyCollection = verifyCollection;
