@@ -1,65 +1,140 @@
 @import '../../styles/colors.less';
 
 header .navbar-expand-lg {
-  position: fixed;
+  position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 30;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  background-color: @bg-primary-color;
+  padding: 0 16px;
+}
+.navbar-expand-lg .container {
+  position: relative;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  pointer-events: auto;
-  transition: @bg-primary-color .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
-  transition: @bg-primary-color .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s!important;
-  transition: @bg-primary-color .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
-  @media screen and (min-width: 992px) {
-    flex-wrap: nowrap;
-  }
-  @media screen and (max-width: 768px) {
-    background-color: @bg-secondary-color;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-}
-.navbar-expand-lg .container {
-  display: flex;
-  flex-wrap: inherit;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  max-width: 1170px;
-  padding: 0 24px;
-}
-.navbar-expand-lg .navbar-brand {
-  display: flex;
-  align-items: center;
   padding: 0;
-  white-space: nowrap;
-  margin-right: 24px;
-  min-height: 80px;
-}
-.navbar-expand-lg .ms-auto {
-  margin-left: auto!important;
-}
-.navbar-expand-lg .navbar-toggler {
-  padding: 4px 12px;
-  font-size: 20px;
-  line-height: 1;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  transition: box-shadow .15s ease-in-out;
-  @media screen and (min-width: 992px) {
-    display: none;
-    order: 1!important;
+
+  .left-container {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+
+    .brand {
+      display: flex;
+      align-items: center;
+
+      .menu-btn {
+        background-color: transparent;
+        border: none;
+        border-radius: 4px;
+        padding: 8px;
+        margin-right: 8px;
+        transition: box-shadow .15s ease-in-out;
+        @media screen and (min-width: 992px) {
+          display: none;
+        }
+
+        .menu-icon {
+          color: white;
+          font-size: 24px;
+        }
+      }
+      
+      .navbar-brand {
+        padding: 0;
+        white-space: nowrap;
+
+        img {
+          width: 150px!important;
+          height: 80px!important;
+          @media screen and (min-width: 992px) {
+            width: 180px!important;
+          }
+        }
+      }
+    }
+
+    .tw-hidden {
+      display: none;
+      margin-left: 32px;
+    }
+
+    .search-container {
+      flex: 1 1 auto;
+      justify-content: center;
+      padding: 0 8px;
+      margin-left: 0px;
+
+      @media screen and (min-width: 992px) {
+        display: inline-flex;
+      }
+
+      .search-control {
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 670px;
+
+        @media screen and (min-width: 992px) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
+  }
+
+  .right-container {
+    display: flex;
+    flex-shrink: 0;
+    margin-left: auto;
+
+    .btn-container {
+      display: block;
+      margin-left: 8px;
+
+      @media screen and (min-width: 992px) {
+        display: none;
+      }
+
+      .search-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        background-color: transparent;
+        border: none;
+
+        .search-icon {
+          color: white;
+          font-size: 20px;
+        }
+      }
+    }
+
+    .wallet {
+      display: none;
+      margin-left: 8px;
+
+      @media screen and (min-width: 768px) {
+        display: inline-flex;
+      }
+
+      .wallet-info {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 }
-.navbar-expand-lg .navbar-icon {
-  color: white;
-  width: 24px;
-  height: 24px;
-}
+
 .navbar-expand-lg .navbar-collapse {
   flex-basis: 100%;
   flex-grow: 1;
