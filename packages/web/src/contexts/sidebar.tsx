@@ -1,4 +1,10 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import useWindowDimensions from '../utils/layout';
 
 interface Props {
@@ -14,10 +20,10 @@ interface Handler {
 }
 
 export const getContext = createContext<SidebarState>({
-  isShown: true
+  isShown: true,
 });
 export const setContext = createContext<Handler>({
-  handleToggle: () => {}
+  handleToggle: () => {},
 });
 
 export default function SidebarProvider(props: Props) {
@@ -33,7 +39,7 @@ export default function SidebarProvider(props: Props) {
   }, [width]);
 
   async function handleToggle() {
-    setShown((prevState) => !prevState);
+    setShown(prevState => !prevState);
   }
 
   return (
@@ -42,7 +48,7 @@ export default function SidebarProvider(props: Props) {
         {props.children}
       </setContext.Provider>
     </getContext.Provider>
-  )
+  );
 }
 
 export const useSetSidebarState = () => useContext(setContext);

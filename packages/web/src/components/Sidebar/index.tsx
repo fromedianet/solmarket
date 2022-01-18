@@ -20,11 +20,8 @@ import useWindowDimensions from '../../utils/layout';
 const { SubMenu } = Menu;
 const SidebarMenu = () => {
   return (
-    <Menu
-      className='sidebar-menu ant-menu-dark'
-      mode={"inline"}
-    >
-      <Menu.Item key="home" icon={<HomeOutlined style={{fontSize: 20}} />}>
+    <Menu className="sidebar-menu ant-menu-dark" mode={'inline'}>
+      <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
         Home
       </Menu.Item>
       <SubMenu
@@ -36,19 +33,28 @@ const SidebarMenu = () => {
         <Menu.Item key="popular-collections">Popular</Menu.Item>
         <Menu.Item key="new-collections">New</Menu.Item>
       </SubMenu>
-      <Menu.Item key="launchpad" icon={<TagOutlined style={{fontSize: 20}} />}>
+      <Menu.Item
+        key="launchpad"
+        icon={<TagOutlined style={{ fontSize: 20 }} />}
+      >
         Launchpad
       </Menu.Item>
-      <Menu.Item key="auctions" icon={<BellOutlined style={{fontSize: 20}} />}>
+      <Menu.Item
+        key="auctions"
+        icon={<BellOutlined style={{ fontSize: 20 }} />}
+      >
         Auctions
       </Menu.Item>
-      <Menu.Item key="stats" icon={<BarChartOutlined style={{fontSize: 20}} />}>
+      <Menu.Item
+        key="stats"
+        icon={<BarChartOutlined style={{ fontSize: 20 }} />}
+      >
         Stats
       </Menu.Item>
       <SubMenu
         key="creators"
         title="Creators"
-        icon={<CopyrightOutlined style={{fontSize: 20}} />}
+        icon={<CopyrightOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="apply:1">Apply for listing</Menu.Item>
         <Menu.Item key="apply:2">Apply for Launchpad</Menu.Item>
@@ -56,7 +62,7 @@ const SidebarMenu = () => {
       <SubMenu
         key="community"
         title="Community"
-        icon={<UsergroupAddOutlined style={{fontSize: 20}} />}
+        icon={<UsergroupAddOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="twitter">Twitter</Menu.Item>
         <Menu.Item key="discord">Discord</Menu.Item>
@@ -67,7 +73,7 @@ const SidebarMenu = () => {
       <SubMenu
         key="more"
         title="More"
-        icon={<BarsOutlined style={{fontSize: 20}} />}
+        icon={<BarsOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="faq">FAQ</Menu.Item>
       </SubMenu>
@@ -81,7 +87,7 @@ const WalletInfo = () => {
   return (
     <div className="wallet">
       <div className="wallet-info">
-        <button className='profile-btn'>
+        <button className="profile-btn">
           <UserOutlined />
         </button>
         {!connected ? (
@@ -95,11 +101,11 @@ const WalletInfo = () => {
         )}
       </div>
     </div>
-  )
+  );
 };
 
 export const Sidebar = () => {
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const { isShown } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
 
@@ -111,15 +117,15 @@ export const Sidebar = () => {
 
   return (
     <Drawer
-      placement='left'
+      placement="left"
       visible={isShown}
       closable={false}
       onClose={onClose}
-      maskStyle={{background: 'transparent'}}
-      className='my-drawer'
+      maskStyle={{ background: 'transparent' }}
+      className="my-drawer"
     >
       <WalletInfo />
       <SidebarMenu />
     </Drawer>
   );
-}
+};

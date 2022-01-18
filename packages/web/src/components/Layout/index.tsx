@@ -11,14 +11,12 @@ const { Content } = Layout;
 export const AppLayout = React.memo((props: any) => {
   return (
     <div className="main page">
-      <header id='header'>
+      <header id="header">
         <AppBar />
       </header>
       <Layout id={'width-layout'} style={{ display: 'flex' }}>
         <Sidebar />
-        <Content className='my-layout-content'>
-          {props.children}
-        </Content>
+        <Content className="my-layout-content">{props.children}</Content>
       </Layout>
       {/*<Footer />*/}
     </div>

@@ -239,7 +239,7 @@ export const CurrentUserBadge = (props: {
         content={
           <Settings
             additionalSettings={
-              <div className='modal-container' >
+              <div className="modal-container">
                 <h5>BALANCE</h5>
                 <div
                   style={{

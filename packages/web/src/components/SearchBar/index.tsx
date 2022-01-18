@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 
 export const SearchBar = ({
@@ -27,4 +27,4 @@ export const SearchBar = ({
       </div>
     </div>
   );
-}
+};

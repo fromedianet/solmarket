@@ -5,7 +5,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Link } from 'react-router-dom';
 import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
-import { SearchBar } from "../SearchBar";
+import { SearchBar } from '../SearchBar';
 
 export const WalletInfo = () => {
   const { connected } = useWallet();
@@ -13,7 +13,7 @@ export const WalletInfo = () => {
   return (
     <div className="wallet">
       <div className="wallet-info">
-        <button className='profile-btn'>
+        <button className="profile-btn">
           <UserOutlined />
         </button>
         {!connected ? (
@@ -27,12 +27,12 @@ export const WalletInfo = () => {
         )}
       </div>
     </div>
-  )
+  );
 };
 
 export const LogoLink = () => {
   return (
-    <Link to={`/`} className='navbar-brand'>
+    <Link to={`/`} className="navbar-brand">
       <img src={'/metaplex-logo.svg'} />
     </Link>
   );
@@ -41,7 +41,7 @@ export const LogoLink = () => {
 export const AppBar = () => {
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
-  const [searchKey, setSearchKey] = useState("");
+  const [searchKey, setSearchKey] = useState('');
 
   const handleSearch = (event: any) => {
     const searchText = event?.target?.value;
@@ -49,16 +49,13 @@ export const AppBar = () => {
   };
 
   return (
-    <div className='navbar-expand-lg'>
-      <div className='container'>
-        <div className='left-container'>
+    <div className="navbar-expand-lg">
+      <div className="container">
+        <div className="left-container">
           {!showSearchBar && (
-            <div className='brand'>
-              <button
-                className="menu-btn"
-                onClick={handleToggle}
-              >
-                <MenuOutlined className='menu-icon' />
+            <div className="brand">
+              <button className="menu-btn" onClick={handleToggle}>
+                <MenuOutlined className="menu-icon" />
               </button>
               <LogoLink />
             </div>
@@ -77,19 +74,18 @@ export const AppBar = () => {
             />
           </div>
         </div>
-        <div className='right-container'>
-          <div className='btn-container'>
+        <div className="right-container">
+          <div className="btn-container">
             <button
-              className='search-btn'
-              onClick={() => toggleSearchBar((prevState) => !prevState)}
+              className="search-btn"
+              onClick={() => toggleSearchBar(prevState => !prevState)}
             >
-              <SearchOutlined className='search-icon'/>
+              <SearchOutlined className="search-icon" />
             </button>
           </div>
           <WalletInfo />
         </div>
       </div>
     </div>
-    
   );
 };

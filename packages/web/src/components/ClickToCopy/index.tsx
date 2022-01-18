@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CheckOutlined, CopyOutlined } from "@ant-design/icons";
+import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 
 export const ClickToCopy = ({
   copyText,
@@ -26,7 +26,11 @@ export const ClickToCopy = ({
 
   return (
     <div className={className} onClick={onClick} title={tooltip}>
-      {clicked ? <CheckOutlined style={{ color: "#00ffbd" }} /> : <CopyOutlined />}
+      {clicked ? (
+        <CheckOutlined style={{ color: '#00ffbd' }} />
+      ) : (
+        <CopyOutlined />
+      )}
     </div>
   );
 };
