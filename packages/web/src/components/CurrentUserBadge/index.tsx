@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -8,13 +8,11 @@ import {
   ENDPOINTS,
   formatNumber,
   formatUSD,
-  Identicon,
   MetaplexModal,
   Settings,
   shortenAddress,
   useConnectionConfig,
   useNativeAccount,
-  useWalletModal,
   useQuerySearch,
   WRAPPED_SOL_MINT,
 } from '@oyster/common';
@@ -44,31 +42,31 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
   return (
     <>
       {store && (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {canCreate && (
-              <Link to={`/art/create`}>
-                <Button
-                  onClick={() => {
-                    props.onClick ? props.onClick() : null;
-                  }}
-                  style={btnStyle}
-                >
-                  Create
-                </Button>
-              </Link>
-            )}
-            <Link to={`/auction/create/0`}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {canCreate && (
+            <Link to={`/art/create`}>
               <Button
                 onClick={() => {
                   props.onClick ? props.onClick() : null;
                 }}
                 style={btnStyle}
               >
-                Sell
+                Create
               </Button>
             </Link>
-          </div>
-        )}
+          )}
+          <Link to={`/auction/create/0`}>
+            <Button
+              onClick={() => {
+                props.onClick ? props.onClick() : null;
+              }}
+              style={btnStyle}
+            >
+              Sell
+            </Button>
+          </Link>
+        </div>
+      )}
     </>
   );
 };
@@ -206,7 +204,7 @@ export const CurrentUserBadge = (props: {
   const handleDisconnect = () => {
     setShow(false);
     disconnect();
-  }
+  };
 
   return (
     <div className="wallet-container">
@@ -314,186 +312,10 @@ export const CurrentUserBadge = (props: {
           />
         }
         visible={show}
-        onVisibleChange={() => setShow((prev) => !prev)}
+        onVisibleChange={() => setShow(prev => !prev)}
       >
         <Button>{name}</Button>
       </Popover>
-      <AddFundsModal
-        setShowAddFundsModal={setShowAddFundsModal}
-        showAddFundsModal={showAddFundsModal}
-        publicKey={publicKey}
-        balance={balance}
-      />
-    </div>
-  );
-};
-
-export const Cog = () => {
-  const { wallet } = useWallet();
-  const { endpoint } = useConnectionConfig();
-  const routerSearchParams = useQuerySearch();
-  const { setVisible } = useWalletModal();
-  const open = useCallback(() => setVisible(true), [setVisible]);
-
-  return (
-    <div className="wallet-container">
-      <Popover
-        trigger="click"
-        placement="bottomRight"
-        content={
-          <div style={{ width: 250 }}>
-            <h5
-              style={{
-                color: 'rgba(255, 255, 255, 0.7)',
-                letterSpacing: '0.02em',
-              }}
-            >
-              NETWORK
-            </h5>
-            <Select
-              onSelect={network => {
-                // Reload the page, forward user selection to the URL querystring.
-                // The app will be re-initialized with the correct network
-                // (which will also be saved to local storage for future visits)
-                // for all its lifecycle.
-
-                // Because we use react-router's HashRouter, we must append
-                // the query parameters to the window location's hash & reload
-                // explicitly. We cannot update the window location's search
-                // property the standard way, see examples below.
-
-                // doesn't work: https://localhost/?network=devnet#/
-                // works: https://localhost/#/?network=devnet
-                const windowHash = window.location.hash;
-                routerSearchParams.set('network', network);
-                const nextLocationHash = `${
-                  windowHash.split('?')[0]
-                }?${routerSearchParams.toString()}`;
-                window.location.hash = nextLocationHash;
-                window.location.reload();
-              }}
-              value={endpoint.name}
-              bordered={false}
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: 8,
-                width: '100%',
-                marginBottom: 10,
-              }}
-            >
-              {ENDPOINTS.map(({ name }) => (
-                <Select.Option value={name} key={name}>
-                  {name}
-                </Select.Option>
-              ))}
-            </Select>
-
-            <Button className="popover-btn" style={btnStyle} onClick={open}>
-              Change wallet
-            </Button>
-          </div>
-        }
-      >
-        <Button className="wallet-icon">
-          <img src={wallet?.icon} />
-        </Button>
-      </Popover>
-    </div>
-  );
-};
-
-export const CurrentUserBadgeMobile = (props: {
-  showBalance?: boolean;
-  showAddress?: boolean;
-  iconSize?: number;
-  closeModal?: any;
-}) => {
-  const { wallet, publicKey, disconnect } = useWallet();
-  const { account } = useNativeAccount();
-  const solPrice = useSolPrice();
-
-  const [showAddFundsModal, setShowAddFundsModal] = useState<Boolean>(false);
-
-  if (!wallet || !publicKey) {
-    return null;
-  }
-  const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
-  const balanceInUSD = balance * solPrice;
-
-  const iconStyle: React.CSSProperties = {
-    display: 'flex',
-    width: props.iconSize,
-    borderRadius: 50,
-  };
-
-  let name = props.showAddress ? shortenAddress(`${publicKey}`) : '';
-  const unknownWallet = wallet as any;
-  if (unknownWallet.name && !props.showAddress) {
-    name = unknownWallet.name;
-  }
-
-  let image = <Identicon address={publicKey?.toBase58()} style={iconStyle} />;
-
-  if (unknownWallet.image) {
-    image = <img src={unknownWallet.image} style={iconStyle} />;
-  }
-
-  return (
-    <div className="current-user-mobile-badge">
-      <div className="mobile-badge">
-        {image}
-        {name && (
-          <span
-            style={{
-              marginLeft: '0.5rem',
-              fontWeight: 600,
-            }}
-          >
-            {name}
-          </span>
-        )}
-      </div>
-      <div className="balance-container">
-        <span className="balance-title">Balance</span>
-        <span>
-          <span className="sol-img-wrapper">
-            <img src="/sol.svg" width="10" />
-          </span>{' '}
-          {formatNumber.format(balance)}&nbsp;&nbsp; SOL{' '}
-          <span
-            style={{
-              marginLeft: 5,
-              fontWeight: 'normal',
-              color: 'rgba(255, 255, 255, 0.5)',
-            }}
-          >
-            {formatUSD.format(balanceInUSD)}
-          </span>
-        </span>
-      </div>
-      <div className="actions-buttons">
-        <Button
-          className="secondary-btn"
-          onClick={() => {
-            props.closeModal ? props.closeModal() : null;
-            setShowAddFundsModal(true);
-          }}
-        >
-          Add Funds
-        </Button>
-        &nbsp;&nbsp;
-        <Button className="black-btn" onClick={disconnect}>
-          Disconnect
-        </Button>
-      </div>
-      <div className="actions-buttons">
-        <UserActions
-          mobile
-          onClick={() => {
-            props.closeModal ? props.closeModal() : null;
-          }}
-        />
-      </div>
       <AddFundsModal
         setShowAddFundsModal={setShowAddFundsModal}
         showAddFundsModal={showAddFundsModal}

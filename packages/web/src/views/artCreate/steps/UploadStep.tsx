@@ -1,7 +1,11 @@
-import { IMetadataExtension, MetadataCategory, MetadataFile } from "@oyster/common";
-import React, { useEffect, useState } from "react";
-import {Button, Row, Upload, Input, Form, Typography} from 'antd';
-import { getLast } from "../../../utils/utils";
+import {
+  IMetadataExtension,
+  MetadataCategory,
+  MetadataFile,
+} from '@oyster/common';
+import React, { useEffect, useState } from 'react';
+import { Button, Row, Upload, Input, Form, Typography } from 'antd';
+import { getLast } from '../../../utils/utils';
 
 const { Dragger } = Upload;
 const { Text } = Typography;

@@ -1,8 +1,8 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import React, { useEffect } from "react";
-import {Spin, Card, Steps} from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { Spin, Card, Steps } from 'antd';
 
-const {Step} = Steps;
+const { Step } = Steps;
 
 export const WaitingStep = (props: {
   mint: Function;
@@ -20,7 +20,7 @@ export const WaitingStep = (props: {
 
   const setIconForStep = (currentStep: number, componentStep) => {
     if (currentStep === componentStep) {
-      return <LoadingOutlined style={{color: "white"}} />;
+      return <LoadingOutlined style={{ color: 'white' }} />;
     }
     return null;
   };

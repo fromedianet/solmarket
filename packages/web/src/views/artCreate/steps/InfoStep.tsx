@@ -1,18 +1,7 @@
 import React from 'react';
-import {
-  Row,
-  Button,
-  Col,
-  Input,
-  InputNumber,
-  Form,
-  Space,
-} from 'antd';
+import { Row, Button, Col, Input, InputNumber, Form, Space } from 'antd';
 import { IMetadataExtension } from '@oyster/common';
-import {
-  MinusCircleOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useArtworkFiles } from '../useArtworkFiles';
 import { ArtContent } from '../../../components/ArtContent';
 
@@ -39,9 +28,9 @@ export const InfoStep = (props: {
         </p>
       </Row>
       <Row className="content-action" justify="center">
-        <Col span={24} lg={12} style={{paddingRight: 24}}>
+        <Col span={24} lg={12} style={{ paddingRight: 24 }}>
           {props.attributes.image && (
-            <div className='thumb-container'>
+            <div className="thumb-container">
               <div className="thumb-content">
                 <ArtContent
                   uri={image}
@@ -129,10 +118,7 @@ export const InfoStep = (props: {
                 <>
                   {fields.map(({ key, name }) => (
                     <Space key={key} align="baseline">
-                      <Form.Item
-                        name={[name, 'trait_type']}
-                        hasFeedback
-                      >
+                      <Form.Item name={[name, 'trait_type']} hasFeedback>
                         <Input placeholder="trait_type (Optional)" />
                       </Form.Item>
                       <Form.Item
@@ -142,10 +128,7 @@ export const InfoStep = (props: {
                       >
                         <Input placeholder="value" />
                       </Form.Item>
-                      <Form.Item
-                        name={[name, 'display_type']}
-                        hasFeedback
-                      >
+                      <Form.Item name={[name, 'display_type']} hasFeedback>
                         <Input placeholder="display_type (Optional)" />
                       </Form.Item>
                       <MinusCircleOutlined onClick={() => remove(name)} />

@@ -1,8 +1,8 @@
-import { StringPublicKey } from "@oyster/common";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { Button, } from 'antd';
-import { Confetti } from "../../../components/Confetti";
+import { StringPublicKey } from '@oyster/common';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button } from 'antd';
+import { Confetti } from '../../../components/Confetti';
 
 export const Congrats = (props: {
   nft?: {

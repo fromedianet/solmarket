@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { IMetadataExtension } from '@oyster/common';
 
-export const useArtworkFiles = (files: File[], attributes: IMetadataExtension) => {
+export const useArtworkFiles = (
+  files: File[],
+  attributes: IMetadataExtension,
+) => {
   const [data, setData] = useState<{ image: string; animation_url: string }>({
     image: '',
     animation_url: '',

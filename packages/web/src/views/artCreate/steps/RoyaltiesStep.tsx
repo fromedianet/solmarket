@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { UserSearch, UserValue } from '../../../components/UserSearch';
-import {Button, Row, Col, InputNumber, Slider, Typography} from 'antd';
-import { Creator, IMetadataExtension, MetaplexModal, shortenAddress } from '@oyster/common';
+import { Button, Row, Col, InputNumber, Slider, Typography } from 'antd';
+import {
+  Creator,
+  IMetadataExtension,
+  MetaplexModal,
+  shortenAddress,
+} from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 
-const {Text} = Typography;
+const { Text } = Typography;
 
 interface Royalty {
   creatorKey: string;
@@ -206,7 +211,10 @@ export const RoyaltiesStep = (props: {
           visible={showCreatorsModal}
           onCancel={() => setShowCreatorsModal(false)}
         >
-          <label className="action-field" style={{ width: '100%', padding: 24 }}>
+          <label
+            className="action-field"
+            style={{ width: '100%', padding: 24 }}
+          >
             <span className="field-title">Creators</span>
             <UserSearch setCreators={setCreators} />
           </label>
@@ -264,7 +272,7 @@ export const RoyaltiesStep = (props: {
             props.confirm();
           }}
           className="action-btn"
-          style={{marginTop: 24 }}
+          style={{ marginTop: 24 }}
         >
           Continue to review
         </Button>

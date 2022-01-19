@@ -1,12 +1,18 @@
-import { getAssetCostToStore, IMetadataExtension, LAMPORT_MULTIPLIER, MAX_METADATA_LEN, WRAPPED_SOL_MINT } from "@oyster/common";
-import { MintLayout } from "@solana/spl-token";
-import { Connection } from "@solana/web3.js";
-import React, { useEffect, useState } from "react";
-import { ArtCard } from "../../../components/ArtCard";
-import { useTokenList } from "../../../contexts/tokenList";
-import { useArtworkFiles } from "../useArtworkFiles";
-import { Row, Col, Statistic, Spin, Button} from 'antd';
-import { AmountLabel } from "../../../components/AmountLabel";
+import {
+  getAssetCostToStore,
+  IMetadataExtension,
+  LAMPORT_MULTIPLIER,
+  MAX_METADATA_LEN,
+  WRAPPED_SOL_MINT,
+} from '@oyster/common';
+import { MintLayout } from '@solana/spl-token';
+import { Connection } from '@solana/web3.js';
+import React, { useEffect, useState } from 'react';
+import { ArtCard } from '../../../components/ArtCard';
+import { useTokenList } from '../../../contexts/tokenList';
+import { useArtworkFiles } from '../useArtworkFiles';
+import { Row, Col, Statistic, Spin, Button } from 'antd';
+import { AmountLabel } from '../../../components/AmountLabel';
 
 export const LaunchStep = (props: {
   confirm: () => void;
@@ -15,10 +21,7 @@ export const LaunchStep = (props: {
   connection: Connection;
 }) => {
   const [cost, setCost] = useState(0);
-  const { image } = useArtworkFiles(
-    props.files,
-    props.attributes,
-  );
+  const { image } = useArtworkFiles(props.files, props.attributes);
   const files = props.files;
   const metadata = props.attributes;
   useEffect(() => {
@@ -100,7 +103,7 @@ export const LaunchStep = (props: {
           size="large"
           onClick={props.confirm}
           className="action-btn"
-          style={{marginTop: 24}}
+          style={{ marginTop: 24 }}
         >
           Pay with SOL
         </Button>

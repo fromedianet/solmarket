@@ -15,7 +15,7 @@ export const AppLayout = React.memo((props: any) => {
         <AppBar />
       </header>
       <Sidebar />
-      <Layout id={'width-layout'} >
+      <Layout id={'width-layout'}>
         <Content className="my-layout-content">{props.children}</Content>
       </Layout>
       {/*<Footer />*/}

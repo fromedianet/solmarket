@@ -1,53 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  Steps,
-  Row,
-  Button,
-  Upload,
-  Col,
-  Input,
-  Statistic,
-  Slider,
-  Spin,
-  InputNumber,
-  Form,
-  Typography,
-  Space,
-  Card,
-} from 'antd';
-import { ArtCard } from './../../components/ArtCard';
-import { UserSearch, UserValue } from './../../components/UserSearch';
-import { Confetti } from './../../components/Confetti';
+import { Steps, Row, Button, Col } from 'antd';
 import { mintNFT } from '../../actions';
 import {
-  MAX_METADATA_LEN,
   useConnection,
   IMetadataExtension,
   MetadataCategory,
   useConnectionConfig,
-  Creator,
-  shortenAddress,
-  MetaplexModal,
   MetaplexOverlay,
-  MetadataFile,
   StringPublicKey,
-  WRAPPED_SOL_MINT,
-  getAssetCostToStore,
-  LAMPORT_MULTIPLIER,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection } from '@solana/web3.js';
-import { MintLayout } from '@solana/spl-token';
 import { useHistory, useParams } from 'react-router-dom';
-import { cleanName, getLast } from '../../utils/utils';
-import { AmountLabel } from '../../components/AmountLabel';
 import useWindowDimensions from '../../utils/layout';
-import {
-  LoadingOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
-import { useTokenList } from '../../contexts/tokenList';
 import { InfoStep } from './steps/InfoStep';
 import { CategoryStep } from './steps/CategoryStep';
 import { UploadStep } from './steps/UploadStep';
@@ -57,8 +21,6 @@ import { WaitingStep } from './steps/WaitingStep';
 import { Congrats } from './steps/Congrats';
 
 const { Step } = Steps;
-const { Dragger } = Upload;
-const { Text } = Typography;
 
 export const ArtCreateView = () => {
   const connection = useConnection();
@@ -171,7 +133,11 @@ export const ArtCreateView = () => {
             </Steps>
           </Col>
         )}
-        <Col span={24} {...(stepsVisible ? { md: 20 } : { md: 24 })} className='content'>
+        <Col
+          span={24}
+          {...(stepsVisible ? { md: 20 } : { md: 24 })}
+          className="content"
+        >
           {step === 0 && (
             <CategoryStep
               confirm={(category: MetadataCategory) => {
@@ -229,7 +195,9 @@ export const ArtCreateView = () => {
           )}
           {0 < step && step < 5 && (
             <div style={{ margin: 'auto', width: 'fit-content' }}>
-              <Button className='' onClick={() => gotoStep(step - 1)}>Back</Button>
+              <Button className="" onClick={() => gotoStep(step - 1)}>
+                Back
+              </Button>
             </div>
           )}
         </Col>
@@ -240,4 +208,3 @@ export const ArtCreateView = () => {
     </>
   );
 };
-

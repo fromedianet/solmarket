@@ -1,7 +1,7 @@
-import React from "react";
-import { MetadataCategory } from "@oyster/common";
-import useWindowDimensions from "../../../utils/layout";
-import { Row, Col, Button} from 'antd';
+import React from 'react';
+import { MetadataCategory } from '@oyster/common';
+import useWindowDimensions from '../../../utils/layout';
+import { Row, Col, Button } from 'antd';
 
 export const CategoryStep = (props: {
   confirm: (category: MetadataCategory) => void;
