@@ -358,6 +358,46 @@ h2 {
   }
 }
 
+.default-button {
+  display: flex;
+  justify-content: center;
+  height: 56px;
+  width: auto;
+  max-width: 100%;
+  align-items: center;
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 600;
+  background: transparent;
+  /* identical to box height, or 100% */
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  /* White */
+  color: white;
+  border: 1px solid @border-purple;
+  border-radius: 12px;
+  padding: 0 24px;
+  cursor: pointer;
+  &.w-100{
+    width: 100%;
+  }
+  &:hover, &:focus, &:active {
+    background: @bg-purple;
+    color: white;
+  }
+}
+
+.default-button[disabled] {
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: not-allowed;
+
+  &:hover, &:focus, &:active {
+    background: transparent;
+  }
+}
+
 .particle {
   position: absolute;
   opacity: 0.9;

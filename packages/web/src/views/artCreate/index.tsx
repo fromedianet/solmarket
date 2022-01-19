@@ -141,16 +141,17 @@ export const ArtCreateView = () => {
 
   return (
     <>
-      <Row className={'creator-base-page'} style={{ paddingTop: 50 }}>
+      <Row className={'creator-base-page'}>
         {stepsVisible && (
           <Col span={24} md={4}>
             <Steps
               progressDot
               direction={width < 768 ? 'horizontal' : 'vertical'}
               current={step}
+              responsive={false}
               style={{
                 width: 'fit-content',
-                margin: '0 auto 30px auto',
+                margin: '0 auto 20px auto',
                 overflowX: 'auto',
                 maxWidth: '100%',
               }}
@@ -163,7 +164,7 @@ export const ArtCreateView = () => {
             </Steps>
           </Col>
         )}
-        <Col span={24} {...(stepsVisible ? { md: 20 } : { md: 24 })}>
+        <Col span={24} {...(stepsVisible ? { md: 20 } : { md: 24 })} className='content'>
           {step === 0 && (
             <CategoryStep
               confirm={(category: MetadataCategory) => {
@@ -221,7 +222,7 @@ export const ArtCreateView = () => {
           )}
           {0 < step && step < 5 && (
             <div style={{ margin: 'auto', width: 'fit-content' }}>
-              <Button onClick={() => gotoStep(step - 1)}>Back</Button>
+              <button className='default-button' onClick={() => gotoStep(step - 1)}>Back</button>
             </div>
           )}
         </Col>
@@ -391,7 +392,7 @@ const UploadStep = (props: {
     <>
       <Row className="call-to-action">
         <h2>Now, let's upload your creation</h2>
-        <p style={{ fontSize: '1.2rem' }}>
+        <p style={{ fontSize: '1rem' }}>
           Your file will be uploaded to the decentralized web via Arweave.
           Depending on file type, can take up to 1 minute. Arweave is a new type
           of storage that backs data with sustainable and perpetual endowments,
@@ -526,9 +527,7 @@ const UploadStep = (props: {
         />
       </Form.Item>
       <Row>
-        <Button
-          type="primary"
-          size="large"
+        <button
           disabled={disableContinue}
           onClick={async () => {
             props.setAttributes({
@@ -567,11 +566,11 @@ const UploadStep = (props: {
             props.setFiles(files);
             props.confirm();
           }}
-          style={{ marginTop: 24 }}
-          className="action-btn"
+          style={{ marginTop: 24, marginBottom: 24 }}
+          className="default-button w-100"
         >
           Continue to Mint
-        </Button>
+        </button>
       </Row>
     </>
   );
