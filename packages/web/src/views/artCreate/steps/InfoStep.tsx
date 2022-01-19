@@ -169,7 +169,9 @@ export const InfoStep = (props: {
       </Row>
 
       <Row>
-        <button
+        <Button
+          type="primary"
+          size="large"
           onClick={() => {
             form.validateFields().then(values => {
               const nftAttributes = values.attributes;
@@ -189,11 +191,11 @@ export const InfoStep = (props: {
               props.confirm();
             });
           }}
-          className="default-button w-100"
-          style={{ marginTop: 24, marginBottom: 24 }}
+          className="action-btn"
+          style={{ marginTop: 24 }}
         >
           Continue to royalties
-        </button>
+        </Button>
       </Row>
     </>
   );

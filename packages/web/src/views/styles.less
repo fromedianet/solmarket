@@ -143,18 +143,19 @@
   background: linear-gradient(270deg, #616774 7.29%, #403f4c 100%);
   max-width: 100%;
   white-space: normal;
-}
 
-.type-btn:hover {
-  background: linear-gradient(270deg, #616774 7.29%, #403f4c 100%) !important;
-}
-.type-btn:disabled {
-  pointer-events: none;
-}
-
-.type-btn-description {
-  color: #aaa;
-  font-size: 0.7rem;
+  &:hover {
+    background: linear-gradient(270deg, #616774 7.29%, #403f4c 100%) !important;
+    opacity: .5;
+  }
+  &:disabled {
+    pointer-events: none;
+  }
+  
+  &-description {
+    color: #aaa;
+    font-size: 0.7rem;
+  }
 }
 
 .action-btn {
@@ -358,51 +359,31 @@ h2 {
   }
 }
 
-.default-button {
-  display: flex;
-  justify-content: center;
-  height: 56px;
-  width: auto;
-  max-width: 100%;
-  align-items: center;
-  font-size: 16px;
-  line-height: 16px;
-  font-weight: 600;
-  background: transparent;
-  /* identical to box height, or 100% */
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  /* White */
-  color: white;
-  border: 1px solid @border-purple;
-  border-radius: 12px;
-  padding: 0 24px;
-  cursor: pointer;
-  &.w-100{
-    width: 100%;
-  }
-  &:hover {
-    background: @bg-purple;
+.ant-btn {
+  border-radius: 8px;
+
+  &:hover, &:focus {
+    background: @bg-pink-gradient;
     color: white;
   }
 }
 
-.default-button[disabled] {
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  cursor: not-allowed;
+.ant-btn-primary {
+  background: @bg-pink-gradient;
+  border-color: @bg-purple;
 
-  &:hover {
-    background: transparent;
+  &:hover, &:focus {
+    opacity: .7;
+    border-color: @bg-purple;
   }
 }
 .ant-btn-dashed {
-
+  border-color: white;
+  color: white;
   &:hover, &:focus {
-    color: @border-purple;
+    color: white;
     border-color: @border-purple;
-    background: transparent;
+    background: @bg-pink-gradient;
   }
 }
 .particle {
