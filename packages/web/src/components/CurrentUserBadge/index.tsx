@@ -298,11 +298,7 @@ export const CurrentUserBadge = (props: {
                     Add Funds
                   </Button>
                   &nbsp;&nbsp; */}
-                  <Button
-                    className="popover-btn"
-                    onClick={handleDisconnect}
-                    style={btnStyle}
-                  >
+                  <Button onClick={handleDisconnect} style={btnStyle}>
                     Disconnect
                   </Button>
                 </div>

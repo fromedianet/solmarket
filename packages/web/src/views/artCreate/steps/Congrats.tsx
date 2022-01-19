@@ -44,27 +44,24 @@ export const Congrats = (props: {
       <div className="waiting-title">Congratulations, you created an NFT!</div>
       <div className="congrats-button-container">
         <Button
-          className="metaplex-button"
+          style={{ marginBottom: 16 }}
           onClick={() => window.open(newTweetURL(), '_blank')}
         >
-          <span>Share it on Twitter</span>
-          <span>&gt;</span>
+          <span>Share it on Twitter &gt;</span>
         </Button>
         <Button
-          className="metaplex-button"
+          style={{ marginBottom: 16 }}
           onClick={() =>
             history.push(`/art/${props.nft?.metadataAccount.toString()}`)
           }
         >
-          <span>See it in your collection</span>
-          <span>&gt;</span>
+          <span>See it in your collection &gt;</span>
         </Button>
         <Button
-          className="metaplex-button"
+          style={{ marginBottom: 16 }}
           onClick={() => history.push('/auction/create')}
         >
-          <span>Sell it via auction</span>
-          <span>&gt;</span>
+          <span>Sell it via auction &gt;</span>
         </Button>
       </div>
       <Confetti />
