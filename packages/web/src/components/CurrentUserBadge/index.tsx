@@ -43,16 +43,15 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
 
   return (
     <>
-      {store &&
-        (props.mobile ? (
-          <div className="actions-buttons actions-user">
+      {store && (
+          <div style={{ display: "flex", flexDirection: "column" }}>
             {canCreate && (
               <Link to={`/art/create`}>
                 <Button
                   onClick={() => {
                     props.onClick ? props.onClick() : null;
                   }}
-                  className="black-btn"
+                  style={btnStyle}
                 >
                   Create
                 </Button>
@@ -63,35 +62,13 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
                 onClick={() => {
                   props.onClick ? props.onClick() : null;
                 }}
-                className="black-btn"
+                style={btnStyle}
               >
                 Sell
               </Button>
             </Link>
           </div>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-            }}
-          >
-            {canCreate && (
-              <>
-                <Link to={`/art/create`} style={{ width: '100%' }}>
-                  <Button className="metaplex-button-default" style={btnStyle}>
-                    Create
-                  </Button>
-                </Link>
-                &nbsp;&nbsp;
-              </>
-            )}
-            <Link to={`/auction/create/0`} style={{ width: '100%' }}>
-              <Button className="metaplex-button-default" style={btnStyle}>
-                Sell
-              </Button>
-            </Link>
-          </div>
-        ))}
+        )}
     </>
   );
 };
@@ -211,6 +188,7 @@ export const CurrentUserBadge = (props: {
   const { account } = useNativeAccount();
   const solPrice = useSolPrice();
   const [showAddFundsModal, setShowAddFundsModal] = useState<Boolean>(false);
+  const [show, setShow] = useState(false);
 
   if (!wallet || !publicKey) {
     return null;
@@ -223,6 +201,11 @@ export const CurrentUserBadge = (props: {
   const unknownWallet = wallet as any;
   if (unknownWallet.name && !props.showAddress) {
     name = unknownWallet.name;
+  }
+
+  const handleDisconnect = () => {
+    setShow(false);
+    disconnect();
   }
 
   return (
@@ -319,17 +302,19 @@ export const CurrentUserBadge = (props: {
                   &nbsp;&nbsp; */}
                   <Button
                     className="popover-btn"
-                    onClick={disconnect}
+                    onClick={handleDisconnect}
                     style={btnStyle}
                   >
                     Disconnect
                   </Button>
                 </div>
-                <UserActions />
+                <UserActions onClick={() => setShow(false)} />
               </div>
             }
           />
         }
+        visible={show}
+        onVisibleChange={() => setShow((prev) => !prev)}
       >
         <Button>{name}</Button>
       </Popover>
