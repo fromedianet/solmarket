@@ -8,6 +8,7 @@ import {
   shortenAddress,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -48,15 +49,11 @@ const RoyaltiesSplitter = (props: {
 
           return (
             <Col span={24} key={idx}>
-              <Row
-                align="middle"
-                gutter={[0, 16]}
-                style={{ margin: '5px auto' }}
-              >
-                <Col span={8} lg={4} style={{ padding: 10 }}>
+              <Row align="middle" gutter={[0, 16]}>
+                <Col span={7} lg={4}>
                   {creator.label}
                 </Col>
-                <Col span={8} lg={4}>
+                <Col span={7} lg={4}>
                   <InputNumber<number>
                     min={0}
                     max={100}
@@ -67,11 +64,11 @@ const RoyaltiesSplitter = (props: {
                     className="royalties-input"
                   />
                 </Col>
-                <Col span={8} lg={4} style={{ paddingLeft: 12 }}>
+                <Col span={7} lg={4}>
                   <Slider value={amt} onChange={handleChangeShare} />
                 </Col>
                 {props.isShowErrors && amt === 0 && (
-                  <Col style={{ paddingLeft: 12 }}>
+                  <Col>
                     <Text type="danger">
                       The split percentage for this creator cannot be 0%.
                     </Text>
@@ -180,33 +177,22 @@ export const RoyaltiesStep = (props: {
         </Row>
       )}
       <Row>
-        <span
+        <div
           onClick={() => setShowCreatorsModal(true)}
-          style={{ padding: 10, marginBottom: 10 }}
+          style={{ padding: 10, cursor: 'pointer' }}
         >
-          <span
-            style={{
-              color: 'white',
-              fontSize: 25,
-              padding: '0px 8px 3px 8px',
-              background: 'rgb(57, 57, 57)',
-              borderRadius: '50%',
-              marginRight: 5,
-              verticalAlign: 'middle',
-            }}
-          >
-            +
-          </span>
+          <PlusCircleOutlined
+            style={{ fontSize: 20, color: 'rgba(255, 255, 255, 0.7)' }}
+          />
           <span
             style={{
               color: 'rgba(255, 255, 255, 0.7)',
-              verticalAlign: 'middle',
-              lineHeight: 1,
+              marginLeft: '10px',
             }}
           >
             Add another creator
           </span>
-        </span>
+        </div>
         <MetaplexModal
           visible={showCreatorsModal}
           onCancel={() => setShowCreatorsModal(false)}

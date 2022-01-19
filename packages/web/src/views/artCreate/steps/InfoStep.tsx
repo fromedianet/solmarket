@@ -1,9 +1,24 @@
 import React from 'react';
-import { Row, Button, Col, Input, InputNumber, Form, Space } from 'antd';
+import {
+  Row,
+  Button,
+  Col,
+  Input,
+  InputNumber,
+  Form,
+  Space,
+  Upload,
+} from 'antd';
 import { IMetadataExtension } from '@oyster/common';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { useArtworkFiles } from '../useArtworkFiles';
 import { ArtContent } from '../../../components/ArtContent';
+
+const { Dragger } = Upload;
 
 export const InfoStep = (props: {
   attributes: IMetadataExtension;
@@ -16,7 +31,6 @@ export const InfoStep = (props: {
     props.attributes,
   );
   const [form] = Form.useForm();
-  console.log(props.attributes);
 
   return (
     <>
@@ -41,6 +55,44 @@ export const InfoStep = (props: {
               </div>
             </div>
           )}
+          <Row
+            className="content-action"
+            style={{ marginBottom: 5, marginTop: 30 }}
+          >
+            <p>Add your config file to fill the input fields.</p>
+            <Dragger
+              accept=".json"
+              style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)' }}
+              multiple={false}
+              maxCount={1}
+              onChange={async info => {
+                const file = info.file.originFileObj;
+                const fileReader = new FileReader();
+                fileReader.onload = function (e) {
+                  const content = e.target?.result;
+                  const intern = JSON.parse(content);
+                  props.setAttributes({
+                    ...intern,
+                  });
+                  form.setFieldsValue({ attributes: intern.attributes });
+                };
+                fileReader.readAsText(file);
+              }}
+            >
+              <p className="ant-upload-drag-icon">
+                <UploadOutlined style={{ color: '#6d6d6d' }} />
+              </p>
+              <p
+                className="ant-upload-text"
+                style={{ color: '#f8f7f8', fontSize: 18, fontWeight: 600 }}
+              >
+                Add your config file(JSON)
+              </p>
+              <p className="ant-upload-text" style={{ color: '#6d6d6d' }}>
+                Drag and drop, or click to browse
+              </p>
+            </Dragger>
+          </Row>
         </Col>
         <Col span={24} lg={12}>
           <label className="action-field">
