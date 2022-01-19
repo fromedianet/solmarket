@@ -381,7 +381,7 @@ h2 {
   &.w-100{
     width: 100%;
   }
-  &:hover, &:focus, &:active {
+  &:hover {
     background: @bg-purple;
     color: white;
   }
@@ -393,11 +393,18 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.5);
   cursor: not-allowed;
 
-  &:hover, &:focus, &:active {
+  &:hover {
     background: transparent;
   }
 }
+.ant-btn-dashed {
 
+  &:hover, &:focus {
+    color: @border-purple;
+    border-color: @border-purple;
+    background: transparent;
+  }
+}
 .particle {
   position: absolute;
   opacity: 0.9;
