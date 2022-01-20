@@ -47,20 +47,20 @@ const formatDropMessage = (info, drop, html) => {
 exports.formatDropMessage = formatDropMessage;
 const distributeAwsSns = async (auth, source, claimants, drop) => {
     if (!auth.accessKeyId || !auth.secretAccessKey) {
-        throw new Error('AWS SES auth keys not supplied');
+        throw new Error("AWS SNS auth keys not supplied");
     }
     if (claimants.length === 0)
         return [];
-    loglevel_1.default.debug('SES auth', auth);
+    loglevel_1.default.debug("SNS auth", auth);
     const client = new client_sns_1.SNSClient({
-        region: 'us-east-2',
+        region: "us-east-1",
         credentials: {
             accessKeyId: auth.accessKeyId,
             secretAccessKey: auth.secretAccessKey,
         },
     });
     const single = async (info, drop) => {
-        const formatted = (0, exports.formatDropMessage)(info, drop, true);
+        const formatted = (0, exports.formatDropMessage)(info, drop, false);
         const message = {
             Message: formatted.message,
             PhoneNumber: info.handle,

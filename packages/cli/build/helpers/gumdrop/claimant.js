@@ -360,7 +360,8 @@ const chunk = (arr, len) => {
     return chunks;
 };
 exports.chunk = chunk;
-const buildGumdrop = async (connection, walletKey, needsPin, claimIntegration, host, baseKey, temporalSigner, claimants, claimInfo, extraParams = []) => {
+const buildGumdrop = async (connection, walletKey, commMethod, claimIntegration, host, baseKey, temporalSigner, claimants, claimInfo, extraParams = []) => {
+    const needsPin = commMethod !== "wallets";
     const leafs = [];
     for (let idx = 0; idx < claimants.length; ++idx) {
         const claimant = claimants[idx];
@@ -408,6 +409,7 @@ const buildGumdrop = async (connection, walletKey, needsPin, claimIntegration, h
         const claimant = claimants[idx];
         const params = [
             `distributor=${distributor}`,
+            `method=${commMethod}`,
             `handle=${encodeURIComponent(claimant.handle)}`,
             `amount=${claimant.amount}`,
             `index=${idx}`,
