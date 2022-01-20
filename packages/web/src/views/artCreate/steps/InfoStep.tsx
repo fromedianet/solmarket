@@ -180,9 +180,9 @@ export const InfoStep = (props: {
                       >
                         <Input placeholder="value" />
                       </Form.Item>
-                      <Form.Item name={[name, 'display_type']} hasFeedback>
+                      {/* <Form.Item name={[name, 'display_type']} hasFeedback>
                         <Input placeholder="display_type (Optional)" />
-                      </Form.Item>
+                      </Form.Item> */}
                       <MinusCircleOutlined onClick={() => remove(name)} />
                     </Space>
                   ))}
