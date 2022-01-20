@@ -1,6 +1,6 @@
 import React from 'react';
 import useWindowDimensions from '../../../utils/layout';
-import {Row, Col, Button} from 'antd';
+import { Row, Col, Button } from 'antd';
 import { AuctionCategory } from '../index';
 
 export const CategoryStep = (props: {

@@ -1,15 +1,15 @@
-import React, { useCallback, useMemo, useState } from "react";
-import {Row, Col, Input, Select, Button} from 'antd';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Row, Col, Input, Select, Button } from 'antd';
 import { AuctionState, InstantSaleType } from '../index';
-import { PublicKey } from "@solana/web3.js";
-import { Creator, useMint, WRAPPED_SOL_MINT } from "@oyster/common";
-import { useTokenList } from "../../../contexts/tokenList";
-import { QUOTE_MINT } from "../../../constants";
-import { SafetyDepositDraft } from "../../../actions/createAuctionManager";
-import { ArtSelector } from "../artSelector";
-import TokenDialog, { TokenButton } from "../../../components/TokenDialog";
+import { PublicKey } from '@solana/web3.js';
+import { Creator, useMint, WRAPPED_SOL_MINT } from '@oyster/common';
+import { useTokenList } from '../../../contexts/tokenList';
+import { QUOTE_MINT } from '../../../constants';
+import { SafetyDepositDraft } from '../../../actions/createAuctionManager';
+import { ArtSelector } from '../artSelector';
+import TokenDialog, { TokenButton } from '../../../components/TokenDialog';
 
-const {Option} = Select;
+const { Option } = Select;
 export const InstantSaleStep = ({
   attributes,
   setAttributes,
