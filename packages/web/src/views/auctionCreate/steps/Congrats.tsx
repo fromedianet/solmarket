@@ -42,21 +42,19 @@ export const Congrats = (props: {
         </div>
         <div className="congrats-button-container">
           <Button
-            className="metaplex-button"
+            style={{ marginBottom: 16 }}
             onClick={() => window.open(newTweetURL(), '_blank')}
           >
-            <span>Share it on Twitter</span>
-            <span>&gt;</span>
+            <span>Share it on Twitter &gt;</span>
           </Button>
           <Button
-            className="metaplex-button"
+            style={{ marginBottom: 16 }}
             onClick={() => {
               history.push(`/`);
               history.go(0);
             }}
           >
-            <span>See it in your auctions</span>
-            <span>&gt;</span>
+            <span>See it in your auctions &gt;</span>
           </Button>
         </div>
       </div>
