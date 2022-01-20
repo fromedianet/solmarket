@@ -75,9 +75,16 @@
   }
 
   p {
-    color: #6d6d6d;
+    color: @text-secondary-color;
     font-style: normal;
     font-size: 20px;
+  }
+
+  a {
+    color: @text-primary-color;
+    &:hover, &:focus {
+      color: @text-pink;
+    }
   }
 }
 
