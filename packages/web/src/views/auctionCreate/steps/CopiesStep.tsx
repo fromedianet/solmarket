@@ -61,8 +61,8 @@ export const CopiesStep = (props: {
           Select the item(s) that you want to list.
         </p>
       </Row>
-      <Row className="content-action">
-        <Col xl={24}>
+      <Row className="content-action" gutter={16}>
+        <Col span={24} lg={12}>
           <ArtSelector
             filter={overallFilter}
             selected={props.attributes.items}
@@ -73,6 +73,8 @@ export const CopiesStep = (props: {
           >
             Select NFT
           </ArtSelector>
+        </Col>
+        <Col span={24} lg={12}>
           {hasOtherTokens && (
             <label className="action-field">
               <span className="field-title">Auction mint</span>

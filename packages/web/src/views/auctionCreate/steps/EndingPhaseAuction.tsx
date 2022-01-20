@@ -31,6 +31,7 @@ export const EndingPhaseAuction = (props: {
                       auctionDurationType: value,
                     })
                   }
+                  bordered={false}
                 >
                   <Option value="minutes">Minutes</Option>
                   <Option value="hours">Hours</Option>
@@ -67,6 +68,7 @@ export const EndingPhaseAuction = (props: {
                       gapTimeType: value,
                     })
                   }
+                  bordered={false}
                 >
                   <Option value="minutes">Minutes</Option>
                   <Option value="hours">Hours</Option>

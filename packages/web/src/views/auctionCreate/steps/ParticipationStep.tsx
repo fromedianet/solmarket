@@ -20,7 +20,7 @@ export const ParticipationStep = (props: {
         </p>
       </Row>
       <Row className="content-action">
-        <Col className="section" xl={24}>
+        <Col className="section" span={24} lg={12}>
           <ArtSelector
             filter={(i: SafetyDepositDraft) =>
               !!i.masterEdition && i.masterEdition.info.maxSupply === undefined
@@ -40,6 +40,8 @@ export const ParticipationStep = (props: {
           >
             Select Participation NFT
           </ArtSelector>
+        </Col>
+        <Col span={24} lg={12}>
           <label className="action-field">
             <span className="field-title">Price</span>
             <span className="field-info">

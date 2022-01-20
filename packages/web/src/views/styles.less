@@ -14,13 +14,6 @@
   padding: 1px;
 }
 
-.action-btn:disabled {
-  color: rgba(255, 255, 255, 0.5);
-  &:hover, &:focus {
-    color: rgba(255, 255, 255, 0.5);
-  }
-}
-
 .ant-upload-list-item-info .anticon-loading .anticon, .ant-upload-list-item-info .ant-upload-text-icon .anticon {
   color: white;
 }
@@ -119,6 +112,9 @@
   padding: 10px;
   border-width: 0;
 }
+.ant-input-group-wrapper.input {
+  background: transparent;
+}
 
 .textarea {
   height: 230px !important;
@@ -159,6 +155,7 @@
 
 .action-btn {
   width: 100%;
+  margin-top: 20px;
   margin-bottom: 20px;
 
   display: flex;
@@ -184,6 +181,13 @@
 
   /* text/default */
   color: #fff;
+
+  &:disabled {
+    color: rgba(255, 255, 255, 0.5);
+    &:hover, &:focus {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
 }
 
 .connector {
@@ -464,4 +468,15 @@ h2 {
 }
 .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
   background: rgba(255, 255, 255, 0.4);
+}
+
+.ant-input-group-addon {
+  background: @bg-text-color;
+  border: none;
+  border-radius: 0 8px 8px 0;
+
+  .ant-select-open .ant-select-selector,
+  .ant-select-focused .ant-select-selector {
+    color: @text-primary-color;
+  }
 }

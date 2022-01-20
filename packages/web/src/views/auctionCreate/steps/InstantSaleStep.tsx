@@ -173,7 +173,6 @@ export const InstantSaleStep = ({
             confirm();
           }}
           className="action-btn"
-          style={{ marginTop: 24 }}
         >
           Continue
         </Button>

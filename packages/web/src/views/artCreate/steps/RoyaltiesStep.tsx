@@ -258,7 +258,6 @@ export const RoyaltiesStep = (props: {
             props.confirm();
           }}
           className="action-btn"
-          style={{ marginTop: 24 }}
         >
           Continue to review
         </Button>
