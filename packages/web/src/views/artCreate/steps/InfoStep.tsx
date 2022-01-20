@@ -227,7 +227,6 @@ export const InfoStep = (props: {
             });
           }}
           className="action-btn"
-          style={{ marginTop: 24 }}
         >
           Continue to royalties
         </Button>

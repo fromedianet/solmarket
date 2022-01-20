@@ -257,7 +257,6 @@ export const UploadStep = (props: {
             props.setFiles(files);
             props.confirm();
           }}
-          style={{ marginTop: 24, marginBottom: 24 }}
           className="action-btn"
         >
           Continue to Mint

@@ -785,7 +785,6 @@ export const AuctionCard = ({
                 }
                 setLoading(false);
               }}
-              style={{ marginTop: 20 }}
             >
               {loading ? <Spin /> : 'Start auction'}
             </Button>
@@ -812,7 +811,6 @@ export const AuctionCard = ({
             size="large"
             className="action-btn"
             onClick={connect}
-            style={{ marginTop: 20 }}
           >
             Connect wallet to{' '}
             {auctionView.isInstantSale ? 'purchase' : 'place bid'}
