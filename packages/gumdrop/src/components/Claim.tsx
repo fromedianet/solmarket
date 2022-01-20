@@ -652,7 +652,14 @@ const fetchNeedsTemporalSigner = async (
 
 export type ClaimProps = {};
 
-export const Claim = (props: RouteComponentProps<ClaimProps>) => {
+type ClaimTransactions = {
+  setup : Transaction | null,
+  claim : Transaction,
+};
+
+export const Claim = (
+  props : RouteComponentProps<ClaimProps>,
+) => {
   const connection = useConnection();
   const wallet = useWallet();
 
@@ -669,38 +676,21 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
     (params.distributor as string) || '',
   );
   const [claimMethod, setClaimMethod] = React.useState(
-    params.tokenAcc
-      ? 'transfer'
-      : params.config
-      ? 'candy'
-      : params.master
-      ? 'edition'
-      : '',
-  );
-  const [tokenAcc, setTokenAcc] = React.useState(
-    (params.tokenAcc as string) || '',
-  );
-  const [candyConfig, setCandyConfig] = React.useState(
-    (params.config as string) || '',
-  );
-  const [candyUUID, setCandyUUID] = React.useState(
-    (params.uuid as string) || '',
-  );
-  const [masterMint, setMasterMint] = React.useState(
-    (params.master as string) || '',
-  );
-  const [editionStr, setEditionStr] = React.useState(
-    (params.edition as string) || '',
-  );
-  const [handle, setHandle] = React.useState((params.handle as string) || '');
-  const [amountStr, setAmount] = React.useState(
-    (params.amount as string) || '',
-  );
-  const [indexStr, setIndex] = React.useState((params.index as string) || '');
-  const [pinStr, setPin] = React.useState((params.pin as string) || '');
-  const [proofStr, setProof] = React.useState((params.proof as string) || '');
-
-  const discordGuild = params.guild;
+        params.tokenAcc ? "transfer"
+      : params.config   ? "candy"
+      : params.master   ? "edition"
+      :                   "");
+  const [tokenAcc, setTokenAcc] = React.useState(params.tokenAcc as string || "");
+  const [candyConfig, setCandyConfig] = React.useState(params.config as string || "");
+  const [candyUUID, setCandyUUID] = React.useState(params.uuid as string || "");
+  const [masterMint, setMasterMint] = React.useState(params.master as string || "");
+  const [editionStr, setEditionStr] = React.useState(params.edition as string || "");
+  const [handle, setHandle] = React.useState(params.handle as string || "");
+  const [amountStr, setAmount] = React.useState(params.amount as string || "");
+  const [indexStr, setIndex] = React.useState(params.index as string || "");
+  const [pinStr, setPin] = React.useState(params.pin as string || "");
+  const [proofStr, setProof] = React.useState(params.proof as string || "");
+  const [commMethod, setCommMethod] = React.useState(params.method || "aws-email");
 
   const allFieldsPopulated =
     distributor.length > 0 &&
@@ -720,10 +710,8 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
   const [editable, setEditable] = React.useState(!allFieldsPopulated);
 
   // temporal verification
-  const [transaction, setTransaction] = React.useState<Transaction | null>(
-    null,
-  );
-  const [OTPStr, setOTPStr] = React.useState('');
+  const [transaction, setTransaction] = React.useState<ClaimTransactions | null>(null);
+  const [OTPStr, setOTPStr] = React.useState("");
 
   // async computed
   const [asyncNeedsTemporalSigner, setNeedsTemporalSigner] =
@@ -853,38 +841,55 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
       );
     }
 
-    const transaction = new Transaction({
+    const signersOf = (instrs : Array<TransactionInstruction>) => {
+      const signers = new Set<PublicKey>();
+      for (const instr of instrs) {
+        for (const key of instr.keys)
+          if (key.isSigner)
+            signers.add(key.pubkey);
+      }
+      return signers;
+    };
+
+    const recentBlockhash = (await connection.getRecentBlockhash("singleGossip")).blockhash;
+    let setupTx : Transaction | null = null;
+    if (instructions.length > 1) {
+      setupTx = new Transaction({
+        feePayer: wallet.publicKey,
+        recentBlockhash,
+      });
+
+      const setupInstrs = instructions.slice(0, -1);
+      const setupSigners = signersOf(setupInstrs);
+      console.log(`Expecting the following setup signers: ${[...setupSigners].map(s => s.toBase58())}`);
+      setupTx.add(...setupInstrs);
+      setupTx.setSigners(...setupSigners);
+
+      if (extraSigners.length > 0) {
+        setupTx.partialSign(...extraSigners);
+      }
+    }
+
+    const claimTx = new Transaction({
       feePayer: wallet.publicKey,
-      recentBlockhash: (await connection.getRecentBlockhash('singleGossip'))
-        .blockhash,
+      recentBlockhash,
     });
 
-    const signers = new Set<PublicKey>();
-    for (const instr of instructions) {
-      transaction.add(instr);
-      for (const key of instr.keys) if (key.isSigner) signers.add(key.pubkey);
-    }
-    console.log(
-      `Expecting the following signers: ${[...signers].map(s => s.toBase58())}`,
-    );
-    transaction.setSigners(...signers);
+    const claimInstrs = instructions.slice(-1);
+    const claimSigners = signersOf(claimInstrs);
+    console.log(`Expecting the following claim signers: ${[...claimSigners].map(s => s.toBase58())}`);
+    claimTx.add(...claimInstrs);
+    claimTx.setSigners(...claimSigners);
 
-    if (extraSigners.length > 0) {
-      transaction.partialSign(...extraSigners);
-    }
-
-    const txnNeedsTemporalSigner = transaction.signatures.some(s =>
-      s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER),
-    );
+    const txnNeedsTemporalSigner =
+        claimTx.signatures.some(s => s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER));
     if (txnNeedsTemporalSigner && !skipAWSWorkflow) {
-      const otpQuery: { [key: string]: any } = {
-        method: 'send',
-        transaction: bs58.encode(transaction.serializeMessage()),
+      const otpQuery : { [key: string] : any } = {
+        method: "send",
+        transaction: bs58.encode(claimTx.serializeMessage()),
         seeds: pdaSeeds,
+        comm: commMethod,
       };
-      if (discordGuild) {
-        otpQuery.discordGuild = discordGuild;
-      }
       const params = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -908,12 +913,22 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
       console.log('AWS OTP response data:', data);
 
       let succeeded, toCheck;
-      if (discordGuild) {
-        succeeded = !!data.id;
-        toCheck = 'discord';
-      } else {
-        succeeded = !!data.MessageId;
-        toCheck = 'email';
+      switch (commMethod) {
+        case "discord": {
+          succeeded = !!data.id;
+          toCheck = "discord";
+          break;
+        }
+        case 'aws-email': {
+          succeeded = !!data.MessageId;
+          toCheck = "email";
+          break;
+        }
+        case 'aws-sms': {
+          succeeded = !!data.MessageId;
+          toCheck = "SMS";
+          break;
+        }
       }
 
       if (!succeeded) {
@@ -926,12 +941,15 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
       });
     }
 
-    return transaction;
+    return {
+      setup: setupTx,
+      claim: claimTx,
+    };
   };
 
   const verifyOTP = async (
-    e: React.SyntheticEvent,
-    transaction: Transaction | null,
+    e : React.SyntheticEvent,
+    transaction : ClaimTransactions | null,
   ) => {
     e.preventDefault();
 
@@ -943,9 +961,8 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
       throw new Error(`Wallet not connected`);
     }
 
-    const txnNeedsTemporalSigner = transaction.signatures.some(s =>
-      s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER),
-    );
+    const txnNeedsTemporalSigner =
+        transaction.claim.signatures.some(s => s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER));
     if (txnNeedsTemporalSigner && !skipAWSWorkflow) {
       // TODO: distinguish between OTP failure and transaction-error. We can try
       // again on the former but not the latter
@@ -989,30 +1006,37 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
         throw new Error(`Could not decode transaction signature ${data.body}`);
       }
 
-      transaction.addSignature(GUMDROP_TEMPORAL_SIGNER, sig);
+      transaction.claim.addSignature(GUMDROP_TEMPORAL_SIGNER, sig);
     }
 
     let fullySigned;
     try {
-      fullySigned = await wallet.signTransaction(transaction);
+      fullySigned = await wallet.signAllTransactions(
+        transaction.setup === null
+        ? [transaction.claim]
+        : [transaction.setup, transaction.claim]
+      );
     } catch {
       throw new Error('Failed to sign transaction');
     }
 
-    const claimResult = await sendSignedTransaction({
-      connection,
-      signedTransaction: fullySigned,
-    });
+    for (let idx = 0; idx < fullySigned.length; ++idx) {
+      const tx = fullySigned[idx];
+      const result = await sendSignedTransaction({
+        connection,
+        signedTransaction: tx,
+      });
+      console.log(result);
+      notify({
+        message: `Claim succeeded: ${idx + 1} of ${fullySigned.length}`,
+        description: (
+          <HyperLink href={explorerLinkFor(result.txid, connection)}>
+            View transaction on explorer
+          </HyperLink>
+        ),
+      });
+    }
 
-    console.log(claimResult);
-    notify({
-      message: 'Claim succeeded',
-      description: (
-        <HyperLink href={explorerLinkFor(claimResult.txid, connection)}>
-          View transaction on explorer
-        </HyperLink>
-      ),
-    });
     setTransaction(null);
     try {
       setNeedsTemporalSigner(
@@ -1166,16 +1190,47 @@ export const Claim = (props: RouteComponentProps<ClaimProps>) => {
           <MenuItem value={'edition'}>Limited Edition</MenuItem>
         </Select>
       </FormControl>
-      {claimMethod !== '' && claimData(claimMethod)}
-      {claimMethod !== 'edition' && (
-        <TextField
-          id="amount-text-field"
-          label="Amount"
-          value={amountStr}
-          onChange={e => setAmount(e.target.value)}
+      {claimMethod !== "" && claimData(claimMethod)}
+      {claimMethod !== "edition" && <TextField
+        id="amount-text-field"
+        label="Amount"
+        value={amountStr}
+        onChange={(e) => setAmount(e.target.value)}
+        disabled={!editable}
+      />}
+      <FormControl fullWidth>
+        <InputLabel
+          id="comm-method-label"
           disabled={!editable}
-        />
-      )}
+        >
+          Distribution Method
+        </InputLabel>
+        <Select
+          labelId="comm-method-label"
+          id="comm-method-select"
+          value={commMethod}
+          label="Distribution Method"
+          onChange={(e) => {
+            if (e.target.value === "discord") {
+              notify({
+                message: "Discord distribution unavailable",
+                description: "Please use the CLI for this. Discord does not support browser-connection requests",
+              });
+              return;
+            }
+            localStorage.setItem("commMethod", e.target.value);
+            setCommMethod(e.target.value);
+          }}
+          style={{textAlign: "left"}}
+          disabled={!editable}
+        >
+          <MenuItem value={"aws-email"}>AWS Email</MenuItem>
+          <MenuItem value={"aws-sms"}>AWS SMS</MenuItem>
+          <MenuItem value={"discord"}>Discord</MenuItem>
+          <MenuItem value={"wallets"}>Wallets</MenuItem>
+          <MenuItem value={"manual"}>Manual</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         id="handle-text-field"
         label="Handle"

@@ -44,6 +44,7 @@ import {
   DropInfo,
   Response as DResponse,
   distributeAwsSes,
+  distributeAwsSns,
   distributeManual,
   distributeWallet,
   urlAndHandleFor,
@@ -69,11 +70,13 @@ const distribute = (
   claimants: Claimants,
   drop: DropInfo,
 ) => {
-  if (method === 'AWS SES') {
+  if (method === "aws-email") {
     return distributeAwsSes(auth, source, claimants, drop);
-  } else if (method === 'Manual') {
+  } else if (method === "aws-sms") {
+    return distributeAwsSns(auth, source, claimants, drop);
+  } else if (method === "manual") {
     return distributeManual(auth, source, claimants, drop);
-  } else if (method === 'Wallets') {
+  } else if (method === "wallets") {
     return distributeWallet(auth, source, claimants, drop);
   } else {
     throw new Error(`Unrecognized claim distribution method ${method}`);
@@ -303,11 +306,9 @@ export const Create = () => {
     localStorage.getItem('commMethod') || '',
   );
   const [commAuth, setCommAuth] = React.useState<AuthKeys>({});
-  const [commSource, setCommSource] = React.useState(
-    localStorage.getItem('commSource') || '',
-  );
-  const [awsAccessKeyId, setAwsAccessKeyId] = React.useState('');
-  const [awsSecretKey, setAwsSecretKey] = React.useState('');
+  const [awsAccessKeyId, setAwsAccessKeyId] = React.useState("");
+  const [awsSecretKey, setAwsSecretKey] = React.useState("");
+  const commSource = 'santa@aws.metaplex.com';
 
   const explorerUrlFor = (key: PublicKey) => {
     return `https://explorer.solana.com/address/${key.toBase58()}?cluster=${envFor(
@@ -329,7 +330,7 @@ export const Create = () => {
 
     // notify if the above routine is actually supposed to do anything
     // (manual and wallet do nothing atm)
-    if (commMethod === 'AWS SES') {
+    if (commMethod === "aws-email" || commMethod === "aws-sms") {
       notify({
         message: 'Gumdrop email distribution completed',
       });
@@ -426,7 +427,7 @@ export const Create = () => {
 
     // temporal auth is the AWS signer by 'default' and a no-op key otherwise
     let temporalSigner;
-    if (commMethod === 'Wallets') {
+    if (commMethod === "wallets") {
       // TODO: this is a bit jank. There should be no form option to set the
       // OTP auth if we are using a wallet but there's still a defaulted value
       // atm...
@@ -446,22 +447,21 @@ export const Create = () => {
     const base = Keypair.generate();
     console.log(`Base ${base.publicKey.toBase58()}`);
 
-    const needsPin = commMethod !== 'Wallets';
     const instructions = await buildGumdrop(
       connection,
       wallet.publicKey,
-      needsPin,
+      commMethod,
       claimMethod,
-      `${window.location.origin}/gumdrop`,
+      `${window.location.origin}${process.env.REACT_APP_WEB_HOME}`,
       base.publicKey,
       temporalSigner,
       claimants,
       claimInfo,
     );
 
-    const shouldSend = (await reactModal(
-      shouldSendRender(claimants, needsPin, claimMethod, claimInfo, base),
-    )) as boolean | undefined;
+    const shouldSend = await reactModal(
+      shouldSendRender(claimants, commMethod !== 'wallets', claimMethod, claimInfo, base)
+    ) as boolean | undefined;
     if (shouldSend !== true) {
       // dismissed. don't use exceptions for control flow?
       throw new Error('Claim distribution preview not approved');
@@ -592,8 +592,8 @@ export const Create = () => {
     }
   };
 
-  const commAuthorization = commMethod => {
-    if (commMethod === 'AWS SES') {
+  const commAuthorization = (commMethod) => {
+    if (commMethod === "aws-email" || commMethod === "aws-sms") {
       return (
         <React.Fragment>
           <TextField
@@ -615,15 +615,6 @@ export const Create = () => {
                 secretAccessKey: e.target.value,
               }));
               setAwsSecretKey(e.target.value);
-            }}
-          />
-          <TextField
-            id="comm-source-field"
-            label={`${commMethod} Source`}
-            value={commSource}
-            onChange={e => {
-              localStorage.setItem('commSource', e.target.value);
-              setCommSource(e.target.value);
             }}
           />
         </React.Fragment>
@@ -807,8 +798,8 @@ export const Create = () => {
           id="comm-method-select"
           value={commMethod}
           label="Distribution Method"
-          onChange={e => {
-            if (e.target.value === 'Discord') {
+          onChange={(e) => {
+            if (e.target.value === "discord") {
               notify({
                 message: 'Discord distribution unavailable',
                 description:
@@ -821,15 +812,16 @@ export const Create = () => {
           }}
           style={{ textAlign: 'left' }}
         >
-          <MenuItem value={'AWS SES'}>AWS SES</MenuItem>
-          <MenuItem value={'Discord'}>Discord</MenuItem>
-          <MenuItem value={'Wallets'}>Wallets</MenuItem>
-          <MenuItem value={'Manual'}>Manual</MenuItem>
+          <MenuItem value={"aws-email"}>AWS Email</MenuItem>
+          <MenuItem value={"aws-sms"}>AWS SMS</MenuItem>
+          <MenuItem value={"discord"}>Discord</MenuItem>
+          <MenuItem value={"wallets"}>Wallets</MenuItem>
+          <MenuItem value={"manual"}>Manual</MenuItem>
         </Select>
       </FormControl>
-      {commMethod !== '' && commAuthorization(commMethod)}
-      {commMethod !== '' && commMethod !== 'Wallets' && otpAuthC}
-      {commMethod !== '' && fileUpload}
+      {commMethod !== "" && commAuthorization(commMethod)}
+      {commMethod !== "" && commMethod !== "wallets" && otpAuthC}
+      {commMethod !== "" && fileUpload}
       {createAirdrop}
       {claimURLs.length > 0 && (
         <HyperLink
