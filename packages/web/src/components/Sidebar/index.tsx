@@ -121,7 +121,7 @@ export const Sidebar = () => {
       visible={isShown}
       closable={false}
       onClose={onClose}
-      maskStyle={{ background: 'transparent' }}
+      mask={width < 768}
       className="my-drawer"
     >
       <WalletInfo />
