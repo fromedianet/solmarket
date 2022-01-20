@@ -8,12 +8,12 @@ import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Statistic, Divider, Spin } from 'antd';
-import { ArtCard } from '../../../components/ArtCard';
 import { AuctionCategory, AuctionState } from '../index';
 import { useTokenList } from '../../../contexts/tokenList';
 import { MINIMUM_SAFE_FEE_AUCTION_CREATION } from '../../../constants';
 import { FundsIssueModal } from '../../../components/FundsIssueModal';
 import { AmountLabel } from '../../../components/AmountLabel';
+import { ArtContent } from '../../../components/ArtContent';
 
 export const ReviewStep = (props: {
   confirm: () => void;
@@ -51,13 +51,13 @@ export const ReviewStep = (props: {
         <h2>Review and list</h2>
         <p>Review your listing before publishing.</p>
       </Row>
-      <Row className="content-action">
-        <Col xl={12}>
+      <Row className="content-action" gutter={16}>
+        <Col span={24} lg={12}>
           {item?.metadata.info && (
-            <ArtCard pubkey={item.metadata.pubkey} small={true} />
+            <ArtContent pubkey={item.metadata.pubkey} />
           )}
         </Col>
-        <Col className="section" xl={12}>
+        <Col className="section" span={24} lg={12}>
           <Statistic
             className="create-statistic"
             title="Copies"
