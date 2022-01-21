@@ -175,18 +175,19 @@ export const AuctionView = () => {
   return (
     <div className="main-area">
       <div className="container">
-        <Row justify="center" ref={ref} gutter={24}>
+        <Row ref={ref} gutter={24} >
           <Col span={24} lg={12}>
-            <div className="auction-view" style={{ minHeight: 300 }}>
-              <Carousel
-                autoplay={false}
-                afterChange={index => setCurrentIndex(index)}
-              >
-                {items}
-              </Carousel>
+            <div className='auction-view'>
+              { auction?.thumbnail.metadata.pubkey === undefined ? (
+                <Skeleton paragraph={{rows: 3}} active />
+              ) : (
+                <ArtContent pubkey={auction.thumbnail.metadata.pubkey} className="artwork-image"/>
+              )}
             </div>
             <Collapse className="price-history" expandIconPosition="right">
-              <Panel key={0} header="Price History" className="bg-secondary">
+              <Panel key={0} header="Price History" className="bg-secondary"
+                extra={<img src='/icons/activity.svg' width={24} alt='price history' />}
+              >
                 <Skeleton paragraph={{ rows: 3 }} active />
               </Panel>
             </Collapse>
@@ -211,7 +212,6 @@ export const AuctionView = () => {
                 <img width={20} src={'/icons/refresh.svg'} />
               </div>
             </div>
-            <ArtistInfo art={art} data={data} />
             <div className="info-view">
               <span className="info-title">View on:</span>
               <Button
@@ -237,12 +237,12 @@ export const AuctionView = () => {
                 Solana
               </Button>
             </div>
-
             {!auction && <Skeleton paragraph={{ rows: 6 }} />}
             {auction && (
               <AuctionCard auctionView={auction} hideDefaultAction={false} />
             )}
             {!auction?.isInstantSale && <AuctionBids auctionView={auction} />}
+            <ArtistInfo art={art} data={data} />
           </Col>
         </Row>
       </div>

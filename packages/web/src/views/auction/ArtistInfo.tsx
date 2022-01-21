@@ -18,7 +18,8 @@ export const ArtistInfo = ({
 
   return (
     <Collapse expandIconPosition="right" className="artist-info">
-      <Panel header={`About ${art.title}`} key={0} className="bg-secondary">
+      <Panel header={`About ${art.title}`} key={0} className="bg-secondary"
+      extra={<img src='/icons/user.svg' width={24} alt='price history' />}>
         <div>
           {hasDescription && <Skeleton paragraph={{ rows: 1 }} />}
           {description || (
@@ -26,7 +27,7 @@ export const ArtistInfo = ({
           )}
         </div>
       </Panel>
-      <Panel header="Attributes" key={1}>
+      <Panel header="Attributes" key={1} extra={<img src='/icons/shield.svg' width={24} alt='price history' />}>
         {attributes === undefined ? (
           <Skeleton paragraph={{ rows: 3 }} />
         ) : (
@@ -39,7 +40,7 @@ export const ArtistInfo = ({
           </Row>
         )}
       </Panel>
-      <Panel header="Details" key={2} className="bg-secondary">
+      <Panel header="Details" key={2} className="bg-secondary" extra={<img src='/icons/detail.svg' width={24} alt='price history' />}>
         <div className="details-container">
           <div className="sub-container">
             <span className="details-key">Mint Address</span>

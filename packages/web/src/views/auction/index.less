@@ -10,6 +10,7 @@
 }
 
 .auction-view {
+  margin-bottom: 20px;
   .ant-skeleton-image {
     min-width: 300px;
     min-height: 300px;
@@ -57,16 +58,6 @@ h6 {
     &:first-child {
       padding-left: 0;
     }
-  }
-}
-.auction-mobile-container{
-  padding: 15px;
-  .auction-mobile-section{
-    .art-title{
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
-    margin-top: 25px;
   }
 }
 @media (min-width: 770px) and (max-width: 1080px) {
@@ -161,40 +152,6 @@ h6 {
   }
 }
 
-.pr-4 {
-  padding-right: 32px;
-}
-
-.ant-carousel .slick-list .slick-slide.slick-active {
-  max-width: 500px;
-}
-.artwork-image-lg {
-  display: flex;
-  // width: 70%;
-  margin: auto;
-  max-height: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.ant-carousel {
-  padding-bottom: 32px;
-}
-
-.flex {
-  display: flex;
-  align-items: center;
-}
-
-.flex-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
 .bid-history {
   width: 100%;
   position: relative;
@@ -223,12 +180,6 @@ h6 {
     .usd{
       margin-left: 15px;
     }
-  }
-}
-
-@media (min-width: 1380px) {
-  .img-cont-500{
-    max-width: 550px;
   }
 }
 
@@ -339,6 +290,19 @@ h6 {
       margin-bottom: 4px;
       font-size: 16px;
       font-weight: 500;
+      flex-direction: row-reverse;
+      align-items: center;
+
+      div {
+        &:first-child {
+          margin-right: auto;
+        }
+      }
+
+      .ant-collapse-extra {
+        margin-right: 8px;
+        margin-left: 0px;
+      }
     }
 
     .ant-collapse-content {
