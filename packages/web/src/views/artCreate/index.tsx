@@ -109,8 +109,8 @@ export const ArtCreateView = () => {
   };
 
   return (
-    <>
-      <Row className={'creator-base-page'}>
+    <div className='main-area'>
+      <Row className='container'>
         {stepsVisible && (
           <Col span={24} md={4}>
             <Steps
@@ -203,6 +203,6 @@ export const ArtCreateView = () => {
       <MetaplexOverlay visible={step === 6}>
         <Congrats nft={nft} alert={alertMessage} />
       </MetaplexOverlay>
-    </>
+    </div>
   );
 };
