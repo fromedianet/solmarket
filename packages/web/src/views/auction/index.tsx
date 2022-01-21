@@ -181,7 +181,16 @@ export const AuctionView = () => {
               { auction?.thumbnail.metadata.pubkey === undefined ? (
                 <Skeleton paragraph={{rows: 3}} active />
               ) : (
-                <ArtContent pubkey={auction.thumbnail.metadata.pubkey} className="artwork-image"/>
+                <ArtContent
+                  style={{ width: '100%', height: 'auto', margin: '0 auto' }}
+                  height={300}
+                  width={300}
+                  className="artwork-image"
+                  pubkey={auction.thumbnail.metadata.pubkey}
+                  active={true}
+                  allowMeshRender={true}
+                  artView={true}
+                />
               )}
             </div>
             <Collapse className="price-history" expandIconPosition="right">

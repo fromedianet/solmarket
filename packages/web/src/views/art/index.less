@@ -1,46 +1,179 @@
-
-.artwork-image {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.artist-image {
-  width: 35px;
-  border-radius: 50%;
-}
-
-.info-header {
-  font-size: 1rem;
+.art-title {
   font-style: normal;
-  font-weight: normal;
-  margin-bottom: 1vh;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  line-height: 28px;
+  color: @text-primary-color;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 20px;
+  }
 }
 
-.info-content {
-  width: 90%;
-  white-space: break-spaces;
+.artwork-view {
+  margin-bottom: 20px;
+  .artwork-image {
+    width: 100%;
+    min-width: 300px;
+    min-height: 300px;
+    margin: 0 auto;
+
+    display: flex !important;
+  }
 }
 
-.royalties {
-  font-weight: 600;
-  font-size: 1.3rem;
+.info-view {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  button.tag {
+    &:first-child {
+      margin-left: 32px;
+    }
+  }
+
+  .info-title {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: @text-secondary-color;
+  }
 }
 
-.art-edition {
-  font-weight: 600;
-  font-size: 1.3rem;
-  color: #fff;
+.collection-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .collection-name {
+    display: flex;
+    align-items: center;
+    flex: 1 1;
+    margin-right: 8px;
+  }
+
+  .social-share {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+
+  span {
+    margin-left: 4px;
+    color: @text-pink;
+    font-size: 16px;
+  }
 }
 
-.ant-card-head {
-  color: white;
+.ant-dropdown {
+  color: @text-primary-color;
+  border: 1px solid @border-primary-color;
+  border-radius: 4px;
+
+  .ant-dropdown-menu {
+    background-color: black;
+
+    .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+      color: @text-primary-color;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.social-menu-item {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 6px;
+    font-size: 16px;
+    color: @text-primary-color;
+  }
+}
+
+.art-info, .price-history {
+  .details-container {
+    display: flex;
+    flex-direction: column;
+    color: @text-primary-color;
+    font-size: 1rem;
+
+    .sub-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+
+      .details-key {
+        
+      }
+      .details-value {
+        color: @text-secondary-color;
+        margin-left: auto;
+      }
+    }
+  }
+
+  &.ant-collapse {
+    background: @bg-body;
+    border: none;
+
+    & > .ant-collapse-item {
+      border: none;
+      margin-bottom: 8px;
+    }
+
+    & > .ant-collapse-item > .ant-collapse-header {
+      color: @text-primary-color;
+      border: 1px solid @border-primary-color;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      font-size: 16px;
+      font-weight: 500;
+      flex-direction: row-reverse;
+      align-items: center;
+
+      div {
+        &:first-child {
+          margin-right: auto;
+        }
+      }
+
+      .ant-collapse-extra {
+        margin-right: 8px;
+        margin-left: 0px;
+      }
+    }
+
+    .ant-collapse-content {
+      background: @bg-body;
+      border: 1px solid @border-primary-color;
+      border-radius: 8px;
+      color: @text-primary-color;
+    }
+
+    .bg-secondary .ant-collapse-content {
+      background: @bg-secondary-color;
+    }
+  }
+
+  .ant-statistic {
+    background: @bg-secondary-color;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+
+    .ant-statistic-title {
+      color: @text-secondary-color;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .ant-statistic-content {
+      color: @text-primary-color;
+      font-size: 14px;
+    }
+  }
 }

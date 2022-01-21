@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Row,
   Col,
-  Divider,
-  Layout,
   Tag,
   Button,
   Skeleton,
-  List,
-  Card,
+  Collapse,
+  Dropdown,
+  Menu,
 } from 'antd';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useArt, useExtendedArt } from '../../hooks';
 
 import { ArtContent } from '../../components/ArtContent';
@@ -19,32 +18,17 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { MetaAvatar } from '../../components/MetaAvatar';
 import { sendSignMetadata } from '../../actions/sendSignMetadata';
 import { ViewOn } from '../../components/ViewOn';
-import { ArtType } from '../../types';
-import { ArtMinting } from '../../components/ArtMinting';
+import { ArtInfo } from './ArtInfo';
 
-const { Content } = Layout;
+const { Panel } = Collapse;
 
 export const ArtView = () => {
   const { id } = useParams<{ id: string }>();
   const wallet = useWallet();
-  const [remountArtMinting, setRemountArtMinting] = useState(0);
 
   const connection = useConnection();
   const art = useArt(id);
-  let badge = '';
-  let maxSupply = '';
-  if (art.type === ArtType.NFT) {
-    badge = 'Unique';
-  } else if (art.type === ArtType.Master) {
-    badge = 'NFT 0';
-    if (art.maxSupply !== undefined) {
-      maxSupply = art.maxSupply.toString();
-    } else {
-      maxSupply = 'Unlimited';
-    }
-  } else if (art.type === ArtType.Print) {
-    badge = `${art.edition} of ${art.supply}`;
-  }
+  
   const { ref, data } = useExtendedArt(id);
 
   // const { userAccounts } = useUserAccounts();
@@ -54,8 +38,6 @@ export const ArtView = () => {
   //   return prev;
   // }, new Map<string, TokenAccount>());
 
-  const description = data?.description;
-  const attributes = data?.attributes;
 
   const pubkey = wallet?.publicKey?.toBase58() || '';
 
@@ -79,48 +61,71 @@ export const ArtView = () => {
     </>
   );
 
+  const menu = (
+    <Menu>
+      <Menu.Item key={0}>
+        <Link to={'/'} className="social-menu-item">
+          <img width={24} src={'/icons/facebook2.png'} />
+          <span>Share on Facebook</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={1}>
+        <Link to={'/'} className="social-menu-item">
+          <img width={24} src={'/icons/twitter2.png'} />
+          <span>Share on Twitter</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={2}>
+        <Link to={'/'} className="social-menu-item">
+          <img width={24} src={'/icons/telegram2.png'} />
+          <span>Share on Telegram</span>
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
-    <Content>
-      <Col>
-        <Row ref={ref}>
-          <Col
-            xs={{ span: 24 }}
-            md={{ span: 12 }}
-            style={{ paddingRight: '30px' }}
-          >
-            <ArtContent
-              style={{ width: '100%', height: 'auto', margin: '0 auto' }}
-              height={300}
-              width={300}
-              className="artwork-image"
-              pubkey={id}
-              active={true}
-              allowMeshRender={true}
-              artView={true}
-            />
+    <div className='main-area'>
+      <div className='container'>
+        <Row ref={ref} gutter={24}>
+          <Col span={24} lg={12}>
+            <div className='artwork-view'>
+              <ArtContent
+                className="artwork-image"
+                pubkey={id}
+                active={true}
+                allowMeshRender={true}
+                artView={true}
+              />
+            </div>
+            <Collapse className="price-history" expandIconPosition="right">
+              <Panel key={0} header="Price History" className="bg-secondary"
+                extra={<img src='/icons/activity.svg' width={24} alt='price history' />}
+              >
+                <Skeleton paragraph={{ rows: 3 }} active />
+              </Panel>
+            </Collapse>
           </Col>
-          {/* <Divider /> */}
-          <Col
-            xs={{ span: 24 }}
-            md={{ span: 12 }}
-            style={{ textAlign: 'left', fontSize: '1.4rem' }}
-          >
-            <Row>
-              <div style={{ fontWeight: 700, fontSize: '4rem' }}>
-                {art.title || <Skeleton paragraph={{ rows: 0 }} />}
+          <Col span={24} lg={12}>
+            <div className="art-title">
+              {art.title || <Skeleton paragraph={{ rows: 0 }} />}
+            </div>
+            <div className="collection-container">
+              <Link to={''} className="collection-name">
+                <img width={20} src={'/icons/check.svg'} />
+                <span>{'collection_name'}</span>
+              </Link>
+              <Dropdown overlay={menu} trigger={['click']}>
+                <a className="social-share" onClick={e => e.preventDefault()}>
+                  <img width={20} src={'/icons/share.svg'} />
+                  <span>Share</span>
+                </a>
+              </Dropdown>
+              <div onClick={() => {}}>
+                <img width={20} src={'/icons/refresh.svg'} />
               </div>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <h6>Royalties</h6>
-                <div className="royalties">
-                  {((art.seller_fee_basis_points || 0) / 100).toFixed(2)}%
-                </div>
-              </Col>
-              <Col span={12}>
-                <ViewOn id={id} />
-              </Col>
-            </Row>
+            </div>
+            <ViewOn id={id} />
             <Row>
               <Col>
                 <h6 style={{ marginTop: 5 }}>Created By</h6>
@@ -172,85 +177,11 @@ export const ArtView = () => {
                 </div>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <h6 style={{ marginTop: 5 }}>Edition</h6>
-                <div className="art-edition">{badge}</div>
-              </Col>
-            </Row>
-            {art.type === ArtType.Master && (
-              <Row>
-                <Col>
-                  <h6 style={{ marginTop: 5 }}>Max Supply</h6>
-                  <div className="art-edition">{maxSupply}</div>
-                </Col>
-              </Row>
-            )}
-            {/* <Button
-                  onClick={async () => {
-                    if(!art.mint) {
-                      return;
-                    }
-                    const mint = new PublicKey(art.mint);
-
-                    const account = accountByMint.get(art.mint);
-                    if(!account) {
-                      return;
-                    }
-
-                    const owner = wallet.publicKey;
-
-                    if(!owner) {
-                      return;
-                    }
-                    const instructions: any[] = [];
-                    await updateMetadata(undefined, undefined, true, mint, owner, instructions)
-
-                    sendTransaction(connection, wallet, instructions, [], true);
-                  }}
-                >
-                  Mark as Sold
-                </Button> */}
-
-            {/* TODO: Add conversion of MasterEditionV1 to MasterEditionV2 */}
-            <ArtMinting
-              id={id}
-              key={remountArtMinting}
-              onMint={async () => await setRemountArtMinting(prev => prev + 1)}
-            />
+            <ArtInfo art={art} data={data} />
           </Col>
-          <Col span="12">
-            <Divider />
-            {art.creators?.find(c => !c.verified) && unverified}
-            <br />
-            <div className="info-header">ABOUT THE CREATION</div>
-            <div className="info-content">{description}</div>
-            <br />
-            {/*
-              TODO: add info about artist
-            <div className="info-header">ABOUT THE CREATOR</div>
-            <div className="info-content">{art.about}</div> */}
-          </Col>
-          <Col span="12">
-            {attributes && (
-              <>
-                <Divider />
-                <br />
-                <div className="info-header">Attributes</div>
-                <List size="large" grid={{ column: 4 }}>
-                  {attributes.map(attribute => (
-                    <List.Item key={attribute.trait_type}>
-                      <Card title={attribute.trait_type}>
-                        {attribute.value}
-                      </Card>
-                    </List.Item>
-                  ))}
-                </List>
-              </>
-            )}
-          </Col>
+          
         </Row>
-      </Col>
-    </Content>
+      </div>
+    </div>
   );
 };
