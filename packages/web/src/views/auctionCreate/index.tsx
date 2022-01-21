@@ -643,8 +643,8 @@ export const AuctionCreateView = () => {
   };
 
   return (
-    <>
-      <Row className="creator-base-page" style={{ paddingTop: 50 }}>
+    <div className='main-area'>
+      <Row className="container">
         {stepsVisible && (
           <Col span={24} md={4}>
             <Steps
@@ -675,6 +675,6 @@ export const AuctionCreateView = () => {
           )}
         </Col>
       </Row>
-    </>
+    </div>
   );
 };

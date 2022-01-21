@@ -7,8 +7,8 @@ import {
   AuctionView,
   useBidsForAuction,
   useUserBalance,
-} from '../../hooks';
-import { ArtContent } from '../../components/ArtContent';
+} from '../../../hooks';
+import { ArtContent } from '../../../components/ArtContent';
 import {
   useConnection,
   BidderMetadata,
@@ -27,7 +27,7 @@ import {
   WRAPPED_SOL_MINT,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useMeta } from '../../contexts';
+import { useMeta } from '../../../contexts';
 import {
   getBidderKeys,
   getPayoutTicket,
@@ -36,7 +36,7 @@ import {
   WinningConstraint,
 } from '@oyster/common/dist/lib/models/metaplex/index';
 import { Connection } from '@solana/web3.js';
-import { settle } from '../../actions/settle';
+import { settle } from '../../../actions/settle';
 import { MintInfo } from '@solana/spl-token';
 const { Content } = Layout;
 
