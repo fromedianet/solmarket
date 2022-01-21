@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {Tooltip} from 'antd';
+import { Tooltip } from 'antd';
 
 export const CopySpan = ({
   value,
   copyText,
   className,
 }: {
-  value: string,
+  value: string;
   copyText: string;
   className: string;
 }) => {
@@ -26,7 +26,13 @@ export const CopySpan = ({
 
   return (
     <Tooltip title={clicked ? 'Copied' : 'Click to copy'}>
-      <span className={className} style={{cursor: 'pointer'}} onClick={onClick}>{value}</span>
+      <span
+        className={className}
+        style={{ cursor: 'pointer' }}
+        onClick={onClick}
+      >
+        {value}
+      </span>
     </Tooltip>
   );
 };

@@ -109,8 +109,8 @@ export const ArtCreateView = () => {
   };
 
   return (
-    <div className='main-area'>
-      <Row className='container'>
+    <div className="main-area">
+      <Row className="container">
         {stepsVisible && (
           <Col span={24} md={4}>
             <Steps

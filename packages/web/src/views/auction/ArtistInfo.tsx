@@ -1,29 +1,32 @@
-import React from "react";
-import {Collapse, Skeleton, Row, Col, Statistic} from 'antd';
-import { IMetadataExtension, shortenAddress } from "@oyster/common";
-import { Art } from "../../types";
-import { CopySpan } from "../CopySpan";
+import React from 'react';
+import { Collapse, Skeleton, Row, Col, Statistic } from 'antd';
+import { IMetadataExtension, shortenAddress } from '@oyster/common';
+import { Art } from '../../types';
+import { CopySpan } from '../../components/CopySpan';
 
-const {Panel} = Collapse;
-export const ArtistInfo = ({art, data}: {art: Art, data: IMetadataExtension | undefined}) => {
-  
+const { Panel } = Collapse;
+export const ArtistInfo = ({
+  art,
+  data,
+}: {
+  art: Art;
+  data: IMetadataExtension | undefined;
+}) => {
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
 
   return (
     <Collapse expandIconPosition="right" className="artist-info">
-      <Panel header={`About ${art.title}`} key={0} className='bg-secondary'>
+      <Panel header={`About ${art.title}`} key={0} className="bg-secondary">
         <div>
           {hasDescription && <Skeleton paragraph={{ rows: 1 }} />}
           {description || (
-            <div style={{ fontStyle: 'italic' }}>
-              No description provided.
-            </div>
+            <div style={{ fontStyle: 'italic' }}>No description provided.</div>
           )}
         </div>
       </Panel>
-      <Panel header='Attributes' key={1}>
+      <Panel header="Attributes" key={1}>
         {attributes === undefined ? (
           <Skeleton paragraph={{ rows: 3 }} />
         ) : (
@@ -36,7 +39,7 @@ export const ArtistInfo = ({art, data}: {art: Art, data: IMetadataExtension | un
           </Row>
         )}
       </Panel>
-      <Panel header='Details' key={2} className='bg-secondary'>
+      <Panel header="Details" key={2} className="bg-secondary">
         <div className="details-container">
           <div className="sub-container">
             <span className="details-key">Mint Address</span>
@@ -44,7 +47,11 @@ export const ArtistInfo = ({art, data}: {art: Art, data: IMetadataExtension | un
               {art.mint === undefined ? (
                 <Skeleton paragraph={{ rows: 0 }} />
               ) : (
-                <CopySpan value={shortenAddress(art.mint)} copyText={art.mint} className='' />
+                <CopySpan
+                  value={shortenAddress(art.mint)}
+                  copyText={art.mint}
+                  className=""
+                />
               )}
             </div>
           </div>
@@ -70,5 +77,5 @@ export const ArtistInfo = ({art, data}: {art: Art, data: IMetadataExtension | un
         </div>
       </Panel>
     </Collapse>
-  )
-}
+  );
+};

@@ -643,7 +643,7 @@ export const AuctionCreateView = () => {
   };
 
   return (
-    <div className='main-area'>
+    <div className="main-area">
       <Row className="container">
         {stepsVisible && (
           <Col span={24} md={4}>

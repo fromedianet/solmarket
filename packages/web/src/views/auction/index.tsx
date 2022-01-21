@@ -1,6 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Card, Carousel, Col, List, Row, Skeleton, Menu, Dropdown, Collapse } from 'antd';
+import {
+  Button,
+  Carousel,
+  Col,
+  Row,
+  Skeleton,
+  Menu,
+  Dropdown,
+  Collapse,
+} from 'antd';
 import { AuctionCard } from '../../components/AuctionCard';
 import { Connection } from '@solana/web3.js';
 import { AuctionViewItem } from '@oyster/common/dist/lib/models/metaplex/index';
@@ -9,7 +18,7 @@ import {
   useArt,
   useAuction,
   useBidsForAuction,
-  useCreators,
+  // useCreators,
   useExtendedArt,
 } from '../../hooks';
 import { ArtContent } from '../../components/ArtContent';
@@ -28,21 +37,20 @@ import {
   useConnectionConfig,
   useMint,
   useMeta,
-  BidStateType,
+  // BidStateType,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { MintInfo } from '@solana/spl-token';
 import { getHandleAndRegistryKey } from '@solana/spl-name-service';
 import useWindowDimensions from '../../utils/layout';
 import { CheckOutlined } from '@ant-design/icons';
-import { ArtType } from '../../types';
-import { MetaAvatar } from '../../components/MetaAvatar';
+// import { ArtType } from '../../types';
 import { AmountLabel } from '../../components/AmountLabel';
 import { ClickToCopy } from '../../components/ClickToCopy';
 import { useTokenList } from '../../contexts/tokenList';
-import { ArtistInfo } from '../../components/ArtistInfo';
+import { ArtistInfo } from './ArtistInfo';
 
-const {Panel} = Collapse;
+const { Panel } = Collapse;
 
 export const AuctionItem = ({
   item,
@@ -90,31 +98,31 @@ export const AuctionView = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const art = useArt(auction?.thumbnail.metadata.pubkey);
   const { ref, data } = useExtendedArt(auction?.thumbnail.metadata.pubkey);
-  const creators = useCreators(auction);
+  // const creators = useCreators(auction);
   const { pullAuctionPage } = useMeta();
   useEffect(() => {
     pullAuctionPage(id);
   }, []);
 
-  let edition = '';
-  if (art.type === ArtType.NFT) {
-    edition = 'Unique';
-  } else if (art.type === ArtType.Master) {
-    edition = 'NFT 0';
-  } else if (art.type === ArtType.Print) {
-    edition = `${art.edition} of ${art.supply}`;
-  }
-  const nftCount = auction?.items.flat().length;
-  const winnerCount = auction?.items.length;
-  const isOpen =
-    auction?.auction.info.bidState.type === BidStateType.OpenEdition;
-  const hasDescription = data === undefined || data.description === undefined;
-  const description = data?.description;
-  const attributes = data?.attributes;
+  // let edition = '';
+  // if (art.type === ArtType.NFT) {
+  //   edition = 'Unique';
+  // } else if (art.type === ArtType.Master) {
+  //   edition = 'NFT 0';
+  // } else if (art.type === ArtType.Print) {
+  //   edition = `${art.edition} of ${art.supply}`;
+  // }
+  // const nftCount = auction?.items.flat().length;
+  // const winnerCount = auction?.items.length;
+  // const isOpen =
+  //   auction?.auction.info.bidState.type === BidStateType.OpenEdition;
+  // const hasDescription = data === undefined || data.description === undefined;
+  // const description = data?.description;
+  // const attributes = data?.attributes;
 
-  const tokenInfo = useTokenList()?.mainnetTokens.filter(
-    m => m.address == auction?.auction.info.tokenMint,
-  )[0];
+  // const tokenInfo = useTokenList()?.mainnetTokens.filter(
+  //   m => m.address == auction?.auction.info.tokenMint,
+  // )[0];
 
   const items = [
     ...(auction?.items
@@ -144,29 +152,29 @@ export const AuctionView = () => {
   const menu = (
     <Menu>
       <Menu.Item key={0}>
-        <Link to={'/'} className='social-menu-item'>
+        <Link to={'/'} className="social-menu-item">
           <img width={24} src={'/icons/facebook2.png'} />
           <span>Share on Facebook</span>
         </Link>
       </Menu.Item>
       <Menu.Item key={1}>
-        <Link to={'/'} className='social-menu-item'>
+        <Link to={'/'} className="social-menu-item">
           <img width={24} src={'/icons/twitter2.png'} />
           <span>Share on Twitter</span>
         </Link>
       </Menu.Item>
       <Menu.Item key={2}>
-        <Link to={'/'} className='social-menu-item'>
+        <Link to={'/'} className="social-menu-item">
           <img width={24} src={'/icons/telegram2.png'} />
           <span>Share on Telegram</span>
         </Link>
       </Menu.Item>
     </Menu>
-  )
+  );
 
   return (
-    <div className='main-area'>
-      <div className='container'>
+    <div className="main-area">
+      <div className="container">
         <Row justify="center" ref={ref} gutter={24}>
           <Col span={24} lg={12}>
             <div className="auction-view" style={{ minHeight: 300 }}>
@@ -177,49 +185,24 @@ export const AuctionView = () => {
                 {items}
               </Carousel>
             </div>
-            <h6 className={'about-nft-collection'}>
-              ABOUT THIS {nftCount === 1 ? 'NFT' : 'COLLECTION'}
-            </h6>
-            <div className={'about-nft-collection a-description'}>
-              {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
-              {description ||
-                (winnerCount !== undefined && (
-                  <div style={{ fontStyle: 'italic' }}>
-                    No description provided.
-                  </div>
-                ))}
-            </div>
-            {attributes && (
-              <div className={'about-nft-collection a-attributes'}>
-                <h6>Attributes</h6>
-                <List grid={{ column: 4 }}>
-                  {attributes.map((attribute, index) => (
-                    <List.Item key={`${attribute.value}-${index}`}>
-                      <Card title={attribute.trait_type}>{attribute.value}</Card>
-                    </List.Item>
-                  ))}
-                </List>
-              </div>
-            )}
-            {/* {auctionData[id] && (
-              <>
-                <h6>About this Auction</h6>
-                <p>{auctionData[id].description.split('\n').map((t: string) => <div>{t}</div>)}</p>
-              </>
-            )} */}
+            <Collapse className="price-history" expandIconPosition="right">
+              <Panel key={0} header="Price History" className="bg-secondary">
+                <Skeleton paragraph={{ rows: 3 }} active />
+              </Panel>
+            </Collapse>
           </Col>
 
           <Col span={24} lg={12}>
             <span className="art-title">
               {art.title || <Skeleton paragraph={{ rows: 0 }} />}
             </span>
-            <div className='collection-container'>
-              <Link to={''} className='collection-name'>
+            <div className="collection-container">
+              <Link to={''} className="collection-name">
                 <img width={20} src={'/icons/check.svg'} />
                 <span>{'collection_name'}</span>
               </Link>
               <Dropdown overlay={menu} trigger={['click']}>
-                <a className='social-share' onClick={e => e.preventDefault()}>
+                <a className="social-share" onClick={e => e.preventDefault()}>
                   <img width={20} src={'/icons/share.svg'} />
                   <span>Share</span>
                 </a>
@@ -229,98 +212,31 @@ export const AuctionView = () => {
               </div>
             </div>
             <ArtistInfo art={art} data={data} />
-            <Row gutter={[44, 0]}>
-              <Col span={12} md={16}>
-                <div className={'info-container'}>
-                  <div className={'info-component'}>
-                    <h6 className={'info-title'}>CREATED BY</h6>
-                    <span>{<MetaAvatar creators={creators} />}</span>
-                  </div>
-                  <div className={'info-component'}>
-                    <h6 className={'info-title'}>Edition</h6>
-                    <span>
-                      {(auction?.items.length || 0) > 1 ? 'Multiple' : edition}
-                    </span>
-                  </div>
-                  <div className={'info-component'}>
-                    <h6 className={'info-title'}>Winners</h6>
-                    <span>
-                      {winnerCount === undefined ? (
-                        <Skeleton paragraph={{ rows: 0 }} />
-                      ) : isOpen ? (
-                        'Unlimited'
-                      ) : (
-                        winnerCount
-                      )}
-                    </span>
-                  </div>
-                  <div className={'info-component'}>
-                    <h6 className={'info-title'}>NFTS</h6>
-                    <span>
-                      {nftCount === undefined ? (
-                        <Skeleton paragraph={{ rows: 0 }} />
-                      ) : isOpen ? (
-                        'Open'
-                      ) : (
-                        nftCount
-                      )}
-                    </span>
-                  </div>
-                  <div className={'info-component'}>
-                    <h6 className={'info-title'}>CURRENCY</h6>
-                    <span>
-                      {nftCount === undefined ? (
-                        <Skeleton paragraph={{ rows: 0 }} />
-                      ) : (
-                        `${tokenInfo?.name || 'Custom Token'} ($${
-                          tokenInfo?.symbol || 'CUSTOM'
-                        })`
-                      )}
-                      <ClickToCopy
-                        className="copy-pubkey"
-                        copyText={
-                          tokenInfo
-                            ? tokenInfo?.address
-                            : auction?.auction.info.tokenMint || ''
-                        }
-                        tooltip="Click to copy pubkey"
-                      />
-                    </span>
-                  </div>
-                </div>
-              </Col>
-              <Col span={12} md={8} className="view-on-container">
-                <div className="info-view-container">
-                  <div className="info-view">
-                    <h6 className="info-title">View on</h6>
-                    <div style={{ display: 'flex' }}>
-                      <Button
-                        className="tag"
-                        onClick={() => window.open(art.uri || '', '_blank')}
-                      >
-                        Arweave
-                      </Button>
-                      <Button
-                        className="tag"
-                        onClick={() => {
-                          const cluster = endpoint.name;
-                          const explorerURL = new URL(
-                            `account/${art?.mint || ''}`,
-                            'https://explorer.solana.com',
-                          );
-                          if (!cluster.includes('mainnet')) {
-                            explorerURL.searchParams.set('cluster', cluster);
-                          }
-                          window.open(explorerURL.href, '_blank');
-                        }}
-                      >
-                        Solana
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </Col>
-            </Row>
+            <div className="info-view">
+              <span className="info-title">View on:</span>
+              <Button
+                className="tag"
+                onClick={() => window.open(art.uri || '', '_blank')}
+              >
+                Arweave
+              </Button>
+              <Button
+                className="tag"
+                onClick={() => {
+                  const cluster = endpoint.name;
+                  const explorerURL = new URL(
+                    `account/${art?.mint || ''}`,
+                    'https://explorer.solana.com',
+                  );
+                  if (!cluster.includes('mainnet')) {
+                    explorerURL.searchParams.set('cluster', cluster);
+                  }
+                  window.open(explorerURL.href, '_blank');
+                }}
+              >
+                Solana
+              </Button>
+            </div>
 
             {!auction && <Skeleton paragraph={{ rows: 6 }} />}
             {auction && (
