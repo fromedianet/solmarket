@@ -10,6 +10,7 @@ import { ConfettiProvider } from './components/Confetti';
 import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
 import { CoingeckoProvider } from './contexts/coingecko';
+import SidebarProvider from './contexts/sidebar';
 import { SPLTokenListProvider } from './contexts/tokenList';
 
 export const Providers: FC = ({ children }) => {
@@ -26,7 +27,9 @@ export const Providers: FC = ({ children }) => {
                 <MetaProvider>
                   <LoaderProvider>
                     <ConfettiProvider>
-                      <AppLayout>{children}</AppLayout>
+                      <SidebarProvider>
+                        <AppLayout>{children}</AppLayout>
+                      </SidebarProvider>
                     </ConfettiProvider>
                   </LoaderProvider>
                 </MetaProvider>

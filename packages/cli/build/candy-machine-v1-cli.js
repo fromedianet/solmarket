@@ -193,7 +193,7 @@ programCommand('withdraw')
             try {
                 if (cg.account.lamports > 0) {
                     const tx = await (0, withdraw_1.withdraw)(anchorProgram, walletKeyPair, env, new web3_js_1.PublicKey(cg.pubkey), cg.account.lamports, charityPub, cpf);
-                    loglevel_1.default.info(`${cg.pubkey} has been withdrawn. \nTransaction Signarure: ${tx}`);
+                    loglevel_1.default.info(`${cg.pubkey} has been withdrawn. \nTransaction Signature: ${tx}`);
                 }
             }
             catch (e) {

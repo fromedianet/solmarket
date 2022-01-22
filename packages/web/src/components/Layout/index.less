@@ -40,10 +40,6 @@ section.ant-layout {
   width: 100%;
   margin: auto;
   position: relative;
-
-  #width-layout {
-    max-width: 1440px;
-  }
 }
 
 section#main-layout.ant-layout {
@@ -91,6 +87,17 @@ section#main-layout.ant-layout {
     background-repeat: no-repeat !important;
     filter: blur(220px);
     clip-path: inset(0 0 0 0);
+  }
+}
+
+.my-layout-content {
+  display: flex;
+  justify-content: center;
+  margin-left: 0;
+
+  @media screen and (min-width: 992px) {
+    margin-left: 240px;
+    width: calc(100% - 240px);
   }
 }
 

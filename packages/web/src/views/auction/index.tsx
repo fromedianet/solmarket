@@ -204,7 +204,7 @@ export const AuctionView = () => {
         <Col className="auction-mobile-section" span={24}>
           <h6 className={'info-title'}>Details</h6>
           <div className="description">
-            <p className={'about-nft-collection a-description'}>
+            <div className={'about-nft-collection a-description'}>
               {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
               {description ||
                 (winnerCount !== undefined && (
@@ -212,7 +212,7 @@ export const AuctionView = () => {
                     No description provided.
                   </div>
                 ))}
-            </p>
+            </div>
           </div>
         </Col>
         {attributes && (
@@ -287,7 +287,7 @@ export const AuctionView = () => {
           <h6 className={'about-nft-collection'}>
             ABOUT THIS {nftCount === 1 ? 'NFT' : 'COLLECTION'}
           </h6>
-          <p className={'about-nft-collection a-description'}>
+          <div className={'about-nft-collection a-description'}>
             {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
             {description ||
               (winnerCount !== undefined && (
@@ -295,7 +295,7 @@ export const AuctionView = () => {
                   No description provided.
                 </div>
               ))}
-          </p>
+          </div>
           {attributes && (
             <div className={'about-nft-collection a-attributes'}>
               <h6>Attributes</h6>
@@ -374,6 +374,7 @@ export const AuctionView = () => {
                           ? tokenInfo?.address
                           : auction?.auction.info.tokenMint || ''
                       }
+                      tooltip="Click to copy pubkey"
                     />
                   </span>
                 </div>
@@ -578,6 +579,7 @@ const BidLine = (props: {
                   <ClickToCopy
                     className="copy-pubkey"
                     copyText={bidder as string}
+                    tooltip="Click to copy pubkey"
                   />
                 </Row>
               ) : (
@@ -586,6 +588,7 @@ const BidLine = (props: {
                   <ClickToCopy
                     className="copy-pubkey"
                     copyText={bidder as string}
+                    tooltip="Click to copy pubkey"
                   />
                 </Row>
               )}

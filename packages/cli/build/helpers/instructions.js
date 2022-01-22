@@ -143,7 +143,7 @@ function createMasterEditionInstruction(metadataAccount, editionAccount, mint, m
         {
             pubkey: metadataAccount,
             isSigner: false,
-            isWritable: false,
+            isWritable: true,
         },
         {
             pubkey: constants_1.TOKEN_PROGRAM_ID,

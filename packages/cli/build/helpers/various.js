@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCluster = exports.getPriceWithMantissa = exports.getMetadata = exports.generateRandoms = exports.chunks = exports.getMultipleAccounts = exports.parseDate = exports.parsePrice = exports.fromUTF8Array = exports.sleep = exports.getUnixTs = exports.generateRandomSet = exports.assertValidBreakdown = exports.shuffle = exports.readJsonFile = exports.getCandyMachineV2Config = void 0;
+exports.parseUses = exports.getCluster = exports.getPriceWithMantissa = exports.getMetadata = exports.generateRandoms = exports.chunks = exports.getMultipleAccounts = exports.parseDate = exports.parsePrice = exports.fromUTF8Array = exports.sleep = exports.getUnixTs = exports.generateRandomSet = exports.assertValidBreakdown = exports.shuffle = exports.readJsonFile = exports.getCandyMachineV2Config = void 0;
 const web3_js_1 = require("@solana/web3.js");
 const fs_1 = __importDefault(require("fs"));
 const weighted_1 = __importDefault(require("weighted"));
@@ -12,6 +12,7 @@ const anchor_1 = require("@project-serum/anchor");
 const spl_token_1 = require("@solana/spl-token");
 const accounts_1 = require("./accounts");
 const constants_1 = require("./constants");
+const mpl_token_metadata_1 = require("@metaplex-foundation/mpl-token-metadata");
 const { readFile } = fs_1.default.promises;
 async function getCandyMachineV2Config(walletKeyPair, anchorProgram, configPath) {
     if (configPath === undefined) {
@@ -54,13 +55,15 @@ async function getCandyMachineV2Config(walletKeyPair, anchorProgram, configPath)
         }
         wallet = new anchor_1.web3.PublicKey(splTokenAccountKey);
         parsedPrice = price * 10 ** mintInfo.decimals;
-        if (whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) {
+        if ((whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) ||
+            (whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) === 0) {
             whitelistMintSettings.discountPrice *= 10 ** mintInfo.decimals;
         }
     }
     else {
         parsedPrice = price * 10 ** 9;
-        if (whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) {
+        if ((whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) ||
+            (whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) === 0) {
             whitelistMintSettings.discountPrice *= 10 ** 9;
         }
         wallet = solTreasuryAccount
@@ -69,7 +72,8 @@ async function getCandyMachineV2Config(walletKeyPair, anchorProgram, configPath)
     }
     if (whitelistMintSettings) {
         whitelistMintSettings.mint = new anchor_1.web3.PublicKey(whitelistMintSettings.mint);
-        if (whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) {
+        if ((whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) ||
+            (whitelistMintSettings === null || whitelistMintSettings === void 0 ? void 0 : whitelistMintSettings.discountPrice) === 0) {
             whitelistMintSettings.discountPrice = new anchor_1.BN(whitelistMintSettings.discountPrice);
         }
     }
@@ -341,3 +345,14 @@ function getCluster(name) {
     return constants_1.DEFAULT_CLUSTER.url;
 }
 exports.getCluster = getCluster;
+function parseUses(useMethod, total) {
+    if (!!useMethod && !!total) {
+        const realUseMethod = mpl_token_metadata_1.UseMethod[useMethod];
+        if (!realUseMethod) {
+            throw new Error(`Invalid use method: ${useMethod}`);
+        }
+        return new mpl_token_metadata_1.Uses({ useMethod: realUseMethod, total, remaining: total });
+    }
+    return null;
+}
+exports.parseUses = parseUses;

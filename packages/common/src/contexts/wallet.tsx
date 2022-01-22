@@ -60,10 +60,10 @@ export const WalletModal: FC = () => {
   const mathWallet = useMemo(() => getMathWallet(), []);
 
   const handleConnectWallet = (name: any) => {
-    console.log("wallet name", name);
+    console.log('wallet name', name);
     select(name);
     close();
-  }
+  };
 
   return (
     <MetaplexModal visible={visible} onCancel={close}>
@@ -79,10 +79,7 @@ export const WalletModal: FC = () => {
           Phantom
           <img src={phantomWallet?.icon} className="end-icon" />
         </Button>
-        <Collapse
-          className="modal-collapse"
-          expandIconPosition="right"
-        >
+        <Collapse className="modal-collapse" expandIconPosition="right">
           <Panel header="Other Wallets" key="1">
             {wallets.map((wallet, index) => {
               if (wallet.name === 'Phantom') return null;
@@ -95,12 +92,11 @@ export const WalletModal: FC = () => {
                   {wallet.name}
                   <img src={wallet?.icon} className="end-icon" />
                 </Button>
-              )
+              );
             })}
           </Panel>
         </Collapse>
       </div>
-      
     </MetaplexModal>
   );
 };

@@ -11,6 +11,7 @@ const arbundles_1 = require("arbundles");
 const loglevel_1 = __importDefault(require("loglevel"));
 const storage_type_1 = require("../storage-type");
 const mime_1 = require("mime");
+const various_1 = require("../various");
 const client_1 = __importDefault(require("@bundlr-network/client"));
 exports.LAMPORTS = 1000000000;
 // The limit for the cumulated size of filepairs to include in a single bundle.
@@ -286,7 +287,19 @@ function* makeArweaveBundleUploadGenerator(storage, dirname, assets, jwk, wallet
                 loglevel_1.default.info(`${cost.toNumber() / exports.LAMPORTS} SOL to upload`);
                 await bundlr.fund(cost.toNumber());
                 for (const tx of bundlrTransactions) {
-                    await tx.upload();
+                    let attempts = 0;
+                    const uploadTransaction = async () => {
+                        await tx.upload().catch(async (err) => {
+                            attempts++;
+                            if (attempts >= 3) {
+                                throw err;
+                            }
+                            loglevel_1.default.warn(`Failed bundlr upload, automatically retrying transaction in 10s (attempt: ${attempts})`, err);
+                            await (0, various_1.sleep)(10 * 1000);
+                            await uploadTransaction();
+                        });
+                    };
+                    await uploadTransaction();
                 }
                 loglevel_1.default.info('Bundle uploaded!');
             }

@@ -52,14 +52,13 @@ programCommand('create')
     .option('--distribution-method <method>', 
 // TODO: more explanation
 'Off-chain distribution of claims. Either `aws-email`, `aws-sms`, `discord`, `manual`, or `wallets`')
-    .option('--aws-ses-access-key-id <string>', 'Access Key Id')
-    .option('--aws-ses-secret-access-key <string>', 'Secret Access Key')
+    .option('--aws-access-key-id <string>', 'Access Key Id')
+    .option('--aws-secret-access-key <string>', 'Secret Access Key')
     .option('--discord-token <string>', 'Discord bot token')
-    .option('--discord-guild <string>', 'Discord guild with members')
-    .option('--otp-auth <auth>', 'Off-chain OTP from claim. Either `default` for AWS OTP endpoint or `none` to skip OTP')
+    .option('--otp-auth <auth>', 'Off-chain OTP from claim. Either `enable` for AWS OTP endpoint or `disable` to skip OTP')
     .option('--distribution-list <path>', 'List of users to build gumdrop from.')
     .option('--resend-only', 'Distribute list with off-chain method only. Assumes a validator and urls already exist')
-    .option('--host <string>', 'Website to claim gumdrop', 'https://lwus.github.io/gumdrop')
+    .option('--host <string>', 'Website to claim gumdrop', 'https://lwus.github.io/metaplex')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action(async (options, cmd) => {
     loglevel_1.default.info(`Parsed options:`, options);
@@ -69,9 +68,9 @@ programCommand('create')
     options.rpcUrl || anchor.web3.clusterApiUrl(options.env));
     const getTemporalSigner = auth => {
         switch (auth) {
-            case 'default':
+            case 'enable':
                 return constants_1.GUMDROP_TEMPORAL_SIGNER;
-            case 'none':
+            case 'disable':
                 return web3_js_1.PublicKey.default;
             default:
                 throw new Error(`Unknown OTP authorization type ${auth}`);
@@ -115,18 +114,17 @@ programCommand('create')
                 return (0, communication_1.distributeManual)({}, '', claimants, dropInfo);
             case 'aws-email':
                 return (0, communication_1.distributeAwsSes)({
-                    accessKeyId: options.awsSesAccessKeyId,
-                    secretAccessKey: options.awsSesSecretAccessKey,
+                    accessKeyId: options.awsAccessKeyId,
+                    secretAccessKey: options.awsSecretAccessKey,
                 }, 'santa@aws.metaplex.com', claimants, dropInfo);
             case 'aws-sms':
                 return (0, communication_1.distributeAwsSns)({
-                    accessKeyId: options.awsSesAccessKeyId,
-                    secretAccessKey: options.awsSesSecretAccessKey,
+                    accessKeyId: options.awsAccessKeyId,
+                    secretAccessKey: options.awsSecretAccessKey,
                 }, '', claimants, dropInfo);
             case 'discord':
                 return distributeDiscord({
                     botToken: options.discordToken,
-                    guild: options.discordGuild,
                 }, '', claimants, dropInfo);
         }
     };
@@ -136,8 +134,8 @@ programCommand('create')
             throw new Error("Specified resend only but not all claimants have a 'url'");
         }
         const responses = await distribute(claimants);
-        // TODO: old path.1?
-        const respPath = logPath(options.env, `resp-${web3_js_1.Keypair.generate().publicKey.toBase58()}.json`);
+        const respDir = fs.mkdtempSync(path.join(path.dirname(options.distributionList), 're-'));
+        const respPath = path.join(respDir, 'resp.json');
         console.log(`writing responses to ${respPath}`);
         fs.writeFileSync(respPath, JSON.stringify(responses));
         return;
@@ -169,15 +167,13 @@ programCommand('create')
                     : /* === edition */ claimInfo.masterMint.key;
     });
     const base = web3_js_1.Keypair.generate();
-    const extraParams = [];
-    if (options.distributionMethod === 'discord') {
-        extraParams.push(`guild=${options.discordGuild}`);
-    }
-    const instructions = await (0, claimant_1.buildGumdrop)(connection, wallet.publicKey, options.distributionMethod !== 'wallets', options.claimIntegration, options.host, base.publicKey, temporalSigner, claimants, claimInfo, extraParams);
-    const basePath = logPath(options.env, `${base.publicKey.toBase58()}.json`);
-    console.log(`writing base to ${basePath}`);
-    fs.writeFileSync(basePath, JSON.stringify([...base.secretKey]));
-    const urlPath = logPath(options.env, `urls-${base.publicKey.toBase58()}.json`);
+    const instructions = await (0, claimant_1.buildGumdrop)(connection, wallet.publicKey, options.distributionMethod, options.claimIntegration, options.host, base.publicKey, temporalSigner, claimants, claimInfo);
+    const logDir = path.join(LOG_PATH, options.env, base.publicKey.toBase58());
+    fs.mkdirSync(logDir, { recursive: true });
+    const keyPath = path.join(logDir, 'id.json');
+    console.log(`writing base to ${keyPath}`);
+    fs.writeFileSync(keyPath, JSON.stringify([...base.secretKey]));
+    const urlPath = path.join(logDir, 'urls.json');
     console.log(`writing claims to ${urlPath}`);
     fs.writeFileSync(urlPath, JSON.stringify((0, communication_1.urlAndHandleFor)(claimants)));
     const createResult = await sendTransactionWithRetry(connection, wallet, instructions, [base]);
@@ -190,7 +186,7 @@ programCommand('create')
     }
     console.log('distributing claim URLs');
     const responses = await distribute(claimants);
-    const respPath = logPath(options.env, `resp-${base.publicKey.toBase58()}.json`);
+    const respPath = path.join(logDir, 'resp.json');
     console.log(`writing responses to ${respPath}`);
     fs.writeFileSync(respPath, JSON.stringify(responses));
 });
@@ -243,8 +239,8 @@ programCommand('close')
 });
 programCommand('create_contact_list')
     .option('--cli-input-json <filename>')
-    .option('--aws-ses-access-key-id <string>', 'Access Key Id')
-    .option('--aws-ses-secret-access-key <string>', 'Secret Access Key')
+    .option('--aws-access-key-id <string>', 'Access Key Id')
+    .option('--aws-secret-access-key <string>', 'Secret Access Key')
     .addHelpText('before', 'A thin wrapper mimicking `aws sesv2 create-contact-list`')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action(async (options, cmd) => {
@@ -259,8 +255,8 @@ programCommand('create_contact_list')
     const client = new client_sesv2_1.SESv2Client({
         region: 'us-east-2',
         credentials: {
-            accessKeyId: options.awsSesAccessKeyId,
-            secretAccessKey: options.awsSesSecretAccessKey,
+            accessKeyId: options.awsAccessKeyId,
+            secretAccessKey: options.awsSecretAccessKey,
         },
     });
     try {
@@ -277,8 +273,8 @@ programCommand('create_contact_list')
 });
 programCommand('get_contact')
     .argument('<email>', 'email address to query')
-    .option('--aws-ses-access-key-id <string>', 'Access Key Id')
-    .option('--aws-ses-secret-access-key <string>', 'Secret Access Key')
+    .option('--aws-access-key-id <string>', 'Access Key Id')
+    .option('--aws-secret-access-key <string>', 'Secret Access Key')
     .addHelpText('before', 'A thin wrapper mimicking `aws sesv2 get-contact`')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .action(async (email, options, cmd) => {
@@ -286,8 +282,8 @@ programCommand('get_contact')
     const client = new client_sesv2_1.SESv2Client({
         region: 'us-east-2',
         credentials: {
-            accessKeyId: options.awsSesAccessKeyId,
-            secretAccessKey: options.awsSesSecretAccessKey,
+            accessKeyId: options.awsAccessKeyId,
+            secretAccessKey: options.awsSecretAccessKey,
         },
     });
     try {
@@ -325,9 +321,6 @@ function loadWalletKey(keypair) {
     loglevel_1.default.info(`wallet public key: ${loaded.publicKey}`);
     return loaded;
 }
-function logPath(env, logName, cPath = LOG_PATH) {
-    return path.join(cPath, `${env}-${logName}`);
-}
 // NB: assumes no overflow
 function randomBytes() {
     // TODO: some predictable seed? sha256?
@@ -350,7 +343,7 @@ async function sendTransactionWithRetry(connection, wallet, instructions, signer
     });
 }
 async function distributeDiscord(auth, source, claimants, drop) {
-    if (!auth.botToken || !auth.guild) {
+    if (!auth.botToken) {
         throw new Error('Discord auth keys not supplied');
     }
     if (claimants.length === 0)
@@ -358,12 +351,12 @@ async function distributeDiscord(auth, source, claimants, drop) {
     loglevel_1.default.debug('Discord auth', auth);
     const client = new discord.Client();
     await client.login(auth.botToken);
-    const guild = await client.guilds.fetch(auth.guild);
-    const members = await guild.members.fetch({
-        user: claimants.map(c => c.handle),
-    });
+    const members = {};
+    for (const c of claimants) {
+        members[c.handle] = await client.users.fetch(c.handle);
+    }
     const single = async (info, drop) => {
-        const user = members.get(info.handle);
+        const user = members[info.handle];
         if (user === undefined) {
             return {
                 status: 'error',

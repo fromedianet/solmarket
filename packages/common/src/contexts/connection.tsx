@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   TokenInfo,
   TokenListProvider,
@@ -87,14 +88,16 @@ export function ConnectionProvider({ children }: { children: any }) {
 
   let maybeEndpoint;
   if (networkParam) {
-    let endpointParam = ENDPOINTS.find(({ name }) => name === networkParam);
+    const endpointParam = ENDPOINTS.find(({ name }) => name === networkParam);
     if (endpointParam) {
       maybeEndpoint = endpointParam;
     }
   }
 
   if (networkStorage && !maybeEndpoint) {
-    let endpointStorage = ENDPOINTS.find(({ name }) => name === networkStorage);
+    const endpointStorage = ENDPOINTS.find(
+      ({ name }) => name === networkStorage,
+    );
     if (endpointStorage) {
       maybeEndpoint = endpointStorage;
     }
@@ -226,7 +229,7 @@ export async function sendTransactionsWithManualRetry(
   let stopPoint = 0;
   let tries = 0;
   let lastInstructionsLength = null;
-  let toRemoveSigners: Record<number, boolean> = {};
+  const toRemoveSigners: Record<number, boolean> = {};
   instructions = instructions.filter((instr, i) => {
     if (instr.length > 0) {
       return true;
@@ -386,7 +389,7 @@ export const sendTransactions = async (
       continue;
     }
 
-    let transaction = new Transaction();
+    const transaction = new Transaction();
     instructions.forEach(instruction => transaction.add(instruction));
     transaction.recentBlockhash = block.blockhash;
     transaction.setSigners(
@@ -406,7 +409,7 @@ export const sendTransactions = async (
 
   const pendingTxns: Promise<{ txid: string; slot: number }>[] = [];
 
-  let breakEarlyObject = { breakEarly: false, i: 0 };
+  const breakEarlyObject = { breakEarly: false, i: 0 };
   console.log(
     'Signed txns length',
     signedTxns.length,
@@ -562,7 +565,7 @@ export const sendTransaction = async (
   }
 
   const rawTransaction = transaction.serialize();
-  let options = {
+  const options = {
     skipPreflight: true,
     commitment,
   };
@@ -588,8 +591,8 @@ export const sendTransaction = async (
         message: 'Transaction failed...',
         description: (
           <>
-            {errors.map(err => (
-              <div>{err}</div>
+            {errors.map((err, index) => (
+              <div key={index}>{err}</div>
             ))}
             <ExplorerLink address={txid} type="transaction" />
           </>
@@ -720,6 +723,7 @@ export async function sendSignedTransaction({
       simulateResult = (
         await simulateTransaction(connection, signedTransaction, 'single')
       ).value;
+      // eslint-disable-next-line no-empty
     } catch (e) {}
     if (simulateResult && simulateResult.err) {
       if (simulateResult.logs) {
@@ -783,6 +787,7 @@ async function awaitTransactionSignatureConfirmation(
     err: null,
   };
   let subId = 0;
+  // eslint-disable-next-line no-async-promise-executor
   status = await new Promise(async (resolve, reject) => {
     setTimeout(() => {
       if (done) {
