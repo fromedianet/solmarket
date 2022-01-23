@@ -364,10 +364,19 @@ export const AuctionCard = ({
     setShowEndingBidModal(true);
     setLoading(false);
   };
+  const {
+    canEndInstantSale,
+    isAlreadyBought,
+    canClaimPurchasedItem,
+    canClaimItem,
+  } = useInstantSaleState(auctionView);
   const instantSaleAction = () => {
     const isNotEnoughLamports =
       balance.balanceLamports < (instantSalePrice?.toNumber() || 0);
-    if (isNotEnoughLamports) {
+    if (
+      isNotEnoughLamports &&
+      !(canClaimPurchasedItem || canClaimItem || canEndInstantSale)
+    ) {
       setShowFundsIssueModal(true);
       return;
     }
@@ -495,9 +504,6 @@ export const AuctionCard = ({
     shouldHideInstantSale ||
     (auctionView.vault.info.state === VaultState.Deactivated &&
       isBidderPotEmpty);
-
-  const { canEndInstantSale, isAlreadyBought, canClaimPurchasedItem } =
-    useInstantSaleState(auctionView);
 
   const actionButtonContent = useActionButtonContent(auctionView);
 
