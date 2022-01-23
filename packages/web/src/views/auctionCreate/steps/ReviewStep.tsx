@@ -53,9 +53,7 @@ export const ReviewStep = (props: {
       </Row>
       <Row className="content-action" gutter={16}>
         <Col span={24} lg={12}>
-          {item?.metadata.info && (
-            <ArtContent pubkey={item.metadata.pubkey} />
-          )}
+          {item?.metadata.info && <ArtContent pubkey={item.metadata.pubkey} />}
         </Col>
         <Col className="section" span={24} lg={12}>
           <Statistic
