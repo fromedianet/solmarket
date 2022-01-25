@@ -36,10 +36,7 @@ async function uploadV2({ files, cacheName, env, totalNFTs, storage, retainAutho
         ? new web3_js_1.PublicKey(cacheContent.program.candyMachine)
         : undefined;
     if (!cacheContent.program.uuid) {
-        const firstAssetKey = dedupedAssetKeys[0];
-        const firstAssetManifest = getAssetManifest(dirname, firstAssetKey.index.includes('json')
-            ? firstAssetKey.index
-            : `${firstAssetKey.index}.json`);
+        const firstAssetManifest = getAssetManifest(dirname, '0.json');
         try {
             const remainingAccounts = [];
             if (splToken) {
