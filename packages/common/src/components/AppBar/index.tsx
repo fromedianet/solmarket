@@ -21,12 +21,7 @@ export const AppBar = (props: {
       {connected ? (
         <CurrentUserBadge />
       ) : (
-        <ConnectButton
-          type="text"
-          size="large"
-          style={{ color: '#2abdd2' }}
-          allowWalletChange
-        />
+        <ConnectButton />
       )}
       <Popover
         placement="topRight"

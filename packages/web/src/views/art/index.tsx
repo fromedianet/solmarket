@@ -4,10 +4,8 @@ import {
   Col,
   Skeleton,
   Collapse,
-  Dropdown,
-  Menu,
 } from 'antd';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { AuctionView, useArt, useAuctions, useExtendedArt } from '../../hooks';
 
 import { ArtContent } from '../../components/ArtContent';
@@ -15,6 +13,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
 import { ArtInfo } from './ArtInfo';
 import { CollectionInfo } from './CollectionInfo';
+import { ActionView } from './ActionView';
 
 const { Panel } = Collapse;
 
@@ -30,7 +29,8 @@ export const ArtView = () => {
     auction = filters[0];
   }
   const pubkey = wallet?.publicKey?.toBase58() || '';
-  
+  const isOwner = art?.creators ? (art.creators.find(item => item.address === pubkey) ? true : false) : false;
+  console.log(art);
   const { ref, data } = useExtendedArt(id);
 
   return (
@@ -61,7 +61,7 @@ export const ArtView = () => {
             </div>
             <CollectionInfo />
             <ViewOn id={id} />
-            
+            <ActionView auction={auction} isOwner={isOwner}/>
             <ArtInfo art={art} data={data} />
           </Col>
           
