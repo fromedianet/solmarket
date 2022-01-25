@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArtCard } from '../../components/ArtCard';
 import { CardLoader } from '../../components/MyLoader';
-import { useCreator, useCreatorArts } from '../../hooks';
+import { useAuctions, useCreator, useCreatorArts } from '../../hooks';
 
 export const ArtistView = () => {
   const { id } = useParams<{ id: string }>();

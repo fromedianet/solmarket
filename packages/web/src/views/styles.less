@@ -479,3 +479,24 @@ h2 {
     color: @text-primary-color;
   }
 }
+
+.tag {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 10px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  max-height: 32px;
+  background: #212121;
+  border-radius: 20px;
+  margin: 0 5px;
+  border-color: transparent;
+
+  @media (max-width: @mobile-xs-max) {
+    border-color: @grey-50;
+    margin: 0 8px 0 0;
+  }
+}
