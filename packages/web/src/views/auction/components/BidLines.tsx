@@ -1,18 +1,43 @@
-import { AuctionDataExtended, AuctionState, BidderMetadata, BidRedemptionTicket, formatTokenAmount, fromLamports, getAuctionExtended, MAX_EDITION_LEN, MAX_METADATA_LEN, MAX_PRIZE_TRACKING_TICKET_SIZE, ParsedAccount, PriceFloorType, programIds, shortenAddress, useConnection, useMeta, useMint, useWalletModal, WRAPPED_SOL_MINT } from "@oyster/common";
-import React, { useCallback, useMemo, useState } from "react";
-import {Button, Row, Col, Statistic, Spin} from 'antd';
-import { AuctionView, AuctionViewState, useBidsForAuction, useUserBalance } from "../../../hooks";
+import {
+  AuctionDataExtended,
+  AuctionState,
+  BidderMetadata,
+  BidRedemptionTicket,
+  formatTokenAmount,
+  fromLamports,
+  getAuctionExtended,
+  MAX_EDITION_LEN,
+  MAX_METADATA_LEN,
+  MAX_PRIZE_TRACKING_TICKET_SIZE,
+  ParsedAccount,
+  PriceFloorType,
+  programIds,
+  shortenAddress,
+  useConnection,
+  useMeta,
+  useMint,
+  useWalletModal,
+  WRAPPED_SOL_MINT,
+} from '@oyster/common';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Button, Row, Col, Statistic, Spin } from 'antd';
+import {
+  AuctionView,
+  AuctionViewState,
+  useBidsForAuction,
+  useUserBalance,
+} from '../../../hooks';
 import { format } from 'timeago.js';
-import { useTokenList } from "../../../contexts/tokenList";
-import { Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useWallet } from "@solana/wallet-adapter-react";
-import moment from "moment";
-import { AccountLayout, MintLayout } from "@solana/spl-token";
-import { findEligibleParticipationBidsForRedemption } from "../../../actions/claimUnusedPrizes";
-import { useHistory } from "react-router-dom";
-import { eligibleForParticipationPrizeGivenWinningIndex } from "../../../actions/sendRedeemBid";
+import { useTokenList } from '../../../contexts/tokenList';
+import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { useWallet } from '@solana/wallet-adapter-react';
+import moment from 'moment';
+import { AccountLayout, MintLayout } from '@solana/spl-token';
+import { findEligibleParticipationBidsForRedemption } from '../../../actions/claimUnusedPrizes';
+import { useHistory } from 'react-router-dom';
+import { eligibleForParticipationPrizeGivenWinningIndex } from '../../../actions/sendRedeemBid';
 
-const {Countdown} = Statistic;
+const { Countdown } = Statistic;
 
 async function calculateTotalCostOfRedeemingOtherPeoplesBids(
   connection: Connection,
@@ -143,13 +168,13 @@ function useAuctionExtended(
   return auctionExtended;
 }
 
-export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
+export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const mintKey = auctionView.auction.info.tokenMint;
   const balance = useUserBalance(mintKey);
-  
+
   const history = useHistory();
   const connection = useConnection();
-  const {update} = useMeta();
+  const { update } = useMeta();
   const [loading, setLoading] = useState<boolean>(false);
   const wallet = useWallet();
   const { setVisible } = useWalletModal();
@@ -191,7 +216,7 @@ export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
   );
   const eligibleForAnything = winnerIndex !== null || eligibleForOpenEdition;
 
-  const myPayingAccount = balance
+  const myPayingAccount = balance;
 
   const participationOnly =
     auctionView.auctionManager.numWinners.toNumber() === 0;
@@ -204,20 +229,21 @@ export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
 
   const isAuctionManagerAuthorityWalletOwner =
     auctionView.auctionManager.authority === wallet.publicKey?.toBase58();
-  const isAuctionNotStarted = auctionView.auction.info.state === AuctionState.Created;
+  const isAuctionNotStarted =
+    auctionView.auction.info.state === AuctionState.Created;
   const isUpcoming = auctionView.state === AuctionViewState.Upcoming;
-  
-  const bidValue = (isUpcoming || bids.length === 0
-    ? fromLamports(
-        participationOnly ? participationFixedPrice : priceFloor,
-        mintInfo,
-      )
-    : parseFloat(formatTokenAmount(bids[0].info.lastBid, mintInfo, 1.0, '', ``, 2)));
-  const minBid =
-    tickSize &&
-    bidValue +
-      tickSize.toNumber() / LAMPORTS_PER_MINT;
-  
+
+  const bidValue =
+    isUpcoming || bids.length === 0
+      ? fromLamports(
+          participationOnly ? participationFixedPrice : priceFloor,
+          mintInfo,
+        )
+      : parseFloat(
+          formatTokenAmount(bids[0].info.lastBid, mintInfo, 1.0, '', ``, 2),
+        );
+  const minBid = tickSize && bidValue + tickSize.toNumber() / LAMPORTS_PER_MINT;
+
   const auction = auctionView.auction.info;
   const ended = auction.ended();
   const deadline = (auction.endedAt?.toNumber() || 0) * 1000;
@@ -227,27 +253,27 @@ export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
   return (
     <div>
       <div className="auction-card-container">
-        <Row gutter={8} className='auction-content'>
+        <Row gutter={8} className="auction-content">
           <Col span={24} lg={10}>
             <Statistic
               title={ended ? 'FINAL BID' : 'CURRENT BID'}
               value={`${bidValue} ${symbol}`}
             />
             {!ended && (
-              <span className='minimum-label'>{`Mimimum bid: ${minBid} ${symbol}`}</span>
+              <span className="minimum-label">{`Mimimum bid: ${minBid} ${symbol}`}</span>
             )}
           </Col>
           <Col span={24} lg={14}>
             <Countdown
-              className='countdown'
+              className="countdown"
               title={ended ? 'AUCTION ENDED' : 'AUCTION ENDS IN'}
-              value={deadline} 
-              format='H m s'
+              value={deadline}
+              format="H m s"
             />
             <div>
-              <span className='time-label'>Hours</span>
-              <span className='time-label'>Minutes</span>
-              <span className='time-label'>Seconds</span>
+              <span className="time-label">Hours</span>
+              <span className="time-label">Minutes</span>
+              <span className="time-label">Seconds</span>
             </div>
           </Col>
         </Row>
@@ -262,52 +288,41 @@ export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
               Connect Wallet
             </Button>
           )}
-          {wallet.connected && ended && (
-            loading ||
+          {wallet.connected &&
+            ended &&
+            (loading ||
             auctionView.items.find(i => i.find(it => !it.metadata)) ||
             !myPayingAccount ? (
               <Spin />
             ) : eligibleForAnything ? (
-              <Button>
-                Redeem Bid
-              </Button>
+              <Button>Redeem Bid</Button>
             ) : isAuctionManagerAuthorityWalletOwner ? (
-              <Button>
-                Reclaim Items
-              </Button>
+              <Button>Reclaim Items</Button>
             ) : (
-              <Button>
-                Refund Bid
-              </Button>
-            )
-          )}
-          {wallet.connected && isAuctionNotStarted && (
+              <Button>Refund Bid</Button>
+            ))}
+          {wallet.connected &&
+            isAuctionNotStarted &&
             isAuctionManagerAuthorityWalletOwner && (
-              <Button>
-                {loading ? <Spin /> : 'Start Auction'}
-              </Button>
-            )
-          )}
-          {wallet.connected && !ended && (
-            <Button>
-              Place a Bid
-            </Button>
-          )}
-          
+              <Button>{loading ? <Spin /> : 'Start Auction'}</Button>
+            )}
+          {wallet.connected && !ended && <Button>Place a Bid</Button>}
         </div>
       </div>
-      {(auctionView && bids.length > 0) && (
+      {auctionView && bids.length > 0 && (
         <Row className="bids-container" gutter={[12, 12]}>
-          <Col span={24} key={0} >
+          <Col span={24} key={0}>
             <Row gutter={2}>
               <Col span={6}>
                 <span>LAST BID BY</span>
               </Col>
-              <Col span={7} className='item-address'>
+              <Col span={7} className="item-address">
                 <span>{`${shortenAddress(bids[0].info.bidderPubkey)} `}</span>
               </Col>
               <Col span={7}>
-                <span>{format(bids[0].info.lastBidTimestamp.toNumber() * 1000)}</span>
+                <span>
+                  {format(bids[0].info.lastBidTimestamp.toNumber() * 1000)}
+                </span>
               </Col>
               <Col span={4} className="toggle-btn">
                 <span onClick={() => setHide(!hide)}>
@@ -316,7 +331,7 @@ export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
               </Col>
             </Row>
           </Col>
-          {!hide && (
+          {!hide &&
             bids.map((item, index) => {
               if (index === 0) return null;
               return (
@@ -326,25 +341,42 @@ export const BidLines = ({auctionView}: {auctionView: AuctionView}) => {
                       <span>{shortenAddress(item.info.bidderPubkey)}</span>
                     </Col>
                     <Col span={8}>
-                      <span>{`bid for ${formatTokenAmount(item.info.lastBid, mintInfo, 1.0, '', ` ${symbol}`, 2)}`}</span>
+                      <span>{`bid for ${formatTokenAmount(
+                        item.info.lastBid,
+                        mintInfo,
+                        1.0,
+                        '',
+                        ` ${symbol}`,
+                        2,
+                      )}`}</span>
                     </Col>
                     <Col span={10}>
-                      <span>{format(item.info.lastBidTimestamp.toNumber() * 1000)}</span>
+                      <span>
+                        {format(item.info.lastBidTimestamp.toNumber() * 1000)}
+                      </span>
                     </Col>
                   </Row>
                 </Col>
               );
-            })
-          )}
+            })}
         </Row>
       )}
       <div className="auction-description">
         <span style={{ fontWeight: 600 }}>How it works:</span>
-        <span>1. Connect your wallet and place a bid. The bid must be at least {tickSize && tickSize.toNumber() / LAMPORTS_PER_MINT} {symbol} greater than the current bid</span>
-        <span>2. You will automatically get your SOL returned to your wallet if outbid.</span>
-        <span>3. When auction closes, the artwork will belong to the highest bidder.</span>
+        <span>
+          1. Connect your wallet and place a bid. The bid must be at least{' '}
+          {tickSize && tickSize.toNumber() / LAMPORTS_PER_MINT} {symbol} greater
+          than the current bid
+        </span>
+        <span>
+          2. You will automatically get your SOL returned to your wallet if
+          outbid.
+        </span>
+        <span>
+          3. When auction closes, the artwork will belong to the highest bidder.
+        </span>
         <span>Please claim the NFT by pressing the “claim item” button</span>
       </div>
     </div>
-  )
+  );
 };

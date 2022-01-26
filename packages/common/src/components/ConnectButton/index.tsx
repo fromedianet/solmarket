@@ -22,7 +22,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
     () => (wallet ? connect().catch(() => {}) : open()),
     [wallet, connect, open],
   );
-  
+
   return (
     <Button
       className={className}

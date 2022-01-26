@@ -32,8 +32,12 @@ export const ArtInfo = ({
 
   return (
     <Collapse expandIconPosition="right" className="art-info">
-      <Panel header={`About ${art.title}`} key={0} className="bg-secondary"
-      extra={<img src='/icons/user.svg' width={24} alt='price history' />}>
+      <Panel
+        header={`About ${art.title}`}
+        key={0}
+        className="bg-secondary"
+        extra={<img src="/icons/user.svg" width={24} alt="price history" />}
+      >
         <div>
           {hasDescription && <Skeleton paragraph={{ rows: 1 }} />}
           {description || (
@@ -41,7 +45,11 @@ export const ArtInfo = ({
           )}
         </div>
       </Panel>
-      <Panel header="Attributes" key={1} extra={<img src='/icons/shield.svg' width={24} alt='price history' />}>
+      <Panel
+        header="Attributes"
+        key={1}
+        extra={<img src="/icons/shield.svg" width={24} alt="price history" />}
+      >
         {attributes === undefined ? (
           <Skeleton paragraph={{ rows: 3 }} />
         ) : (
@@ -54,7 +62,12 @@ export const ArtInfo = ({
           </Row>
         )}
       </Panel>
-      <Panel header="Details" key={2} className="bg-secondary" extra={<img src='/icons/detail.svg' width={24} alt='price history' />}>
+      <Panel
+        header="Details"
+        key={2}
+        className="bg-secondary"
+        extra={<img src="/icons/detail.svg" width={24} alt="price history" />}
+      >
         <div className="details-container">
           <div className="sub-container">
             <span className="details-key">Mint Address</span>

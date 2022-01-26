@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import {Dropdown, Menu} from 'antd';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Dropdown, Menu } from 'antd';
 
 const menu = (
   <Menu>
@@ -42,5 +42,5 @@ export const CollectionInfo = () => {
         <img width={20} src={'/icons/refresh.svg'} />
       </div>
     </div>
-  )
-}
+  );
+};
