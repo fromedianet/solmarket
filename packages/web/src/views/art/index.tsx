@@ -31,6 +31,7 @@ export const ArtView = () => {
   const pubkey = wallet?.publicKey?.toBase58() || '';
   const isOwner = art?.creators ? (art.creators.find(item => item.address === pubkey) ? true : false) : false;
   console.log(art);
+  console.log('auction', auction);
   const { ref, data } = useExtendedArt(id);
 
   return (
@@ -61,7 +62,7 @@ export const ArtView = () => {
             </div>
             <CollectionInfo />
             <ViewOn id={id} />
-            <ActionView auction={auction} isOwner={isOwner}/>
+            <ActionView art={art} auction={auction} isOwner={isOwner}/>
             <ArtInfo art={art} data={data} />
           </Col>
           
