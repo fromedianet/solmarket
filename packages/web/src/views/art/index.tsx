@@ -62,7 +62,7 @@ export const ArtView = () => {
             </div>
             <CollectionInfo />
             <ViewOn id={id} />
-            <ActionView art={art} auction={auction} isOwner={isOwner}/>
+            <ActionView id={id} auction={auction} isOwner={isOwner}/>
             <ArtInfo art={art} data={data} />
           </Col>
           
