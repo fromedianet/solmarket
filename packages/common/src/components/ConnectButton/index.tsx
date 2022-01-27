@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu } from 'antd';
+import { Button } from 'antd';
 import { ButtonProps } from 'antd/lib/button';
 import React, { useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -9,10 +9,11 @@ export interface ConnectButtonProps
     React.RefAttributes<HTMLElement> {
   allowWalletChange?: boolean;
   className?: string;
+  name?: string;
 }
 
 export const ConnectButton = (props: ConnectButtonProps) => {
-  const { children, disabled, allowWalletChange, className, ...rest } = props;
+  const { disabled, className, name, ...rest } = props;
   const { wallet, connect, connected } = useWallet();
   const { setVisible } = useWalletModal();
   const open = useCallback(() => setVisible(true), [setVisible]);
@@ -22,38 +23,17 @@ export const ConnectButton = (props: ConnectButtonProps) => {
     [wallet, connect, open],
   );
 
-  // only show if wallet selected or user connected
-
-  if (!wallet || !allowWalletChange) {
-    return (
-      <Button
-        className={className}
-        {...rest}
-        onClick={e => {
-          props.onClick ? props.onClick(e) : null;
-          handleClick();
-        }}
-        disabled={connected && disabled}
-      >
-        {connected ? children : 'Connect Wallet'}
-      </Button>
-    );
-  }
-
   return (
-    <Dropdown.Button
+    <Button
       className={className}
-      onClick={handleClick}
+      {...rest}
+      onClick={e => {
+        props.onClick ? props.onClick(e) : null;
+        handleClick();
+      }}
       disabled={connected && disabled}
-      overlay={
-        <Menu className={'black-dropdown'}>
-          <Menu.Item onClick={open} key="1">
-            Change Wallet
-          </Menu.Item>
-        </Menu>
-      }
     >
-      Connect
-    </Dropdown.Button>
+      {name || 'Connect'}
+    </Button>
   );
 };

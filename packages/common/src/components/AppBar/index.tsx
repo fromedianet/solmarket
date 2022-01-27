@@ -18,16 +18,7 @@ export const AppBar = (props: {
   const TopBar = (
     <div className="App-Bar-right">
       {props.left}
-      {connected ? (
-        <CurrentUserBadge />
-      ) : (
-        <ConnectButton
-          type="text"
-          size="large"
-          style={{ color: '#2abdd2' }}
-          allowWalletChange
-        />
-      )}
+      {connected ? <CurrentUserBadge /> : <ConnectButton />}
       <Popover
         placement="topRight"
         title={LABELS.SETTINGS_TOOLTIP}
