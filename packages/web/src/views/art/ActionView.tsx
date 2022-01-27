@@ -1,6 +1,6 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useState } from 'react';
-import { Row, Col, Button, InputNumber, Form } from 'antd';
+import { Row, Col, Button, InputNumber, Form, Spin } from 'antd';
 import { ConnectButton } from '@oyster/common';
 import { AuctionState } from '../auctionCreate';
 import { AuctionView } from '../../hooks';
@@ -45,6 +45,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
 export const ActionView = (props: {
   auctionView: AuctionView | undefined,
   isOwner: boolean;
+  loading: boolean;
   attributes: AuctionState;
   listnow: () => void;
   setAttributes: (attr: AuctionState) => void;
@@ -82,23 +83,31 @@ export const ActionView = (props: {
             <Button className="button">Cancel Listing</Button>
           ) : (
             <Form name="price-control" layout="inline" onFinish={onFinish}>
-              <Form.Item name="price" rules={[{ validator: checkPrice }]}>
-                <PriceInput
-                  value={{number: bidValue}}
-                  onChange={value =>
-                    props.setAttributes({
-                      ...props.attributes,
-                      priceFloor: value.number,
-                      instantSalePrice: value.number,
-                    })
-                  }
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button className="button" htmlType="submit">
-                  List Now
-                </Button>
-              </Form.Item>
+              <Row style={{ width: '100%' }}>
+                <Col span={12}>
+                  <Form.Item name="price" rules={[{ validator: checkPrice }]}>
+                    <PriceInput
+                      value={{number: bidValue}}
+                      onChange={value =>
+                        props.setAttributes({
+                          ...props.attributes,
+                          priceFloor: value.number,
+                          instantSalePrice: value.number,
+                        })
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item>
+                    <Button className="button" htmlType="submit">
+                      {props.loading ? <Spin /> : 'List Now'}
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </Row>
+              
+              
             </Form>
           )
         ) : (
