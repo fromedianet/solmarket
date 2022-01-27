@@ -41,6 +41,7 @@ import {
 import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { Waiting } from './Waiting';
+import { useUserAccounts } from '@oyster/common';
 
 const { Panel } = Collapse;
 
@@ -75,10 +76,12 @@ export const ArtView = () => {
     storeIndexer,
   } = useMeta();
   const { tokenMap } = useTokenList();
+  const { accountByMint } = useUserAccounts();
   // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
+  const account = m.info.mint && accountByMint.get(m.info.mint);
   const safetyDeposit: SafetyDepositDraft = {
-    holding: m.pubkey,
+    holding: account && account.pubkey,
     edition: editions && m.info.edition ? editions[m.info.edition] : undefined,
     masterEdition:
       masterEditions && m.info.edition
@@ -153,6 +156,7 @@ export const ArtView = () => {
       storeIndexer,
     );
     console.log('_auctionObj', _auctionObj);
+    // TODO: Refresh the UI with new added auction obj
     // setAuctionObj(_auctionObj);
   };
 
