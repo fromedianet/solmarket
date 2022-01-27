@@ -18,6 +18,7 @@ import { ActionView } from './ActionView';
 import {
   AmountRange,
   IPartialCreateAuctionArgs,
+  MetaplexModal,
   PriceFloor,
   PriceFloorType,
   useAccountByMint,
@@ -77,9 +78,9 @@ export const ArtView = () => {
   const { tokenMap } = useTokenList();
   // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
-  const account = m.info.mint && useAccountByMint(m.info.mint);
-  const safetyDeposit: SafetyDepositDraft = {
-    holding: account && account.pubkey,
+  const account = m.info.mint ? useAccountByMint(m.info.mint) : undefined;
+  const safetyDeposit: SafetyDepositDraft | undefined = account && {
+    holding: account.pubkey,
     edition: editions && m.info.edition ? editions[m.info.edition] : undefined,
     masterEdition:
       masterEditions && m.info.edition
@@ -100,7 +101,7 @@ export const ArtView = () => {
   const [loading, setLoading] = useState(false);
   const [attributes, setAttributes] = useState<AuctionState>({
     reservationPrice: 0,
-    items: [safetyDeposit],
+    items: safetyDeposit && [safetyDeposit] || [],
     category: AuctionCategory.InstantSale,
     auctionDurationType: 'minutes',
     gapTimeType: 'minutes',

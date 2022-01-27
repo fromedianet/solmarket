@@ -1,7 +1,7 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useState } from 'react';
 import { Row, Col, Button, InputNumber, Form, Spin } from 'antd';
-import { ConnectButton } from '@oyster/common';
+import { ConnectButton, MetaplexModal } from '@oyster/common';
 import { AuctionState } from '../auctionCreate';
 import { AuctionView } from '../../hooks';
 import { useAuctionStatus } from '../../components/AuctionRenderCard/hooks/useAuctionStatus';
@@ -50,6 +50,7 @@ export const ActionView = (props: {
   listnow: () => void;
   setAttributes: (attr: AuctionState) => void;
 }) => {
+  const [showBuyModal, setShowBuyModal] = useState(false);
   const wallet = useWallet();
   const auctionStatus = props.auctionView && useAuctionStatus(props.auctionView);
   const bidValue = typeof auctionStatus?.amount === 'string' ? parseFloat(auctionStatus.amount) : auctionStatus?.amount;
@@ -61,10 +62,14 @@ export const ActionView = (props: {
     return Promise.reject(new Error('Price must be greater than zero!'));
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onFinish = (values: any) => {
+  const listNow = () => {
     props.listnow();
   };
+
+  const buyNow = () => {
+    setShowBuyModal(true);
+    
+  }
 
   return (
     <div className="action-view">
@@ -82,7 +87,7 @@ export const ActionView = (props: {
           alreadyListed ? (
             <Button className="button">Cancel Listing</Button>
           ) : (
-            <Form name="price-control" layout="inline" onFinish={onFinish}>
+            <Form name="price-control" layout="inline" onFinish={listNow}>
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
@@ -114,7 +119,7 @@ export const ActionView = (props: {
           alreadyListed && (
             <Row gutter={16}>
               <Col span={10}>
-                <Button className="button">Buy now</Button>
+                <Button className="button" onClick={buyNow}>Buy now</Button>
               </Col>
               <Col span={14}>
                 <Button className="button">Make an offer</Button>
@@ -123,6 +128,19 @@ export const ActionView = (props: {
           )
         )}
       </div>
+      <MetaplexModal visible={showBuyModal} closable={false} className='main-modal'>
+        <div className='buy-modal'>
+          <div>
+            <Spin />
+            <span className='header-text'>Do not close this window</span>
+          </div>
+          <span className='main-text'>After wallet approval, your transaction will be finished in about 3s.</span>
+          <div className='content'>
+            <span>While you are waiting. Join our <a>discord</a> & <a>twitter</a> community for weekly giveaways</span>
+          </div>
+        </div>
+        
+      </MetaplexModal>
     </div>
   );
 };
