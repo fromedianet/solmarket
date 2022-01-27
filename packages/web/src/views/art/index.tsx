@@ -20,6 +20,7 @@ import {
   IPartialCreateAuctionArgs,
   PriceFloor,
   PriceFloorType,
+  useAccountByMint,
   useConnection,
   useMeta,
   useMint,
@@ -40,8 +41,6 @@ import {
 } from '../auctionCreate';
 import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { Waiting } from './Waiting';
-import { useUserAccounts } from '@oyster/common';
 
 const { Panel } = Collapse;
 
@@ -76,10 +75,9 @@ export const ArtView = () => {
     storeIndexer,
   } = useMeta();
   const { tokenMap } = useTokenList();
-  const { accountByMint } = useUserAccounts();
   // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
-  const account = m.info.mint && accountByMint.get(m.info.mint);
+  const account = m.info.mint && useAccountByMint(m.info.mint);
   const safetyDeposit: SafetyDepositDraft = {
     holding: account && account.pubkey,
     edition: editions && m.info.edition ? editions[m.info.edition] : undefined,
@@ -160,60 +158,60 @@ export const ArtView = () => {
     // setAuctionObj(_auctionObj);
   };
 
+  const listNow = async () => {
+    setLoading(true);
+    await createAuction();
+    setLoading(false);
+  }
+
   return (
     <div className="main-area">
       <div className="container art-container">
-        {loading ? (
-          <Waiting
-            createAuction={createAuction}
-            confirm={() => setLoading(false)}
-          />
-        ) : (
-          <Row ref={ref} gutter={24}>
-            <Col span={24} lg={12}>
-              <div className="artwork-view">
-                <ArtContent
-                  className="artwork-image"
-                  pubkey={id}
-                  active={true}
-                  allowMeshRender={true}
-                  artView={true}
-                />
-              </div>
-              <Collapse className="price-history" expandIconPosition="right">
-                <Panel
-                  key={0}
-                  header="Price History"
-                  className="bg-secondary"
-                  extra={
-                    <img
-                      src="/icons/activity.svg"
-                      width={24}
-                      alt="price history"
-                    />
-                  }
-                >
-                  <Skeleton paragraph={{ rows: 3 }} active />
-                </Panel>
-              </Collapse>
-            </Col>
-            <Col span={24} lg={12}>
-              <div className="art-title">
-                {art.title || <Skeleton paragraph={{ rows: 0 }} />}
-              </div>
-              <CollectionInfo />
-              <ViewOn id={id} />
-              <ActionView
-                auctionView={auction}
-                isOwner={isOwner}
-                listnow={() => setLoading(true)}
-                attributes={attributes}
-                setAttributes={setAttributes}
+        <Row ref={ref} gutter={24}>
+          <Col span={24} lg={12}>
+            <div className="artwork-view">
+              <ArtContent
+                className="artwork-image"
+                pubkey={id}
+                active={true}
+                allowMeshRender={true}
+                artView={true}
               />
-              <ArtInfo art={art} data={data} />
-            </Col>
-          </Row>
-        )}
+            </div>
+            <Collapse className="price-history" expandIconPosition="right">
+              <Panel
+                key={0}
+                header="Price History"
+                className="bg-secondary"
+                extra={
+                  <img
+                    src="/icons/activity.svg"
+                    width={24}
+                    alt="price history"
+                  />
+                }
+              >
+                <Skeleton paragraph={{ rows: 3 }} active />
+              </Panel>
+            </Collapse>
+          </Col>
+          <Col span={24} lg={12}>
+            <div className="art-title">
+              {art.title || <Skeleton paragraph={{ rows: 0 }} />}
+            </div>
+            <CollectionInfo />
+            <ViewOn id={id} />
+            <ActionView
+              auctionView={auction}
+              isOwner={isOwner}
+              listnow={listNow}
+              loading={loading}
+              attributes={attributes}
+              setAttributes={setAttributes}
+            />
+            <ArtInfo art={art} data={data} />
+          </Col>
+        </Row>
       </div>
     </div>
   );
