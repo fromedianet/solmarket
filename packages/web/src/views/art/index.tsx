@@ -1,256 +1,218 @@
 import React, { useState } from 'react';
-import {
-  Row,
-  Col,
-  Divider,
-  Layout,
-  Tag,
-  Button,
-  Skeleton,
-  List,
-  Card,
-} from 'antd';
+import { Row, Col, Skeleton, Collapse } from 'antd';
 import { useParams } from 'react-router-dom';
-import { useArt, useExtendedArt } from '../../hooks';
+import {
+  AuctionView,
+  useArt,
+  useAuctions,
+  useBidsForAuction,
+  useExtendedArt,
+} from '../../hooks';
 
 import { ArtContent } from '../../components/ArtContent';
-import { shortenAddress, useConnection } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { MetaAvatar } from '../../components/MetaAvatar';
-import { sendSignMetadata } from '../../actions/sendSignMetadata';
 import { ViewOn } from '../../components/ViewOn';
-import { ArtType } from '../../types';
-import { ArtMinting } from '../../components/ArtMinting';
+import { ArtInfo } from './ArtInfo';
+import { CollectionInfo } from './CollectionInfo';
+import { ActionView } from './ActionView';
+import {
+  AmountRange,
+  IPartialCreateAuctionArgs,
+  PriceFloor,
+  PriceFloorType,
+  useAccountByMint,
+  useConnection,
+  useMeta,
+  useMint,
+  WinnerLimit,
+  WinnerLimitType,
+  WinningConfigType,
+} from '@oyster/common';
+import { useTokenList } from '../../contexts/tokenList';
+import {
+  createAuctionManager,
+  SafetyDepositDraft,
+} from '../../actions/createAuctionManager';
+import { BN } from 'bn.js';
+import {
+  AuctionCategory,
+  AuctionState,
+  InstantSaleType,
+} from '../auctionCreate';
+import { QUOTE_MINT } from '../../constants';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
-const { Content } = Layout;
+const { Panel } = Collapse;
 
 export const ArtView = () => {
   const { id } = useParams<{ id: string }>();
-  const wallet = useWallet();
-  const [remountArtMinting, setRemountArtMinting] = useState(0);
-
   const connection = useConnection();
+  const wallet = useWallet();
+
   const art = useArt(id);
-  let badge = '';
-  let maxSupply = '';
-  if (art.type === ArtType.NFT) {
-    badge = 'Unique';
-  } else if (art.type === ArtType.Master) {
-    badge = 'NFT 0';
-    if (art.maxSupply !== undefined) {
-      maxSupply = art.maxSupply.toString();
-    } else {
-      maxSupply = 'Unlimited';
-    }
-  } else if (art.type === ArtType.Print) {
-    badge = `${art.edition} of ${art.supply}`;
+  let auction: AuctionView | undefined;
+  const auctions = useAuctions();
+  const filters = auctions.filter(
+    item => item.thumbnail.metadata.pubkey === id,
+  );
+  if (filters.length > 0) {
+    auction = filters[0];
   }
+  
+  const pubkey = wallet?.publicKey?.toBase58() || '';
+  const isOwner = art?.creators
+    ? art.creators.find(item => item.address === pubkey)
+      ? true
+      : false
+    : false;
   const { ref, data } = useExtendedArt(id);
 
-  // const { userAccounts } = useUserAccounts();
+  const {
+    metadata,
+    masterEditions,
+    editions,
+    whitelistedCreatorsByCreator,
+    storeIndexer,
+  } = useMeta();
+  const { tokenMap } = useTokenList();
+  // const bids = useBidsForAuction(auction?.auction.pubkey || '');
+  const m = metadata.filter(item => item.pubkey === id)[0];
+  const account = m.info.mint && useAccountByMint(m.info.mint);
+  const safetyDeposit: SafetyDepositDraft = {
+    holding: account && account.pubkey,
+    edition: editions && m.info.edition ? editions[m.info.edition] : undefined,
+    masterEdition:
+      masterEditions && m.info.edition
+        ? masterEditions[m.info.edition]
+        : undefined,
+    metadata: m,
+    printingMintHolding: undefined,
+    winningConfigType: WinningConfigType.FullRightsTransfer,
+    amountRanges: [
+      new AmountRange({
+        amount: new BN(1),
+        length: new BN(1),
+      }),
+    ],
+    participationConfig: undefined,
+  };
 
-  // const accountByMint = userAccounts.reduce((prev, acc) => {
-  //   prev.set(acc.info.mint.toBase58(), acc);
-  //   return prev;
-  // }, new Map<string, TokenAccount>());
+  const [loading, setLoading] = useState(false);
+  const [attributes, setAttributes] = useState<AuctionState>({
+    reservationPrice: 0,
+    items: [safetyDeposit],
+    category: AuctionCategory.InstantSale,
+    auctionDurationType: 'minutes',
+    gapTimeType: 'minutes',
+    winnersCount: 1,
+    startSaleTS: undefined,
+    startListTS: undefined,
+    instantSaleType: InstantSaleType.Single,
+    quoteMintAddress: QUOTE_MINT.toBase58(),
+    //@ts-ignore
+    quoteMintInfo: useMint(QUOTE_MINT.toBase58()),
+    //@ts-ignore
+    quoteMintInfoExtended: tokenMap.get(QUOTE_MINT.toBase58()),
+  });
 
-  const description = data?.description;
-  const attributes = data?.attributes;
+  const createAuction = async () => {
+    const winnerLimit = new WinnerLimit({
+      type: WinnerLimitType.Capped,
+      usize: new BN(1),
+    });
 
-  const pubkey = wallet?.publicKey?.toBase58() || '';
+    const auctionSettings: IPartialCreateAuctionArgs = {
+      winners: winnerLimit,
+      endAuctionAt: null,
+      auctionGap: null,
+      priceFloor: new PriceFloor({
+        type: attributes.priceFloor
+          ? PriceFloorType.Minimum
+          : PriceFloorType.None,
+        minPrice: new BN((attributes.priceFloor || 0) * LAMPORTS_PER_SOL),
+      }),
+      tokenMint: attributes.quoteMintAddress,
+      gapTickSizePercentage: null,
+      tickSize: null,
+      instantSalePrice: new BN(
+        (attributes.instantSalePrice || 0) * LAMPORTS_PER_SOL,
+      ),
+      name: null,
+    };
 
-  const tag = (
-    <div className="info-header">
-      <Tag color="blue">UNVERIFIED</Tag>
-    </div>
-  );
+    const safetyDepositDrafts = attributes.items;
+    const participationSafetyDepositDraft = attributes.participationNFT;
 
-  const unverified = (
-    <>
-      {tag}
-      <div style={{ fontSize: 12 }}>
-        <i>
-          This artwork is still missing verification from{' '}
-          {art.creators?.filter(c => !c.verified).length} contributors before it
-          can be considered verified and sellable on the platform.
-        </i>
-      </div>
-      <br />
-    </>
-  );
+    const _auctionObj = await createAuctionManager(
+      connection,
+      wallet,
+      whitelistedCreatorsByCreator,
+      auctionSettings,
+      safetyDepositDrafts,
+      participationSafetyDepositDraft,
+      attributes.quoteMintAddress,
+      storeIndexer,
+    );
+    console.log('_auctionObj', _auctionObj);
+    // TODO: Refresh the UI with new added auction obj
+    // setAuctionObj(_auctionObj);
+  };
+
+  const listNow = async () => {
+    setLoading(true);
+    await createAuction();
+    setLoading(false);
+  }
 
   return (
-    <Content>
-      <Col>
-        <Row ref={ref}>
-          <Col
-            xs={{ span: 24 }}
-            md={{ span: 12 }}
-            style={{ paddingRight: '30px' }}
-          >
-            <ArtContent
-              style={{ width: '100%', height: 'auto', margin: '0 auto' }}
-              height={300}
-              width={300}
-              className="artwork-image"
-              pubkey={id}
-              active={true}
-              allowMeshRender={true}
-              artView={true}
+    <div className="main-area">
+      <div className="container art-container">
+        <Row ref={ref} gutter={24}>
+          <Col span={24} lg={12}>
+            <div className="artwork-view">
+              <ArtContent
+                className="artwork-image"
+                pubkey={id}
+                active={true}
+                allowMeshRender={true}
+                artView={true}
+              />
+            </div>
+            <Collapse className="price-history" expandIconPosition="right">
+              <Panel
+                key={0}
+                header="Price History"
+                className="bg-secondary"
+                extra={
+                  <img
+                    src="/icons/activity.svg"
+                    width={24}
+                    alt="price history"
+                  />
+                }
+              >
+                <Skeleton paragraph={{ rows: 3 }} active />
+              </Panel>
+            </Collapse>
+          </Col>
+          <Col span={24} lg={12}>
+            <div className="art-title">
+              {art.title || <Skeleton paragraph={{ rows: 0 }} />}
+            </div>
+            <CollectionInfo />
+            <ViewOn id={id} />
+            <ActionView
+              auctionView={auction}
+              isOwner={isOwner}
+              listnow={listNow}
+              loading={loading}
+              attributes={attributes}
+              setAttributes={setAttributes}
             />
-          </Col>
-          {/* <Divider /> */}
-          <Col
-            xs={{ span: 24 }}
-            md={{ span: 12 }}
-            style={{ textAlign: 'left', fontSize: '1.4rem' }}
-          >
-            <Row>
-              <div style={{ fontWeight: 700, fontSize: '4rem' }}>
-                {art.title || <Skeleton paragraph={{ rows: 0 }} />}
-              </div>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <h6>Royalties</h6>
-                <div className="royalties">
-                  {((art.seller_fee_basis_points || 0) / 100).toFixed(2)}%
-                </div>
-              </Col>
-              <Col span={12}>
-                <ViewOn id={id} />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h6 style={{ marginTop: 5 }}>Created By</h6>
-                <div className="creators">
-                  {(art.creators || []).map((creator, idx) => {
-                    return (
-                      <div
-                        key={idx}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginBottom: 5,
-                        }}
-                      >
-                        <MetaAvatar creators={[creator]} size={64} />
-                        <div>
-                          <span className="creator-name">
-                            {creator.name ||
-                              shortenAddress(creator.address || '')}
-                          </span>
-                          <div style={{ marginLeft: 10 }}>
-                            {!creator.verified &&
-                              (creator.address === pubkey ? (
-                                <Button
-                                  onClick={async () => {
-                                    try {
-                                      await sendSignMetadata(
-                                        connection,
-                                        wallet,
-                                        id,
-                                      );
-                                    } catch (e) {
-                                      console.error(e);
-                                      return false;
-                                    }
-                                    return true;
-                                  }}
-                                >
-                                  Approve
-                                </Button>
-                              ) : (
-                                tag
-                              ))}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <h6 style={{ marginTop: 5 }}>Edition</h6>
-                <div className="art-edition">{badge}</div>
-              </Col>
-            </Row>
-            {art.type === ArtType.Master && (
-              <Row>
-                <Col>
-                  <h6 style={{ marginTop: 5 }}>Max Supply</h6>
-                  <div className="art-edition">{maxSupply}</div>
-                </Col>
-              </Row>
-            )}
-            {/* <Button
-                  onClick={async () => {
-                    if(!art.mint) {
-                      return;
-                    }
-                    const mint = new PublicKey(art.mint);
-
-                    const account = accountByMint.get(art.mint);
-                    if(!account) {
-                      return;
-                    }
-
-                    const owner = wallet.publicKey;
-
-                    if(!owner) {
-                      return;
-                    }
-                    const instructions: any[] = [];
-                    await updateMetadata(undefined, undefined, true, mint, owner, instructions)
-
-                    sendTransaction(connection, wallet, instructions, [], true);
-                  }}
-                >
-                  Mark as Sold
-                </Button> */}
-
-            {/* TODO: Add conversion of MasterEditionV1 to MasterEditionV2 */}
-            <ArtMinting
-              id={id}
-              key={remountArtMinting}
-              onMint={async () => await setRemountArtMinting(prev => prev + 1)}
-            />
-          </Col>
-          <Col span="12">
-            <Divider />
-            {art.creators?.find(c => !c.verified) && unverified}
-            <br />
-            <div className="info-header">ABOUT THE CREATION</div>
-            <div className="info-content">{description}</div>
-            <br />
-            {/*
-              TODO: add info about artist
-            <div className="info-header">ABOUT THE CREATOR</div>
-            <div className="info-content">{art.about}</div> */}
-          </Col>
-          <Col span="12">
-            {attributes && (
-              <>
-                <Divider />
-                <br />
-                <div className="info-header">Attributes</div>
-                <List size="large" grid={{ column: 4 }}>
-                  {attributes.map(attribute => (
-                    <List.Item key={attribute.trait_type}>
-                      <Card title={attribute.trait_type}>
-                        {attribute.value}
-                      </Card>
-                    </List.Item>
-                  ))}
-                </List>
-              </>
-            )}
+            <ArtInfo art={art} data={data} />
           </Col>
         </Row>
-      </Col>
-    </Content>
+      </div>
+    </div>
   );
 };

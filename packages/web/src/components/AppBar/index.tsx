@@ -50,7 +50,7 @@ export const AppBar = () => {
 
   return (
     <div className="navbar-expand-lg">
-      <div className="container">
+      <div className="nav-container">
         <div className="left-container">
           {!showSearchBar && (
             <div className="brand">

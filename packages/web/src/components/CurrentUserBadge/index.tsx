@@ -276,6 +276,7 @@ export const CurrentUserBadge = (props: {
                     }}
                     value={endpoint.name}
                     bordered={false}
+                    style={{ width: '100%' }}
                   >
                     {ENDPOINTS.map(({ name }) => (
                       <Select.Option value={name} key={name}>
