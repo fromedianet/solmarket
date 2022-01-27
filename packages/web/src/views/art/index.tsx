@@ -65,7 +65,6 @@ export const ArtView = () => {
       ? true
       : false
     : false;
-  console.log('auction', auction);
   const { ref, data } = useExtendedArt(id);
 
   const {
@@ -76,7 +75,7 @@ export const ArtView = () => {
     storeIndexer,
   } = useMeta();
   const { tokenMap } = useTokenList();
-  const bids = useBidsForAuction(auction?.auction.pubkey || '');
+  // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
   const safetyDeposit: SafetyDepositDraft = {
     holding: m.pubkey,
@@ -87,7 +86,7 @@ export const ArtView = () => {
         : undefined,
     metadata: m,
     printingMintHolding: undefined,
-    winningConfigType: WinningConfigType.PrintingV2,
+    winningConfigType: WinningConfigType.FullRightsTransfer,
     amountRanges: [
       new AmountRange({
         amount: new BN(1),
