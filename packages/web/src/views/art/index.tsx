@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Row, Col, Skeleton, Collapse, Spin } from 'antd';
+import React, { useState } from 'react';
+import { Row, Col, Skeleton, Collapse } from 'antd';
 import { useParams } from 'react-router-dom';
 import {
   AuctionView,
@@ -7,8 +7,8 @@ import {
   useAuctions,
   useBidsForAuction,
   useExtendedArt,
-  useUserBalance,
 } from '../../hooks';
+
 import { ArtContent } from '../../components/ArtContent';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
@@ -17,19 +17,13 @@ import { CollectionInfo } from './CollectionInfo';
 import { ActionView } from './ActionView';
 import {
   AmountRange,
-  Bid,
-  BidderPot,
-  BidStateType,
   IPartialCreateAuctionArgs,
-  MetaplexModal,
-  notify,
   PriceFloor,
   PriceFloorType,
   useAccountByMint,
   useConnection,
   useMeta,
   useMint,
-  useUserAccounts,
   WinnerLimit,
   WinnerLimitType,
   WinningConfigType,
@@ -47,29 +41,22 @@ import {
 } from '../auctionCreate';
 import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { sendPlaceBid } from '../../actions/sendPlaceBid';
-import { sendRedeemBid } from '../../actions/sendRedeemBid';
 
 const { Panel } = Collapse;
 
 export const ArtView = () => {
   const { id } = useParams<{ id: string }>();
-  const [loading, setLoading] = useState(false);
-  const [showBuyModal, setShowBuyModal] = useState(false);
-
   const connection = useConnection();
   const wallet = useWallet();
 
   const art = useArt(id);
-  const { ref, data } = useExtendedArt(id);
-
-  let auctionView: AuctionView | undefined;
+  let auction: AuctionView | undefined;
   const auctions = useAuctions();
   const filters = auctions.filter(
     item => item.thumbnail.metadata.pubkey === id,
   );
   if (filters.length > 0) {
-    auctionView = filters[0];
+    auction = filters[0];
   }
   
   const pubkey = wallet?.publicKey?.toBase58() || '';
@@ -78,6 +65,7 @@ export const ArtView = () => {
       ? true
       : false
     : false;
+  const { ref, data } = useExtendedArt(id);
 
   const {
     metadata,
@@ -85,25 +73,13 @@ export const ArtView = () => {
     editions,
     whitelistedCreatorsByCreator,
     storeIndexer,
-    update,
-    prizeTrackingTickets,
-    bidRedemptions,
   } = useMeta();
-  const bids = useBidsForAuction(auctionView?.auction.pubkey || '');
-  const { accountByMint } = useUserAccounts();
   const { tokenMap } = useTokenList();
   // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
-  const account = useAccountByMint(m.info.mint);
-  const balance = useUserBalance(auctionView?.auction.info.tokenMint);
-  const myPayingAccount = balance.accounts[0];
-  const instantSalePrice = useMemo(
-    () => (auctionView?.auction?.info.priceFloor.minPrice || new BN(0)).toNumber() / LAMPORTS_PER_SOL,
-    [auctionView?.auction],
-  );
-
-  const safetyDeposit: SafetyDepositDraft | undefined = account && {
-    holding: account.pubkey,
+  const account = m.info.mint && useAccountByMint(m.info.mint);
+  const safetyDeposit: SafetyDepositDraft = {
+    holding: account && account.pubkey,
     edition: editions && m.info.edition ? editions[m.info.edition] : undefined,
     masterEdition:
       masterEditions && m.info.edition
@@ -121,9 +97,10 @@ export const ArtView = () => {
     participationConfig: undefined,
   };
 
+  const [loading, setLoading] = useState(false);
   const [attributes, setAttributes] = useState<AuctionState>({
     reservationPrice: 0,
-    items: safetyDeposit && [safetyDeposit] || [],
+    items: [safetyDeposit],
     category: AuctionCategory.InstantSale,
     auctionDurationType: 'minutes',
     gapTimeType: 'minutes',
@@ -187,119 +164,6 @@ export const ArtView = () => {
     setLoading(false);
   }
 
-  const buyNow = async () => {
-    if (!auctionView) return;
-    setShowBuyModal(true);
-    const winningConfigType =
-      auctionView.participationItem?.winningConfigType ||
-      auctionView.items[0][0]?.winningConfigType;
-    const isAuctionItemMaster = [
-      WinningConfigType.FullRightsTransfer,
-      WinningConfigType.TokenOnlyTransfer,
-    ].includes(winningConfigType);
-    const allowBidToPublic =
-      myPayingAccount &&
-      !auctionView.myBidderPot &&
-      !isOwner;
-    const allowBidToAuctionOwner =
-      myPayingAccount &&
-      isOwner &&
-      isAuctionItemMaster;
-
-    // Placing a "bid" of the full amount results in a purchase to redeem.
-    if (instantSalePrice && (allowBidToPublic || allowBidToAuctionOwner)) {
-      try {
-        console.log('sendPlaceBid');
-        await sendPlaceBid(
-          connection,
-          wallet,
-          myPayingAccount.pubkey,
-          auctionView,
-          accountByMint,
-          instantSalePrice,
-          // make sure all accounts are created
-          'finalized',
-        );
-        // setLastBid(bid);
-      } catch (e) {
-        console.error('sendPlaceBid', e);
-        notify({
-          message: 'Transaction failed...',
-          description: 'There was an issue place a bid. Please try again.',
-          type: 'error'
-        });
-        setShowBuyModal(false);
-        return;
-      }
-    }
-
-    const newAuctionState = await update(
-      auctionView.auction.pubkey,
-      wallet.publicKey,
-    );
-    auctionView.auction = newAuctionState[0];
-    auctionView.myBidderPot = newAuctionState[1];
-    auctionView.myBidderMetadata = newAuctionState[2];
-    if (
-      wallet.publicKey &&
-      auctionView.auction.info.bidState.type == BidStateType.EnglishAuction
-    ) {
-      const winnerIndex = auctionView.auction.info.bidState.getWinnerIndex(
-        wallet.publicKey.toBase58(),
-      );
-      if (winnerIndex === null)
-        auctionView.auction.info.bidState.bids.unshift(
-          new Bid({
-            key: wallet.publicKey.toBase58(),
-            amount: new BN(instantSalePrice || 0),
-          }),
-        );
-      // It isnt here yet
-      if (!auctionView.myBidderPot)
-        auctionView.myBidderPot = {
-          pubkey: 'none',
-          //@ts-ignore
-          account: {},
-          info: new BidderPot({
-            bidderPot: 'dummy',
-            bidderAct: wallet.publicKey.toBase58(),
-            auctionAct: auctionView.auction.pubkey,
-            emptied: false,
-          }),
-        };
-    }
-    // Claim the purchase
-    try {
-      await sendRedeemBid(
-        connection,
-        wallet,
-        myPayingAccount.pubkey,
-        auctionView,
-        accountByMint,
-        prizeTrackingTickets,
-        bidRedemptions,
-        bids,
-      );
-      await update();
-    } catch (e) {
-      console.error(e);
-      notify({
-        message: 'Transaction failed...',
-        description: 'There was an issue redeeming or refunding your bid. Please try again.',
-        type: 'error'
-      });
-      setShowBuyModal(false);
-      return;
-    }
-
-    notify({
-      message: 'Transaction successed',
-      description: '',
-      type: 'success'
-    })
-    setShowBuyModal(false);
-  }
-
   return (
     <div className="main-area">
       <div className="container art-container">
@@ -338,30 +202,17 @@ export const ArtView = () => {
             <CollectionInfo />
             <ViewOn id={id} />
             <ActionView
-              instantSalePrice={instantSalePrice}
+              auctionView={auction}
               isOwner={isOwner}
+              listnow={listNow}
               loading={loading}
               attributes={attributes}
               setAttributes={setAttributes}
-              listNow={listNow}
-              buyNow={buyNow}
             />
-            <ArtInfo art={art} data={data} account={account} />
+            <ArtInfo art={art} data={data} />
           </Col>
         </Row>
       </div>
-      <MetaplexModal visible={showBuyModal} closable={false} className='main-modal'>
-        <div className='buy-modal'>
-          <div>
-            <Spin />
-            <span className='header-text'>Do not close this window</span>
-          </div>
-          <span className='main-text'>After wallet approval, your transaction will be finished in about 3s.</span>
-          <div className='content'>
-            <span>While you are waiting. Join our <a>discord</a> & <a>twitter</a> community for weekly giveaways</span>
-          </div>
-        </div>
-      </MetaplexModal>
     </div>
   );
 };
