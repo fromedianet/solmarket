@@ -5,6 +5,8 @@ import { Layout } from 'antd';
 import { AppBar } from '../AppBar';
 // import { Footer } from '../Footer';
 import { Sidebar } from '../Sidebar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Content } = Layout;
 
@@ -19,6 +21,7 @@ export const AppLayout = React.memo((props: any) => {
         <Content className="my-layout-content">{props.children}</Content>
       </Layout>
       {/*<Footer />*/}
+      <ToastContainer />
     </div>
   );
 });
