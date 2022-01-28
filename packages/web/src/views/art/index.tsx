@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Row, Col, Skeleton, Collapse, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import {
@@ -25,7 +25,7 @@ import {
   notify,
   PriceFloor,
   PriceFloorType,
-  useAccountByMint,
+  TokenAccount,
   useConnection,
   useMeta,
   useMint,
@@ -46,9 +46,10 @@ import {
   InstantSaleType,
 } from '../auctionCreate';
 import { QUOTE_MINT } from '../../constants';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { sendPlaceBid } from '../../actions/sendPlaceBid';
 import { sendRedeemBid } from '../../actions/sendRedeemBid';
+import { getTokenAccountByMint } from '../../contexts/getTokenAccountByMint';
 
 const { Panel } = Collapse;
 
@@ -56,12 +57,22 @@ export const ArtView = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const [account, setAccount] = useState<TokenAccount | undefined>();
 
   const connection = useConnection();
   const wallet = useWallet();
 
   const art = useArt(id);
   const { ref, data } = useExtendedArt(id);
+
+  useEffect(() => {
+    if (art.mint) {
+      getTokenAccountByMint(connection, new PublicKey(art.mint))
+        .then((value) => {
+          if (value) setAccount(value);
+        });
+    }
+  }, [art]);
 
   let auctionView: AuctionView | undefined;
   const auctions = useAuctions();
@@ -94,7 +105,7 @@ export const ArtView = () => {
   const { tokenMap } = useTokenList();
   // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
-  const account = useAccountByMint(m.info.mint);
+  // const account = useAccountByMint(m.info.mint);
   const balance = useUserBalance(auctionView?.auction.info.tokenMint);
   const myPayingAccount = balance.accounts[0];
   const instantSalePrice = useMemo(
