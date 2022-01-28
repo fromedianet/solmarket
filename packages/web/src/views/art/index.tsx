@@ -95,7 +95,7 @@ export const ArtView = () => {
   // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
   const account = useAccountByMint(m.info.mint);
-  const balance = useUserBalance(m.info.mint);
+  const balance = useUserBalance(auctionView?.auction.info.tokenMint);
   const myPayingAccount = balance.accounts[0];
   const instantSalePrice = useMemo(
     () => (auctionView?.auction?.info.priceFloor.minPrice || new BN(0)).toNumber() / LAMPORTS_PER_SOL,
@@ -192,7 +192,7 @@ export const ArtView = () => {
     setShowBuyModal(true);
     const winningConfigType =
       auctionView.participationItem?.winningConfigType ||
-      auctionView.items[0][0].winningConfigType;
+      auctionView.items[0][0]?.winningConfigType;
     const isAuctionItemMaster = [
       WinningConfigType.FullRightsTransfer,
       WinningConfigType.TokenOnlyTransfer,
@@ -288,23 +288,16 @@ export const ArtView = () => {
         description: 'There was an issue redeeming or refunding your bid. Please try again.',
         type: 'error'
       });
+      setShowBuyModal(false);
+      return;
     }
 
+    notify({
+      message: 'Transaction successed',
+      description: '',
+      type: 'success'
+    })
     setShowBuyModal(false);
-  }
-
-  const test = async () => {
-    setShowBuyModal(true);
-    
-    setTimeout(() => {
-      notify({
-        message: 'Transaction failed...',
-        description: 'There was an issue redeeming or refunding your bid. Please try again.',
-        type: 'error'
-      });
-      setShowBuyModal(false);
-    }, 3000);
-    
   }
 
   return (
@@ -351,9 +344,9 @@ export const ArtView = () => {
               attributes={attributes}
               setAttributes={setAttributes}
               listNow={listNow}
-              buyNow={test}
+              buyNow={buyNow}
             />
-            <ArtInfo art={art} data={data} />
+            <ArtInfo art={art} data={data} account={account} />
           </Col>
         </Row>
       </div>
