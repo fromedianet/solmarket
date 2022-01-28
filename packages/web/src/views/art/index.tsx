@@ -9,8 +9,7 @@ import {
   useExtendedArt,
   useUserBalance,
 } from '../../hooks';
-import { Snackbar } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { ToastContainer, toast } from 'react-toastify';
 import { ArtContent } from '../../components/ArtContent';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
@@ -50,7 +49,7 @@ import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { sendPlaceBid } from '../../actions/sendPlaceBid';
 import { sendRedeemBid } from '../../actions/sendRedeemBid';
-import { AlertState } from '../../utils/utils';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Panel } = Collapse;
 
@@ -58,11 +57,6 @@ export const ArtView = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
   const [showBuyModal, setShowBuyModal] = useState(false);
-  const [alertState, setAlertState] = useState<AlertState>({
-    open: false,
-    message: '',
-    severity: undefined,
-  });
 
   const connection = useConnection();
   const wallet = useWallet();
@@ -230,11 +224,7 @@ export const ArtView = () => {
         // setLastBid(bid);
       } catch (e) {
         console.error('sendPlaceBid', e);
-        // setAlertState({
-        //   open: true,
-        //   message: 'There was an issue place a bid. Please try again.',
-        //   severity: 'error'
-        // });
+        toast.error('There was an issue place a bid. Please try again.');
         setShowBuyModal(false);
         return;
       }
@@ -290,26 +280,19 @@ export const ArtView = () => {
       await update();
     } catch (e) {
       console.error(e);
-      setAlertState({
-        open: true,
-        message: 'There was an issue redeeming or refunding your bid. Please try again.',
-        severity: 'error'
-      });
+      toast.error('There was an issue redeeming or refunding your bid. Please try again.');
     }
 
     setShowBuyModal(false);
   }
 
   const test = async () => {
-    setShowBuyModal(true);
-    setTimeout(() => {
-      setAlertState({
-        open: true,
-        message: 'There was an issue redeeming or refunding your bid. Please try again.',
-        severity: 'error'
-      });
-      setShowBuyModal(false);
-    }, 3000);
+    // setShowBuyModal(true);
+    toast.error('There was an issue redeeming or refunding your bid. Please try again.');
+    // setTimeout(() => {
+      
+    //   setShowBuyModal(false);
+    // }, 3000);
     
   }
 
@@ -375,19 +358,11 @@ export const ArtView = () => {
           </div>
         </div>
       </MetaplexModal>
-      <Snackbar
-        open={alertState.open}
-        autoHideDuration={6000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
-        onClose={() => setAlertState({ ...alertState, open: false })}
-      >
-        <Alert
-          onClose={() => setAlertState({ ...alertState, open: false })}
-          severity={alertState.severity}
-        >
-          {alertState.message}
-        </Alert>
-      </Snackbar>
+      <ToastContainer
+        position='top-center'
+        theme='dark'
+        autoClose={6000}
+      />
     </div>
   );
 };

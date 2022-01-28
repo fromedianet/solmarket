@@ -13,9 +13,3 @@ export const getLast = <T>(arr: T[]) => {
 
   return arr[arr.length - 1];
 };
-
-export interface AlertState {
-  open: boolean;
-  message: string;
-  severity: 'success' | 'info' | 'warning' | 'error' | undefined;
-}
