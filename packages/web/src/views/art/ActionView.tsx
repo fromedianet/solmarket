@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Row, Col, Button, InputNumber, Form, Spin } from 'antd';
 import { ConnectButton } from '@oyster/common';
 import { AuctionState } from '../auctionCreate';
+import { AuctionView } from '../../hooks';
+import { useAuctionStatus } from '../../components/AuctionRenderCard/hooks/useAuctionStatus';
 
 interface PriceValue {
   number?: number;
@@ -41,16 +43,17 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
 };
 
 export const ActionView = (props: {
-  instantSalePrice: number,
+  auctionView: AuctionView | undefined,
   isOwner: boolean;
   loading: boolean;
   attributes: AuctionState;
+  listnow: () => void;
   setAttributes: (attr: AuctionState) => void;
-  listNow: () => Promise<void>;
-  buyNow: () => Promise<void>;
 }) => {
   const wallet = useWallet();
-  const alreadyListed = props.instantSalePrice > 0;
+  const auctionStatus = props.auctionView && useAuctionStatus(props.auctionView);
+  const bidValue = typeof auctionStatus?.amount === 'string' ? parseFloat(auctionStatus.amount) : auctionStatus?.amount;
+  const alreadyListed = bidValue && bidValue > 0 ? true : false;
   const checkPrice = (_: any, value: { number: number }) => {
     if (value && value.number > 0) {
       return Promise.resolve();
@@ -58,12 +61,17 @@ export const ActionView = (props: {
     return Promise.reject(new Error('Price must be greater than zero!'));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onFinish = (values: any) => {
+    props.listnow();
+  };
+
   return (
     <div className="action-view">
       {alreadyListed && <span className="label">Current Price</span>}
       <div className='price-container'>
         <img src="/icons/price.svg" width={24} alt="price" style={{marginRight: '8px'}} />
-        {alreadyListed && <span className="value">{props.instantSalePrice} SOL</span>}
+        {alreadyListed && <span className="value">{bidValue} SOL</span>}
       </div>
 
       {!alreadyListed && <span className="value">Not listed</span>}
@@ -74,12 +82,12 @@ export const ActionView = (props: {
           alreadyListed ? (
             <Button className="button">Cancel Listing</Button>
           ) : (
-            <Form name="price-control" layout="inline" onFinish={props.listNow}>
+            <Form name="price-control" layout="inline" onFinish={onFinish}>
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
                     <PriceInput
-                      value={{number: props.instantSalePrice}}
+                      value={{number: bidValue}}
                       onChange={value =>
                         props.setAttributes({
                           ...props.attributes,
@@ -98,13 +106,15 @@ export const ActionView = (props: {
                   </Form.Item>
                 </Col>
               </Row>
+              
+              
             </Form>
           )
         ) : (
           alreadyListed && (
             <Row gutter={16}>
               <Col span={10}>
-                <Button className="button" onClick={props.buyNow}>Buy now</Button>
+                <Button className="button">Buy now</Button>
               </Col>
               <Col span={14}>
                 <Button className="button">Make an offer</Button>
