@@ -56,6 +56,7 @@ export function notify({
     theme: 'dark',
     autoClose: 6000,
     hideProgressBar: false,
+    pauseOnFocusLoss: false,
     type: type
   });
 }
