@@ -9,7 +9,6 @@ import {
   useExtendedArt,
   useUserBalance,
 } from '../../hooks';
-import { ToastContainer, toast } from 'react-toastify';
 import { ArtContent } from '../../components/ArtContent';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
@@ -23,6 +22,7 @@ import {
   BidStateType,
   IPartialCreateAuctionArgs,
   MetaplexModal,
+  notify,
   PriceFloor,
   PriceFloorType,
   useAccountByMint,
@@ -49,7 +49,6 @@ import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { sendPlaceBid } from '../../actions/sendPlaceBid';
 import { sendRedeemBid } from '../../actions/sendRedeemBid';
-import 'react-toastify/dist/ReactToastify.css';
 
 const { Panel } = Collapse;
 
@@ -224,7 +223,11 @@ export const ArtView = () => {
         // setLastBid(bid);
       } catch (e) {
         console.error('sendPlaceBid', e);
-        toast.error('There was an issue place a bid. Please try again.');
+        notify({
+          message: 'Transaction failed...',
+          description: 'There was an issue place a bid. Please try again.',
+          type: 'error'
+        });
         setShowBuyModal(false);
         return;
       }
@@ -280,19 +283,27 @@ export const ArtView = () => {
       await update();
     } catch (e) {
       console.error(e);
-      toast.error('There was an issue redeeming or refunding your bid. Please try again.');
+      notify({
+        message: 'Transaction failed...',
+        description: 'There was an issue redeeming or refunding your bid. Please try again.',
+        type: 'error'
+      });
     }
 
     setShowBuyModal(false);
   }
 
   const test = async () => {
-    // setShowBuyModal(true);
-    toast.error('There was an issue redeeming or refunding your bid. Please try again.');
-    // setTimeout(() => {
-      
-    //   setShowBuyModal(false);
-    // }, 3000);
+    setShowBuyModal(true);
+    
+    setTimeout(() => {
+      notify({
+        message: 'Transaction failed...',
+        description: 'There was an issue redeeming or refunding your bid. Please try again.',
+        type: 'error'
+      });
+      setShowBuyModal(false);
+    }, 3000);
     
   }
 
@@ -358,11 +369,6 @@ export const ArtView = () => {
           </div>
         </div>
       </MetaplexModal>
-      <ToastContainer
-        position='top-center'
-        theme='dark'
-        autoClose={6000}
-      />
     </div>
   );
 };
