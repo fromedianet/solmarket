@@ -16,17 +16,14 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { ConnectButton } from '@oyster/common';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import useWindowDimensions from '../../utils/layout';
+import { Link } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 const SidebarMenu = () => {
-  const clickLink = link => {
-    window.location.href = `/#${link}`;
-  };
-
   return (
     <Menu className="sidebar-menu ant-menu-dark" mode={'inline'}>
       <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
-        Home
+        <Link to={'/'}>Home</Link>
       </Menu.Item>
       <SubMenu
         key="collections"
@@ -46,9 +43,8 @@ const SidebarMenu = () => {
       <Menu.Item
         key="auctions"
         icon={<BellOutlined style={{ fontSize: 20 }} />}
-        onClick={() => clickLink('/auctions')}
       >
-        Auctions
+        <Link to="/auctions">Auctions</Link>
       </Menu.Item>
       <Menu.Item
         key="stats"
