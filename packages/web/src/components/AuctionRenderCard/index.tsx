@@ -1,12 +1,17 @@
 import React from 'react';
 import { Card, CardProps, Statistic } from 'antd';
 import { ArtContent } from '../ArtContent';
-import { AuctionView, useArt, useCreators } from '../../hooks';
+import {
+  AuctionView,
+  AuctionViewState,
+  useArt,
+  useCreators,
+} from '../../hooks';
 
 import { useAuctionStatus } from './hooks/useAuctionStatus';
 import { useTokenList } from '../../contexts/tokenList';
 import { Link } from 'react-router-dom';
-import { AuctionState, CountdownState, formatAmount, shortenAddress } from '@oyster/common';
+import { CountdownState, formatAmount, shortenAddress } from '@oyster/common';
 import { TokenCircle } from '../Custom';
 import { useAuctionCountdown } from '../../hooks/useAuctionCountdown';
 
@@ -36,15 +41,16 @@ export const AuctionRenderCard = (props: AuctionCard) => {
   const formattedAmount = formatAmount(_amount);
 
   const state = useAuctionCountdown(auctionView);
-  const ended = auctionView.auction.info.state === AuctionState.Ended;
+  const ended =
+    auctionView.state === AuctionViewState.Ended ||
+    auctionView.state === AuctionViewState.BuyNow;
   const countdown =
     state && !ended
-      ? ( isNotSet(state)
-        ? 'N/A' 
+      ? isNotSet(state)
+        ? 'N/A'
         : state?.days > 0
-          ? `${state?.days}d ${state?.hours}h ${state?.minutes}m`
-          : `${state?.hours}h ${state?.minutes}m ${state?.seconds}s`
-        )
+        ? `${state?.days}d ${state?.hours}h ${state?.minutes}m`
+        : `${state?.hours}h ${state?.minutes}m ${state?.seconds}s`
       : 'ENDED';
 
   const card = (
