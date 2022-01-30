@@ -1,13 +1,13 @@
 import { Col, Row } from 'antd';
 import React from 'react';
 
-import { useMeta } from '../../../../contexts';
-import { CardLoader } from '../../../../components/MyLoader';
-import { Banner } from '../../../../components/Banner';
-import { HowToBuyModal } from '../../../../components/HowToBuyModal';
+import { useMeta } from '../../contexts';
+import { CardLoader } from '../../components/MyLoader';
+import { Banner } from '../../components/Banner';
+import { HowToBuyModal } from '../../components/HowToBuyModal';
 
-import { useAuctionsList } from './hooks/useAuctionsList';
-import { AuctionRenderCard } from '../../../../components/AuctionRenderCard';
+import { AuctionRenderCard } from '../../components/AuctionRenderCard';
+import { useAuctionsList } from '../home/components/SalesList/hooks/useAuctionsList';
 
 export enum LiveAuctionViewState {
   All = '0',
@@ -17,7 +17,7 @@ export enum LiveAuctionViewState {
   Own = '4',
 }
 
-export const SalesListView = () => {
+export const AuctionsView = () => {
   const { isLoading } = useMeta();
   const liveAuctions = useAuctionsList(LiveAuctionViewState.All);
   const endedAuctions = useAuctionsList(LiveAuctionViewState.Ended);

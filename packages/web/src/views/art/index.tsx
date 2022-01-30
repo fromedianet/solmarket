@@ -70,11 +70,10 @@ export const ArtView = () => {
 
   useEffect(() => {
     if (art.mint) {
-      getTokenAccountByMint(connection, new PublicKey(art.mint))
-        .then((value) => {
-          if (value) setAccount(value);
-        });
-    
+      getTokenAccountByMint(connection, new PublicKey(art.mint)).then(value => {
+        if (value) setAccount(value);
+      });
+
       getGlobalActivityByMint(connection, new PublicKey(art.mint));
     }
   }, [art]);
@@ -89,7 +88,7 @@ export const ArtView = () => {
   }
 
   const bids = useBidsForAuction(auctionView?.auction.pubkey || '');
-  
+
   const pubkey = wallet?.publicKey?.toBase58() || '';
   const isOwner = art?.creators
     ? art.creators.find(item => item.address === pubkey)
@@ -107,14 +106,16 @@ export const ArtView = () => {
     prizeTrackingTickets,
     bidRedemptions,
   } = useMeta();
-  
+
   const { accountByMint } = useUserAccounts();
   const { tokenMap } = useTokenList();
   const m = metadata.filter(item => item.pubkey === id)[0];
   const balance = useUserBalance(auctionView?.auction.info.tokenMint);
   const myPayingAccount = balance.accounts[0];
   const instantSalePrice = useMemo(
-    () => (auctionView?.auction?.info.priceFloor.minPrice || new BN(0)).toNumber() / LAMPORTS_PER_SOL,
+    () =>
+      (auctionView?.auction?.info.priceFloor.minPrice || new BN(0)).toNumber() /
+      LAMPORTS_PER_SOL,
     [auctionView?.auction],
   );
 
@@ -139,7 +140,7 @@ export const ArtView = () => {
 
   const [attributes, setAttributes] = useState<AuctionState>({
     reservationPrice: 0,
-    items: safetyDeposit && [safetyDeposit] || [],
+    items: (safetyDeposit && [safetyDeposit]) || [],
     category: AuctionCategory.InstantSale,
     auctionDurationType: 'minutes',
     gapTimeType: 'minutes',
@@ -201,7 +202,7 @@ export const ArtView = () => {
     setLoading(true);
     await createAuction();
     setLoading(false);
-  }
+  };
 
   const buyNow = async () => {
     if (!auctionView) return;
@@ -214,13 +215,9 @@ export const ArtView = () => {
       WinningConfigType.TokenOnlyTransfer,
     ].includes(winningConfigType);
     const allowBidToPublic =
-      myPayingAccount &&
-      !auctionView.myBidderPot &&
-      !isOwner;
+      myPayingAccount && !auctionView.myBidderPot && !isOwner;
     const allowBidToAuctionOwner =
-      myPayingAccount &&
-      isOwner &&
-      isAuctionItemMaster;
+      myPayingAccount && isOwner && isAuctionItemMaster;
 
     // Placing a "bid" of the full amount results in a purchase to redeem.
     if (instantSalePrice && (allowBidToPublic || allowBidToAuctionOwner)) {
@@ -242,7 +239,7 @@ export const ArtView = () => {
         notify({
           message: 'Transaction failed...',
           description: 'There was an issue place a bid. Please try again.',
-          type: 'error'
+          type: 'error',
         });
         setShowBuyModal(false);
         return;
@@ -301,8 +298,9 @@ export const ArtView = () => {
       console.error(e);
       notify({
         message: 'Transaction failed...',
-        description: 'There was an issue redeeming or refunding your bid. Please try again.',
-        type: 'error'
+        description:
+          'There was an issue redeeming or refunding your bid. Please try again.',
+        type: 'error',
       });
       setShowBuyModal(false);
       return;
@@ -311,10 +309,10 @@ export const ArtView = () => {
     notify({
       message: 'Transaction successed',
       description: '',
-      type: 'success'
-    })
+      type: 'success',
+    });
     setShowBuyModal(false);
-  }
+  };
 
   return (
     <div className="main-area">
@@ -367,15 +365,25 @@ export const ArtView = () => {
         </Row>
         <BottomSection offers={[]} />
       </div>
-      <MetaplexModal visible={showBuyModal} closable={false} className='main-modal'>
-        <div className='buy-modal'>
+      <MetaplexModal
+        visible={showBuyModal}
+        closable={false}
+        className="main-modal"
+      >
+        <div className="buy-modal">
           <div>
             <Spin />
-            <span className='header-text'>Do not close this window</span>
+            <span className="header-text">Do not close this window</span>
           </div>
-          <span className='main-text'>After wallet approval, your transaction will be finished in about 3s.</span>
-          <div className='content'>
-            <span>While you are waiting. Join our <a>discord</a> & <a>twitter</a> community for weekly giveaways</span>
+          <span className="main-text">
+            After wallet approval, your transaction will be finished in about
+            3s.
+          </span>
+          <div className="content">
+            <span>
+              While you are waiting. Join our <a>discord</a> & <a>twitter</a>{' '}
+              community for weekly giveaways
+            </span>
           </div>
         </div>
       </MetaplexModal>

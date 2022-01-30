@@ -17,6 +17,7 @@ import { AdminView } from './views/admin';
 import PackView from './views/pack';
 import { PackCreateView } from './views/packCreate';
 import { BillingView } from './views/auction/billing/billing';
+import { AuctionsView } from './views/auctions';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -58,7 +59,7 @@ export function Routes() {
             <Route exact path="/art/:id" component={() => <ArtView />} />
             <Route exact path="/artists/:id" component={() => <ArtistView />} />
             <Route exact path="/artists" component={() => <ArtistsView />} />
-
+            <Route exact path="/auctions" component={() => <AuctionsView />} />
             <Route
               exact
               path="/auction/create/:step_param?"

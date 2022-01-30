@@ -19,6 +19,10 @@ import useWindowDimensions from '../../utils/layout';
 
 const { SubMenu } = Menu;
 const SidebarMenu = () => {
+  const clickLink = link => {
+    window.location.href = `/#${link}`;
+  };
+
   return (
     <Menu className="sidebar-menu ant-menu-dark" mode={'inline'}>
       <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
@@ -42,6 +46,7 @@ const SidebarMenu = () => {
       <Menu.Item
         key="auctions"
         icon={<BellOutlined style={{ fontSize: 20 }} />}
+        onClick={() => clickLink('/auctions')}
       >
         Auctions
       </Menu.Item>

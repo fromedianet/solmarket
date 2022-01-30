@@ -1,12 +1,20 @@
-import { pubkeyToString, TokenAccount, TokenAccountParser, TOKEN_PROGRAM_ID } from '@oyster/common';
+import {
+  pubkeyToString,
+  TokenAccount,
+  TokenAccountParser,
+  TOKEN_PROGRAM_ID,
+} from '@oyster/common';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 
 export const getTokenAccountByMint = async (
   connection: Connection,
   mintAddress: PublicKey,
 ): Promise<TokenAccount | undefined> => {
-  const result = await connection.getTokenLargestAccounts(mintAddress, 'confirmed');
-  
+  const result = await connection.getTokenLargestAccounts(
+    mintAddress,
+    'confirmed',
+  );
+
   if (result.value && result.value.length > 0) {
     const tokenAddress = result.value[0].address;
 
@@ -20,7 +28,7 @@ export const getTokenAccountByMint = async (
   } else {
     return undefined;
   }
-}
+};
 
 const isTokenAccount = (account: AccountInfo<Buffer>) =>
   account && pubkeyToString(account.owner) === TOKEN_PROGRAM_ID.toString();

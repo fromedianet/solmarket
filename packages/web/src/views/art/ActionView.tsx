@@ -41,7 +41,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
 };
 
 export const ActionView = (props: {
-  instantSalePrice: number,
+  instantSalePrice: number;
   isOwner: boolean;
   loading: boolean;
   attributes: AuctionState;
@@ -61,9 +61,16 @@ export const ActionView = (props: {
   return (
     <div className="action-view">
       {alreadyListed && <span className="label">Current Price</span>}
-      <div className='price-container'>
-        <img src="/icons/price.svg" width={24} alt="price" style={{marginRight: '8px'}} />
-        {alreadyListed && <span className="value">{props.instantSalePrice} SOL</span>}
+      <div className="price-container">
+        <img
+          src="/icons/price.svg"
+          width={24}
+          alt="price"
+          style={{ marginRight: '8px' }}
+        />
+        {alreadyListed && (
+          <span className="value">{props.instantSalePrice} SOL</span>
+        )}
       </div>
 
       {!alreadyListed && <span className="value">Not listed</span>}
@@ -79,7 +86,7 @@ export const ActionView = (props: {
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
                     <PriceInput
-                      value={{number: props.instantSalePrice}}
+                      value={{ number: props.instantSalePrice }}
                       onChange={value =>
                         props.setAttributes({
                           ...props.attributes,
@@ -104,7 +111,9 @@ export const ActionView = (props: {
           alreadyListed && (
             <Row gutter={16}>
               <Col span={10}>
-                <Button className="button" onClick={props.buyNow}>Buy now</Button>
+                <Button className="button" onClick={props.buyNow}>
+                  Buy now
+                </Button>
               </Col>
               <Col span={14}>
                 <Button className="button">Make an offer</Button>
