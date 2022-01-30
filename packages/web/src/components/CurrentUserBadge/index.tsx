@@ -194,7 +194,7 @@ export const CurrentUserBadge = (props: {
   if (!wallet || !publicKey) {
     return null;
   }
-  
+
   let name = props.showAddress ? shortenAddress(`${publicKey}`) : '';
   const unknownWallet = wallet as any;
   if (unknownWallet.name && !props.showAddress) {

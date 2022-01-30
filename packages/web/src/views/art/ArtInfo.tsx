@@ -1,6 +1,10 @@
 import React from 'react';
 import { Collapse, Skeleton, Row, Col, Statistic } from 'antd';
-import { IMetadataExtension, shortenAddress, TokenAccount } from '@oyster/common';
+import {
+  IMetadataExtension,
+  shortenAddress,
+  TokenAccount,
+} from '@oyster/common';
 import { Art } from '../../types';
 import { CopySpan } from '../../components/CopySpan';
 
@@ -75,7 +79,7 @@ export const ArtInfo = ({
             <span className="details-key">Mint Address</span>
             <div className="details-value">
               {art.mint === undefined ? (
-                <Skeleton paragraph={{ rows: 0 }} active/>
+                <Skeleton paragraph={{ rows: 0 }} active />
               ) : (
                 <CopySpan
                   value={shortenAddress(art.mint)}
@@ -90,21 +94,21 @@ export const ArtInfo = ({
               <div className="sub-container">
                 <span className="details-key">Token Address</span>
                 <div className="details-value">
-                    <CopySpan
-                      value={shortenAddress(account.pubkey)}
-                      copyText={account.pubkey}
-                      className=""
-                    />
+                  <CopySpan
+                    value={shortenAddress(account.pubkey)}
+                    copyText={account.pubkey}
+                    className=""
+                  />
                 </div>
               </div>
               <div className="sub-container">
                 <span className="details-key">Owner</span>
                 <div className="details-value">
-                    <CopySpan
-                      value={shortenAddress(account.info.owner.toBase58())}
-                      copyText={account.info.owner.toBase58()}
-                      className=""
-                    />
+                  <CopySpan
+                    value={shortenAddress(account.info.owner.toBase58())}
+                    copyText={account.info.owner.toBase58()}
+                    className=""
+                  />
                 </div>
               </div>
             </>
