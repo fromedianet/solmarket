@@ -50,6 +50,8 @@ import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { sendPlaceBid } from '../../actions/sendPlaceBid';
 import { sendRedeemBid } from '../../actions/sendRedeemBid';
 import { getTokenAccountByMint } from '../../contexts/getTokenAccountByMint';
+import { BottomSection } from './BottomSection';
+import { getGlobalActivityByMint } from '../../contexts/getGlobalActivityByMint';
 
 const { Panel } = Collapse;
 
@@ -64,6 +66,7 @@ export const ArtView = () => {
 
   const art = useArt(id);
   const { ref, data } = useExtendedArt(id);
+  console.log(art);
 
   useEffect(() => {
     if (art.mint) {
@@ -71,6 +74,8 @@ export const ArtView = () => {
         .then((value) => {
           if (value) setAccount(value);
         });
+    
+      getGlobalActivityByMint(connection, new PublicKey(art.mint));
     }
   }, [art]);
 
@@ -82,6 +87,8 @@ export const ArtView = () => {
   if (filters.length > 0) {
     auctionView = filters[0];
   }
+
+  const bids = useBidsForAuction(auctionView?.auction.pubkey || '');
   
   const pubkey = wallet?.publicKey?.toBase58() || '';
   const isOwner = art?.creators
@@ -100,12 +107,10 @@ export const ArtView = () => {
     prizeTrackingTickets,
     bidRedemptions,
   } = useMeta();
-  const bids = useBidsForAuction(auctionView?.auction.pubkey || '');
+  
   const { accountByMint } = useUserAccounts();
   const { tokenMap } = useTokenList();
-  // const bids = useBidsForAuction(auction?.auction.pubkey || '');
   const m = metadata.filter(item => item.pubkey === id)[0];
-  // const account = useAccountByMint(m.info.mint);
   const balance = useUserBalance(auctionView?.auction.info.tokenMint);
   const myPayingAccount = balance.accounts[0];
   const instantSalePrice = useMemo(
@@ -360,6 +365,7 @@ export const ArtView = () => {
             <ArtInfo art={art} data={data} account={account} />
           </Col>
         </Row>
+        <BottomSection offers={[]} />
       </div>
       <MetaplexModal visible={showBuyModal} closable={false} className='main-modal'>
         <div className='buy-modal'>
