@@ -61,7 +61,7 @@
   
     span {
       margin-left: 4px;
-      color: @text-pink;
+      color: @text-purple;
       font-size: 16px;
     }
   }
@@ -230,6 +230,46 @@
       }
     }
   }
+
+  .bottom-section {
+    width: 100%;
+    margin: 24px auto;
+  }
+
+  .ant-table {
+    background: transparent;
+    color: @text-primary-color;
+
+    th.ant-table-cell {
+      background: @bg-secondary-color;
+      color: @text-pink;
+      border: none;
+    }
+    .ant-table-tbody {
+      tr:nth-child(odd) {
+        background: @bg-table-odd;
+      }
+      tr:nth-child(even) {
+        background: @bg-table-even;
+      }
+      & >tr {
+        td {
+          border: none;
+
+          a {
+            color: @text-primary-color;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+        }
+        &.ant-table-row:hover >td, & >td.ant-table-cell-row-hover {
+          background: transparent;
+        }
+      }
+    }
+    
+  }
 }
 .main-modal .ant-modal-body {
   background: @bg-primary-color;
@@ -260,7 +300,7 @@
       font-size: 16px;
 
       a {
-        color: @text-pink;
+        color: @text-purple;
       }
     }
   }
