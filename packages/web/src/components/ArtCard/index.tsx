@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Card, CardProps, Button, Badge } from 'antd';
+import { Card, CardProps, Badge } from 'antd';
 import { MetadataCategory, StringPublicKey } from '@oyster/common';
 import { ArtContent } from '../ArtContent';
 import { AuctionView, useArt, useAuctions } from '../../hooks';
@@ -23,6 +23,7 @@ export interface ArtCardProps extends CardProps {
   preview?: boolean;
   small?: boolean;
   onClose?: () => void;
+  noEvent?: boolean;
 
   height?: number;
   artView?: boolean;
@@ -37,6 +38,7 @@ export const ArtCard = (props: ArtCardProps) => {
     small,
     onClose,
     pubkey,
+    noEvent,
     ...rest
   } = props;
   const art = useArt(pubkey);
@@ -57,27 +59,9 @@ export const ArtCard = (props: ArtCardProps) => {
     [auctionView?.auction],
   );
   
-  const card = (
-    <Card
-      hoverable={true}
-      className={`art-card ${small ? 'small' : ''} ${className ?? ''}`}
-      bordered={false}
-      {...rest}
-    >
-      {onClose && (
-        <Button
-          className="card-close-button"
-          shape="circle"
-          onClick={e => {
-            e.stopPropagation();
-            e.preventDefault();
-            onClose && onClose();
-          }}
-        >
-          X
-        </Button>
-      )}
-      <Link to={`/art/${pubkey}`}>
+  const CardContent = () => {
+    return (
+      <>
         <div className='image-over art-image-container'>
           <ArtContent
             className="art-image no-event"
@@ -95,12 +79,41 @@ export const ArtCard = (props: ArtCardProps) => {
               </span>
               <img src="/icons/check.svg" alt="check" />
             </div>
-            {instantSalePrice > 0 && (
+            {!noEvent &&instantSalePrice > 0 && (
               <h5>{`${instantSalePrice} SOL`}</h5>
             )}
           </div>
         </div>
-      </Link>
+      </>
+    );
+  };
+
+  const card = (
+    <Card
+      hoverable={true}
+      className={`art-card ${small ? 'small' : ''} ${className ?? ''}`}
+      bordered={false}
+      {...rest}
+    >
+      {onClose && (
+        <button
+          className="card-close-button"
+          onClick={e => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClose && onClose();
+          }}
+        >
+          X
+        </button>
+      )}
+      {noEvent ? (
+        <CardContent />
+      ) : (
+        <Link to={`/art/${pubkey}`}>
+          <CardContent />
+        </Link>
+      )}
     </Card>
   );
 
