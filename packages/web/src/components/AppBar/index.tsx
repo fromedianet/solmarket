@@ -35,7 +35,7 @@ export const WalletInfo = () => {
 export const LogoLink = () => {
   return (
     <Link to={`/`} className="navbar-brand">
-      <img src={'/metaplex-logo.svg'} />
+      <img src={'/solana-logo.jpg'} />
     </Link>
   );
 };
