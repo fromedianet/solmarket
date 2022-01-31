@@ -105,8 +105,12 @@
     height: 0px;
   }
 
-  .ant-tabs-top > .ant-tabs-nav::before {
-    border: none;
+  .ant-tabs-top > .ant-tabs-nav {
+    margin: 0;
+
+    &::before {
+      border: none;
+    }
   }
 
   @media (max-width: 576px) {
@@ -114,6 +118,23 @@
       padding: 0;
     }
   }
-  
+}
 
+.profile-modal {
+  padding: 24px;
+
+  h1 {
+    color: @text-primary-color;
+  }
+  .ant-form-item-label > label {
+    color: @text-primary-color;
+  }
+  .submit-button {
+    height: 40px;
+    background: @bg-pink-gradient;
+    border: none;
+    &:hover {
+      opacity: .8;
+    }
+  }
 }
