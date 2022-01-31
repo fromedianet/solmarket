@@ -3,19 +3,21 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useState } from "react";
 import { Button, Row, Col, Statistic, Tabs, Form, Input, message } from 'antd';
 import { CopySpan } from "../../components/CopySpan";
-import { useCreator } from "../../hooks";
+import { useCreator, useCreatorArts } from "../../hooks";
+import { Link } from "react-router-dom";
+import { ArtCard } from "../../components/ArtCard";
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export const ProfileView = () => {
-
   const [visible, setVisible] = useState(false);
+  const wallet = useWallet();
+  const artwork = useCreatorArts(wallet.publicKey?.toBase58());
+  
+  const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
 
-  const wallet = useWallet();
-  const creator = useCreator(wallet.publicKey?.toBase58());
-  
   const onSubmit = (values) => {
     console.log(values);
     message.success('Submit success!');
@@ -24,6 +26,15 @@ export const ProfileView = () => {
   const onSubmitFailed = () => {
     message.error("Submit failed!");
   }
+
+  const EmptyView = () => {
+    return (
+      <div className="empty-container">
+        <img src="/icons/no-data.svg" width={100} alt='empty' />
+        <span>No Items</span>
+      </div>
+    );
+  };
 
   return (
     <div className="main-area">
@@ -55,19 +66,35 @@ export const ProfileView = () => {
           </Row>
           <Tabs defaultActiveKey="1" className="profile-tabs">
             <TabPane tab='My items' key='1'>
-              My items
+              {artwork && artwork.length > 0 ? (
+                <Row gutter={[16, 16]}>
+                  {artwork.map((item, index) => 
+                    <Col key={index} span={24} md={8} xl={6} >
+                      <Link to={`/art/${item.pubkey}`}>
+                        <ArtCard
+                          pubkey={item.pubkey}
+                          preview={false}
+                          artView={true}
+                        />
+                      </Link>
+                    </Col>
+                  )}
+                </Row>
+              ) : (
+                <EmptyView />
+              )}
             </TabPane>
             <TabPane tab='Listed items' key='2'>
-              Listed items
+              Listed items - Comming soon
             </TabPane>
             <TabPane tab='Offers made' key='3'>
-              Offers made
+              Offers made - Comming soom
             </TabPane>
             <TabPane tab='Offers received' key='4'>
-              Offers received
+              Offers received - Comming soon
             </TabPane>
             <TabPane tab='Activites' key='5'>
-              Activites
+              Activites - Comming soon
             </TabPane>
           </Tabs>
         </div>
