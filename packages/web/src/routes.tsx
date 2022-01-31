@@ -76,11 +76,7 @@ export function Routes() {
               path="/auction/:id/billing"
               component={() => <BillingView />}
             />
-            <Route
-              exact
-              path='/profile'
-              component={() => <ProfileView />}
-            />
+            <Route exact path="/profile" component={() => <ProfileView />} />
             <Route path="/about" component={() => <StaticPageView />} />
             <Route path="/" component={() => <HomeView />} />
           </Switch>

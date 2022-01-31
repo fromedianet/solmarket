@@ -295,18 +295,30 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
             !myPayingAccount ? (
               <Spin />
             ) : eligibleForAnything ? (
-              <Button>Redeem Bid</Button>
+              <Button type="primary" size="large" className="action-btn">
+                Redeem Bid
+              </Button>
             ) : isAuctionManagerAuthorityWalletOwner ? (
-              <Button>Reclaim Items</Button>
+              <Button type="primary" size="large" className="action-btn">
+                Reclaim Items
+              </Button>
             ) : (
-              <Button>Refund Bid</Button>
+              <Button type="primary" size="large" className="action-btn">
+                Refund Bid
+              </Button>
             ))}
           {wallet.connected &&
             isAuctionNotStarted &&
             isAuctionManagerAuthorityWalletOwner && (
-              <Button>{loading ? <Spin /> : 'Start Auction'}</Button>
+              <Button type="primary" size="large" className="action-btn">
+                {loading ? <Spin /> : 'Start Auction'}
+              </Button>
             )}
-          {wallet.connected && !ended && <Button>Place a Bid</Button>}
+          {wallet.connected && !ended && (
+            <Button type="primary" size="large" className="action-btn">
+              Place a Bid
+            </Button>
+          )}
         </div>
       </div>
       {auctionView && bids.length > 0 && (

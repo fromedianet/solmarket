@@ -33,14 +33,7 @@ export interface ArtCardProps extends CardProps {
 }
 
 export const ArtCard = (props: ArtCardProps) => {
-  const {
-    className,
-    small,
-    onClose,
-    pubkey,
-    noEvent,
-    ...rest
-  } = props;
+  const { className, small, onClose, pubkey, noEvent, ...rest } = props;
   const art = useArt(pubkey);
 
   let auctionView: AuctionView | undefined;
@@ -58,11 +51,11 @@ export const ArtCard = (props: ArtCardProps) => {
       LAMPORTS_PER_SOL,
     [auctionView?.auction],
   );
-  
+
   const CardContent = () => {
     return (
       <>
-        <div className='image-over art-image-container'>
+        <div className="image-over art-image-container">
           <ArtContent
             className="art-image no-event"
             preview={false}
@@ -74,12 +67,10 @@ export const ArtCard = (props: ArtCardProps) => {
           <div className="card-body">
             <h5>{art.title}</h5>
             <div className="card-collection-name">
-              <span>
-                collection_name
-              </span>
+              <span>collection_name</span>
               <img src="/icons/check.svg" alt="check" />
             </div>
-            {!noEvent &&instantSalePrice > 0 && (
+            {!noEvent && instantSalePrice > 0 && (
               <h5>{`${instantSalePrice} SOL`}</h5>
             )}
           </div>

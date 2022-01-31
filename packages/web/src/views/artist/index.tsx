@@ -13,34 +13,27 @@ export const ArtistView = () => {
   const artworkGrid = (
     <Row gutter={[16, 16]}>
       {artwork.length > 0
-        ? artwork.map((m) => {
+        ? artwork.map(m => {
             const id = m.pubkey;
             return (
               <Col key={id} span={12} md={8} lg={6} xl={4}>
-                <ArtCard
-                  pubkey={m.pubkey}
-                  preview={false}
-                  artView={true}
-                />
+                <ArtCard pubkey={m.pubkey} preview={false} artView={true} />
               </Col>
             );
           })
-        : [...Array(6)].map((_, idx) =>
-          <Col key={idx} span={24} md={8} lg={6} xl={4}>
-            <CardLoader />
-          </Col>
-          
-        )}
+        : [...Array(6)].map((_, idx) => (
+            <Col key={idx} span={24} md={8} lg={6} xl={4}>
+              <CardLoader />
+            </Col>
+          ))}
     </Row>
   );
 
   return (
-    <div className='main-area'>
-      <div className='container'>
+    <div className="main-area">
+      <div className="container">
         <Divider />
-        <Row
-          style={{ textAlign: 'left', fontSize: '1.4rem' }}
-        >
+        <Row style={{ textAlign: 'left', fontSize: '1.4rem' }}>
           <Col span={24}>
             <h2>
               {/* <MetaAvatar creators={creator ? [creator] : []} size={100} /> */}
