@@ -17,9 +17,9 @@ export const AuctionsView = () => {
   return (
     <div className="main-area">
       <Banner
-        src="/main-banner.svg"
-        headingText="The amazing world of Metaplex."
-        subHeadingText="Buy exclusive Metaplex NFTs."
+        src="/solana-logo.jpg"
+        headingText="The amazing world of Solana NFT."
+        subHeadingText="Buy exclusive Solana NFTs."
         actionComponent={<HowToBuyModal buttonClassName="secondary-btn" />}
         useBannerBg
       />

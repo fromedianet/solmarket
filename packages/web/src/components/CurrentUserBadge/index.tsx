@@ -25,6 +25,7 @@ import { TokenCircle } from '../Custom';
 const btnStyle: React.CSSProperties = {
   border: 'none',
   height: 40,
+  marginTop: '8px',
 };
 
 const UserActions = (props: { mobile?: boolean; onClick?: any }) => {

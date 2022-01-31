@@ -316,54 +316,56 @@ export const ArtView = () => {
 
   return (
     <div className="main-area">
-      <div className="container art-container">
-        <Row ref={ref} gutter={24}>
-          <Col span={24} lg={12}>
-            <div className="artwork-view">
-              <ArtContent
-                className="artwork-image"
-                pubkey={id}
-                active={true}
-                allowMeshRender={true}
-                artView={true}
+      <div className='main-page'>
+        <div className="container art-container">
+          <Row ref={ref} gutter={24}>
+            <Col span={24} lg={12}>
+              <div className="artwork-view">
+                <ArtContent
+                  className="artwork-image"
+                  pubkey={id}
+                  active={true}
+                  allowMeshRender={true}
+                  artView={true}
+                />
+              </div>
+              <Collapse className="price-history" expandIconPosition="right">
+                <Panel
+                  key={0}
+                  header="Price History"
+                  className="bg-secondary"
+                  extra={
+                    <img
+                      src="/icons/activity.svg"
+                      width={24}
+                      alt="price history"
+                    />
+                  }
+                >
+                  <Skeleton paragraph={{ rows: 3 }} active />
+                </Panel>
+              </Collapse>
+            </Col>
+            <Col span={24} lg={12}>
+              <div className="art-title">
+                {art.title || <Skeleton paragraph={{ rows: 0 }} />}
+              </div>
+              <CollectionInfo />
+              <ViewOn id={id} />
+              <ActionView
+                instantSalePrice={instantSalePrice}
+                isOwner={isOwner}
+                loading={loading}
+                attributes={attributes}
+                setAttributes={setAttributes}
+                listNow={listNow}
+                buyNow={buyNow}
               />
-            </div>
-            <Collapse className="price-history" expandIconPosition="right">
-              <Panel
-                key={0}
-                header="Price History"
-                className="bg-secondary"
-                extra={
-                  <img
-                    src="/icons/activity.svg"
-                    width={24}
-                    alt="price history"
-                  />
-                }
-              >
-                <Skeleton paragraph={{ rows: 3 }} active />
-              </Panel>
-            </Collapse>
-          </Col>
-          <Col span={24} lg={12}>
-            <div className="art-title">
-              {art.title || <Skeleton paragraph={{ rows: 0 }} />}
-            </div>
-            <CollectionInfo />
-            <ViewOn id={id} />
-            <ActionView
-              instantSalePrice={instantSalePrice}
-              isOwner={isOwner}
-              loading={loading}
-              attributes={attributes}
-              setAttributes={setAttributes}
-              listNow={listNow}
-              buyNow={buyNow}
-            />
-            <ArtInfo art={art} data={data} account={account} />
-          </Col>
-        </Row>
-        <BottomSection offers={[]} />
+              <ArtInfo art={art} data={data} account={account} />
+            </Col>
+          </Row>
+          <BottomSection offers={[]} />
+        </div>
       </div>
       <MetaplexModal
         visible={showBuyModal}

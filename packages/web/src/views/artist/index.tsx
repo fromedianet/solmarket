@@ -31,22 +31,24 @@ export const ArtistView = () => {
 
   return (
     <div className="main-area">
-      <div className="container">
-        <Divider />
-        <Row style={{ textAlign: 'left', fontSize: '1.4rem' }}>
-          <Col span={24}>
-            <h2>
-              {/* <MetaAvatar creators={creator ? [creator] : []} size={100} /> */}
-              {creator?.info.name || creator?.info.address}
-            </h2>
-            <br />
-            <div className="info-header">ABOUT THE CREATOR</div>
-            <div className="info-content">{creator?.info.description}</div>
-            <br />
-            <div className="info-header">Art Created</div>
-            {artworkGrid}
-          </Col>
-        </Row>
+      <div className='main-page'>
+        <div className="container">
+          <Divider />
+          <Row style={{ textAlign: 'left', fontSize: '1.4rem' }}>
+            <Col span={24}>
+              <h2>
+                {/* <MetaAvatar creators={creator ? [creator] : []} size={100} /> */}
+                {creator?.info.name || creator?.info.address}
+              </h2>
+              <br />
+              <div className="info-header">ABOUT THE CREATOR</div>
+              <div className="info-content">{creator?.info.description}</div>
+              <br />
+              <div className="info-header">Art Created</div>
+              {artworkGrid}
+            </Col>
+          </Row>
+        </div>
       </div>
     </div>
   );
