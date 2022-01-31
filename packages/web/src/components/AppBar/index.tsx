@@ -14,7 +14,9 @@ export const WalletInfo = () => {
     <div className="wallet">
       <div className="wallet-info">
         <button className="profile-btn">
-          <UserOutlined />
+          <Link to={'/profile'}>
+            <UserOutlined />
+          </Link>
         </button>
         {!connected ? (
           <ConnectButton className="connect-btn" />

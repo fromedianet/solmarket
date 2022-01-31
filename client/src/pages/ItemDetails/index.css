@@ -1,10 +1,6 @@
 .item-details-area {
   margin-top: 100px;
 }
-.container {
-  padding: 0;
-  max-width: 1170px;
-}
 .item-details-area .item-info {
   border-radius: 24px;
   overflow: hidden;
