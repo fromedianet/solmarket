@@ -52,6 +52,7 @@ const AuctionItemCard = ({
     <ArtCard
       pubkey={current.metadata.pubkey}
       preview={false}
+      noEvent={true}
       onClick={onSelect}
       className={
         isSelected

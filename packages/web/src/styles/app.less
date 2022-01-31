@@ -43,6 +43,7 @@ body {
 .container {
   padding: 0;
   max-width: 1170px;
+  width: 100%;
 }
 
 .no-events {
@@ -117,15 +118,16 @@ code {
 .card-close-button {
   position: absolute;
   top: 5px;
-  left: 5px;
+  right: 5px;
   z-index: 1;
   width: 30px;
   height: 30px;
   border-radius: 30px;
   background-color: #434343 !important;
+  cursor: pointer;
 
-  :hover {
-    background-color: #434343;
+  &:hover {
+    background-color: #5c5b5b;
   }
 }
 
@@ -318,6 +320,10 @@ h1 {
   }
 }
 
+.image-over {
+  overflow: hidden;
+}
+
 model-viewer {
   --poster-color: transparent;
 }
@@ -326,13 +332,11 @@ model-viewer {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  & > a,
-  & > div {
-    margin: 10px;
-    flex: calc(25% - 20px);
-    max-width: calc(25% - 20px);
-    align-self: stretch;
-  }
+  // & > a,
+  // & > div {
+  //   flex: calc(50% - 20px);
+  //   max-width: calc(50% - 20px);
+  // }
 }
 
 .my-masonry-grid {
@@ -384,16 +388,6 @@ model-viewer {
   }
 }
 
-@media (max-width: 1200px) {
-  .artwork-grid {
-    & > a,
-    & > div {
-      flex: calc(33% - 20px);
-      max-width: calc(33% - 20px);
-    }
-  }
-}
-
 .ant-tabs-nav-list {
   align-items: center;
 }
@@ -417,13 +411,6 @@ model-viewer {
 
 /* Optional, different gutter size on mobile */
 @media (max-width: 800px) {
-  .artwork-grid {
-    & > a,
-    & > div {
-      flex: calc(50% - 20px);
-      max-width: calc(50% - 20px);
-    }
-  }
   .my-masonry-grid {
     margin-left: -15px; /* gutter size offset */
   }

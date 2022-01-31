@@ -1,26 +1,18 @@
 import { Col, Row } from 'antd';
 import React from 'react';
 
-import { useMeta } from '../../../../contexts';
-import { CardLoader } from '../../../../components/MyLoader';
-import { Banner } from '../../../../components/Banner';
-import { HowToBuyModal } from '../../../../components/HowToBuyModal';
+import { useMeta } from '../../../contexts';
+import { CardLoader } from '../../../components/MyLoader';
+import { Banner } from '../../../components/Banner';
+import { HowToBuyModal } from '../../../components/HowToBuyModal';
 
-import { useAuctionsList } from './hooks/useAuctionsList';
-import { AuctionRenderCard } from '../../../../components/AuctionRenderCard';
-
-export enum LiveAuctionViewState {
-  All = '0',
-  Participated = '1',
-  Ended = '2',
-  Resale = '3',
-  Own = '4',
-}
+import { AuctionRenderCard } from '../../../components/AuctionRenderCard';
+import { AuctionViewState, useAuctionsList } from '../../../hooks';
 
 export const SalesListView = () => {
   const { isLoading } = useMeta();
-  const liveAuctions = useAuctionsList(LiveAuctionViewState.All);
-  const endedAuctions = useAuctionsList(LiveAuctionViewState.Ended);
+  const liveAuctions = useAuctionsList(AuctionViewState.Live);
+  const endedAuctions = useAuctionsList(AuctionViewState.Ended);
 
   return (
     <div className="main-area">
