@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardProps, Button, Badge } from 'antd';
 import { MetadataCategory, StringPublicKey } from '@oyster/common';
 import { ArtContent } from '../ArtContent';
-import { useArt } from '../../hooks';
-import { Artist, ArtType } from '../../types';
-import { MetaAvatar } from '../MetaAvatar';
-
-const { Meta } = Card;
+import { AuctionView, useArt, useAuctions } from '../../hooks';
+import { Artist } from '../../types';
+import { Link } from 'react-router-dom';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import BN from 'bn.js';
 
 export interface ArtCardProps extends CardProps {
   pubkey?: StringPublicKey;
@@ -32,41 +32,36 @@ export interface ArtCardProps extends CardProps {
 }
 
 export const ArtCard = (props: ArtCardProps) => {
-  let {
+  const {
     className,
     small,
-    category,
-    image,
-    animationURL,
-    name,
-    preview,
-    creators,
-    description,
     onClose,
     pubkey,
-    height,
-    artView,
-    width,
-    count,
     ...rest
   } = props;
   const art = useArt(pubkey);
-  creators = art?.creators || creators || [];
-  name = art?.title || name || ' ';
 
-  let badge = '';
-  if (art.type === ArtType.NFT) {
-    badge = 'Unique';
-  } else if (art.type === ArtType.Master) {
-    badge = 'NFT 0';
-  } else if (art.type === ArtType.Print) {
-    badge = `${art.edition} of ${art.supply}`;
+  let auctionView: AuctionView | undefined;
+  const auctions = useAuctions();
+  const filters = auctions.filter(
+    item => item.thumbnail.metadata.pubkey === pubkey,
+  );
+  if (filters.length > 0) {
+    auctionView = filters[0];
   }
 
+  const instantSalePrice = useMemo(
+    () =>
+      (auctionView?.auction?.info.priceFloor.minPrice || new BN(0)).toNumber() /
+      LAMPORTS_PER_SOL,
+    [auctionView?.auction],
+  );
+  
   const card = (
     <Card
       hoverable={true}
       className={`art-card ${small ? 'small' : ''} ${className ?? ''}`}
+      bordered={false}
       {...rest}
     >
       {onClose && (
@@ -82,44 +77,30 @@ export const ArtCard = (props: ArtCardProps) => {
           X
         </Button>
       )}
-      <div className="art-card__header">
-        <MetaAvatar creators={creators} size={32} />
-        <div className="edition-badge">{badge}</div>
-      </div>
-      <div className="art-content__wrapper">
-        <ArtContent
-          pubkey={pubkey}
-          uri={image}
-          animationURL={animationURL}
-          category={category}
-          preview={preview}
-          height={height}
-          width={width}
-          artView={artView}
-        />
-      </div>
-      <Meta
-        title={`${name}`}
-        description={
-          <>
-            {/* {art.type === ArtType.Master && (
-              <>
-                <br />
-                {!endAuctionAt && (
-                  <span style={{ padding: '24px' }}>
-                    {(art.maxSupply || 0) - (art.supply || 0)}/
-                    {art.maxSupply || 0} prints remaining
-                  </span>
-                )}
-              </>
-            )} */}
-
-            {count && (
-              <div className="edition-badge">Selected count: {count}</div>
+      <Link to={`/art/${pubkey}`}>
+        <div className='image-over art-image-container'>
+          <ArtContent
+            className="art-image no-event"
+            preview={false}
+            pubkey={pubkey}
+            allowMeshRender={false}
+          />
+        </div>
+        <div className="card-caption">
+          <div className="card-body">
+            <h5>{art.title}</h5>
+            <div className="card-collection-name">
+              <span>
+                collection_name
+              </span>
+              <img src="/icons/check.svg" alt="check" />
+            </div>
+            {instantSalePrice > 0 && (
+              <h5>{`${instantSalePrice} SOL`}</h5>
             )}
-          </>
-        }
-      />
+          </div>
+        </div>
+      </Link>
     </Card>
   );
 

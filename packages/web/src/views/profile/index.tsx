@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Button, Row, Col, Statistic, Tabs, Form, Input, message } from 'antd';
 import { CopySpan } from "../../components/CopySpan";
 import { useCreator, useCreatorArts } from "../../hooks";
-import { Link } from "react-router-dom";
 import { ArtCard } from "../../components/ArtCard";
 
 const { TabPane } = Tabs;
@@ -69,14 +68,12 @@ export const ProfileView = () => {
               {artwork && artwork.length > 0 ? (
                 <Row gutter={[16, 16]}>
                   {artwork.map((item, index) => 
-                    <Col key={index} span={24} md={8} xl={6} >
-                      <Link to={`/art/${item.pubkey}`}>
-                        <ArtCard
-                          pubkey={item.pubkey}
-                          preview={false}
-                          artView={true}
-                        />
-                      </Link>
+                    <Col key={index} span={12} md={8} lg={6} xl={4} >
+                      <ArtCard
+                        pubkey={item.pubkey}
+                        preview={false}
+                        artView={true}
+                      />
                     </Col>
                   )}
                 </Row>

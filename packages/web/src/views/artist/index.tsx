@@ -1,6 +1,6 @@
 import { Col, Divider, Row } from 'antd';
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ArtCard } from '../../components/ArtCard';
 import { CardLoader } from '../../components/MyLoader';
 import { useAuctions, useCreator, useCreatorArts } from '../../hooks';
@@ -11,31 +11,35 @@ export const ArtistView = () => {
   const artwork = useCreatorArts(id);
 
   const artworkGrid = (
-    <div className="artwork-grid">
+    <Row gutter={[16, 16]}>
       {artwork.length > 0
-        ? artwork.map((m, idx) => {
+        ? artwork.map((m) => {
             const id = m.pubkey;
             return (
-              <Link to={`/art/${id}`} key={idx}>
+              <Col key={id} span={12} md={8} lg={6} xl={4}>
                 <ArtCard
-                  key={id}
                   pubkey={m.pubkey}
                   preview={false}
                   artView={true}
                 />
-              </Link>
+              </Col>
             );
           })
-        : [...Array(6)].map((_, idx) => <CardLoader key={idx} />)}
-    </div>
+        : [...Array(6)].map((_, idx) =>
+          <Col key={idx} span={24} md={8} lg={6} xl={4}>
+            <CardLoader />
+          </Col>
+          
+        )}
+    </Row>
   );
 
   return (
-    <>
-      <Col>
+    <div className='main-area'>
+      <div className='container'>
         <Divider />
         <Row
-          style={{ margin: '0 30px', textAlign: 'left', fontSize: '1.4rem' }}
+          style={{ textAlign: 'left', fontSize: '1.4rem' }}
         >
           <Col span={24}>
             <h2>
@@ -50,7 +54,7 @@ export const ArtistView = () => {
             {artworkGrid}
           </Col>
         </Row>
-      </Col>
-    </>
+      </div>
+    </div>
   );
 };
