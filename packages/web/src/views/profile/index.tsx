@@ -1,8 +1,9 @@
-import { ConnectButton, MetaplexModal, shortenAddress, useMeta } from "@oyster/common";
+import { ConnectButton, MetaplexModal, shortenAddress } from "@oyster/common";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useState } from "react";
 import { Button, Row, Col, Statistic, Tabs, Form, Input, message } from 'antd';
 import { CopySpan } from "../../components/CopySpan";
+import { useCreator } from "../../hooks";
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -13,11 +14,7 @@ export const ProfileView = () => {
   const [form] = Form.useForm();
 
   const wallet = useWallet();
-  const { whitelistedCreatorsByCreator } = useMeta();
-  let item;
-  if (wallet.connected) {
-    item = whitelistedCreatorsByCreator[wallet.publicKey?.toBase58() || ''];
-  }
+  const creator = useCreator(wallet.publicKey?.toBase58());
   
   const onSubmit = (values) => {
     console.log(values);
@@ -33,18 +30,18 @@ export const ProfileView = () => {
       <div className="profile-page">
         <div className="container">
           <div className="collection-info">
-            {item && item.info ? (
-              item.info.image 
-                ? (<img src={item.info.image} alt='profile' className="profile-image" />)
-                : (<img src={`https://avatars.dicebear.com/api/jdenticon/${item.info.address}.svg`} className='profile-image' />)
+            {creator && creator.info ? (
+              creator.info.image 
+                ? (<img src={creator.info.image} alt='profile' className="profile-image" />)
+                : (<img src={`https://avatars.dicebear.com/api/jdenticon/${creator.info.address}.svg`} className='profile-image' />)
             ) : (
               <img src={`https://avatars.dicebear.com/api/jdenticon/unknown.svg`} className='profile-image' />
             )}
-            {item && item.info ? (
+            {creator && creator.info ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {item.info.name && (<h1>{item.info.name}</h1>)}
-                <CopySpan value={shortenAddress(item.info.address, 8)} copyText={item.info.address} className='wallet-address'/>
-                {item.info.description && (<span className="description">{item.info.description}</span>)}
+                {creator.info.name && (<h1>{creator.info.name}</h1>)}
+                <CopySpan value={shortenAddress(creator.info.address, 8)} copyText={creator.info.address} className='wallet-address'/>
+                {creator.info.description && (<span className="description">{creator.info.description}</span>)}
                 <Button className="profile-button" onClick={() => setVisible(true)}>Edit Profile</Button>
               </div>
             ) : (
@@ -87,13 +84,13 @@ export const ProfileView = () => {
             onFinishFailed={onSubmitFailed}
           >
             <Form.Item name={['user', 'name']} label='Display name' required tooltip='This is a required field' rules={[{ required: true }]}>
-              <Input placeholder="Display name"/>
+              <Input placeholder="Display name" value={creator?.info.name}/>
             </Form.Item>
             <Form.Item name={['user', 'description']} label='Description'>
-              <TextArea placeholder="Description" autoSize={{ minRows: 2, maxRows: 5 }}/>
+              <TextArea placeholder="Description" autoSize={{ minRows: 2, maxRows: 5 }} value={creator?.info.description}/>
             </Form.Item>
             <Form.Item name={['user', 'twitter']} label='Twitter'>
-              <Input addonBefore='https://' />
+              <Input addonBefore='https://' value={creator?.info.twitter} />
             </Form.Item>
             <Form.Item>
               <Button htmlType="submit" className="submit-button">Submit</Button>
