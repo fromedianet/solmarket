@@ -17,7 +17,7 @@ export const ArtistView = () => {
             const id = m.pubkey;
             return (
               <Col key={id} span={12} md={8} lg={6} xl={4}>
-                <ArtCard pubkey={m.pubkey} preview={false} artView={true} />
+                <ArtCard pubkey={m.pubkey} preview={false} artview={true} />
               </Col>
             );
           })

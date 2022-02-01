@@ -326,7 +326,7 @@ export const ArtView = () => {
                   pubkey={id}
                   active={true}
                   allowMeshRender={true}
-                  artView={true}
+                  artview={true}
                 />
               </div>
               <Collapse className="price-history" expandIconPosition="right">

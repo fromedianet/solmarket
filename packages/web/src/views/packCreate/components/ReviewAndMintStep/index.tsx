@@ -23,7 +23,7 @@ const ReviewAndMintStep = ({
         wrapperClassName="review-step-wrapper__image-wrapper"
         className="review-step-wrapper__image"
         src={uri}
-        preview
+        preview={true}
         loading="lazy"
       />
 

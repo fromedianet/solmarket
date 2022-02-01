@@ -97,7 +97,7 @@ export const AuctionView = () => {
                   pubkey={auction.thumbnail.metadata.pubkey}
                   active={true}
                   allowMeshRender={true}
-                  artView={true}
+                  artview={true}
                 />
               )}
             </div>

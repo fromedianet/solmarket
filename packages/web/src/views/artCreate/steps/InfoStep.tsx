@@ -50,7 +50,7 @@ export const InfoStep = (props: {
                   uri={image}
                   animationURL={animation_url}
                   category={props.attributes.properties?.category}
-                  artView={!(props.files.length > 1)}
+                  artview={!(props.files.length > 1)}
                 />
               </div>
             </div>

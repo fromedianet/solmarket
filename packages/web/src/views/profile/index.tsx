@@ -103,7 +103,7 @@ export const ProfileView = () => {
                       <ArtCard
                         pubkey={item.pubkey}
                         preview={false}
-                        artView={true}
+                        artview={true}
                       />
                     </Col>
                   ))}

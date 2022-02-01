@@ -26,13 +26,14 @@ export interface ArtCardProps extends CardProps {
   noEvent?: boolean;
 
   height?: number;
-  artView?: boolean;
+  artview?: boolean;
   width?: number;
 
   count?: string;
 }
 
 export const ArtCard = (props: ArtCardProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { className, small, onClose, pubkey, noEvent, ...rest } = props;
   const art = useArt(pubkey);
 
@@ -84,7 +85,7 @@ export const ArtCard = (props: ArtCardProps) => {
       hoverable={true}
       className={`art-card ${small ? 'small' : ''} ${className ?? ''}`}
       bordered={false}
-      {...rest}
+      // {...rest}
     >
       {onClose && (
         <button

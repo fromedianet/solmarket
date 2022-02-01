@@ -41,7 +41,7 @@ const AuctionItemCard = ({
             authority={authority}
             allowedAmountToRedeem={allowedAmountToRedeem}
             onClose={onClose}
-            artView
+            artview
           />
         </div>
       );

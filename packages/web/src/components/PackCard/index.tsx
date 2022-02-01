@@ -15,7 +15,7 @@ interface Props {
   authority: string;
   cardsRedeemed?: number;
   allowedAmountToRedeem?: number;
-  artView?: boolean;
+  artview?: boolean;
   onClose?: () => void;
 }
 
@@ -26,7 +26,7 @@ const PackCard = ({
   authority,
   cardsRedeemed,
   allowedAmountToRedeem,
-  artView,
+  artview,
   onClose,
 }: Props): ReactElement => {
   const { whitelistedCreatorsByCreator } = useMeta();
@@ -38,7 +38,7 @@ const PackCard = ({
   );
 
   const packStatusTitle = cardsRedeemed ? 'Opened' : 'Sealed';
-  const headingTitle = artView ? packStatusTitle : 'Pack';
+  const headingTitle = artview ? packStatusTitle : 'Pack';
   const badge = art.type === ArtType.Print && `${art.edition} of ${art.supply}`;
   const numberOfCardsLeft =
     allowedAmountToRedeem && cardsRedeemed
@@ -46,11 +46,11 @@ const PackCard = ({
       : allowedAmountToRedeem || 0;
 
   const infoMessage = useMemo(() => {
-    if (!artView) return 'PACK OPENING UNLOCKS';
+    if (!artview) return 'PACK OPENING UNLOCKS';
     return numberOfCardsLeft
       ? `${numberOfCardsLeft} NFT reveal left`
       : 'All revealed';
-  }, [artView, numberOfCardsLeft]);
+  }, [artview, numberOfCardsLeft]);
 
   return (
     <Card hoverable className="auction-render-card" bordered={false}>
@@ -97,7 +97,7 @@ const PackCard = ({
           </div>
         </div>
       </div>
-      {!artView && <div className="card-bid-info" />}
+      {!artview && <div className="card-bid-info" />}
     </Card>
   );
 };
