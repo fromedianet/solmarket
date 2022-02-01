@@ -31,20 +31,20 @@ const SidebarMenu = () => {
         icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="all-collections">
-          <Link to='/collections/all'>All</Link>
+          <Link to="/collections/all">All</Link>
         </Menu.Item>
         <Menu.Item key="popular-collections">
-          <Link to='/collections/popular'>Popular</Link>
+          <Link to="/collections/popular">Popular</Link>
         </Menu.Item>
         <Menu.Item key="new-collections">
-          <Link to='/collections/new'>new</Link>
+          <Link to="/collections/new">new</Link>
         </Menu.Item>
       </SubMenu>
       <Menu.Item
         key="launchpad"
         icon={<TagOutlined style={{ fontSize: 20 }} />}
       >
-        <Link to='/launchpad'>Launchpad</Link>
+        <Link to="/launchpad">Launchpad</Link>
       </Menu.Item>
       <Menu.Item
         key="auctions"
@@ -56,7 +56,7 @@ const SidebarMenu = () => {
         key="stats"
         icon={<BarChartOutlined style={{ fontSize: 20 }} />}
       >
-        <Link to='/stats'>Stats</Link>
+        <Link to="/stats">Stats</Link>
       </Menu.Item>
       <SubMenu
         key="creators"
@@ -83,7 +83,7 @@ const SidebarMenu = () => {
         icon={<BarsOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="faq">
-          <Link to='/faq'>FAQ</Link>
+          <Link to="/faq">FAQ</Link>
         </Menu.Item>
       </SubMenu>
     </Menu>

@@ -82,24 +82,16 @@ export function Routes() {
             />
             <Route
               exact
-              path='/collections/:type'
+              path="/collections/:type"
               component={() => <CollectionsView />}
             />
             <Route
               exact
-              path='/launchpad'
+              path="/launchpad"
               component={() => <LaunchPadView />}
             />
-            <Route
-              exact
-              path='/stats'
-              component={() => <StatsView />}
-            />
-            <Route
-              exact
-              path='/faq'
-              component={() => <FAQView />}
-            />
+            <Route exact path="/stats" component={() => <StatsView />} />
+            <Route exact path="/faq" component={() => <FAQView />} />
             <Route exact path="/profile" component={() => <ProfileView />} />
             <Route path="/about" component={() => <StaticPageView />} />
             <Route path="/" component={() => <HomeView />} />

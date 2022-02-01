@@ -82,7 +82,7 @@ export const AuctionView = () => {
 
   return (
     <div className="main-area">
-      <div className='main-page'>
+      <div className="main-page">
         <div className="container auction-content">
           <div className="artwork-container">
             <div className="artwork-content">

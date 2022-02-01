@@ -31,7 +31,7 @@ export const ArtistView = () => {
 
   return (
     <div className="main-area">
-      <div className='main-page'>
+      <div className="main-page">
         <div className="container">
           <Divider />
           <Row style={{ textAlign: 'left', fontSize: '1.4rem' }}>

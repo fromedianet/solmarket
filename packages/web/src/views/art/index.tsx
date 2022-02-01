@@ -316,7 +316,7 @@ export const ArtView = () => {
 
   return (
     <div className="main-area">
-      <div className='main-page'>
+      <div className="main-page">
         <div className="container art-container">
           <Row ref={ref} gutter={24}>
             <Col span={24} lg={12}>
