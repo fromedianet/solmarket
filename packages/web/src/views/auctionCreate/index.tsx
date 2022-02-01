@@ -644,37 +644,39 @@ export const AuctionCreateView = () => {
 
   return (
     <div className="main-area">
-      <Row className="container">
-        {stepsVisible && (
-          <Col span={24} md={4}>
-            <Steps
-              progressDot
-              direction={width < 768 ? 'horizontal' : 'vertical'}
-              current={step}
-              style={{
-                width: 'fit-content',
-                margin: '0 auto 30px auto',
-                overflowX: 'auto',
-                maxWidth: '100%',
-              }}
-            >
-              {stepsByCategory[attributes.category]
-                .filter(_ => !!_[0])
-                .map((step, idx) => (
-                  <Step title={step[0]} key={idx} />
-                ))}
-            </Steps>
-          </Col>
-        )}
-        <Col span={24} {...(stepsVisible ? { md: 20 } : { md: 24 })}>
-          {stepsByCategory[attributes.category][step][1]}
-          {0 < step && stepsVisible && (
-            <div style={{ margin: 'auto', width: 'fit-content' }}>
-              <Button onClick={() => gotoNextStep(step - 1)}>Back</Button>
-            </div>
+      <div className='main-page'>
+        <Row className="container">
+          {stepsVisible && (
+            <Col span={24} md={4}>
+              <Steps
+                progressDot
+                direction={width < 768 ? 'horizontal' : 'vertical'}
+                current={step}
+                style={{
+                  width: 'fit-content',
+                  margin: '0 auto 30px auto',
+                  overflowX: 'auto',
+                  maxWidth: '100%',
+                }}
+              >
+                {stepsByCategory[attributes.category]
+                  .filter(_ => !!_[0])
+                  .map((step, idx) => (
+                    <Step title={step[0]} key={idx} />
+                  ))}
+              </Steps>
+            </Col>
           )}
-        </Col>
-      </Row>
+          <Col span={24} {...(stepsVisible ? { md: 20 } : { md: 24 })}>
+            {stepsByCategory[attributes.category][step][1]}
+            {0 < step && stepsVisible && (
+              <div style={{ margin: 'auto', width: 'fit-content' }}>
+                <Button onClick={() => gotoNextStep(step - 1)}>Back</Button>
+              </div>
+            )}
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
