@@ -41,7 +41,7 @@ const AuctionItemCard = ({
             authority={authority}
             allowedAmountToRedeem={allowedAmountToRedeem}
             onClose={onClose}
-            artView
+            artview
           />
         </div>
       );
@@ -52,6 +52,7 @@ const AuctionItemCard = ({
     <ArtCard
       pubkey={current.metadata.pubkey}
       preview={false}
+      noEvent={true}
       onClick={onSelect}
       className={
         isSelected

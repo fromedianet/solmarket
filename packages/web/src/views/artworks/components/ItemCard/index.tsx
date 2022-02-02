@@ -32,7 +32,7 @@ const ItemCard = ({ item }: { item: Item }): ReactElement => {
           cardsRedeemed={cardsRedeemed}
           allowedAmountToRedeem={allowedAmountToRedeem}
           uri={uri}
-          artView
+          artview
         />
       </Link>
     );
@@ -47,7 +47,7 @@ const ItemCard = ({ item }: { item: Item }): ReactElement => {
         preview={false}
         height={ART_CARD_SIZE}
         width={ART_CARD_SIZE}
-        artView
+        artview
       />
     </Link>
   );

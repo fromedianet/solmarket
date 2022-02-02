@@ -206,6 +206,7 @@ export const ArtMinting = ({ id, onMint }: ArtMintingProps) => {
                 max={maxEditionsToMint}
                 value={editions}
                 precision={0}
+                controls={false}
                 onChange={debouncedEditionsChangeHandler}
               />
             </Form.Item>
@@ -228,6 +229,7 @@ export const ArtMinting = ({ id, onMint }: ArtMintingProps) => {
                 max={art.supply}
                 value={editionNumber}
                 precision={0}
+                controls={false}
                 onChange={setEditionNumber}
               />
             </Form.Item>

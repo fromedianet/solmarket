@@ -2,11 +2,6 @@
   background-color: rgb(9, 8, 13);
 }
 
-.container {
-  padding: 0;
-  max-width: 1170px;
-}
-
 .searchbar {
   height: 48px !important;
   background-color: rgb(22, 19, 32);

@@ -63,7 +63,6 @@ import { useActionButtonContent } from './hooks/useActionButtonContent';
 import { endSale } from './utils/endSale';
 import { useInstantSaleState } from './hooks/useInstantSaleState';
 import { useTokenList } from '../../contexts/tokenList';
-import { FundsIssueModal } from '../FundsIssueModal';
 import CongratulationsModal from '../Modals/CongratulationsModal';
 
 async function calculateTotalCostOfRedeemingOtherPeoplesBids(
@@ -714,6 +713,7 @@ export const AuctionCard = ({
                     onChange={setValue}
                     precision={4}
                     style={{ fontSize: 16, lineHeight: '16px' }}
+                    controls={false}
                     formatter={value =>
                       value
                         ? `◎ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')

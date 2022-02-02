@@ -149,8 +149,8 @@ const VideoArtContent = ({
           )}
           {files
             ?.filter(f => typeof f !== 'string')
-            .map((f: any) => (
-              <source src={f.uri} type={f.type} style={style} />
+            .map((f: any, index) => (
+              <source key={index} src={f.uri} type={f.type} style={style} />
             ))}
         </video>
       </div>
@@ -172,7 +172,7 @@ const HTMLContent = ({
   preview,
   style,
   files,
-  artView,
+  artview,
 }: {
   uri?: string;
   animationUrl?: string;
@@ -180,10 +180,10 @@ const HTMLContent = ({
   preview?: boolean;
   style?: React.CSSProperties;
   files?: (MetadataFile | string)[];
-  artView?: boolean;
+  artview?: boolean;
 }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
-  if (!artView) {
+  if (!artview) {
     return (
       <CachedImageContent
         uri={uri}
@@ -246,7 +246,7 @@ export const ArtContent = ({
   uri,
   animationURL,
   files,
-  artView,
+  artview,
 }: {
   category?: MetadataCategory;
   className?: string;
@@ -261,7 +261,7 @@ export const ArtContent = ({
   uri?: string;
   animationURL?: string;
   files?: (MetadataFile | string)[];
-  artView?: boolean;
+  artview?: boolean;
 }) => {
   const [uriState, setUriState] = useState<string | undefined>();
   const [animationURLState, setAnimationURLState] = useState<
@@ -336,7 +336,7 @@ export const ArtContent = ({
         preview={preview}
         style={style}
         files={filesState}
-        artView={artView}
+        artview={artview}
       />
     );
   }

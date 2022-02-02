@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Row, Button, Modal, ButtonProps } from 'antd';
+import { Row, Button, Modal, ButtonProps, Col } from 'antd';
 import { useUserArts } from '../../hooks';
 import { SafetyDepositDraft } from '../../actions/createAuctionManager';
 import AuctionItemCard from './AuctionItemCard';
@@ -72,7 +72,7 @@ export const ArtSelector = (props: ArtSelectorProps) => {
         visible={visible}
         onCancel={close}
         onOk={confirm}
-        width={1100}
+        width={1000}
         footer={null}
         className={'modalp-40 big-modal'}
       >
@@ -85,42 +85,42 @@ export const ArtSelector = (props: ArtSelectorProps) => {
         <Row
           className="content-action"
           style={{ overflowY: 'auto', height: '50vh' }}
+          gutter={[16, 16]}
         >
-          <div className="artwork-grid">
-            {items.map(m => {
-              const id = m.metadata.pubkey;
-              const isSelected = selectedItems.has(id);
+          {items.map(m => {
+            const id = m.metadata.pubkey;
+            const isSelected = selectedItems.has(id);
 
-              const onSelect = () => {
-                let list = [...selectedItems.keys()];
-                if (allowMultiple) {
-                  list = [];
-                }
+            const onSelect = () => {
+              let list = [...selectedItems.keys()];
+              if (allowMultiple) {
+                list = [];
+              }
 
-                const newSet = isSelected
-                  ? new Set(list.filter(item => item !== id))
-                  : new Set([...list, id]);
+              const newSet = isSelected
+                ? new Set(list.filter(item => item !== id))
+                : new Set([...list, id]);
 
-                const selected = items.filter(item =>
-                  newSet.has(item.metadata.pubkey),
-                );
-                setSelected(selected);
+              const selected = items.filter(item =>
+                newSet.has(item.metadata.pubkey),
+              );
+              setSelected(selected);
 
-                if (!allowMultiple) {
-                  confirm();
-                }
-              };
+              if (!allowMultiple) {
+                confirm();
+              }
+            };
 
-              return (
+            return (
+              <Col key={id} span={24} md={12} lg={8} xl={6}>
                 <AuctionItemCard
-                  key={id}
                   isSelected={isSelected}
                   current={m}
                   onSelect={onSelect}
                 />
-              );
-            })}
-          </div>
+              </Col>
+            );
+          })}
         </Row>
         <Row>
           <Button

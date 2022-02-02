@@ -110,96 +110,98 @@ export const ArtCreateView = () => {
 
   return (
     <div className="main-area">
-      <Row className="container">
-        {stepsVisible && (
-          <Col span={24} md={4}>
-            <Steps
-              progressDot
-              direction={width < 768 ? 'horizontal' : 'vertical'}
-              current={step}
-              responsive={false}
-              style={{
-                width: 'fit-content',
-                margin: '0 auto 20px auto',
-                overflowX: 'auto',
-                maxWidth: '100%',
-              }}
-            >
-              <Step title="Category" />
-              <Step title="Upload" />
-              <Step title="Info" />
-              <Step title="Royalties" />
-              <Step title="Launch" />
-            </Steps>
-          </Col>
-        )}
-        <Col
-          span={24}
-          {...(stepsVisible ? { md: 20 } : { md: 24 })}
-          className="content"
-        >
-          {step === 0 && (
-            <CategoryStep
-              confirm={(category: MetadataCategory) => {
-                setAttributes({
-                  ...attributes,
-                  properties: {
-                    ...attributes.properties,
-                    category,
-                  },
-                });
-                gotoStep(1);
-              }}
-            />
+      <div className="main-page">
+        <Row className="container">
+          {stepsVisible && (
+            <Col span={24} md={4}>
+              <Steps
+                progressDot
+                direction={width < 768 ? 'horizontal' : 'vertical'}
+                current={step}
+                responsive={false}
+                style={{
+                  width: 'fit-content',
+                  margin: '0 auto 20px auto',
+                  overflowX: 'auto',
+                  maxWidth: '100%',
+                }}
+              >
+                <Step title="Category" />
+                <Step title="Upload" />
+                <Step title="Info" />
+                <Step title="Royalties" />
+                <Step title="Launch" />
+              </Steps>
+            </Col>
           )}
-          {step === 1 && (
-            <UploadStep
-              attributes={attributes}
-              setAttributes={setAttributes}
-              files={files}
-              setFiles={setFiles}
-              confirm={() => gotoStep(2)}
-            />
-          )}
+          <Col
+            span={24}
+            {...(stepsVisible ? { md: 20 } : { md: 24 })}
+            className="content"
+          >
+            {step === 0 && (
+              <CategoryStep
+                confirm={(category: MetadataCategory) => {
+                  setAttributes({
+                    ...attributes,
+                    properties: {
+                      ...attributes.properties,
+                      category,
+                    },
+                  });
+                  gotoStep(1);
+                }}
+              />
+            )}
+            {step === 1 && (
+              <UploadStep
+                attributes={attributes}
+                setAttributes={setAttributes}
+                files={files}
+                setFiles={setFiles}
+                confirm={() => gotoStep(2)}
+              />
+            )}
 
-          {step === 2 && (
-            <InfoStep
-              attributes={attributes}
-              files={files}
-              setAttributes={setAttributes}
-              confirm={() => gotoStep(3)}
-            />
-          )}
-          {step === 3 && (
-            <RoyaltiesStep
-              attributes={attributes}
-              confirm={() => gotoStep(4)}
-              setAttributes={setAttributes}
-            />
-          )}
-          {step === 4 && (
-            <LaunchStep
-              attributes={attributes}
-              files={files}
-              confirm={() => gotoStep(5)}
-              connection={connection}
-            />
-          )}
-          {step === 5 && (
-            <WaitingStep
-              mint={mint}
-              minting={isMinting}
-              step={nftCreateProgress}
-              confirm={() => gotoStep(6)}
-            />
-          )}
-          {0 < step && step < 5 && (
-            <div style={{ margin: 'auto', width: 'fit-content' }}>
-              <Button onClick={() => gotoStep(step - 1)}>Back</Button>
-            </div>
-          )}
-        </Col>
-      </Row>
+            {step === 2 && (
+              <InfoStep
+                attributes={attributes}
+                files={files}
+                setAttributes={setAttributes}
+                confirm={() => gotoStep(3)}
+              />
+            )}
+            {step === 3 && (
+              <RoyaltiesStep
+                attributes={attributes}
+                confirm={() => gotoStep(4)}
+                setAttributes={setAttributes}
+              />
+            )}
+            {step === 4 && (
+              <LaunchStep
+                attributes={attributes}
+                files={files}
+                confirm={() => gotoStep(5)}
+                connection={connection}
+              />
+            )}
+            {step === 5 && (
+              <WaitingStep
+                mint={mint}
+                minting={isMinting}
+                step={nftCreateProgress}
+                confirm={() => gotoStep(6)}
+              />
+            )}
+            {0 < step && step < 5 && (
+              <div style={{ margin: 'auto', width: 'fit-content' }}>
+                <Button onClick={() => gotoStep(step - 1)}>Back</Button>
+              </div>
+            )}
+          </Col>
+        </Row>
+      </div>
       <MetaplexOverlay visible={step === 6}>
         <Congrats nft={nft} alert={alertMessage} />
       </MetaplexOverlay>

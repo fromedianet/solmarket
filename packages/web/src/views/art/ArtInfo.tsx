@@ -1,34 +1,40 @@
 import React from 'react';
 import { Collapse, Skeleton, Row, Col, Statistic } from 'antd';
-import { IMetadataExtension, shortenAddress } from '@oyster/common';
-import { Art, ArtType } from '../../types';
+import {
+  IMetadataExtension,
+  shortenAddress,
+  TokenAccount,
+} from '@oyster/common';
+import { Art } from '../../types';
 import { CopySpan } from '../../components/CopySpan';
 
 const { Panel } = Collapse;
 export const ArtInfo = ({
   art,
   data,
+  account,
 }: {
   art: Art;
   data: IMetadataExtension | undefined;
+  account: TokenAccount | undefined;
 }) => {
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
-  let badge = '';
-  let maxSupply = '';
-  if (art.type === ArtType.NFT) {
-    badge = 'Unique';
-  } else if (art.type === ArtType.Master) {
-    badge = 'NFT 0';
-    if (art.maxSupply !== undefined) {
-      maxSupply = art.maxSupply.toString();
-    } else {
-      maxSupply = 'Unlimited';
-    }
-  } else if (art.type === ArtType.Print) {
-    badge = `${art.edition} of ${art.supply}`;
-  }
+  // let badge = '';
+  // let maxSupply = '';
+  // if (art.type === ArtType.NFT) {
+  //   badge = 'Unique';
+  // } else if (art.type === ArtType.Master) {
+  //   badge = 'NFT 0';
+  //   if (art.maxSupply !== undefined) {
+  //     maxSupply = art.maxSupply.toString();
+  //   } else {
+  //     maxSupply = 'Unlimited';
+  //   }
+  // } else if (art.type === ArtType.Print) {
+  //   badge = `${art.edition} of ${art.supply}`;
+  // }
 
   return (
     <Collapse expandIconPosition="right" className="art-info">
@@ -73,7 +79,7 @@ export const ArtInfo = ({
             <span className="details-key">Mint Address</span>
             <div className="details-value">
               {art.mint === undefined ? (
-                <Skeleton paragraph={{ rows: 0 }} />
+                <Skeleton paragraph={{ rows: 0 }} active />
               ) : (
                 <CopySpan
                   value={shortenAddress(art.mint)}
@@ -83,22 +89,37 @@ export const ArtInfo = ({
               )}
             </div>
           </div>
-          {/* TODO: implement new api endpoint called getNFTbyMintAddress
-          <div className="sub-container">
-            <span className="details-key">Token Address</span>
-            <span className="details-value">{}</span>
-          </div>
-          <div className="sub-container">
-            <span className="details-key">Owner</span>
-            <span className="details-value"></span>
-          </div> */}
+          {account && (
+            <>
+              <div className="sub-container">
+                <span className="details-key">Token Address</span>
+                <div className="details-value">
+                  <CopySpan
+                    value={shortenAddress(account.pubkey)}
+                    copyText={account.pubkey}
+                    className=""
+                  />
+                </div>
+              </div>
+              <div className="sub-container">
+                <span className="details-key">Owner</span>
+                <div className="details-value">
+                  <CopySpan
+                    value={shortenAddress(account.info.owner.toBase58())}
+                    copyText={account.info.owner.toBase58()}
+                    className=""
+                  />
+                </div>
+              </div>
+            </>
+          )}
           <div className="sub-container">
             <span className="details-key">Artist Royalties</span>
             <div className="details-value">
               {((art.seller_fee_basis_points || 0) / 100).toFixed(2)}%
             </div>
           </div>
-          <div className="sub-container">
+          {/* <div className="sub-container">
             <span className="details-key">Edition</span>
             <div className="details-value">{badge}</div>
           </div>
@@ -107,7 +128,7 @@ export const ArtInfo = ({
               <span className="details-key">Max Supply</span>
               <div className="details-value">{maxSupply}</div>
             </div>
-          )}
+          )} */}
         </div>
       </Panel>
     </Collapse>

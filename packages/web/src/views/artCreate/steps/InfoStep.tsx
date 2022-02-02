@@ -50,7 +50,7 @@ export const InfoStep = (props: {
                   uri={image}
                   animationURL={animation_url}
                   category={props.attributes.properties?.category}
-                  artView={!(props.files.length > 1)}
+                  artview={!(props.files.length > 1)}
                 />
               </div>
             </div>
@@ -149,6 +149,7 @@ export const InfoStep = (props: {
             <span className="field-title">Maximum Supply</span>
             <InputNumber
               placeholder="Quantity"
+              controls={false}
               onChange={(val: number) => {
                 props.setAttributes({
                   ...props.attributes,

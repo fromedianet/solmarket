@@ -59,6 +59,7 @@ const RoyaltiesSplitter = (props: {
                     max={100}
                     formatter={value => `${value}%`}
                     value={amt}
+                    controls={false}
                     parser={value => parseInt(value?.replace('%', '') ?? '0')}
                     onChange={handleChangeShare}
                     className="royalties-input"
@@ -148,6 +149,7 @@ export const RoyaltiesStep = (props: {
             autoFocus
             min={0}
             max={100}
+            controls={false}
             placeholder="Between 0 and 100"
             onChange={(val: number) => {
               props.setAttributes({

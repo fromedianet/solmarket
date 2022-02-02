@@ -70,8 +70,9 @@ export const LaunchStep = (props: {
               category={props.attributes.properties?.category}
               name={props.attributes.name}
               symbol={props.attributes.symbol}
-              small={true}
-              artView={props.files[1]?.type === 'unknown'}
+              noEvent={true}
+              preview={true}
+              artview={props.files[1]?.type === 'unknown'}
               className="art-create-card"
             />
           )}

@@ -45,7 +45,7 @@ const PackSidebar = ({ onOpenPack }: IPropsPackSidebar) => {
       </div>
       <Divider className="divider" />
       <div className="pack-view__art-preview">
-        {uri && <ArtContent uri={uri} active allowMeshRender artView />}
+        {uri && <ArtContent uri={uri} active allowMeshRender artview />}
         {!uri && <Skeleton.Image />}
       </div>
       <h4 className="pack-view__name">
