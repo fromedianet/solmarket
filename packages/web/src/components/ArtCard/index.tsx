@@ -110,7 +110,7 @@ export const ArtCard = (props: ArtCardProps) => {
       hoverable={true}
       className={`art-card ${small ? 'small' : ''} ${className ?? ''}`}
       bordered={false}
-      // {...rest}
+      {...rest}
     >
       {onClose && (
         <button
