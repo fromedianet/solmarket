@@ -46,7 +46,7 @@ export const ArtCard = (props: ArtCardProps) => {
     onClose,
     pubkey,
     height,
-    artView,
+    artview,
     width,
     count,
     noEvent,
@@ -85,6 +85,7 @@ export const ArtCard = (props: ArtCardProps) => {
             preview={preview}
             height={height}
             width={width}
+            artview={artview}
             allowMeshRender={false}
           />
         </div>
