@@ -33,9 +33,28 @@ export interface ArtCardProps extends CardProps {
 }
 
 export const ArtCard = (props: ArtCardProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { className, small, onClose, pubkey, noEvent, ...rest } = props;
+  let {
+    className,
+    small,
+    category,
+    image,
+    animationURL,
+    name,
+    preview,
+    creators,
+    description,
+    onClose,
+    pubkey,
+    height,
+    artView,
+    width,
+    count,
+    noEvent,
+    ...rest
+  } = props;
   const art = useArt(pubkey);
+  creators = art?.creators || creators || [];
+  name = art?.title || name || ' ';
 
   let auctionView: AuctionView | undefined;
   const auctions = useAuctions();
@@ -59,14 +78,19 @@ export const ArtCard = (props: ArtCardProps) => {
         <div className="image-over art-image-container">
           <ArtContent
             className="art-image no-event"
-            preview={false}
             pubkey={pubkey}
+            uri={image}
+            animationURL={animationURL}
+            category={category}
+            preview={preview}
+            height={height}
+            width={width}
             allowMeshRender={false}
           />
         </div>
         <div className="card-caption">
           <div className="card-body">
-            <h5>{art.title}</h5>
+            <h5>{name}</h5>
             <div className="card-collection-name">
               <span>collection_name</span>
               <img src="/icons/check.svg" alt="check" />
