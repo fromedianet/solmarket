@@ -149,6 +149,7 @@ export const InfoStep = (props: {
             <span className="field-title">Maximum Supply</span>
             <InputNumber
               placeholder="Quantity"
+              controls={false}
               onChange={(val: number) => {
                 props.setAttributes({
                   ...props.attributes,
