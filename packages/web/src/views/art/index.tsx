@@ -51,7 +51,7 @@ import { sendPlaceBid } from '../../actions/sendPlaceBid';
 import { sendRedeemBid } from '../../actions/sendRedeemBid';
 import { getTokenAccountByMint } from '../../contexts/getTokenAccountByMint';
 import { BottomSection } from './BottomSection';
-import { getGlobalActivityByMint } from '../../contexts/getGlobalActivityByMint';
+// import { getGlobalActivityByMint } from '../../contexts/getGlobalActivityByMint';
 
 const { Panel } = Collapse;
 
@@ -74,7 +74,7 @@ export const ArtView = () => {
         if (value) setAccount(value);
       });
 
-      getGlobalActivityByMint(connection, new PublicKey(art.mint));
+      // getGlobalActivityByMint(connection, new PublicKey(art.mint));
     }
   }, [art]);
 

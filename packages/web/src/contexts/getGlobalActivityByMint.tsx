@@ -23,15 +23,15 @@ export const getGlobalActivityByMint = async (
     );
 
     txs.sort((a, b) => (b.blockTime || 0) - (a.blockTime || 0));
-    const uniqTxs = uniqBy(txs, JSON.stringify);
-    console.log(uniqTxs);
+    // const uniqTxs = uniqBy(txs, JSON.stringify);
+    // console.log(uniqTxs);
   }
 };
 
-const uniqBy = (a, key) => {
-  const index = [];
-  return a.filter(function (item) {
-    const k = key(item);
-    return index.indexOf(k) >= 0 ? false : index.push(k);
-  });
-};
+// const uniqBy = (a, key) => {
+//   const index = [];
+//   return a.filter(function (item) {
+//     const k = key(item);
+//     return index.indexOf(k) >= 0 ? false : index.push(k);
+//   });
+// };
