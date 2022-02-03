@@ -62,9 +62,6 @@ export const AuctionView = () => {
   const { pullAuctionPage } = useMeta();
   useEffect(() => {
     pullAuctionPage(id);
-    if (width > 768) {
-      handleToggle(true);
-    }
   }, []);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
@@ -74,6 +71,12 @@ export const AuctionView = () => {
       return () => callbackRef.current()
     }, [])
   }
+
+  useEffect(() => {
+    if (width > 768) {
+      handleToggle(true);
+    }
+  });
 
   useComponentWillUnmount(() => {
     if (width > 768) {
