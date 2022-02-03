@@ -8,7 +8,9 @@ import { ArtContent } from '../../components/ArtContent';
 import { shortenAddress, useMeta } from '@oyster/common';
 import { CopySpan } from '../../components/CopySpan';
 import { BidLines } from './components/BidLines';
-import { AuctionCard } from '../../components/AuctionCard';
+// import { AuctionCard } from '../../components/AuctionCard';
+import { useSetSidebarState } from '../../contexts';
+import useWindowDimensions from '../../utils/layout';
 
 export const AuctionItem = ({
   item,
@@ -54,11 +56,30 @@ export const AuctionView = () => {
   const auction = useAuction(id);
   const art = useArt(auction?.thumbnail.metadata.pubkey);
   const { ref, data } = useExtendedArt(auction?.thumbnail.metadata.pubkey);
+  const { width } = useWindowDimensions();
+  const { handleToggle } = useSetSidebarState();
   // const creators = useCreators(auction);
   const { pullAuctionPage } = useMeta();
   useEffect(() => {
     pullAuctionPage(id);
+    if (width > 768) {
+      handleToggle(true);
+    }
   }, []);
+
+  function useComponentWillUnmount(cleanupCallback = () => {}) {
+    const callbackRef = React.useRef(cleanupCallback)
+    callbackRef.current = cleanupCallback // always up to date
+    React.useEffect(() => {
+      return () => callbackRef.current()
+    }, [])
+  }
+
+  useComponentWillUnmount(() => {
+    if (width > 768) {
+      handleToggle(false);
+    }
+  });
 
   // let edition = '';
   // if (art.type === ArtType.NFT) {

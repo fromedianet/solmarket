@@ -24,7 +24,7 @@ const SidebarMenu = (props: {
   onCollapse: () => void;
 }) => {
   return (
-    <Menu className="sidebar-menu ant-menu-dark" mode={'inline'} onClick={props.onCollapse}>
+    <Menu className="sidebar-menu" theme='dark' mode={'inline'} onClick={props.onCollapse}>
       <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
         <Link to={'/'}>Home</Link>
       </Menu.Item>
