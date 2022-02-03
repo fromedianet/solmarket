@@ -56,7 +56,7 @@ export const AppBar = () => {
         <div className="left-container">
           {!showSearchBar && (
             <div className="brand">
-              <button className="menu-btn" onClick={handleToggle}>
+              <button className="menu-btn" onClick={() => handleToggle()}>
                 <MenuOutlined className="menu-icon" />
               </button>
               <LogoLink />

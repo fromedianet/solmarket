@@ -70,11 +70,13 @@ export const InfoStep = (props: {
                 const fileReader = new FileReader();
                 fileReader.onload = function (e) {
                   const content = e.target?.result;
-                  const intern = JSON.parse(content);
-                  props.setAttributes({
-                    ...intern,
-                  });
-                  form.setFieldsValue({ attributes: intern.attributes });
+                  if (typeof content === 'string') {
+                    const intern = JSON.parse(content);
+                    props.setAttributes({
+                      ...intern,
+                    });
+                    form.setFieldsValue({ attributes: intern.attributes });
+                  }
                 };
                 fileReader.readAsText(file);
               }}

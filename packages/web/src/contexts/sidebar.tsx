@@ -12,38 +12,42 @@ interface Props {
 }
 
 type SidebarState = {
-  isShown: boolean;
+  collapsed: boolean;
 };
 
 interface Handler {
-  handleToggle: () => void;
+  handleToggle: (status?: boolean) => void;
 }
 
 export const getContext = createContext<SidebarState>({
-  isShown: true,
+  collapsed: false,
 });
 export const setContext = createContext<Handler>({
   handleToggle: () => {},
 });
 
 export default function SidebarProvider(props: Props) {
-  const [isShown, setShown] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const { width } = useWindowDimensions();
 
   useEffect(() => {
     if (width < 768) {
-      setShown(false);
+      setCollapsed(true);
     } else {
-      setShown(true);
+      setCollapsed(false);
     }
   }, [width]);
 
-  async function handleToggle() {
-    setShown(prevState => !prevState);
+  async function handleToggle(status?: boolean) {
+    if (status !== undefined) {
+      setCollapsed(status);
+    } else {
+      setCollapsed(prevState => !prevState);
+    }
   }
 
   return (
-    <getContext.Provider value={{ isShown }}>
+    <getContext.Provider value={{ collapsed }}>
       <setContext.Provider value={{ handleToggle }}>
         {props.children}
       </setContext.Provider>

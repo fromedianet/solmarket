@@ -93,8 +93,13 @@ section#main-layout.ant-layout {
   margin-left: 0;
 
   @media screen and (min-width: 992px) {
-    margin-left: 240px;
-    width: calc(100% - 240px);
+    margin-left: 200px;
+    width: calc(100% - 200px);
+
+    &.collapsed-sidebar {
+      margin-left: 80px;
+      width: calc(100% - 80px);
+    }
   }
 }
 
