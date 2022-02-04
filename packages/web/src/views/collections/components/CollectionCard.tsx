@@ -29,7 +29,7 @@ export const CollectionCard = (props: {
           />
         </div>
         <div className="card-caption">
-          <h5>{art.data?.name}</h5>
+          <h5>{art.data?.symbol}</h5>
           <span className='description'>{art.data?.description}</span>
         </div>
       </Card>

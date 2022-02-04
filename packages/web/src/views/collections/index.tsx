@@ -4,13 +4,8 @@ import { Row, Col } from 'antd';
 import { CollectionCard } from './components/CollectionCard';
 
 const dummyData = [
-  "E2egSmVKfx3LYm6AEdyqnD7AhABYLwDjEzWYo1KfdAsn",
-  "2Q1vd4J7B616CNpcRZhugJmXPTpZKjQf66nMAbnHcb2v",
-  "CnrkjppFxnuYwtfYVSaEKueVcrnPPDfiiELx9EHW5M4b",
-  "ALPXoxSv9L7U6sDN9uoi4VMc1FgH6P4n7RRQWz94vmZy",
   "C11Rotyyu7VFEiHLsMt6KQQaBronzjqCQLwyscxhJ4y1",
   "7WP7RJWd7jptPGWTpXw5n6wnWXQU33g4nPjf1C3XoF5g",
-  "AVtdUGDSVx7tP7dx2c8sNCZG7nqTHqbsiR1ULKAVa9YC",
   "7PHKnLg4gRXWvAmz19EwntwMBnNuphu89AtgM78tE8ME",
   "FEd6kXA6FS8hzE29sc8pWJmnv9ZX6GNkxueibcEvzSaD"
 ]

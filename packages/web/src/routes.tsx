@@ -23,6 +23,7 @@ import { LaunchPadView } from './views/launchpad';
 import { CollectionsView } from './views/collections';
 import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
+import { CollectionView } from './views/collection';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -84,6 +85,11 @@ export function Routes() {
               exact
               path="/collections"
               component={() => <CollectionsView />}
+            />
+            <Route
+              exact
+              path="/collection/:id"
+              component={() => <CollectionView />}
             />
             <Route
               exact
