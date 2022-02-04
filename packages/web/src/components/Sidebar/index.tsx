@@ -34,13 +34,13 @@ const SidebarMenu = (props: {
         icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="all-collections">
-          <Link to="/collections/all">All</Link>
+          <Link to="/collections">All</Link>
         </Menu.Item>
         <Menu.Item key="popular-collections">
-          <Link to="/collections/popular">Popular</Link>
+          <Link to="/collections?type=popular">Popular</Link>
         </Menu.Item>
         <Menu.Item key="new-collections">
-          <Link to="/collections/new">new</Link>
+          <Link to="/collections?type=new">new</Link>
         </Menu.Item>
       </SubMenu>
       <Menu.Item

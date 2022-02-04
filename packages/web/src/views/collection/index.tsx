@@ -27,6 +27,9 @@ export const CollectionView = () => {
   });
 
   return (
-    <div></div>
+    <div className='collection-page'>
+      <div></div>
+      <div></div>
+    </div>
   );
 }
