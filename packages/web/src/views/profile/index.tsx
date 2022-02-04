@@ -14,6 +14,8 @@ export const ProfileView = () => {
   const wallet = useWallet();
   const artwork = useCreatorArts(wallet.publicKey?.toBase58());
 
+  console.log(artwork);
+
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
 
@@ -39,7 +41,7 @@ export const ProfileView = () => {
     <div className="main-area">
       <div className="profile-page">
         <div className="container">
-          <div className="collection-info">
+          <div className="profile-info">
             {creator && creator.info ? (
               creator.info.image ? (
                 <img
@@ -109,7 +111,7 @@ export const ProfileView = () => {
               )
             )}
           </div>
-          <Row className="collection-details">
+          <Row className="profile-details">
             <Col span={12} md={8} lg={6} className="details-container">
               <Statistic title="TOTAL FLOOR VALUE" value="--SOL" />
             </Col>
