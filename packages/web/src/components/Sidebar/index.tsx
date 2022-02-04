@@ -20,11 +20,14 @@ import { Link } from 'react-router-dom';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-const SidebarMenu = (props: {
-  onCollapse: () => void;
-}) => {
+const SidebarMenu = (props: { onCollapse: () => void }) => {
   return (
-    <Menu className="sidebar-menu" theme='dark' mode={'inline'} onClick={props.onCollapse}>
+    <Menu
+      className="sidebar-menu"
+      theme="dark"
+      mode={'inline'}
+      onClick={props.onCollapse}
+    >
       <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
         <Link to={'/'}>Home</Link>
       </Menu.Item>
@@ -134,14 +137,14 @@ export const Sidebar = () => {
       collapsible
       collapsed={collapsed}
       trigger={null}
-      breakpoint='lg'
+      breakpoint="lg"
       collapsedWidth={width < 992 ? 0 : 80}
-      theme='dark'
+      theme="dark"
       onCollapse={onCollapse}
       className="my-sider"
     >
       <WalletInfo />
-      <SidebarMenu onCollapse={onCollapse}/>
+      <SidebarMenu onCollapse={onCollapse} />
     </Sider>
   );
 };

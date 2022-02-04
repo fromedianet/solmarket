@@ -5,18 +5,12 @@ import { useExtendedArt } from '../../../hooks';
 import { ArtContent } from '../../../components/ArtContent';
 import { StringPublicKey } from '@oyster/common';
 
-export const CollectionCard = (props: {
-  pubkey: StringPublicKey
-}) => {
+export const CollectionCard = (props: { pubkey: StringPublicKey }) => {
   const art = useExtendedArt(props.pubkey);
 
   return (
     <Link to={`/collection/${art.data?.symbol}`}>
-      <Card
-        className='collection-card'
-        hoverable={true}
-        bordered={false}
-      >
+      <Card className="collection-card" hoverable={true} bordered={false}>
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"
@@ -30,7 +24,7 @@ export const CollectionCard = (props: {
         </div>
         <div className="card-caption">
           <h5>{art.data?.symbol}</h5>
-          <span className='description'>{art.data?.description}</span>
+          <span className="description">{art.data?.description}</span>
         </div>
       </Card>
     </Link>

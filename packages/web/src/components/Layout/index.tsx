@@ -13,14 +13,14 @@ import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 const { Content } = Layout;
 
 export const AppLayout = React.memo((props: any) => {
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const { collapsed } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
   const overSidebarClick = () => {
     if (width < 992) {
       handleToggle(true);
     }
-  }
+  };
   return (
     <div className="main page">
       <header id="header">
@@ -28,7 +28,12 @@ export const AppLayout = React.memo((props: any) => {
       </header>
       <Layout id={'width-layout'} hasSider>
         <Sidebar />
-        <Content className={`my-layout-content ${collapsed && 'collapsed-sidebar'}`} onClick={overSidebarClick}>{props.children}</Content>
+        <Content
+          className={`my-layout-content ${collapsed && 'collapsed-sidebar'}`}
+          onClick={overSidebarClick}
+        >
+          {props.children}
+        </Content>
       </Layout>
       {/*<Footer />*/}
       <ToastContainer />

@@ -87,28 +87,28 @@ export const ProfileView = () => {
                   Edit Profile
                 </Button>
               </div>
-            ) : (
-              wallet.publicKey ? (
-                <div style={{
+            ) : wallet.publicKey ? (
+              <div
+                style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                }}>
-                  <CopySpan
-                    value={shortenAddress(wallet.publicKey.toBase58(), 8)}
-                    copyText={wallet.publicKey.toBase58()}
-                    className="wallet-address"
-                  />
-                  <Button
-                    className="profile-button"
-                    onClick={() => setVisible(true)}
-                  >
-                    Edit Profile
-                  </Button>
-                </div>
-              ) : (
-                <ConnectButton className="profile-button" />
-              )
+                }}
+              >
+                <CopySpan
+                  value={shortenAddress(wallet.publicKey.toBase58(), 8)}
+                  copyText={wallet.publicKey.toBase58()}
+                  className="wallet-address"
+                />
+                <Button
+                  className="profile-button"
+                  onClick={() => setVisible(true)}
+                >
+                  Edit Profile
+                </Button>
+              </div>
+            ) : (
+              <ConnectButton className="profile-button" />
             )}
           </div>
           <Row className="profile-details">
