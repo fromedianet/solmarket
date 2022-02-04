@@ -17,7 +17,7 @@ export const AppLayout = React.memo((props: any) => {
   const { collapsed } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
   const overSidebarClick = () => {
-    if (width < 768) {
+    if (width < 992) {
       handleToggle(true);
     }
   }

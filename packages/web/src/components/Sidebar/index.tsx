@@ -122,7 +122,7 @@ export const Sidebar = () => {
   const { handleToggle } = useSetSidebarState();
 
   const onCollapse = () => {
-    if (width < 768) {
+    if (width < 992) {
       handleToggle();
     } else {
       handleToggle(false);
@@ -135,7 +135,7 @@ export const Sidebar = () => {
       collapsed={collapsed}
       trigger={null}
       breakpoint='lg'
-      collapsedWidth={width < 768 ? 0 : 80}
+      collapsedWidth={width < 992 ? 0 : 80}
       theme='dark'
       onCollapse={onCollapse}
       className="my-sider"
