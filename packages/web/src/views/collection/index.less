@@ -2,4 +2,82 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  .collection-info {
+    width: 100%;
+    margin-top: 40px;
+
+    .info-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      padding: 16px;
+
+      .info-image {
+        width: 160px;
+        height: 160px;
+        border: 2px solid white;
+        border-radius: 50%;
+        background: transparent;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .info-title {
+        margin-top: 32px;
+        color: @text-primary-color;
+        font-size: 36px;
+        line-height: 40px;
+        text-align: center;
+      }
+
+      .info-group {
+        position: relative;
+        display: flex;
+        height: 40px;
+        margin-top: 16px;
+
+        @media screen and (min-width: 992px) {
+          position: absolute;
+          top: 80px;
+          right: 24px;
+          margin-top: 0;
+        }
+      }
+
+      .info-attribute.ant-statistic {
+        background-color: @bg-secondary-color;
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+
+        .ant-statistic-title {
+          color: @text-secondary-color;
+          font-size: 11px;
+          line-height: 13px;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .ant-statistic-content {
+          color: @text-primary-color;
+          font-size: 14px;
+          line-height: 18px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      .info-description {
+        max-width: 670px;
+        margin-top: 16px;
+      }
+    }
+  }
 }

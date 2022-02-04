@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
+import { CollectionInfo } from './components/CollectionInfo';
 
 export const CollectionView = () => {
   const { width } = useWindowDimensions();
@@ -28,8 +29,9 @@ export const CollectionView = () => {
 
   return (
     <div className='collection-page'>
-      Collection page
-      <div></div>
+      <div className='collection-info'>
+        <CollectionInfo />
+      </div>
       <div></div>
     </div>
   );
