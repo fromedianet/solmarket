@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Collapse, Form, InputNumber, Space, Select, Button } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -7,14 +7,64 @@ import {
   PlusOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
+import dummy from '../dummy.json';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
+
+type Details = {
+  value: string;
+  floor: string;
+};
+
+type Attribute = {
+  trait_type: string;
+  data: Details[];
+};
+
+function prepareAttributes() {
+  const data: Attribute[] = [];
+  let traitType = "";
+  let attrs: Attribute = {
+    trait_type: "",
+    data: [],
+  };
+  dummy.availableAttributes.forEach((item) => {
+    if (traitType === "") {
+      attrs["trait_type"] = item.attribute.trait_type;
+    } else if (item.attribute.trait_type !== traitType) {
+      data.push(attrs);
+      attrs = {
+        trait_type: item.attribute.trait_type,
+        data: [],
+      };
+    }
+    attrs["data"].push({
+      value: `${item.attribute.value} (${item.count})`,
+      floor: `floor: ${item.floor / Math.pow(10, 9)}`,
+    });
+    traitType = item.attribute.trait_type;
+  });
+  data.push(attrs);
+
+  return data;
+}
+
 export const FilterSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [attributes, setAttributes] = useState<Attribute[]>([]);
+
+  useEffect(() => {
+    setAttributes(prepareAttributes());
+  }, []);
 
   const onFinish = (values) => {
     console.log(values);
+  }
+
+  const onChange = (trait, values) => {
+    console.log('onChange', values);
+    console.log('trait', trait);
   }
 
   return (
@@ -83,7 +133,30 @@ export const FilterSidebar = () => {
               key="attributes"
               header="Attributes filter"
               extra={<UnorderedListOutlined className="filter-icon" />}
-            ></Panel>
+            >
+              <div className='attr-container'>
+                {attributes.map((attr, index) =>
+                  <Select 
+                    key={index}
+                    mode='multiple'
+                    placeholder={attr.trait_type}
+                    allowClear={true}
+                    showArrow={true}
+                    onChange={(value) => onChange(attr.trait_type, value)}
+                    optionLabelProp='value'
+                  >
+                    {attr.data.map((item, idx) => 
+                      <Select.Option key={idx} value={item.value}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '16px'}}>
+                          <span>{item.value}</span>
+                          <span>{item.floor}</span>
+                        </div>
+                      </Select.Option>
+                    )}
+                  </Select>
+                )}
+              </div>
+            </Panel>
           </Collapse>
         </>
       )}

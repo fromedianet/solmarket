@@ -209,5 +209,41 @@
         }
       }
     }
+
+    .attr-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 8px 16px;
+
+      .ant-select {
+        background: transparent;
+
+        .ant-select-selector {
+          background: #16151a;
+          border: 1px solid @border-primary-color;
+          border-radius: 4px;
+          margin-bottom: 4px;
+          height: auto;
+          min-height: 50px;
+
+          .ant-select-selection-item {
+            background: @bg-third-color;
+            border: none;
+            height: 28px;
+            line-height: 28px;
+          }
+        }
+
+        .ant-select-clear {
+          background: #16151a;
+          color: @text-primary-color;
+        }
+      }
+    }
   }
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) .ant-select-item-option-state {
+  color: @text-primary-color;
 }
