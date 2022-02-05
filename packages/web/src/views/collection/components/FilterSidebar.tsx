@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Collapse, Form, InputNumber, Space, Select, Button } from 'antd';
+import {
+  Layout,
+  Collapse,
+  Form,
+  InputNumber,
+  Space,
+  Select,
+  Button,
+} from 'antd';
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -24,14 +32,14 @@ type Attribute = {
 
 function prepareAttributes() {
   const data: Attribute[] = [];
-  let traitType = "";
+  let traitType = '';
   let attrs: Attribute = {
-    trait_type: "",
+    trait_type: '',
     data: [],
   };
-  dummy.availableAttributes.forEach((item) => {
-    if (traitType === "") {
-      attrs["trait_type"] = item.attribute.trait_type;
+  dummy.availableAttributes.forEach(item => {
+    if (traitType === '') {
+      attrs['trait_type'] = item.attribute.trait_type;
     } else if (item.attribute.trait_type !== traitType) {
       data.push(attrs);
       attrs = {
@@ -39,7 +47,7 @@ function prepareAttributes() {
         data: [],
       };
     }
-    attrs["data"].push({
+    attrs['data'].push({
       value: `${item.attribute.value} (${item.count})`,
       floor: `floor: ${item.floor / Math.pow(10, 9)}`,
     });
@@ -58,14 +66,14 @@ export const FilterSidebar = () => {
     setAttributes(prepareAttributes());
   }, []);
 
-  const onFinish = (values) => {
+  const onFinish = values => {
     console.log(values);
-  }
+  };
 
   const onChange = (trait, values) => {
     console.log('onChange', values);
     console.log('trait', trait);
-  }
+  };
 
   return (
     <Sider
@@ -105,26 +113,42 @@ export const FilterSidebar = () => {
               header="Price filter"
               extra={<UnorderedListOutlined className="filter-icon" />}
             >
-              <Form name='price_form' className='price-form' onFinish={onFinish} autoComplete='off'>
-                <Form.Item
-                  name={['price', 'symbol']}
-                >
-                  <Select defaultValue='sol' disabled>
-                    <Select.Option value='sol'>SOL</Select.Option>
+              <Form
+                name="price_form"
+                className="price-form"
+                onFinish={onFinish}
+                autoComplete="off"
+              >
+                <Form.Item name={['price', 'symbol']}>
+                  <Select defaultValue="sol" disabled>
+                    <Select.Option value="sol">SOL</Select.Option>
                   </Select>
                 </Form.Item>
-                <Space style={{ display: 'flex', justifyContent: 'space-between' }} align='baseline'>
+                <Space
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                  align="baseline"
+                >
                   <Form.Item name={['price', 'min']}>
-                    <InputNumber placeholder='Min' style={{ width: '125px'}} controls={false}/>
+                    <InputNumber
+                      placeholder="Min"
+                      style={{ width: '125px' }}
+                      controls={false}
+                    />
                   </Form.Item>
                   <span>to</span>
                   <Form.Item name={['price', 'max']}>
-                    <InputNumber placeholder='Max' style={{ width: '125px'}} controls={false}/>
+                    <InputNumber
+                      placeholder="Max"
+                      style={{ width: '125px' }}
+                      controls={false}
+                    />
                   </Form.Item>
                 </Space>
                 <Form.Item>
-                  <div className='gradient-wrapper'>
-                    <Button htmlType='submit' className='apply-btn'>Apply</Button>
+                  <div className="gradient-wrapper">
+                    <Button htmlType="submit" className="apply-btn">
+                      Apply
+                    </Button>
                   </div>
                 </Form.Item>
               </Form>
@@ -134,27 +158,33 @@ export const FilterSidebar = () => {
               header="Attributes filter"
               extra={<UnorderedListOutlined className="filter-icon" />}
             >
-              <div className='attr-container'>
-                {attributes.map((attr, index) =>
-                  <Select 
+              <div className="attr-container">
+                {attributes.map((attr, index) => (
+                  <Select
                     key={index}
-                    mode='multiple'
+                    mode="multiple"
                     placeholder={attr.trait_type}
                     allowClear={true}
                     showArrow={true}
-                    onChange={(value) => onChange(attr.trait_type, value)}
-                    optionLabelProp='value'
+                    onChange={value => onChange(attr.trait_type, value)}
+                    optionLabelProp="value"
                   >
-                    {attr.data.map((item, idx) => 
+                    {attr.data.map((item, idx) => (
                       <Select.Option key={idx} value={item.value}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '16px'}}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            paddingRight: '16px',
+                          }}
+                        >
                           <span>{item.value}</span>
                           <span>{item.floor}</span>
                         </div>
                       </Select.Option>
-                    )}
+                    ))}
                   </Select>
-                )}
+                ))}
               </div>
             </Panel>
           </Collapse>

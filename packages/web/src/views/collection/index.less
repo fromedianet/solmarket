@@ -81,9 +81,34 @@
     }
   }
 
+  .collection-tabs {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid @border-primary-color;
+
+    .my-tab {
+      padding: 8px;
+      color: @text-secondary-color;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:first-child {
+        margin-right: 24px;
+      }
+
+      &.my-tab-active {
+        color: @text-primary-color;
+        border-bottom: 2px solid @text-pink;
+      }
+    }
+  }
+
   .filter-sider {
     position: sticky;
-    height: 100vh;
+    position: -webkit-sticky;
+    height: calc(100vh - 80px);
+    top: 80px;
     overflow: auto;
 
     @media screen and (max-width: 768px) {
@@ -241,6 +266,10 @@
         }
       }
     }
+  }
+
+  .collection-container {
+    height: 1200px;
   }
 }
 

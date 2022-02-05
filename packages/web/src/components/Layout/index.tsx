@@ -10,8 +10,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import useWindowDimensions from '../../utils/layout';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 
-const { Content } = Layout;
-
 export const AppLayout = React.memo((props: any) => {
   const { width } = useWindowDimensions();
   const { collapsed } = useGetSidebarState();
@@ -28,12 +26,12 @@ export const AppLayout = React.memo((props: any) => {
       </header>
       <Layout id={'width-layout'} hasSider>
         <Sidebar />
-        <Content
+        <div
           className={`my-layout-content ${collapsed && 'collapsed-sidebar'}`}
           onClick={overSidebarClick}
         >
           {props.children}
-        </Content>
+        </div>
       </Layout>
       {/*<Footer />*/}
       <ToastContainer />
