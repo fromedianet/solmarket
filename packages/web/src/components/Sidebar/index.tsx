@@ -20,11 +20,14 @@ import { Link } from 'react-router-dom';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-const SidebarMenu = (props: {
-  onCollapse: () => void;
-}) => {
+const SidebarMenu = (props: { onCollapse: () => void }) => {
   return (
-    <Menu className="sidebar-menu" theme='dark' mode={'inline'} onClick={props.onCollapse}>
+    <Menu
+      className="sidebar-menu"
+      theme="dark"
+      mode={'inline'}
+      onClick={props.onCollapse}
+    >
       <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
         <Link to={'/'}>Home</Link>
       </Menu.Item>
@@ -34,13 +37,13 @@ const SidebarMenu = (props: {
         icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="all-collections">
-          <Link to="/collections/all">All</Link>
+          <Link to="/collections">All</Link>
         </Menu.Item>
         <Menu.Item key="popular-collections">
-          <Link to="/collections/popular">Popular</Link>
+          <Link to="/collections?type=popular">Popular</Link>
         </Menu.Item>
         <Menu.Item key="new-collections">
-          <Link to="/collections/new">new</Link>
+          <Link to="/collections?type=new">new</Link>
         </Menu.Item>
       </SubMenu>
       <Menu.Item
@@ -122,7 +125,7 @@ export const Sidebar = () => {
   const { handleToggle } = useSetSidebarState();
 
   const onCollapse = () => {
-    if (width < 768) {
+    if (width < 992) {
       handleToggle();
     } else {
       handleToggle(false);
@@ -134,14 +137,14 @@ export const Sidebar = () => {
       collapsible
       collapsed={collapsed}
       trigger={null}
-      breakpoint='lg'
-      collapsedWidth={width < 768 ? 0 : 80}
-      theme='dark'
+      breakpoint="lg"
+      collapsedWidth={width < 992 ? 0 : 80}
+      theme="dark"
       onCollapse={onCollapse}
       className="my-sider"
     >
       <WalletInfo />
-      <SidebarMenu onCollapse={onCollapse}/>
+      <SidebarMenu onCollapse={onCollapse} />
     </Sider>
   );
 };

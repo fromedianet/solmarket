@@ -31,7 +31,7 @@ export default function SidebarProvider(props: Props) {
   const { width } = useWindowDimensions();
 
   useEffect(() => {
-    if (width < 768) {
+    if (width < 992) {
       setCollapsed(true);
     } else {
       setCollapsed(false);

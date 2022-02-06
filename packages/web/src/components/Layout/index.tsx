@@ -10,17 +10,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import useWindowDimensions from '../../utils/layout';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 
-const { Content } = Layout;
-
 export const AppLayout = React.memo((props: any) => {
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const { collapsed } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
   const overSidebarClick = () => {
-    if (width < 768) {
+    if (width < 992) {
       handleToggle(true);
     }
-  }
+  };
   return (
     <div className="main page">
       <header id="header">
@@ -28,7 +26,12 @@ export const AppLayout = React.memo((props: any) => {
       </header>
       <Layout id={'width-layout'} hasSider>
         <Sidebar />
-        <Content className={`my-layout-content ${collapsed && 'collapsed-sidebar'}`} onClick={overSidebarClick}>{props.children}</Content>
+        <div
+          className={`my-layout-content ${collapsed && 'collapsed-sidebar'}`}
+          onClick={overSidebarClick}
+        >
+          {props.children}
+        </div>
       </Layout>
       {/*<Footer />*/}
       <ToastContainer />

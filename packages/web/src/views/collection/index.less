@@ -1,0 +1,334 @@
+.collection-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .collection-info {
+    width: 100%;
+    margin-top: 40px;
+
+    .info-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      padding: 16px;
+
+      .info-image {
+        width: 160px;
+        height: 160px;
+        border: 2px solid white;
+        border-radius: 50%;
+        background: transparent;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .info-title {
+        margin-top: 32px;
+        color: @text-primary-color;
+        font-size: 36px;
+        line-height: 40px;
+        text-align: center;
+      }
+
+      .info-group {
+        position: relative;
+        display: flex;
+        height: 40px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+
+        @media screen and (min-width: 992px) {
+          position: absolute;
+          top: 80px;
+          right: 24px;
+          margin-top: 0;
+        }
+      }
+
+      .info-attribute.ant-statistic {
+        background-color: @bg-secondary-color;
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+
+        .ant-statistic-title {
+          color: @text-secondary-color;
+          font-size: 11px;
+          line-height: 13px;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .ant-statistic-content {
+          color: @text-primary-color;
+          font-size: 14px;
+          line-height: 18px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      .info-description {
+        max-width: 670px;
+        margin-top: 16px;
+      }
+    }
+  }
+
+  .collection-tabs {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid @border-primary-color;
+
+    .my-tab {
+      padding: 8px;
+      color: @text-secondary-color;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:first-child {
+        margin-right: 24px;
+      }
+
+      &.my-tab-active {
+        color: @text-primary-color;
+        border-bottom: 2px solid @text-pink;
+      }
+    }
+  }
+
+  .filter-sider {
+    position: sticky;
+    position: -webkit-sticky;
+    height: calc(100vh - 80px);
+    top: 80px;
+    overflow: auto;
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
+    &.ant-layout-sider {
+      background: #16151a;
+    }
+
+    .filter-header {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+
+      span {
+        font-size: 18px;
+        color: @text-secondary-color;
+      }
+    }
+
+    .filter-icon {
+      width: 28px;
+      text-align: center;
+      font-size: 20px;
+      color: @tw-icon-color!important;
+    }
+
+    .tw-border-bottom-1 {
+      border-bottom: 2px solid @border-primary-color;
+    }
+
+    .filter-container {
+      &.ant-collapse {
+        background: transparent;
+        border: none;
+    
+        & > .ant-collapse-item {
+          border: none;
+          border-bottom: 1px solid @border-primary-color;
+        }
+    
+        & > .ant-collapse-item > .ant-collapse-header {
+          height: 60px;
+          color: @text-secondary-color;
+          font-size: 18px;
+          border: none;
+          border-bottom: 1px solid @border-primary-color;
+          flex-direction: row-reverse;
+          align-items: center;
+    
+          div {
+            &:first-child {
+              margin-right: auto;
+            }
+          }
+    
+          .ant-collapse-extra {
+            margin-right: 8px;
+            margin-left: 0px;
+          }
+        }
+    
+        .ant-collapse-content {
+          background: transparent;
+          border: none;
+
+          & > .ant-collapse-content-box {
+            padding: 0;
+          }
+        }
+      }
+
+      .price-form {
+        margin: 0 16px 16px 16px;
+        padding: 12px;
+        background-color: #1c1326;
+
+        .ant-form-item {
+          margin-bottom: 12px;
+        }
+
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+          background: transparent;
+          border: none;
+        }
+  
+        .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+          color: @text-primary-color;
+          background: transparent;
+        }
+  
+        .ant-input-number {
+          border: none;
+          border-radius: 8px;
+  
+          .ant-input-number-input {
+            height: 40px;
+          }
+        }
+  
+        .gradient-wrapper {
+          display: inline-block;
+          width: 100%;
+          padding: 1px;
+          border-radius: 8px;
+          background: @bg-pink-gradient;
+  
+          .apply-btn {
+            width: 100%;
+            background: #282828!important;
+            border: none;
+            border-radius: 8px;
+            height: 40px;
+
+            &:hover {
+              background: transparent!important;
+            }
+          }
+        }
+      }
+    }
+
+    .attr-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 8px 16px;
+
+      .ant-select {
+        background: transparent;
+
+        .ant-select-selector {
+          background: #16151a;
+          border: 1px solid @border-primary-color;
+          border-radius: 4px;
+          margin-bottom: 4px;
+          height: auto;
+          min-height: 50px;
+
+          .ant-select-selection-item {
+            background: @bg-third-color;
+            border: none;
+            height: 28px;
+            line-height: 28px;
+          }
+        }
+
+        .ant-select-clear {
+          background: #16151a;
+          color: @text-primary-color;
+        }
+      }
+    }
+  }
+
+  .collection-container {
+
+    .items-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .control-container {
+        display: flex;
+        padding: 8px;
+
+        .refresh-btn {
+          width: 40px;
+          height: 40px;
+          padding: 8px;
+          cursor: pointer;
+
+          &:hover {
+            opacity: .8;
+          }
+        }
+
+        .filter-btn {
+          width: 40px;
+          height: 40px;
+          padding: 8px;
+          cursor: pointer;
+
+          &:hover {
+            opacity: .8;
+          }
+
+          @media screen and (min-width: 768px) {
+            display: none;
+          }
+        }
+
+        .search-control {
+          height: 40px;
+          flex: 1 1 auto;
+        }
+
+        .select-container {
+          width: 100%;
+
+          &.ant-select {
+            background: transparent;
+
+            &:not(.ant-select-customize-input) .ant-select-selector {
+              background: transparent;
+              border-color: #595280;
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) .ant-select-item-option-state {
+  color: @text-primary-color;
+}
