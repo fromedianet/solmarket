@@ -119,8 +119,8 @@ export const FilterSidebar = () => {
                 onFinish={onFinish}
                 autoComplete="off"
               >
-                <Form.Item name={['price', 'symbol']}>
-                  <Select defaultValue="sol" disabled>
+                <Form.Item initialValue='sol' name={['price', 'symbol']}>
+                  <Select disabled>
                     <Select.Option value="sol">SOL</Select.Option>
                   </Select>
                 </Form.Item>

@@ -4,6 +4,9 @@ import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { CollectionInfo } from './components/CollectionInfo';
 import { FilterSidebar } from './components/FilterSidebar';
+import { Items } from './components/Items';
+import { Activities } from './components/Activities';
+import { useMeta } from '@oyster/common';
 
 const { Content } = Layout;
 
@@ -11,6 +14,8 @@ export const CollectionView = () => {
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
+
+  const { metadata } = useMeta();
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -61,7 +66,9 @@ export const CollectionView = () => {
       </div>
       <Layout hasSider>
         <FilterSidebar />
-        <Content className="collection-container"></Content>
+        <Content className="collection-container">
+          {isItems ? <Items list={metadata} /> : <Activities />}
+        </Content>
       </Layout>
     </div>
   );

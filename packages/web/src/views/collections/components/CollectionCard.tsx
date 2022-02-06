@@ -23,7 +23,7 @@ export const CollectionCard = (props: { pubkey: StringPublicKey }) => {
           />
         </div>
         <div className="card-caption">
-          <h5>{art.data?.symbol}</h5>
+          <h6>{art.data?.symbol}</h6>
           <span className="description">{art.data?.description}</span>
         </div>
       </Card>

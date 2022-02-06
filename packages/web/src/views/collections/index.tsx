@@ -30,7 +30,7 @@ export const CollectionsView = () => {
         <h1>{caption}</h1>
         <Row gutter={[16, 16]}>
           {dummyData.map((pubkey, index) => (
-            <Col key={index} span={24} md={12} lg={8} xl={6} xxl={4}>
+            <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
               <CollectionCard pubkey={pubkey} />
             </Col>
           ))}

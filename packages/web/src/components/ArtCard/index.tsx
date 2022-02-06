@@ -90,16 +90,14 @@ export const ArtCard = (props: ArtCardProps) => {
           />
         </div>
         <div className="card-caption">
-          <div className="card-body">
-            <h5>{name}</h5>
-            <div className="card-collection-name">
-              <span>collection_name</span>
-              <img src="/icons/check.svg" alt="check" />
-            </div>
-            {!noEvent && instantSalePrice > 0 && (
-              <h5>{`${instantSalePrice} SOL`}</h5>
-            )}
+          <h6>{name}</h6>
+          <div className="card-collection-name">
+            <span>collection_name</span>
+            <img src="/icons/check.svg" alt="check" />
           </div>
+          {!noEvent && instantSalePrice > 0 && (
+            <h6>{`${instantSalePrice} SOL`}</h6>
+          )}
         </div>
       </>
     );
