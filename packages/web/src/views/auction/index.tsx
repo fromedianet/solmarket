@@ -8,7 +8,7 @@ import { ArtContent } from '../../components/ArtContent';
 import { shortenAddress, useMeta } from '@oyster/common';
 import { CopySpan } from '../../components/CopySpan';
 import { BidLines } from './components/BidLines';
-import { AuctionCard } from '../../components/AuctionCard';
+// import { AuctionCard } from '../../components/AuctionCard';
 
 export const AuctionItem = ({
   item,

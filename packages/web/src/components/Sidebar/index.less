@@ -1,18 +1,17 @@
-.ant-drawer.my-drawer {
+.my-sider {
   position: fixed;
-  margin-top: 80px;
+  z-index: 20;
+  overflow: auto;
+  left: 0;
+  top: 80px;
+  bottom: 0;
 
-  @media screen and (min-width: 992px) {
-    width: 240px!important;
+  &.ant-layout-sider {
+    background: @bg-primary-color;
   }
-}
-
-.my-drawer {
-  .ant-drawer-content-wrapper {
-    width: 240px!important;
-  }
-
+  
   .wallet {
+    width: 100%;
     display: inline-flex;
     justify-content: center;
     border-bottom: 1px solid #24182f;
@@ -57,15 +56,6 @@
     }
   }
 
-  .ant-drawer-body {
-    display: flex;
-    flex-direction: column;
-    background-color: @bg-primary-color;
-    border-right: 1px solid #24182f;
-    overflow-x: hidden;
-    padding: 0px;
-  }
-
   .sidebar-menu {
     padding: 0 16px;
     overflow-y: auto;
@@ -88,5 +78,12 @@
     .ant-menu-item-selected {
       background-color: rgba(255, 255, 255, 0.05)!important;
     }
+  }
+}
+
+.ant-menu.ant-menu-dark {
+  & .ant-menu-sub {
+    background: black;
+    color: rgba(255, 255, 255, 0.8);
   }
 }

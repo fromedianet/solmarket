@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, Menu } from 'antd';
+import { Menu, Layout } from 'antd';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 import {
   BarChartOutlined,
@@ -18,10 +18,16 @@ import { CurrentUserBadge } from '../CurrentUserBadge';
 import useWindowDimensions from '../../utils/layout';
 import { Link } from 'react-router-dom';
 
+const { Sider } = Layout;
 const { SubMenu } = Menu;
-const SidebarMenu = () => {
+const SidebarMenu = (props: { onCollapse: () => void }) => {
   return (
-    <Menu className="sidebar-menu ant-menu-dark" mode={'inline'}>
+    <Menu
+      className="sidebar-menu"
+      theme="dark"
+      mode={'inline'}
+      onClick={props.onCollapse}
+    >
       <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
         <Link to={'/'}>Home</Link>
       </Menu.Item>
@@ -31,13 +37,13 @@ const SidebarMenu = () => {
         icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="all-collections">
-          <Link to="/collections/all">All</Link>
+          <Link to="/collections">All</Link>
         </Menu.Item>
         <Menu.Item key="popular-collections">
-          <Link to="/collections/popular">Popular</Link>
+          <Link to="/collections?type=popular">Popular</Link>
         </Menu.Item>
         <Menu.Item key="new-collections">
-          <Link to="/collections/new">new</Link>
+          <Link to="/collections?type=new">new</Link>
         </Menu.Item>
       </SubMenu>
       <Menu.Item
@@ -115,26 +121,30 @@ const WalletInfo = () => {
 
 export const Sidebar = () => {
   const { width } = useWindowDimensions();
-  const { isShown } = useGetSidebarState();
+  const { collapsed } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
 
-  const onClose = () => {
-    if (width < 768) {
+  const onCollapse = () => {
+    if (width < 992) {
       handleToggle();
+    } else {
+      handleToggle(false);
     }
   };
 
   return (
-    <Drawer
-      placement="left"
-      visible={isShown}
-      closable={false}
-      onClose={onClose}
-      mask={width < 768}
-      className="my-drawer"
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      trigger={null}
+      breakpoint="lg"
+      collapsedWidth={width < 992 ? 0 : 80}
+      theme="dark"
+      onCollapse={onCollapse}
+      className="my-sider"
     >
       <WalletInfo />
-      <SidebarMenu />
-    </Drawer>
+      <SidebarMenu onCollapse={onCollapse} />
+    </Sider>
   );
 };
