@@ -14,8 +14,6 @@ export const ProfileView = () => {
   const wallet = useWallet();
   const artwork = useCreatorArts(wallet.publicKey?.toBase58());
 
-  console.log(artwork);
-
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
 
