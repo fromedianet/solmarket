@@ -7,16 +7,22 @@ import { EmptyView } from '../../../components/EmptyView';
 
 const DELIMITER = '|&=&|';
 
-export const Items = (props: { 
-  list: ParsedAccount<Metadata>[],
+export const Items = (props: {
+  list: ParsedAccount<Metadata>[];
   filter: {
-    price: { symbol: string | undefined, min: number | undefined, max: number | undefined },
-    attributes: {}
-  },
-  updateFilters: (p, a) => void,
+    price: {
+      symbol: string | undefined;
+      min: number | undefined;
+      max: number | undefined;
+    };
+    attributes: {};
+  };
+  updateFilters: (p, a) => void;
 }) => {
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
-  const [attributeFilter, setAttributeFilter] = useState(props.filter.attributes);
+  const [attributeFilter, setAttributeFilter] = useState(
+    props.filter.attributes,
+  );
   const [priceTag, setPriceTag] = useState<string | undefined>();
 
   useEffect(() => {
@@ -43,24 +49,26 @@ export const Items = (props: {
   const existsAttributes = () => {
     const values = Object.values(attributeFilter);
     return values.length > 0;
-  }
+  };
 
   const onRefresh = () => {
     console.log('refresh');
   };
 
   const onClosePriceTag = () => {
-    props.updateFilters({
-      symbol: 'SOL',
-      min: undefined,
-      max: undefined,
-    },
-    attributeFilter);
+    props.updateFilters(
+      {
+        symbol: 'SOL',
+        min: undefined,
+        max: undefined,
+      },
+      attributeFilter,
+    );
   };
 
   const onCloseAttributeTag = (key: string) => {
     const splitKey = key.split(DELIMITER);
-    const newAttributeFilter = {...attributeFilter};
+    const newAttributeFilter = { ...attributeFilter };
     const index = newAttributeFilter[splitKey[0]].indexOf(splitKey[1]);
     if (index !== -1) {
       newAttributeFilter[splitKey[0]].splice(index, 1);
@@ -70,16 +78,18 @@ export const Items = (props: {
     }
 
     props.updateFilters(priceFilter, newAttributeFilter);
-  }
+  };
 
   const onClearAll = () => {
-    props.updateFilters({
-      symbol: 'SOL',
-      min: undefined,
-      max: undefined,
-    },
-    {});
-  }
+    props.updateFilters(
+      {
+        symbol: 'SOL',
+        min: undefined,
+        max: undefined,
+      },
+      {},
+    );
+  };
 
   return (
     <div className="items-container">
@@ -101,25 +111,33 @@ export const Items = (props: {
           </Select>
         </Col>
       </Row>
-      <div className='tag-container'>
-        {priceTag && <Tag key='price-tag' closable onClose={onClosePriceTag} >{priceTag}</Tag>}
+      <div className="tag-container">
+        {priceTag && (
+          <Tag key="price-tag" closable onClose={onClosePriceTag}>
+            {priceTag}
+          </Tag>
+        )}
         {existsAttributes() && (
-          <div className='attributes'>
-            {Object.keys(attributeFilter).map(key => (
+          <div className="attributes">
+            {Object.keys(attributeFilter).map(key =>
               attributeFilter[key].map(val => (
                 <Tag
                   key={`${key}${DELIMITER}${val}`}
                   closable
-                  onClose={() => onCloseAttributeTag(`${key}${DELIMITER}${val}`)}
+                  onClose={() =>
+                    onCloseAttributeTag(`${key}${DELIMITER}${val}`)
+                  }
                 >
                   {val}
                 </Tag>
-              ))
-            ))}
+              )),
+            )}
           </div>
         )}
         {(priceTag || existsAttributes()) && (
-          <div className='clear-all' onClick={onClearAll}>Clear All</div>
+          <div className="clear-all" onClick={onClearAll}>
+            Clear All
+          </div>
         )}
       </div>
       <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
