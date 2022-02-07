@@ -7,7 +7,9 @@ export const useAuctionsList = (
   activeKey: AuctionViewState,
 ): { auctions: AuctionView[]; hasResaleAuctions: boolean } => {
   const { publicKey } = useWallet();
-  const auctions = useAuctions();
+  const auctions = useAuctions().filter(item => {
+    return item.auction.info.auctionGap && (item.auction.info.endAuctionAt || item.auction.info.endedAt);
+  });
 
   const filteredAuctions = useMemo(() => {
     const filterFn = getFilterFunction(activeKey);

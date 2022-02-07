@@ -242,7 +242,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
       : parseFloat(
           formatTokenAmount(bids[0].info.lastBid, mintInfo, 1.0, '', ``, 2),
         );
-  const minBid = tickSize && bidValue + tickSize.toNumber() / LAMPORTS_PER_MINT;
+  const minBid = tickSize ? bidValue + tickSize.toNumber() / LAMPORTS_PER_MINT : bidValue;
 
   const auction = auctionView.auction.info;
   const ended = auction.ended();
@@ -257,10 +257,10 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
           <Col span={24} lg={10}>
             <Statistic
               title={ended ? 'FINAL BID' : 'CURRENT BID'}
-              value={`${bidValue} ${symbol}`}
+              value={`${bidValue} ◎`}
             />
             {!ended && (
-              <span className="minimum-label">{`Mimimum bid: ${minBid} ${symbol}`}</span>
+              <span className="minimum-label">{`Minimum bid: ${minBid} ◎`}</span>
             )}
           </Col>
           <Col span={24} lg={14}>
