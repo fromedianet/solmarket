@@ -275,6 +275,7 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+      margin-bottom: 8px;
 
       .control-container {
         display: flex;
@@ -323,6 +324,38 @@
               border-radius: 4px;
             }
           }
+        }
+      }
+
+      .tag-container {
+        display: flex;
+        padding: 0 8px;
+        flex-wrap: nowrap;
+
+        .attributes {
+          flex: 1 1 auto;
+          flex-wrap: wrap;
+        }
+
+        .ant-tag {
+          background: @bg-third-color;
+          color: @text-primary-color;
+          border: none;
+          font-size: 14px;
+          line-height: 28px;
+          margin-bottom: 4px;
+        }
+
+        .clear-all {
+          padding: 0 8px;
+          text-align: center;
+          cursor: pointer;
+          color: @text-primary-color;
+          font-size: 16px;
+        }
+
+        @media screen and (max-width: 768px) {
+          display: none;
         }
       }
     }

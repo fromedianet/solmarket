@@ -66,7 +66,6 @@ export const ArtView = () => {
 
   const art = useArt(id);
   const { ref, data } = useExtendedArt(id);
-  console.log(art);
 
   useEffect(() => {
     if (art.mint) {
