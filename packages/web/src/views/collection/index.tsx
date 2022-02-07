@@ -18,9 +18,9 @@ export const CollectionView = () => {
     price: {
       symbol: 'SOL',
       min: undefined,
-      max: undefined
+      max: undefined,
     },
-    attributes: {}
+    attributes: {},
   });
 
   const { metadata } = useMeta();
@@ -47,7 +47,7 @@ export const CollectionView = () => {
 
   const onUpdateFilters = (priceFilter, attributeFilter) => {
     setFilter({ price: priceFilter, attributes: attributeFilter });
-  }
+  };
 
   return (
     <div className="collection-page">
@@ -79,7 +79,15 @@ export const CollectionView = () => {
       <Layout hasSider>
         <FilterSidebar updateFilters={onUpdateFilters} filter={filter} />
         <Content className="collection-container">
-          {isItems ? <Items list={metadata} updateFilters={onUpdateFilters} filter={filter}/> : <Activities />}
+          {isItems ? (
+            <Items
+              list={metadata}
+              updateFilters={onUpdateFilters}
+              filter={filter}
+            />
+          ) : (
+            <Activities />
+          )}
         </Content>
       </Layout>
     </div>

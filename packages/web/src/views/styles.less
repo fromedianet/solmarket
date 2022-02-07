@@ -162,11 +162,9 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 20px 10px;
 
   /* button/primary/default */
   border-radius: 8px;
-  height: 58px;
 
   /* caps button text */
   font-style: normal;
@@ -180,12 +178,19 @@
 
   /* text/default */
   color: #fff;
+  height: 40px;
+  background: @bg-pink-gradient!important;
 
   &:disabled {
+    background: transparent;
     color: rgba(255, 255, 255, 0.5);
     &:hover, &:focus {
       color: rgba(255, 255, 255, 0.5);
     }
+  }
+
+  &:hover {
+    opacity: .8;
   }
 }
 
@@ -211,11 +216,7 @@
 .phantom-button {
   background-color: white !important;
 }
-// .ant-btn-primary:hover, .ant-btn-primary:focus {
-//   color: #5969d4;
-//   background: transparent;
-//   border-color: #5969d4;
-// }
+
 .ant-modal-content {
   border-radius: 12px;
 }
@@ -360,33 +361,6 @@ h2 {
   }
 }
 
-.ant-btn {
-  border-radius: 8px;
-
-  &:hover, &:focus {
-    background: @bg-pink-gradient;
-    color: white;
-  }
-}
-
-.ant-btn-primary {
-  background: @bg-pink-gradient;
-  border-color: @bg-purple;
-
-  &:hover, &:focus {
-    opacity: .7;
-    border-color: @bg-purple;
-  }
-}
-.ant-btn-dashed {
-  border-color: white;
-  color: white;
-  &:hover, &:focus {
-    color: white;
-    border-color: @border-purple;
-    background: @bg-pink-gradient;
-  }
-}
 .particle {
   position: absolute;
   opacity: 0.9;
