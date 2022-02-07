@@ -1,14 +1,85 @@
-import React from 'react';
-import { Row, Col, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Select, Tag } from 'antd';
 import { SearchBar } from '../../../components/SearchBar';
 import { Metadata, ParsedAccount } from '@oyster/common';
 import { ArtCard } from '../../../components/ArtCard';
 import { EmptyView } from '../../../components/EmptyView';
 
-export const Items = (props: { list: ParsedAccount<Metadata>[] }) => {
+const DELIMITER = '|&=&|';
+
+export const Items = (props: { 
+  list: ParsedAccount<Metadata>[],
+  filter: {
+    price: { symbol: string | undefined, min: number | undefined, max: number | undefined },
+    attributes: {}
+  },
+  updateFilters: (p, a) => void,
+}) => {
+  const [priceFilter, setPriceFilter] = useState(props.filter.price);
+  const [attributeFilter, setAttributeFilter] = useState(props.filter.attributes);
+  const [priceTag, setPriceTag] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (props.filter.price !== priceFilter) {
+      setPriceFilter(props.filter.price);
+    }
+    if (props.filter.attributes !== attributeFilter) {
+      setAttributeFilter(props.filter.attributes);
+    }
+  }, [props.filter]);
+
+  useEffect(() => {
+    let newPriceTag: string | undefined;
+    if (priceFilter.min && priceFilter.max) {
+      newPriceTag = `${priceFilter.symbol}: ${priceFilter.min} - ${priceFilter.max}`;
+    } else if (priceFilter.min) {
+      newPriceTag = `${priceFilter.symbol}:> ${priceFilter.min}`;
+    } else if (priceFilter.max) {
+      newPriceTag = `${priceFilter.symbol}:< ${priceFilter.max}`;
+    }
+    setPriceTag(newPriceTag);
+  }, [priceFilter]);
+
+  const existsAttributes = () => {
+    const values = Object.values(attributeFilter);
+    return values.length > 0;
+  }
+
   const onRefresh = () => {
     console.log('refresh');
   };
+
+  const onClosePriceTag = () => {
+    props.updateFilters({
+      symbol: 'SOL',
+      min: undefined,
+      max: undefined,
+    },
+    attributeFilter);
+  };
+
+  const onCloseAttributeTag = (key: string) => {
+    const splitKey = key.split(DELIMITER);
+    const newAttributeFilter = {...attributeFilter};
+    const index = newAttributeFilter[splitKey[0]].indexOf(splitKey[1]);
+    if (index !== -1) {
+      newAttributeFilter[splitKey[0]].splice(index, 1);
+    }
+    if (newAttributeFilter[splitKey[0]].length === 0) {
+      delete newAttributeFilter[splitKey[0]];
+    }
+
+    props.updateFilters(priceFilter, newAttributeFilter);
+  }
+
+  const onClearAll = () => {
+    props.updateFilters({
+      symbol: 'SOL',
+      min: undefined,
+      max: undefined,
+    },
+    {});
+  }
 
   return (
     <div className="items-container">
@@ -30,7 +101,28 @@ export const Items = (props: { list: ParsedAccount<Metadata>[] }) => {
           </Select>
         </Col>
       </Row>
-      <Row gutter={[16, 16]} style={{ padding: '0 16px' }}>
+      <div className='tag-container'>
+        {priceTag && <Tag key='price-tag' closable onClose={onClosePriceTag} >{priceTag}</Tag>}
+        {existsAttributes() && (
+          <div className='attributes'>
+            {Object.keys(attributeFilter).map(key => (
+              attributeFilter[key].map(val => (
+                <Tag
+                  key={`${key}${DELIMITER}${val}`}
+                  closable
+                  onClose={() => onCloseAttributeTag(`${key}${DELIMITER}${val}`)}
+                >
+                  {val}
+                </Tag>
+              ))
+            ))}
+          </div>
+        )}
+        {(priceTag || existsAttributes()) && (
+          <div className='clear-all' onClick={onClearAll}>Clear All</div>
+        )}
+      </div>
+      <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
         {props.list && props.list.length > 0 ? (
           props.list.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>

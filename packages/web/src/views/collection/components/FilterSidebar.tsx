@@ -58,58 +58,52 @@ function prepareAttributes() {
   return data;
 }
 
-export const FilterSidebar = () => {
+export const FilterSidebar = (props: {
+  filter: {
+    price: { symbol: string | undefined, min: number | undefined, max: number | undefined },
+    attributes: {}
+  },
+  updateFilters: (p, a) => void,
+}) => {
   const [collapsed, setCollapsed] = useState(false);
   const [attributes, setAttributes] = useState<Attribute[]>([]);
-  const [priceFilter, setPriceFilter] = useState({
-    symbol: 'SOL',
-    min: undefined,
-    max: undefined,
-  });
-  const [attributeFilter, setAttributeFilter] = useState({});
-
+  const [attributeFilter, setAttributeFilter] = useState(props.filter.attributes);
+  const [form] = Form.useForm();
   
   useEffect(() => {
     setAttributes(prepareAttributes());
   }, []);
 
+  useEffect(() => {
+    onFillForm(props.filter.price);
+    setAttributeFilter(props.filter.attributes);
+  }, [props.filter]);
+
   const onFinish = values => {
-    if (!values.price.min && !values.price.max) {
-      return;
-    } else if (values.price.min && values.price.max) {
-      if (values.price.max >= values.price.min) {
-        console.log(values.price);
+    if (values.min && values.max) {
+      if (values.max >= values.min) {
+        props.updateFilters(values, attributeFilter);
       }
     } else {
-      console.log(values.price);
+      props.updateFilters(values, attributeFilter);
     }
   };
 
-  const onMinChange = value => {
-    setPriceFilter(prev => {
-      return ({
-        ...prev,
-        min: value,
-      });
+  const onFillForm = (price) => {
+    form.setFieldsValue({
+      min: price.min,
+      max: price.max,
     });
-  }
-
-  const onMaxChange = value => {
-    setPriceFilter(prev => {
-      return ({
-        ...prev,
-        max: value,
-      });
-    });
-  }
+  };
 
   const onChange = async (trait, values) => {
-    await setAttributeFilter(prev => {
-      return ({
-        ...prev,
-        trait: values,
-      });
-    });
+    const newAttributeFilter = {...attributeFilter};
+    if (values.length > 0) {
+      newAttributeFilter[trait] = values;
+    } else {
+      delete newAttributeFilter[trait];
+    }
+    props.updateFilters(form.getFieldsValue(), newAttributeFilter);
   };
 
   return (
@@ -151,12 +145,13 @@ export const FilterSidebar = () => {
               extra={<UnorderedListOutlined className="filter-icon" />}
             >
               <Form
+                form={form}
                 name="price_form"
                 className="price-form"
                 onFinish={onFinish}
                 autoComplete="off"
               >
-                <Form.Item initialValue="SOL" name={['price', 'symbol']}>
+                <Form.Item initialValue="SOL" name='symbol'>
                   <Select disabled>
                     <Select.Option value="SOL">SOL</Select.Option>
                   </Select>
@@ -165,23 +160,19 @@ export const FilterSidebar = () => {
                   style={{ display: 'flex', justifyContent: 'space-between' }}
                   align="baseline"
                 >
-                  <Form.Item name={['price', 'min']}>
+                  <Form.Item name='min'>
                     <InputNumber
                       placeholder="Min"
                       style={{ width: '125px' }}
                       controls={false}
-                      value={priceFilter.min}
-                      onChange={onMinChange}
                     />
                   </Form.Item>
                   <span>to</span>
-                  <Form.Item name={['price', 'max']}>
+                  <Form.Item name='max'>
                     <InputNumber
                       placeholder="Max"
                       style={{ width: '125px' }}
                       controls={false}
-                      value={priceFilter.max}
-                      onChange={onMaxChange}
                     />
                   </Form.Item>
                 </Space>
@@ -209,7 +200,7 @@ export const FilterSidebar = () => {
                     showArrow={true}
                     onChange={value => onChange(attr.trait_type, value)}
                     optionLabelProp="label"
-                    defaultValue={attributeFilter[attr.trait_type]}
+                    value={attributeFilter[attr.trait_type]}
                   >
                     {attr.data.map((item, idx) => (
                       <Select.Option key={idx} value={item.value} label={item.value}>

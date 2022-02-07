@@ -14,6 +14,14 @@ export const CollectionView = () => {
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
+  const [filter, setFilter] = useState({
+    price: {
+      symbol: 'SOL',
+      min: undefined,
+      max: undefined
+    },
+    attributes: {}
+  });
 
   const { metadata } = useMeta();
 
@@ -36,6 +44,10 @@ export const CollectionView = () => {
       handleToggle(false);
     }
   });
+
+  const onUpdateFilters = (priceFilter, attributeFilter) => {
+    setFilter({ price: priceFilter, attributes: attributeFilter });
+  }
 
   return (
     <div className="collection-page">
@@ -65,9 +77,9 @@ export const CollectionView = () => {
         </div>
       </div>
       <Layout hasSider>
-        <FilterSidebar />
+        <FilterSidebar updateFilters={onUpdateFilters} filter={filter} />
         <Content className="collection-container">
-          {isItems ? <Items list={metadata} /> : <Activities />}
+          {isItems ? <Items list={metadata} updateFilters={onUpdateFilters} filter={filter}/> : <Activities />}
         </Content>
       </Layout>
     </div>
