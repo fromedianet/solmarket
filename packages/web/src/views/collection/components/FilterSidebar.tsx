@@ -61,18 +61,55 @@ function prepareAttributes() {
 export const FilterSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [attributes, setAttributes] = useState<Attribute[]>([]);
+  const [priceFilter, setPriceFilter] = useState({
+    symbol: 'SOL',
+    min: undefined,
+    max: undefined,
+  });
+  const [attributeFilter, setAttributeFilter] = useState({});
 
+  
   useEffect(() => {
     setAttributes(prepareAttributes());
   }, []);
 
   const onFinish = values => {
-    console.log(values);
+    if (!values.price.min && !values.price.max) {
+      return;
+    } else if (values.price.min && values.price.max) {
+      if (values.price.max >= values.price.min) {
+        console.log(values.price);
+      }
+    } else {
+      console.log(values.price);
+    }
   };
 
-  const onChange = (trait, values) => {
-    console.log('onChange', values);
-    console.log('trait', trait);
+  const onMinChange = value => {
+    setPriceFilter(prev => {
+      return ({
+        ...prev,
+        min: value,
+      });
+    });
+  }
+
+  const onMaxChange = value => {
+    setPriceFilter(prev => {
+      return ({
+        ...prev,
+        max: value,
+      });
+    });
+  }
+
+  const onChange = async (trait, values) => {
+    await setAttributeFilter(prev => {
+      return ({
+        ...prev,
+        trait: values,
+      });
+    });
   };
 
   return (
@@ -119,9 +156,9 @@ export const FilterSidebar = () => {
                 onFinish={onFinish}
                 autoComplete="off"
               >
-                <Form.Item initialValue="sol" name={['price', 'symbol']}>
+                <Form.Item initialValue="SOL" name={['price', 'symbol']}>
                   <Select disabled>
-                    <Select.Option value="sol">SOL</Select.Option>
+                    <Select.Option value="SOL">SOL</Select.Option>
                   </Select>
                 </Form.Item>
                 <Space
@@ -133,6 +170,8 @@ export const FilterSidebar = () => {
                       placeholder="Min"
                       style={{ width: '125px' }}
                       controls={false}
+                      value={priceFilter.min}
+                      onChange={onMinChange}
                     />
                   </Form.Item>
                   <span>to</span>
@@ -141,6 +180,8 @@ export const FilterSidebar = () => {
                       placeholder="Max"
                       style={{ width: '125px' }}
                       controls={false}
+                      value={priceFilter.max}
+                      onChange={onMaxChange}
                     />
                   </Form.Item>
                 </Space>
@@ -167,10 +208,11 @@ export const FilterSidebar = () => {
                     allowClear={true}
                     showArrow={true}
                     onChange={value => onChange(attr.trait_type, value)}
-                    optionLabelProp="value"
+                    optionLabelProp="label"
+                    defaultValue={attributeFilter[attr.trait_type]}
                   >
                     {attr.data.map((item, idx) => (
-                      <Select.Option key={idx} value={item.value}>
+                      <Select.Option key={idx} value={item.value} label={item.value}>
                         <div
                           style={{
                             display: 'flex',
