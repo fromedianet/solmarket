@@ -254,9 +254,6 @@ h1 {
   font-weight: 600;
   font-size: 2rem;
 }
-.ant-btn:hover {
-  background-color: transparent !important;
-}
 .ant-steps {
   padding-left: 2px;
 }
@@ -305,12 +302,28 @@ h1 {
   color: rgba(255, 255, 255, 0.45);
 }
 .ant-btn {
-  height: 56px;
   font-weight: 600;
   font-size: 16px;
   line-height: 16px;
   background-color: transparent !important;
   color: white;
+  border-radius: 8px;
+
+  &:hover, &:focus {
+    background: @bg-pink-gradient;
+    color: white;
+  }
+
+  &.ant-btn-primary {
+    background: @bg-pink-gradient;
+    border-color: @bg-purple;
+  
+    &:hover, &:focus {
+      opacity: .7;
+      border-color: @bg-purple;
+    }
+  }
+
   &.secondary-btn {
     color: @black-100;
     background: @metaplex-primary-color !important;
@@ -346,6 +359,27 @@ h1 {
       background: transparent;
       border-color: rgba(255, 255, 255, 0.05);
       color: #ffffff;
+    }
+  }
+
+  &.ant-btn-dashed {
+    border-color: white;
+    color: white;
+    &:hover, &:focus {
+      color: white;
+      border-color: @border-purple;
+      background: @bg-pink-gradient;
+    }
+  }
+
+  &.button {
+    width: 100%;
+    height: 40px;
+    background: @bg-pink-gradient!important;
+    border: none;
+
+    &:hover {
+      opacity: 0.8;
     }
   }
 }

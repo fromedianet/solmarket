@@ -8,7 +8,6 @@ export const PriceAuction = (props: {
   setAttributes: (attr: AuctionState) => void;
   confirm: () => void;
 }) => {
-  console.log(props.attributes);
   const quoteMintName =
     props.attributes?.quoteMintInfoExtended?.name || 'Custom Token';
   const quoteMintExt =
