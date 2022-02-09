@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  TokenInfo,
-  TokenListProvider,
-  ENV as ChainId,
-} from '@solana/spl-token-registry';
+import { getTokenListContainerPromise } from '../utils';
+import { TokenInfo, ENV as ChainId } from '@solana/spl-token-registry';
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import {
   Keypair,
@@ -112,7 +109,7 @@ export function ConnectionProvider({ children }: { children: any }) {
 
   useEffect(() => {
     function fetchTokens() {
-      return new TokenListProvider().resolve().then(container => {
+      return getTokenListContainerPromise().then(container => {
         const list = container
           .excludeByTag('nft')
           .filterByChainId(endpoint.chainId)
