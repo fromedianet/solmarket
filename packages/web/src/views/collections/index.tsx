@@ -12,7 +12,7 @@ const dummyData = [
 
 function useQuery() {
   const { search } = useLocation();
-  return React.useMemo(() => new URLSearchParams(search), [search]);
+  return new URLSearchParams(search);
 }
 
 export const CollectionsView = () => {

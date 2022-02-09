@@ -61,7 +61,8 @@ export const ENDPOINTS: Array<Endpoint> = [
   {
     name: 'devnet',
     label: 'devnet',
-    url: clusterApiUrl('devnet'),
+    // url: clusterApiUrl('devnet'),
+    url: 'https://metaplex.devnet.rpcpool.com/',
     chainId: ChainId.Devnet,
   },
 ];

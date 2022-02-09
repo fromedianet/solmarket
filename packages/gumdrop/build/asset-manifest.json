@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/metaplex/static/css/main.dae76bef.chunk.css",
-    "main.js": "/metaplex/static/js/main.99d0e78a.chunk.js",
-    "main.js.map": "/metaplex/static/js/main.99d0e78a.chunk.js.map",
+    "main.js": "/metaplex/static/js/main.335b390a.chunk.js",
+    "main.js.map": "/metaplex/static/js/main.335b390a.chunk.js.map",
     "runtime-main.js": "/metaplex/static/js/runtime-main.bbe8d7a5.js",
     "runtime-main.js.map": "/metaplex/static/js/runtime-main.bbe8d7a5.js.map",
     "static/css/2.76a43bc4.chunk.css": "/metaplex/static/css/2.76a43bc4.chunk.css",
@@ -22,6 +22,6 @@
     "static/css/2.76a43bc4.chunk.css",
     "static/js/2.5dfd6ddb.chunk.js",
     "static/css/main.dae76bef.chunk.css",
-    "static/js/main.99d0e78a.chunk.js"
+    "static/js/main.335b390a.chunk.js"
   ]
 }

@@ -33,7 +33,7 @@ export interface ArtCardProps extends CardProps {
 }
 
 export const ArtCard = (props: ArtCardProps) => {
-  let {
+  const {
     className,
     small,
     category,
@@ -41,20 +41,20 @@ export const ArtCard = (props: ArtCardProps) => {
     animationURL,
     name,
     preview,
-    creators,
-    description,
+    // creators,
+    // description,
     onClose,
     pubkey,
     height,
     artview,
     width,
-    count,
+    // count,
     noEvent,
     ...rest
   } = props;
   const art = useArt(pubkey);
-  creators = art?.creators || creators || [];
-  name = art?.title || name || ' ';
+  // const artCreators = art?.creators || creators || [];
+  const artName = art?.title || name || ' ';
 
   let auctionView: AuctionView | undefined;
   const auctions = useAuctions();
@@ -90,7 +90,7 @@ export const ArtCard = (props: ArtCardProps) => {
           />
         </div>
         <div className="card-caption">
-          <h6>{name}</h6>
+          <h6>{artName}</h6>
           <div className="card-collection-name">
             <span>collection_name</span>
             <img src="/icons/check.svg" alt="check" />

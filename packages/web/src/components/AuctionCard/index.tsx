@@ -344,7 +344,6 @@ export const AuctionCard = ({
 
   const endInstantSale = async () => {
     setLoading(true);
-
     try {
       await endSale({
         auctionView,

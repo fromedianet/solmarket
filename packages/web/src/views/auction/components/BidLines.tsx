@@ -36,6 +36,7 @@ import { AccountLayout, MintLayout } from '@solana/spl-token';
 import { findEligibleParticipationBidsForRedemption } from '../../../actions/claimUnusedPrizes';
 import { useHistory } from 'react-router-dom';
 import { eligibleForParticipationPrizeGivenWinningIndex } from '../../../actions/sendRedeemBid';
+import { useAuctionExtended } from '../../../hooks/useAuctionDataExtend';
 
 const { Countdown } = Statistic;
 
@@ -143,31 +144,6 @@ function useGapTickCheck(
   }, [value, gapTick, gapTime, auctionView]);
 }
 
-function useAuctionExtended(
-  auctionView: AuctionView,
-): ParsedAccount<AuctionDataExtended> | undefined {
-  const [auctionExtended, setAuctionExtended] =
-    useState<ParsedAccount<AuctionDataExtended>>();
-  const { auctionDataExtended } = useMeta();
-
-  useMemo(() => {
-    const fn = async () => {
-      if (!auctionExtended) {
-        const PROGRAM_IDS = programIds();
-        const extendedKey = await getAuctionExtended({
-          auctionProgramId: PROGRAM_IDS.auction,
-          resource: auctionView.vault.pubkey,
-        });
-        const extendedValue = auctionDataExtended[extendedKey];
-        if (extendedValue) setAuctionExtended(extendedValue);
-      }
-    };
-    fn();
-  }, [auctionDataExtended, auctionExtended, setAuctionExtended]);
-
-  return auctionExtended;
-}
-
 export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const mintKey = auctionView.auction.info.tokenMint;
   const balance = useUserBalance(mintKey);
@@ -242,7 +218,9 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
       : parseFloat(
           formatTokenAmount(bids[0].info.lastBid, mintInfo, 1.0, '', ``, 2),
         );
-  const minBid = tickSize ? bidValue + tickSize.toNumber() / LAMPORTS_PER_MINT : bidValue;
+  const minBid = tickSize
+    ? bidValue + tickSize.toNumber() / LAMPORTS_PER_MINT
+    : bidValue;
 
   const auction = auctionView.auction.info;
   const ended = auction.ended();
