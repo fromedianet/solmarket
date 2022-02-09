@@ -56,25 +56,30 @@ export function CoingeckoProvider({ children = null as any }) {
         ? process.env.NEXT_CG_SPL_TOKEN_IDS.split(',')
         : [];
 
-      var allSplPrices: AllSplTokens[] = [];
-      for (let i = 0; i < subscribedTokenMints.length; i++) {
-        try {
-          const splName = subscribedTokenIDS[i];
-          const splMint = subscribedTokenMints[i];
+      const splPricePromises: Promise<AllSplTokens | void>[] = [];
+      for (let i=0; i < subscribedTokenMints.length; i++) {
+        const splName = subscribedTokenIDS[i]
+        const splMint = subscribedTokenMints[i]
 
-          //console.log("[--P]PROCESSING TOKEN",i,  splName, splMint)
-          const splPrice = await altSplToUSD(splName);
-          //console.log("[--P]PRICE", splPrice)
-          allSplPrices[i] = {
-            tokenMint: splMint,
-            tokenName: splName,
-            tokenPrice: splPrice,
-          };
-        } catch (e) {
-          //console.log("[--P] error setting", e)
-        }
+        //console.log("[--P]PROCESSING TOKEN",i,  splName, splMint)
+        splPricePromises.push(
+          (async () => {
+            try {
+              const splPrice = await altSplToUSD(splName);
+              //console.log("[--P]PRICE", splPrice)
+              return {
+                tokenMint: splMint,
+                tokenName: splName,
+                tokenPrice: splPrice,
+              };
+            } catch (e) {
+              //console.log("[--P] error setting", e)
+            }
+          })(),
+        );
       }
-      setAllSplPrices(allSplPrices);
+      const allSplPrices = await Promise.all(splPricePromises);
+      setAllSplPrices(allSplPrices.filter(Boolean) as AllSplTokens[]);
       //console.log("[--P]SUBSCRIBED TOKENS", allSplPrices)
       startTimer();
     };
