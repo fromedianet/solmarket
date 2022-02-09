@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { getTokenListContainerPromise } from '@oyster/common';
-import { TokenInfo } from "@solana/spl-token-registry";
+import { TokenInfo } from '@solana/spl-token-registry';
 import { WRAPPED_SOL_MINT } from '@project-serum/serum/lib/token-instructions';
 
 // Tag in the spl-token-registry for sollet wrapped tokens.

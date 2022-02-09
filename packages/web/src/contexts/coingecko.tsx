@@ -57,9 +57,9 @@ export function CoingeckoProvider({ children = null as any }) {
         : [];
 
       const splPricePromises: Promise<AllSplTokens | void>[] = [];
-      for (let i=0; i < subscribedTokenMints.length; i++) {
-        const splName = subscribedTokenIDS[i]
-        const splMint = subscribedTokenMints[i]
+      for (let i = 0; i < subscribedTokenMints.length; i++) {
+        const splName = subscribedTokenIDS[i];
+        const splMint = subscribedTokenMints[i];
 
         //console.log("[--P]PROCESSING TOKEN",i,  splName, splMint)
         splPricePromises.push(
