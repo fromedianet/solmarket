@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { getTokenListContainerPromise } from '@oyster/common';
-import { TokenInfo, TokenListContainer } from "@solana/spl-token-registry";
+import { TokenInfo } from "@solana/spl-token-registry";
 import { WRAPPED_SOL_MINT } from '@project-serum/serum/lib/token-instructions';
 
 // Tag in the spl-token-registry for sollet wrapped tokens.
@@ -26,14 +26,16 @@ const TokenListContext = React.createContext<TokenListContextState | null>(
 
 // eslint-disable-next-line react/prop-types
 export function SPLTokenListProvider({ children = null as any }) {
-  const [tokenList, setTokenList] = useState<TokenListContainer | null>(null);
+  const [tokenList, setTokenList] = useState<Awaited<
+    ReturnType<typeof getTokenListContainerPromise>
+  > | null>(null);
 
   const subscribedTokenMints = process.env.NEXT_SPL_TOKEN_MINTS
     ? [WRAPPED_SOL_MINT, ...process.env.NEXT_SPL_TOKEN_MINTS.split(',')]
     : [WRAPPED_SOL_MINT];
 
   useEffect(() => {
-    getTokenListContainerPromise().then(()=>setTokenList);
+    getTokenListContainerPromise().then(setTokenList);
   }, [setTokenList]);
 
   const hasOtherTokens = !!process.env.NEXT_SPL_TOKEN_MINTS;
