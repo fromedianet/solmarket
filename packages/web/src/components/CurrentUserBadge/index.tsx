@@ -188,9 +188,10 @@ export const CurrentUserBadge = (props: {
   const solPrice = useSolPrice();
   const [showAddFundsModal, setShowAddFundsModal] = useState<Boolean>(false);
   const [show, setShow] = useState(false);
+  const tokenList = useTokenList();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const balanceInUSD = balance * solPrice;
-  const solMintInfo = useTokenList().tokenMap.get(WRAPPED_SOL_MINT.toString());
+  const solMintInfo = tokenList.tokenMap.get(WRAPPED_SOL_MINT.toString());
 
   if (!wallet || !publicKey) {
     return null;
