@@ -33,7 +33,7 @@ export const ENDPOINTS = [
   },
   {
     name: 'devnet' as ENV,
-    endpoint: 'https://metaplex.devnet.rpcpool.com/',
+    endpoint: "http://api.devnet.metaplex.rpcpool.com/",
     ChainId: ChainId.Devnet,
   },
 ];
