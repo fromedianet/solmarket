@@ -162,7 +162,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const bids = useBidsForAuction(auctionView.auction.pubkey || '');
   const auctionExtended = useAuctionExtended(auctionView);
   const mintInfo = useMint(mintKey);
-  const tokenInfo = useTokenList().mainnetTokens.filter(
+  const tokenInfo = useTokenList().subscribedTokens.filter(
     m => m.address == mintKey,
   )[0];
   const symbol = tokenInfo
