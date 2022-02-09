@@ -238,10 +238,11 @@ export const AuctionCard = ({
   const [printingCost, setPrintingCost] = useState<number>();
 
   const { accountByMint } = useUserAccounts();
+  const tokenList = useTokenList();
 
   const mintKey = auctionView.auction.info.tokenMint;
   const balance = useUserBalance(mintKey);
-  const tokenInfo = useTokenList().subscribedTokens.filter(
+  const tokenInfo = tokenList.subscribedTokens.filter(
     m => m.address == mintKey,
   )[0];
   const symbol = tokenInfo
