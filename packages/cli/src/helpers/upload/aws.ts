@@ -41,6 +41,7 @@ export async function awsUpload(
 ) {
   const REGION = 'us-east-1'; // TODO: Parameterize this.
   const s3Client = new S3Client({ region: REGION });
+
   async function uploadMedia(media) {
     const mediaPath = `assets/${basename(media)}`;
     log.debug('media:', media);
@@ -57,20 +58,19 @@ export async function awsUpload(
   }
 
   // Copied from ipfsUpload
-  const imageUrl = `${await uploadMedia(image)}?ext=${path.extname(image).replace('.', '')}`;
-  const animationUrl = animation ? `${await uploadMedia(animation)}?ext=${path.extname(animation).replace('.', '')}` : undefined;
+  const imageUrl = `${await uploadMedia(image)}?ext=${path
+    .extname(image)
+    .replace('.', '')}`;
+  const animationUrl = animation
+    ? `${await uploadMedia(animation)}?ext=${path
+        .extname(animation)
+        .replace('.', '')}`
+    : undefined;
   const manifestJson = JSON.parse(manifestBuffer.toString('utf8'));
   manifestJson.image = imageUrl;
   if (animation) {
     manifestJson.animation_url = animationUrl;
   }
-  manifestJson.properties.files = manifestJson.properties.files.map(f => {
-    if (f.type.startsWith('image/')) {
-      return { ...f, uri: imageUrl };
-    } else {
-      return { ...f, uri: animationUrl };
-    }
-  });
 
   const updatedManifestBuffer = Buffer.from(JSON.stringify(manifestJson));
 
