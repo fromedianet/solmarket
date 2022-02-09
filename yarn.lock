@@ -5368,19 +5368,18 @@
     snake-case "^3.0.4"
     toml "^3.0.0"
 
-"@project-serum/anchor@^0.21.0":
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/@project-serum/anchor/-/anchor-0.21.0.tgz#ad5fb33744991ec1900cdb2fd22707c908b12b5f"
-  integrity sha512-flRuW/F+iC8mitNokx82LOXyND7Dyk6n5UUPJpQv/+NfySFrNFlzuQZaBZJ4CG5g9s8HS/uaaIz1nVkDR8V/QA==
+"@project-serum/anchor@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@project-serum/anchor/-/anchor-0.17.0.tgz#99a2cc59cae2939c1db1197950b7b606319ea7a8"
+  integrity sha512-vctZHZD5rUP1WXUUaJFdKl+1u0dE+O2+jejmYcb0InAZiwXdGAW8mX47U902voT94PdCr0aNHuyOQ8I75nfinw==
   dependencies:
-    "@project-serum/borsh" "^0.2.4"
+    "@project-serum/borsh" "^0.2.2"
     "@solana/web3.js" "^1.17.0"
     base64-js "^1.5.1"
     bn.js "^5.1.2"
     bs58 "^4.0.1"
-    buffer-layout "^1.2.2"
+    buffer-layout "^1.2.0"
     camelcase "^5.3.1"
-    cross-fetch "^3.1.5"
     crypto-hash "^1.3.0"
     eventemitter3 "^4.0.7"
     find "^0.3.0"
@@ -5393,14 +5392,6 @@
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@project-serum/borsh/-/borsh-0.2.3.tgz#1d705c5887484cb6a127dd5feff58e90cbfcb558"
   integrity sha512-lH9zEYADZE3cxrgiFym8+jbUE3NM/LH+WOKYcUjs65CT10Q64Hv45bcAAa/phwYk4Tpz0uQ1x+ergFaAoGt67Q==
-  dependencies:
-    bn.js "^5.1.2"
-    buffer-layout "^1.2.0"
-
-"@project-serum/borsh@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@project-serum/borsh/-/borsh-0.2.4.tgz#8884c3a759984a39d54bf5b7390bd1ee0b579f16"
-  integrity sha512-tQPc1ktAp1Jtn9D72DmObAfhAic9ivfYBOS5b+T4H7MvkQ84uML88LY1LfvGep30mCy+ua5rf+X9ocPfg6u9MA==
   dependencies:
     bn.js "^5.1.2"
     buffer-layout "^1.2.0"
@@ -5727,7 +5718,7 @@
     "@solana/wallet-adapter-solong" "^0.4.1"
     "@solana/wallet-adapter-torus" "^0.5.0"
 
-"@solana/web3.js@^1.12.0", "@solana/web3.js@^1.17.0", "@solana/web3.js@^1.20.0", "@solana/web3.js@^1.21.0", "@solana/web3.js@^1.30.2", "@solana/web3.js@^1.31.0", "@solana/web3.js@^1.33.0":
+"@solana/web3.js@1.33.0", "@solana/web3.js@^1.12.0", "@solana/web3.js@^1.17.0", "@solana/web3.js@^1.20.0", "@solana/web3.js@^1.21.0", "@solana/web3.js@^1.30.2", "@solana/web3.js@^1.31.0", "@solana/web3.js@^1.33.0":
   version "1.33.0"
   resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-1.33.0.tgz#3b8c0b4cd259ffe8764937f1001f79958c5d9533"
   integrity sha512-R53wvQQsUKCCJ9UmOfDlxCwC94jzjmpjr6wT/Xf1uFavZblSLAtzLaF4vbGIS465lk3mW6oJMtASd8cqSnr8Mw==
@@ -10847,13 +10838,6 @@ cross-fetch@^3.1.4:
   integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
   dependencies:
     node-fetch "2.6.1"
-
-cross-fetch@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
-  integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
-  dependencies:
-    node-fetch "2.6.7"
 
 cross-spawn@7.0.3, cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -19169,10 +19153,6 @@ node-fetch@2.6.1:
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
-node-fetch@2.6.7, "node-fetch@https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz":
-  version "2.6.7"
-  resolved "https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz#1b5d62978f2ed07b99444f64f0df39f960a6d34d"
-
 node-fetch@^1.0.1, node-fetch@~1.7.1:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.3.tgz#980f6f72d85211a5347c6b2bc18c5b84c3eb47ef"
@@ -19187,6 +19167,10 @@ node-fetch@^2.5.0, node-fetch@^2.6.0, node-fetch@^2.6.1, node-fetch@^2.6.5:
   integrity sha512-Z8/6vRlTUChSdIgMa51jxQ4lrw/Jy5SOW10ObaA47/RElsAN2c5Pn8bTgFGWn/ibwzXTE8qwr1Yzx28vsecXEA==
   dependencies:
     whatwg-url "^5.0.0"
+
+"node-fetch@https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz":
+  version "2.6.7"
+  resolved "https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz#1b5d62978f2ed07b99444f64f0df39f960a6d34d"
 
 node-forge@^0.10.0:
   version "0.10.0"
