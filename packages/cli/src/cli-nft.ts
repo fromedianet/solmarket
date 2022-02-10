@@ -48,7 +48,7 @@ programCommand('mint')
       collectionKey = new PublicKey(collection);
     }
     const supply = maxSupply || 0;
-    
+
     await mintNFT(
       solConnection,
       walletKeyPair,

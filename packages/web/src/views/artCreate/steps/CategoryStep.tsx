@@ -14,7 +14,7 @@ export const CategoryStep = (props: {
         <p>
           First time creating on Metaplex?{' '}
           <a
-            href="https://docs.metaplex.com/create-store/sell"
+            href="https://docs.metaplex.com/storefront/create"
             target="_blank"
             rel="noreferrer"
           >

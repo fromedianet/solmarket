@@ -14,7 +14,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
 import { ArtInfo } from './ArtInfo';
 import { CollectionInfo } from './CollectionInfo';
-import { ActionView } from './ActionView';
+import { ArtAction } from './ArtAction';
 import {
   AmountRange,
   Bid,
@@ -29,6 +29,7 @@ import {
   useConnection,
   useMeta,
   useMint,
+  useStore,
   useUserAccounts,
   WinnerLimit,
   WinnerLimitType,
@@ -51,6 +52,8 @@ import { sendPlaceBid } from '../../actions/sendPlaceBid';
 import { sendRedeemBid } from '../../actions/sendRedeemBid';
 import { getTokenAccountByMint } from '../../contexts/getTokenAccountByMint';
 import { BottomSection } from './BottomSection';
+import { NewAuction } from './NewAuction';
+import { endSale } from './hooks/endSale';
 // import { getGlobalActivityByMint } from '../../contexts/getGlobalActivityByMint';
 
 const { Panel } = Collapse;
@@ -61,6 +64,8 @@ export const ArtView = () => {
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [account, setAccount] = useState<TokenAccount | undefined>();
 
+  const { storeAddress } = useStore();
+  console.log('storeAddress', storeAddress);
   const connection = useConnection();
   const wallet = useWallet();
 
@@ -203,46 +208,70 @@ export const ArtView = () => {
     setLoading(false);
   };
 
+  const cancelList = async () => {
+    if (!auctionView) return;
+    setLoading(true);
+    try {
+      console.log('auctionView endedAt', auctionView.auction.info.endedAt);
+      console.log('accountByMint', accountByMint);
+      console.log('bids', bids);
+      console.log('bidRedemptions', bidRedemptions);
+      console.log('prizeTrackingTickets', prizeTrackingTickets);
+      await endSale({
+        auctionView,
+        connection,
+        accountByMint,
+        bids,
+        bidRedemptions,
+        prizeTrackingTickets,
+        wallet,
+      });
+
+      notify({
+        message: 'Transaction successed',
+        description: '',
+        type: 'success',
+      });
+      setLoading(false);
+    } catch (e) {
+      console.error('endAuction', e);
+      setLoading(false);
+      notify({
+        message: 'Transaction failed...',
+        description: 'There was an issue cancel list. Please try again.',
+        type: 'error',
+      });
+      return;
+    }
+  };
+
   const buyNow = async () => {
     if (!auctionView) return;
     setShowBuyModal(true);
-    const winningConfigType =
-      auctionView.participationItem?.winningConfigType ||
-      auctionView.items[0][0]?.winningConfigType;
-    const isAuctionItemMaster = [
-      WinningConfigType.FullRightsTransfer,
-      WinningConfigType.TokenOnlyTransfer,
-    ].includes(winningConfigType);
-    const allowBidToPublic =
-      myPayingAccount && !auctionView.myBidderPot && !isOwner;
-    const allowBidToAuctionOwner =
-      myPayingAccount && isOwner && isAuctionItemMaster;
 
     // Placing a "bid" of the full amount results in a purchase to redeem.
-    if (instantSalePrice && (allowBidToPublic || allowBidToAuctionOwner)) {
-      try {
-        console.log('sendPlaceBid');
-        await sendPlaceBid(
-          connection,
-          wallet,
-          myPayingAccount.pubkey,
-          auctionView,
-          accountByMint,
-          instantSalePrice,
-          // make sure all accounts are created
-          'finalized',
-        );
-        // setLastBid(bid);
-      } catch (e) {
-        console.error('sendPlaceBid', e);
-        notify({
-          message: 'Transaction failed...',
-          description: 'There was an issue place a bid. Please try again.',
-          type: 'error',
-        });
-        setShowBuyModal(false);
-        return;
-      }
+    try {
+      console.log('sendPlaceBid');
+      await sendPlaceBid(
+        connection,
+        wallet,
+        myPayingAccount.pubkey,
+        auctionView,
+        accountByMint,
+        instantSalePrice,
+        // make sure all accounts are created
+        'finalized',
+      );
+      // setLastBid(bid);
+    } catch (e) {
+      console.error('sendPlaceBid', e);
+      notify({
+        message: 'Transaction failed...',
+        description: 'There was an issue place a bid. Please try again.',
+        type: 'error',
+      });
+      setShowBuyModal(false);
+      return;
     }
 
     const newAuctionState = await update(
@@ -351,15 +380,26 @@ export const ArtView = () => {
               </div>
               <CollectionInfo />
               <ViewOn id={id} />
-              <ActionView
-                instantSalePrice={instantSalePrice}
-                isOwner={isOwner}
-                loading={loading}
-                attributes={attributes}
-                setAttributes={setAttributes}
-                listNow={listNow}
-                buyNow={buyNow}
-              />
+              {auctionView ? (
+                <ArtAction
+                  instantSalePrice={instantSalePrice}
+                  isOwner={isOwner}
+                  loading={loading}
+                  attributes={attributes}
+                  setAttributes={setAttributes}
+                  listNow={listNow}
+                  cancelList={cancelList}
+                  buyNow={buyNow}
+                />
+              ) : (
+                <NewAuction
+                  loading={loading}
+                  attributes={attributes}
+                  setAttributes={setAttributes}
+                  listNow={listNow}
+                />
+              )}
+
               <ArtInfo art={art} data={data} account={account} />
             </Col>
           </Row>

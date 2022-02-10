@@ -20,20 +20,20 @@ export const Header = ({ narrow }: { narrow: boolean }) => {
   const navs = [
     {
       href: `${process.env.REACT_APP_WEB_HOME}/`,
-      innerNarrow: "About",
+      innerNarrow: 'About',
       inner: <HomeIcon />,
     },
     {
       href: `${process.env.REACT_APP_WEB_HOME}/create`,
-      inner: "Create",
+      inner: 'Create',
     },
     {
       href: `${process.env.REACT_APP_WEB_HOME}/claim`,
-      inner: "Claim",
+      inner: 'Claim',
     },
     {
       href: `${process.env.REACT_APP_WEB_HOME}/close`,
-      inner: "Close",
+      inner: 'Close',
     },
   ];
 

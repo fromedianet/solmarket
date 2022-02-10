@@ -230,7 +230,6 @@ export const AuctionCard = ({
   const [showBidPlaced, setShowBidPlaced] = useState<boolean>(false);
   const [showPlaceBid, setShowPlaceBid] = useState<boolean>(false);
   const [lastBid, setLastBid] = useState<{ amount: BN } | undefined>(undefined);
-  const [showFundsIssueModal, setShowFundsIssueModal] = useState(false);
   const [isOpenPurchase, setIsOpenPurchase] = useState<boolean>(false);
   const [isOpenClaim, setIsOpenClaim] = useState<boolean>(false);
 
@@ -238,10 +237,11 @@ export const AuctionCard = ({
   const [printingCost, setPrintingCost] = useState<number>();
 
   const { accountByMint } = useUserAccounts();
+  const tokenList = useTokenList();
 
   const mintKey = auctionView.auction.info.tokenMint;
   const balance = useUserBalance(mintKey);
-  const tokenInfo = useTokenList().mainnetTokens.filter(
+  const tokenInfo = tokenList.subscribedTokens.filter(
     m => m.address == mintKey,
   )[0];
   const symbol = tokenInfo
@@ -344,7 +344,6 @@ export const AuctionCard = ({
 
   const endInstantSale = async () => {
     setLoading(true);
-
     try {
       await endSale({
         auctionView,
@@ -376,7 +375,6 @@ export const AuctionCard = ({
       isNotEnoughLamports &&
       !(canClaimPurchasedItem || canClaimItem || canEndInstantSale)
     ) {
-      setShowFundsIssueModal(true);
       return;
     }
 

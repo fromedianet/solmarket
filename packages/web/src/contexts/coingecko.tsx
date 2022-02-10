@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useTokenList } from './tokenList';
+
 export const COINGECKO_POOL_INTERVAL = 1000 * 60; // 60 sec
 export const COINGECKO_API = 'https://api.coingecko.com/api/v3/';
 export const COINGECKO_COIN_PRICE_API = `${COINGECKO_API}simple/price`;
@@ -38,10 +38,10 @@ export const altSplToUSD = async (cgTokenName?: string): Promise<number> => {
 const CoingeckoContext = React.createContext<CoingeckoContextState | null>(
   null,
 );
-export function CoingeckoProvider({ children = null as any }) {
+
+export function CoingeckoProvider({ children = null }: { children: any }) {
   const [solPrice, setSolPrice] = useState<number>(0);
   const [allSplPrices, setAllSplPrices] = useState<AllSplTokens[]>([]);
-  const tokenList = useTokenList().mainnetTokens;
 
   useEffect(() => {
     let timerId = 0;
@@ -56,25 +56,30 @@ export function CoingeckoProvider({ children = null as any }) {
         ? process.env.NEXT_CG_SPL_TOKEN_IDS.split(',')
         : [];
 
-      var allSplPrices: AllSplTokens[] = [];
+      const splPricePromises: Promise<AllSplTokens | void>[] = [];
       for (let i = 0; i < subscribedTokenMints.length; i++) {
-        try {
-          const splName = subscribedTokenIDS[i];
-          const splMint = subscribedTokenMints[i];
+        const splName = subscribedTokenIDS[i];
+        const splMint = subscribedTokenMints[i];
 
-          //console.log("[--P]PROCESSING TOKEN",i,  splName, splMint)
-          const splPrice = await altSplToUSD(splName);
-          //console.log("[--P]PRICE", splPrice)
-          allSplPrices[i] = {
-            tokenMint: splMint,
-            tokenName: splName,
-            tokenPrice: splPrice,
-          };
-        } catch (e) {
-          //console.log("[--P] error setting", e)
-        }
+        //console.log("[--P]PROCESSING TOKEN",i,  splName, splMint)
+        splPricePromises.push(
+          (async () => {
+            try {
+              const splPrice = await altSplToUSD(splName);
+              //console.log("[--P]PRICE", splPrice)
+              return {
+                tokenMint: splMint,
+                tokenName: splName,
+                tokenPrice: splPrice,
+              };
+            } catch (e) {
+              //console.log("[--P] error setting", e)
+            }
+          })(),
+        );
       }
-      setAllSplPrices(allSplPrices);
+      const allSplPrices = await Promise.all(splPricePromises);
+      setAllSplPrices(allSplPrices.filter(Boolean) as AllSplTokens[]);
       //console.log("[--P]SUBSCRIBED TOKENS", allSplPrices)
       startTimer();
     };
