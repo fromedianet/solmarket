@@ -203,12 +203,14 @@ export const ArtView = () => {
   };
 
   const listNow = async () => {
+    return;
     setLoading(true);
     await createAuction();
     setLoading(false);
   };
 
   const cancelList = async () => {
+    return;
     if (!auctionView) return;
     setLoading(true);
     try {
@@ -246,6 +248,7 @@ export const ArtView = () => {
   };
 
   const buyNow = async () => {
+    return;
     if (!auctionView) return;
     setShowBuyModal(true);
 
