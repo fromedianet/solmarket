@@ -57,6 +57,7 @@ export const AuctionView = () => {
   // const creators = useCreators(auction);
   const { pullAuctionPage } = useMeta();
   useEffect(() => {
+    console.log('------------- pullAuctionPage -----------');
     pullAuctionPage(id);
   }, []);
 
