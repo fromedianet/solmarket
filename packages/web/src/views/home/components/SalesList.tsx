@@ -7,12 +7,12 @@ import { Banner } from '../../../components/Banner';
 import { HowToBuyModal } from '../../../components/HowToBuyModal';
 
 import { AuctionRenderCard } from '../../../components/AuctionRenderCard';
-import { AuctionViewState, useAuctionsList } from '../../../hooks';
+import { AuctionViewState, useAuctions } from '../../../hooks';
 
 export const SalesListView = () => {
   const { isLoading } = useMeta();
-  const liveAuctions = useAuctionsList(AuctionViewState.Live);
-  const endedAuctions = useAuctionsList(AuctionViewState.Ended);
+  const liveAuctions = useAuctions(AuctionViewState.Live);
+  const endedAuctions = useAuctions(AuctionViewState.Ended);
 
   return (
     <div className="main-area">
@@ -29,7 +29,7 @@ export const SalesListView = () => {
           {isLoading &&
             [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
           {!isLoading &&
-            liveAuctions.auctions.map(auction => (
+            liveAuctions.map(auction => (
               <Col key={auction.auction.pubkey} span={12} md={8} xl={6} xxl={4}>
                 <AuctionRenderCard auctionView={auction} />
               </Col>
@@ -42,7 +42,7 @@ export const SalesListView = () => {
           {isLoading &&
             [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
           {!isLoading &&
-            endedAuctions.auctions.map(auction => (
+            endedAuctions.map(auction => (
               <Col key={auction.auction.pubkey} span={12} md={8} xl={6} xxl={4}>
                 <AuctionRenderCard auctionView={auction} />
               </Col>
