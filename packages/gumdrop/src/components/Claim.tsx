@@ -653,13 +653,11 @@ const fetchNeedsTemporalSigner = async (
 export type ClaimProps = {};
 
 type ClaimTransactions = {
-  setup : Transaction | null,
-  claim : Transaction,
+  setup: Transaction | null;
+  claim: Transaction;
 };
 
-export const Claim = (
-  props : RouteComponentProps<ClaimProps>,
-) => {
+export const Claim = (props: RouteComponentProps<ClaimProps>) => {
   const connection = useConnection();
   const wallet = useWallet();
 
@@ -676,21 +674,39 @@ export const Claim = (
     (params.distributor as string) || '',
   );
   const [claimMethod, setClaimMethod] = React.useState(
-        params.tokenAcc ? "transfer"
-      : params.config   ? "candy"
-      : params.master   ? "edition"
-      :                   "");
-  const [tokenAcc, setTokenAcc] = React.useState(params.tokenAcc as string || "");
-  const [candyConfig, setCandyConfig] = React.useState(params.config as string || "");
-  const [candyUUID, setCandyUUID] = React.useState(params.uuid as string || "");
-  const [masterMint, setMasterMint] = React.useState(params.master as string || "");
-  const [editionStr, setEditionStr] = React.useState(params.edition as string || "");
-  const [handle, setHandle] = React.useState(params.handle as string || "");
-  const [amountStr, setAmount] = React.useState(params.amount as string || "");
-  const [indexStr, setIndex] = React.useState(params.index as string || "");
-  const [pinStr, setPin] = React.useState(params.pin as string || "");
-  const [proofStr, setProof] = React.useState(params.proof as string || "");
-  const [commMethod, setCommMethod] = React.useState(params.method || "aws-email");
+    params.tokenAcc
+      ? 'transfer'
+      : params.config
+      ? 'candy'
+      : params.master
+      ? 'edition'
+      : '',
+  );
+  const [tokenAcc, setTokenAcc] = React.useState(
+    (params.tokenAcc as string) || '',
+  );
+  const [candyConfig, setCandyConfig] = React.useState(
+    (params.config as string) || '',
+  );
+  const [candyUUID, setCandyUUID] = React.useState(
+    (params.uuid as string) || '',
+  );
+  const [masterMint, setMasterMint] = React.useState(
+    (params.master as string) || '',
+  );
+  const [editionStr, setEditionStr] = React.useState(
+    (params.edition as string) || '',
+  );
+  const [handle, setHandle] = React.useState((params.handle as string) || '');
+  const [amountStr, setAmount] = React.useState(
+    (params.amount as string) || '',
+  );
+  const [indexStr, setIndex] = React.useState((params.index as string) || '');
+  const [pinStr, setPin] = React.useState((params.pin as string) || '');
+  const [proofStr, setProof] = React.useState((params.proof as string) || '');
+  const [commMethod, setCommMethod] = React.useState(
+    params.method || 'aws-email',
+  );
 
   const allFieldsPopulated =
     distributor.length > 0 &&
@@ -710,8 +726,9 @@ export const Claim = (
   const [editable, setEditable] = React.useState(!allFieldsPopulated);
 
   // temporal verification
-  const [transaction, setTransaction] = React.useState<ClaimTransactions | null>(null);
-  const [OTPStr, setOTPStr] = React.useState("");
+  const [transaction, setTransaction] =
+    React.useState<ClaimTransactions | null>(null);
+  const [OTPStr, setOTPStr] = React.useState('');
 
   // async computed
   const [asyncNeedsTemporalSigner, setNeedsTemporalSigner] =
@@ -841,18 +858,18 @@ export const Claim = (
       );
     }
 
-    const signersOf = (instrs : Array<TransactionInstruction>) => {
+    const signersOf = (instrs: Array<TransactionInstruction>) => {
       const signers = new Set<PublicKey>();
       for (const instr of instrs) {
-        for (const key of instr.keys)
-          if (key.isSigner)
-            signers.add(key.pubkey);
+        for (const key of instr.keys) if (key.isSigner) signers.add(key.pubkey);
       }
       return signers;
     };
 
-    const recentBlockhash = (await connection.getRecentBlockhash("singleGossip")).blockhash;
-    let setupTx : Transaction | null = null;
+    const recentBlockhash = (
+      await connection.getRecentBlockhash('singleGossip')
+    ).blockhash;
+    let setupTx: Transaction | null = null;
     if (instructions.length > 1) {
       setupTx = new Transaction({
         feePayer: wallet.publicKey,
@@ -861,7 +878,11 @@ export const Claim = (
 
       const setupInstrs = instructions.slice(0, -1);
       const setupSigners = signersOf(setupInstrs);
-      console.log(`Expecting the following setup signers: ${[...setupSigners].map(s => s.toBase58())}`);
+      console.log(
+        `Expecting the following setup signers: ${[...setupSigners].map(s =>
+          s.toBase58(),
+        )}`,
+      );
       setupTx.add(...setupInstrs);
       setupTx.setSigners(...setupSigners);
 
@@ -877,15 +898,20 @@ export const Claim = (
 
     const claimInstrs = instructions.slice(-1);
     const claimSigners = signersOf(claimInstrs);
-    console.log(`Expecting the following claim signers: ${[...claimSigners].map(s => s.toBase58())}`);
+    console.log(
+      `Expecting the following claim signers: ${[...claimSigners].map(s =>
+        s.toBase58(),
+      )}`,
+    );
     claimTx.add(...claimInstrs);
     claimTx.setSigners(...claimSigners);
 
-    const txnNeedsTemporalSigner =
-        claimTx.signatures.some(s => s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER));
+    const txnNeedsTemporalSigner = claimTx.signatures.some(s =>
+      s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER),
+    );
     if (txnNeedsTemporalSigner && !skipAWSWorkflow) {
-      const otpQuery : { [key: string] : any } = {
-        method: "send",
+      const otpQuery: { [key: string]: any } = {
+        method: 'send',
         transaction: bs58.encode(claimTx.serializeMessage()),
         seeds: pdaSeeds,
         comm: commMethod,
@@ -914,19 +940,19 @@ export const Claim = (
 
       let succeeded, toCheck;
       switch (commMethod) {
-        case "discord": {
+        case 'discord': {
           succeeded = !!data.id;
-          toCheck = "discord";
+          toCheck = 'discord';
           break;
         }
         case 'aws-email': {
           succeeded = !!data.MessageId;
-          toCheck = "email";
+          toCheck = 'email';
           break;
         }
         case 'aws-sms': {
           succeeded = !!data.MessageId;
-          toCheck = "SMS";
+          toCheck = 'SMS';
           break;
         }
       }
@@ -948,8 +974,8 @@ export const Claim = (
   };
 
   const verifyOTP = async (
-    e : React.SyntheticEvent,
-    transaction : ClaimTransactions | null,
+    e: React.SyntheticEvent,
+    transaction: ClaimTransactions | null,
   ) => {
     e.preventDefault();
 
@@ -961,8 +987,9 @@ export const Claim = (
       throw new Error(`Wallet not connected`);
     }
 
-    const txnNeedsTemporalSigner =
-        transaction.claim.signatures.some(s => s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER));
+    const txnNeedsTemporalSigner = transaction.claim.signatures.some(s =>
+      s.publicKey.equals(GUMDROP_TEMPORAL_SIGNER),
+    );
     if (txnNeedsTemporalSigner && !skipAWSWorkflow) {
       // TODO: distinguish between OTP failure and transaction-error. We can try
       // again on the former but not the latter
@@ -1013,8 +1040,8 @@ export const Claim = (
     try {
       fullySigned = await wallet.signAllTransactions(
         transaction.setup === null
-        ? [transaction.claim]
-        : [transaction.setup, transaction.claim]
+          ? [transaction.claim]
+          : [transaction.setup, transaction.claim],
       );
     } catch {
       throw new Error('Failed to sign transaction');
@@ -1190,19 +1217,18 @@ export const Claim = (
           <MenuItem value={'edition'}>Limited Edition</MenuItem>
         </Select>
       </FormControl>
-      {claimMethod !== "" && claimData(claimMethod)}
-      {claimMethod !== "edition" && <TextField
-        id="amount-text-field"
-        label="Amount"
-        value={amountStr}
-        onChange={(e) => setAmount(e.target.value)}
-        disabled={!editable}
-      />}
-      <FormControl fullWidth>
-        <InputLabel
-          id="comm-method-label"
+      {claimMethod !== '' && claimData(claimMethod)}
+      {claimMethod !== 'edition' && (
+        <TextField
+          id="amount-text-field"
+          label="Amount"
+          value={amountStr}
+          onChange={e => setAmount(e.target.value)}
           disabled={!editable}
-        >
+        />
+      )}
+      <FormControl fullWidth>
+        <InputLabel id="comm-method-label" disabled={!editable}>
           Distribution Method
         </InputLabel>
         <Select
@@ -1210,25 +1236,26 @@ export const Claim = (
           id="comm-method-select"
           value={commMethod}
           label="Distribution Method"
-          onChange={(e) => {
-            if (e.target.value === "discord") {
+          onChange={e => {
+            if (e.target.value === 'discord') {
               notify({
-                message: "Discord distribution unavailable",
-                description: "Please use the CLI for this. Discord does not support browser-connection requests",
+                message: 'Discord distribution unavailable',
+                description:
+                  'Please use the CLI for this. Discord does not support browser-connection requests',
               });
               return;
             }
-            localStorage.setItem("commMethod", e.target.value);
+            localStorage.setItem('commMethod', e.target.value);
             setCommMethod(e.target.value);
           }}
-          style={{textAlign: "left"}}
+          style={{ textAlign: 'left' }}
           disabled={!editable}
         >
-          <MenuItem value={"aws-email"}>AWS Email</MenuItem>
-          <MenuItem value={"aws-sms"}>AWS SMS</MenuItem>
-          <MenuItem value={"discord"}>Discord</MenuItem>
-          <MenuItem value={"wallets"}>Wallets</MenuItem>
-          <MenuItem value={"manual"}>Manual</MenuItem>
+          <MenuItem value={'aws-email'}>AWS Email</MenuItem>
+          <MenuItem value={'aws-sms'}>AWS SMS</MenuItem>
+          <MenuItem value={'discord'}>Discord</MenuItem>
+          <MenuItem value={'wallets'}>Wallets</MenuItem>
+          <MenuItem value={'manual'}>Manual</MenuItem>
         </Select>
       </FormControl>
       <TextField

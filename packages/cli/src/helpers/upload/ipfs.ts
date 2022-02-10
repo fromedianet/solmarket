@@ -58,7 +58,7 @@ export async function ipfsUpload(
   if (animation) {
     manifestJson.animation_url = animationUrl;
   }
-  
+
   const manifestHash = await uploadToIpfs(
     Buffer.from(JSON.stringify(manifestJson)),
   );

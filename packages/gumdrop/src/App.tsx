@@ -23,85 +23,83 @@ const About = () => {
         to creators.
       </div>
 
-
       <div>
-      Various ecosystem projects want to ensure early followers and supporters
-      gain access to project assets whether they be tokens, NFTs, or others.
-      Simultaneously, capitalization of these assets should not incur undue
-      costs or operational overhead to the creators. There are several ways to
-      achieve such a setup and Gumdrop offers one that integrates with existing
-      Solana and Metaplex ecosystem programs.
+        Various ecosystem projects want to ensure early followers and supporters
+        gain access to project assets whether they be tokens, NFTs, or others.
+        Simultaneously, capitalization of these assets should not incur undue
+        costs or operational overhead to the creators. There are several ways to
+        achieve such a setup and Gumdrop offers one that integrates with
+        existing Solana and Metaplex ecosystem programs.
       </div>
 
       <div>
-      Gumdrop solves this efficient-airdrop issue by utilizing a space-efficient hash
-      structure (the merkle tree) such that an on-chain program can validate whether
-      the user is part of a whitelist. This uses a pull-based paradigm to shift the
-      burden from creators, sending airdrops or pre-minting NFTs, to recipients, that
-      can choose to claim their portion or leave it for general adoption.
+        Gumdrop solves this efficient-airdrop issue by utilizing a
+        space-efficient hash structure (the merkle tree) such that an on-chain
+        program can validate whether the user is part of a whitelist. This uses
+        a pull-based paradigm to shift the burden from creators, sending
+        airdrops or pre-minting NFTs, to recipients, that can choose to claim
+        their portion or leave it for general adoption.
       </div>
 
       <div>
-      The approach, originally pioneered for token airdrops by{" "}
-      <HyperLink
-        href="https://github.com/Uniswap/merkle-distributor"
-        underline="none"
-      >
-        Uniswap
-      </HyperLink>
-      {" "}and ported to Solana by{WHITESPACE}
-      <HyperLink
-        href="https://github.com/saber-hq/merkle-distributor"
-        underline="none"
-      >
-        Saber
-      </HyperLink>, is extended to allow pre-minting a Candy Machine or
-      printing editions of a master copy.  Moreover, Gumdrop allows creators to
-      directly send whitelisted users a drop reclamation link by building the
-      tree with off-chain handles (e.g email, discord, etc) and allowing the
-      user to redeem into any wallet.
+        The approach, originally pioneered for token airdrops by{' '}
+        <HyperLink
+          href="https://github.com/Uniswap/merkle-distributor"
+          underline="none"
+        >
+          Uniswap
+        </HyperLink>{' '}
+        and ported to Solana by{WHITESPACE}
+        <HyperLink
+          href="https://github.com/saber-hq/merkle-distributor"
+          underline="none"
+        >
+          Saber
+        </HyperLink>
+        , is extended to allow pre-minting a Candy Machine or printing editions
+        of a master copy. Moreover, Gumdrop allows creators to directly send
+        whitelisted users a drop reclamation link by building the tree with
+        off-chain handles (e.g email, discord, etc) and allowing the user to
+        redeem into any wallet.
       </div>
     </Stack>
   );
 
   const create = (
     <Stack spacing={1}>
-      <Link to={`${process.env.REACT_APP_WEB_HOME}/create`}>
-        CREATION
-      </Link>
+      <Link to={`${process.env.REACT_APP_WEB_HOME}/create`}>CREATION</Link>
 
       <div>
-      Creation builds a whitelist of users that can claim either existing
-      fungible tokens or directly mint from a pre-sale Candy Machine.
-
-      See a full explanation on the{" "}
-      <HyperLink
-        href="https://docs.metaplex.com/airdrops/create-gumdrop"
-        underline="none"
-      >
-        metaplex docs
-      </HyperLink>
+        Creation builds a whitelist of users that can claim either existing
+        fungible tokens or directly mint from a pre-sale Candy Machine. See a
+        full explanation on the{' '}
+        <HyperLink
+          href="https://docs.metaplex.com/airdrops/create-gumdrop"
+          underline="none"
+        >
+          metaplex docs
+        </HyperLink>
       </div>
 
       <div>
-      Click{" "}
-      <HyperLink
-        href={`data:text/plain;charset=utf-8,${JSON.stringify(require("./example.json"))}`}
-        download="example.json"
-        underline="none"
-      >
-      here
-      </HyperLink>
-      {" "}for an example distribution list with emails.
+        Click{' '}
+        <HyperLink
+          href={`data:text/plain;charset=utf-8,${JSON.stringify(
+            require('./example.json'),
+          )}`}
+          download="example.json"
+          underline="none"
+        >
+          here
+        </HyperLink>{' '}
+        for an example distribution list with emails.
       </div>
     </Stack>
   );
 
   const claim = (
     <Stack spacing={1}>
-      <Link to={`${process.env.REACT_APP_WEB_HOME}/claim`}>
-        CLAIMS
-      </Link>
+      <Link to={`${process.env.REACT_APP_WEB_HOME}/claim`}>CLAIMS</Link>
 
       <div>
         Claims are redeemed through a URL with query parameters holding
@@ -114,9 +112,7 @@ const About = () => {
 
   const close = (
     <Stack spacing={1}>
-      <Link to={`${process.env.REACT_APP_WEB_HOME}/close`}>
-        CLOSING
-      </Link>
+      <Link to={`${process.env.REACT_APP_WEB_HOME}/close`}>CLOSING</Link>
 
       <div>
         Closing the Gumdrop cleans up the on-chain state and allows creators to
@@ -125,8 +121,8 @@ const About = () => {
       </div>
 
       <div>
-      When closing a Candy Machine-integrated distributor, update authority
-      will be transferred back to the wallet owner.
+        When closing a Candy Machine-integrated distributor, update authority
+        will be transferred back to the wallet owner.
       </div>
     </Stack>
   );
@@ -210,10 +206,26 @@ function App() {
           >
             <Box height="40px" />
             <Switch>
-              <Route exact path={`${process.env.REACT_APP_WEB_HOME}/create`} component={Create} />
-              <Route exact path={`${process.env.REACT_APP_WEB_HOME}/claim`} component={Claim} />
-              <Route exact path={`${process.env.REACT_APP_WEB_HOME}/close`} component={Close} />
-              <Route exact path={`${process.env.REACT_APP_WEB_HOME}/`} component={About} />
+              <Route
+                exact
+                path={`${process.env.REACT_APP_WEB_HOME}/create`}
+                component={Create}
+              />
+              <Route
+                exact
+                path={`${process.env.REACT_APP_WEB_HOME}/claim`}
+                component={Claim}
+              />
+              <Route
+                exact
+                path={`${process.env.REACT_APP_WEB_HOME}/close`}
+                component={Close}
+              />
+              <Route
+                exact
+                path={`${process.env.REACT_APP_WEB_HOME}/`}
+                component={About}
+              />
             </Switch>
             <Box height="80px" />
           </Box>

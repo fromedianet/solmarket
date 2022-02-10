@@ -44,59 +44,113 @@ export function useWalletModal(): WalletModalContextState {
 export const WalletModal: FC = () => {
   const { wallets, select } = useWallet();
   const { visible, setVisible } = useWalletModal();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showWallets, setShowWallets] = useState(false);
   const close = useCallback(() => {
     setVisible(false);
-    setShowWallets(false);
-  }, [setVisible, setShowWallets]);
+  }, [setVisible]);
 
-  const phantomWallet = useMemo(() => getPhantomWallet(), []);
-  const slopeWallet = useMemo(() => getSlopeWallet(), []);
-  const solletWallet = useMemo(() => getSolletWallet(), []);
-  const solflareWallet = useMemo(() => getSolflareWallet(), []);
-  const ledgerWallet = useMemo(() => getLedgerWallet(), []);
-  const solongWallet = useMemo(() => getSolongWallet(), []);
-  const mathWallet = useMemo(() => getMathWallet(), []);
-
-  const handleConnectWallet = (name: any) => {
-    console.log('wallet name', name);
-    select(name);
-    close();
-  };
+  const phatomWallet = useMemo(() => getPhantomWallet(), []);
 
   return (
-    <MetaplexModal visible={visible} onCancel={close}>
-      <div className="modal-top-content">
-        <img src="/favicon.ico" alt="logo" className="logo" />
-        <p className="text">Connect Wallet</p>
-      </div>
-      <div className="modal-btn-container">
-        <Button
-          className="wallet-adapter-btn"
-          onClick={() => handleConnectWallet(phantomWallet.name)}
+    <MetaplexModal title="Connect Wallet" visible={visible} onCancel={close}>
+      <span
+        style={{
+          color: 'rgba(255, 255, 255, 0.75)',
+          fontSize: '14px',
+          lineHeight: '14px',
+          fontFamily: 'GraphikWeb',
+          letterSpacing: '0.02em',
+          marginBottom: 14,
+        }}
+      >
+        RECOMMENDED
+      </span>
+
+      <Button
+        className="phantom-button metaplex-button"
+        onClick={() => {
+          console.log(phatomWallet.name);
+          select(phatomWallet.name);
+          close();
+        }}
+      >
+        <img src={phatomWallet?.icon} style={{ width: '1.2rem' }} />
+        &nbsp;Connect to Phantom
+      </Button>
+      <Collapse
+        ghost
+        expandIcon={panelProps =>
+          panelProps.isActive ? (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 7.5L10 12.5L5 7.5"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ) : (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7.5 5L12.5 10L7.5 15"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )
+        }
+      >
+        <Panel
+          header={
+            <span
+              style={{
+                fontWeight: 600,
+                fontSize: '16px',
+                lineHeight: '16px',
+                letterSpacing: '-0.01em',
+                color: 'rgba(255, 255, 255, 255)',
+              }}
+            >
+              Other Wallets
+            </span>
+          }
+          key="1"
         >
-          Phantom
-          <img src={phantomWallet?.icon} className="end-icon" />
-        </Button>
-        <Collapse className="modal-collapse" expandIconPosition="right">
-          <Panel header="Other Wallets" key="1">
-            {wallets.map((wallet, index) => {
-              if (wallet.name === 'Phantom') return null;
-              return (
-                <Button
-                  key={index}
-                  className="wallet-adapter-btn"
-                  onClick={() => handleConnectWallet(wallet.name)}
-                >
-                  {wallet.name}
-                  <img src={wallet?.icon} className="end-icon" />
-                </Button>
-              );
-            })}
-          </Panel>
-        </Collapse>
-      </div>
+          {wallets.map((wallet, idx) => {
+            if (wallet.name === 'Phantom') return null;
+
+            return (
+              <Button
+                key={idx}
+                className="metaplex-button w100"
+                style={{
+                  marginBottom: 5,
+                }}
+                onClick={() => {
+                  select(wallet.name);
+                  close();
+                }}
+              >
+                Connect to {wallet.name}
+              </Button>
+            );
+          })}
+        </Panel>
+      </Collapse>
     </MetaplexModal>
   );
 };

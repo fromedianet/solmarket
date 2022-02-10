@@ -57,19 +57,19 @@ export async function nftStorageUpload(
     },
     body: metaData, // Here, stringContent or bufferContent would also work
   })
-  .then(response => response.json())
-  .then(metaUploadResponse => {
-    const link = `https://${metaUploadResponse.value.cid}.ipfs.dweb.link`;
-    log.info('Upload End');
-    if (animation) {
-      log.debug([link, imageUrl, animationUrl]);
-    } else {
-      log.debug([link, imageUrl]);
-    }
-    return [link, imageUrl, animationUrl];
-  })
-  .catch(error => {
-    log.debug(error);
-    throw new Error(`Metadata Upload Error: ${error}`);
-  });
+    .then(response => response.json())
+    .then(metaUploadResponse => {
+      const link = `https://${metaUploadResponse.value.cid}.ipfs.dweb.link`;
+      log.info('Upload End');
+      if (animation) {
+        log.debug([link, imageUrl, animationUrl]);
+      } else {
+        log.debug([link, imageUrl]);
+      }
+      return [link, imageUrl, animationUrl];
+    })
+    .catch(error => {
+      log.debug(error);
+      throw new Error(`Metadata Upload Error: ${error}`);
+    });
 }

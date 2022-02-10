@@ -66,6 +66,7 @@ export const CollectionInfo = () => {
       </Row>
       <div className="info-description">
         <ReadMore
+          // eslint-disable-next-line react/no-children-prop
           children="Space Runners is the first NFT Metaverse Fashion brand in
           collaboration with artists and brands, designing digitally through
           through Augmented Reality (AR) and plug-in's into the Metaverse as

@@ -6,7 +6,7 @@ import { ArtContent } from '../../../components/ArtContent';
 import { StringPublicKey } from '@oyster/common';
 
 export const CollectionCard = (props: { pubkey: StringPublicKey }) => {
-  const {ref, data} = useExtendedArt(props.pubkey);
+  const { ref, data } = useExtendedArt(props.pubkey);
 
   return (
     <Link ref={ref} to={`/collection/${data?.symbol}`}>

@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useWindowDimensions from '../../utils/layout';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 
-export const AppLayout = React.memo((props: any) => {
+export const AppLayout = React.memo(function AppLayoutImpl(props: any) {
   const { width } = useWindowDimensions();
   const { collapsed } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
