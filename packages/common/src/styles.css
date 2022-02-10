@@ -14,7 +14,7 @@ p {
   vertical-align: middle !important;
 }
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
-  padding: 36px 8px 20px;
+  padding: 8px;
 }
 .ant-modal-body .modal-top-content {
   display: flex;
@@ -22,11 +22,11 @@ p {
   align-items: center;
 }
 .ant-modal-body .modal-top-content .logo {
-  margin: 40px 0 16px 0;
+  margin: 20px 0 16px 0;
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: turquoise;
+  object-fit: cover;
 }
 .ant-modal-body .modal-top-content .text {
   font-size: 32px;
@@ -37,7 +37,6 @@ p {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 24px;
 }
 .ant-modal-body .wallet-adapter-btn {
   width: 100%;

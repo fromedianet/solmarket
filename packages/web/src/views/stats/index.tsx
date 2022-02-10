@@ -321,9 +321,9 @@ function InnerAnalytics({ mint }: { mint: MintInfo }) {
   const auctionViews = useAuctions();
 
   return (
-    <div className='main-area stats-page'>
-      <div className='main-page'>
-        <div className='container'>
+    <div className="main-area stats-page">
+      <div className="main-page">
+        <div className="container">
           <Col style={{ marginTop: 10 }}>
             <Button
               type="primary"
@@ -379,7 +379,6 @@ function InnerAnalytics({ mint }: { mint: MintInfo }) {
           </Col>
         </div>
       </div>
-      
     </div>
   );
 }
