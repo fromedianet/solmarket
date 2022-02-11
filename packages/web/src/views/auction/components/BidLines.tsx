@@ -18,8 +18,9 @@ import {
   useUserAccounts,
   useWalletModal,
 } from '@oyster/common';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Row, Col, Statistic, Spin, Form, InputNumber } from 'antd';
+import BN from 'bn.js';
 import {
   AuctionView,
   AuctionViewState,
@@ -156,7 +157,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const balance = useUserBalance(mintKey);
 
   const connection = useConnection();
-  const { prizeTrackingTickets, bidRedemptions } = useMeta();
+  const { prizeTrackingTickets, bidRedemptions, pullAuctionPage } = useMeta();
   const { accountByMint } = useUserAccounts();
   const [loading, setLoading] = useState<boolean>(false);
   const [value, setValue] = useState<number>();
@@ -187,7 +188,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
     : 0;
   const tickSize = auctionExtended?.info?.tickSize
     ? auctionExtended.info.tickSize
-    : 0;
+    : new BN(0);
   const tickSizeInvalid = !!(
     tickSize &&
     value &&
@@ -258,25 +259,42 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const deadline = (auctionView.auction.info.endedAt?.toNumber() || 0) * 1000;
   const isEnded = auctionView.auction.info.ended();
 
+  useEffect(() => {
+    async function runSendPlaceBid() {
+      if (!invalidBid) {
+        setLoading(true);
+        try {
+          await sendPlaceBid(
+            connection,
+            wallet,
+            myPayingAccount.pubkey,
+            auctionView,
+            accountByMint,
+            value
+          );
+          await pullAuctionPage(auctionView.auction.pubkey);
+          notify({
+            message: 'Your bid was successed',
+            type: 'success'
+          });
+        } catch (e) {
+          console.error(e);
+          notify({
+            message: 'Transaction failed...',
+            description: 'There was an issue to place a bid. Please try again',
+            type: 'error'
+          });
+        }
+        
+        setLoading(false);
+      }
+    }
+    runSendPlaceBid();
+  }, [value]);
+
   const onFinish = async (values) => {
     setValue(values.bidPrice);
     setShowPlaceBid(false);
-    if (!invalidBid) {
-      setLoading(true);
-      await sendPlaceBid(
-        connection,
-        wallet,
-        myPayingAccount.pubkey,
-        auctionView,
-        accountByMint,
-        value
-      );
-      notify({
-        message: 'Your bid was successed',
-        type: 'success'
-      });
-      setLoading(false);
-    }
   }
 
   return (
@@ -297,7 +315,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
               className="countdown"
               title={isEnded ? 'AUCTION ENDED' : 'AUCTION ENDS IN'}
               value={deadline}
-              format="H m s"
+              format="H mm ss"
             />
             <div>
               <span className="time-label">Hours</span>
@@ -421,6 +439,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
             )}
           {wallet.connected && !isEnded && (
             <Button type="primary" size="large" className="action-btn"
+              disabled={loading}
               onClick={() => {
                 setShowPlaceBid(true);
                 form.setFieldsValue({
@@ -428,7 +447,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                 });
               }}
             >
-              Place a Bid
+              {loading ? <Spin /> : 'Place a Bid'}
             </Button>
           )}
           {showRedemptionIssue && (
