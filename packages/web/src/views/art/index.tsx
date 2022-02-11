@@ -211,138 +211,138 @@ export const ArtView = () => {
 
   const cancelList = async () => {
     return;
-    if (!auctionView) return;
-    setLoading(true);
-    try {
-      console.log('auctionView endedAt', auctionView.auction.info.endedAt);
-      console.log('accountByMint', accountByMint);
-      console.log('bids', bids);
-      console.log('bidRedemptions', bidRedemptions);
-      console.log('prizeTrackingTickets', prizeTrackingTickets);
-      await endSale({
-        auctionView,
-        connection,
-        accountByMint,
-        bids,
-        bidRedemptions,
-        prizeTrackingTickets,
-        wallet,
-      });
+    // if (!auctionView) return;
+    // setLoading(true);
+    // try {
+    //   console.log('auctionView endedAt', auctionView.auction.info.endedAt);
+    //   console.log('accountByMint', accountByMint);
+    //   console.log('bids', bids);
+    //   console.log('bidRedemptions', bidRedemptions);
+    //   console.log('prizeTrackingTickets', prizeTrackingTickets);
+    //   await endSale({
+    //     auctionView,
+    //     connection,
+    //     accountByMint,
+    //     bids,
+    //     bidRedemptions,
+    //     prizeTrackingTickets,
+    //     wallet,
+    //   });
 
-      notify({
-        message: 'Transaction successed',
-        description: '',
-        type: 'success',
-      });
-      setLoading(false);
-    } catch (e) {
-      console.error('endAuction', e);
-      setLoading(false);
-      notify({
-        message: 'Transaction failed...',
-        description: 'There was an issue cancel list. Please try again.',
-        type: 'error',
-      });
-      return;
-    }
+    //   notify({
+    //     message: 'Transaction successed',
+    //     description: '',
+    //     type: 'success',
+    //   });
+    //   setLoading(false);
+    // } catch (e) {
+    //   console.error('endAuction', e);
+    //   setLoading(false);
+    //   notify({
+    //     message: 'Transaction failed...',
+    //     description: 'There was an issue cancel list. Please try again.',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
   };
 
   const buyNow = async () => {
     return;
-    if (!auctionView) return;
-    setShowBuyModal(true);
+    // if (!auctionView) return;
+    // setShowBuyModal(true);
 
-    // Placing a "bid" of the full amount results in a purchase to redeem.
-    try {
-      console.log('sendPlaceBid');
-      await sendPlaceBid(
-        connection,
-        wallet,
-        myPayingAccount.pubkey,
-        auctionView,
-        accountByMint,
-        instantSalePrice,
-        // make sure all accounts are created
-        'finalized',
-      );
-      // setLastBid(bid);
-    } catch (e) {
-      console.error('sendPlaceBid', e);
-      notify({
-        message: 'Transaction failed...',
-        description: 'There was an issue place a bid. Please try again.',
-        type: 'error',
-      });
-      setShowBuyModal(false);
-      return;
-    }
+    // // Placing a "bid" of the full amount results in a purchase to redeem.
+    // try {
+    //   console.log('sendPlaceBid');
+    //   await sendPlaceBid(
+    //     connection,
+    //     wallet,
+    //     myPayingAccount.pubkey,
+    //     auctionView,
+    //     accountByMint,
+    //     instantSalePrice,
+    //     // make sure all accounts are created
+    //     'finalized',
+    //   );
+    //   // setLastBid(bid);
+    // } catch (e) {
+    //   console.error('sendPlaceBid', e);
+    //   notify({
+    //     message: 'Transaction failed...',
+    //     description: 'There was an issue place a bid. Please try again.',
+    //     type: 'error',
+    //   });
+    //   setShowBuyModal(false);
+    //   return;
+    // }
 
-    const newAuctionState = await update(
-      auctionView.auction.pubkey,
-      wallet.publicKey,
-    );
-    auctionView.auction = newAuctionState[0];
-    auctionView.myBidderPot = newAuctionState[1];
-    auctionView.myBidderMetadata = newAuctionState[2];
-    if (
-      wallet.publicKey &&
-      auctionView.auction.info.bidState.type == BidStateType.EnglishAuction
-    ) {
-      const winnerIndex = auctionView.auction.info.bidState.getWinnerIndex(
-        wallet.publicKey.toBase58(),
-      );
-      if (winnerIndex === null)
-        auctionView.auction.info.bidState.bids.unshift(
-          new Bid({
-            key: wallet.publicKey.toBase58(),
-            amount: new BN(instantSalePrice || 0),
-          }),
-        );
-      // It isnt here yet
-      if (!auctionView.myBidderPot)
-        auctionView.myBidderPot = {
-          pubkey: 'none',
-          //@ts-ignore
-          account: {},
-          info: new BidderPot({
-            bidderPot: 'dummy',
-            bidderAct: wallet.publicKey.toBase58(),
-            auctionAct: auctionView.auction.pubkey,
-            emptied: false,
-          }),
-        };
-    }
-    // Claim the purchase
-    try {
-      await sendRedeemBid(
-        connection,
-        wallet,
-        myPayingAccount.pubkey,
-        auctionView,
-        accountByMint,
-        prizeTrackingTickets,
-        bidRedemptions,
-        bids,
-      );
-      await update();
-    } catch (e) {
-      console.error(e);
-      notify({
-        message: 'Transaction failed...',
-        description:
-          'There was an issue redeeming or refunding your bid. Please try again.',
-        type: 'error',
-      });
-      setShowBuyModal(false);
-      return;
-    }
+    // const newAuctionState = await update(
+    //   auctionView.auction.pubkey,
+    //   wallet.publicKey,
+    // );
+    // auctionView.auction = newAuctionState[0];
+    // auctionView.myBidderPot = newAuctionState[1];
+    // auctionView.myBidderMetadata = newAuctionState[2];
+    // if (
+    //   wallet.publicKey &&
+    //   auctionView.auction.info.bidState.type == BidStateType.EnglishAuction
+    // ) {
+    //   const winnerIndex = auctionView.auction.info.bidState.getWinnerIndex(
+    //     wallet.publicKey.toBase58(),
+    //   );
+    //   if (winnerIndex === null)
+    //     auctionView.auction.info.bidState.bids.unshift(
+    //       new Bid({
+    //         key: wallet.publicKey.toBase58(),
+    //         amount: new BN(instantSalePrice || 0),
+    //       }),
+    //     );
+    //   // It isnt here yet
+    //   if (!auctionView.myBidderPot)
+    //     auctionView.myBidderPot = {
+    //       pubkey: 'none',
+    //       //@ts-ignore
+    //       account: {},
+    //       info: new BidderPot({
+    //         bidderPot: 'dummy',
+    //         bidderAct: wallet.publicKey.toBase58(),
+    //         auctionAct: auctionView.auction.pubkey,
+    //         emptied: false,
+    //       }),
+    //     };
+    // }
+    // // Claim the purchase
+    // try {
+    //   await sendRedeemBid(
+    //     connection,
+    //     wallet,
+    //     myPayingAccount.pubkey,
+    //     auctionView,
+    //     accountByMint,
+    //     prizeTrackingTickets,
+    //     bidRedemptions,
+    //     bids,
+    //   );
+    //   await update();
+    // } catch (e) {
+    //   console.error(e);
+    //   notify({
+    //     message: 'Transaction failed...',
+    //     description:
+    //       'There was an issue redeeming or refunding your bid. Please try again.',
+    //     type: 'error',
+    //   });
+    //   setShowBuyModal(false);
+    //   return;
+    // }
 
-    notify({
-      message: 'Transaction successed',
-      description: '',
-      type: 'success',
-    });
-    setShowBuyModal(false);
+    // notify({
+    //   message: 'Transaction successed',
+    //   description: '',
+    //   type: 'success',
+    // });
+    // setShowBuyModal(false);
   };
 
   return (
