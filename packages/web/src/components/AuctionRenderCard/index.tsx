@@ -35,7 +35,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
   const tokenInfo = useTokenList().subscribedTokens.filter(
     m => m.address == auctionView.auction.info.tokenMint,
   )[0];
-  const { amount } = useAuctionStatus(auctionView);
+  const { amount, status } = useAuctionStatus(auctionView);
 
   const _amount = typeof amount === 'string' ? parseFloat(amount) : amount;
   const formattedAmount = formatAmount(_amount);
@@ -81,7 +81,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
           <div className="card-bid">
             <Statistic
               className="bid-statistic"
-              title="CURRENT BID"
+              title={status}
               value={`${formattedAmount} SOL`}
               prefix={
                 <TokenCircle

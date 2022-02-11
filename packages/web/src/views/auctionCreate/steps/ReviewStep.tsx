@@ -10,7 +10,6 @@ import { Row, Col, Button, Statistic, Spin } from 'antd';
 import { AuctionCategory, AuctionState } from '../index';
 import { MINIMUM_SAFE_FEE_AUCTION_CREATION } from '../../../constants';
 import { FundsIssueModal } from '../../../components/FundsIssueModal';
-import { ArtContent } from '../../../components/ArtContent';
 import { ArtCard } from '../../../components/ArtCard';
 
 export const ReviewStep = (props: {
