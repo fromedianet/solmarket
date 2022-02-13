@@ -12,17 +12,13 @@ import {
 import { ArtContent } from '../../components/ArtContent';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
+import { ArtDetails } from './ArtDetails';
 import { ArtInfo } from './ArtInfo';
-import { CollectionInfo } from './CollectionInfo';
 import { ArtAction } from './ArtAction';
 import {
   AmountRange,
-  Bid,
-  BidderPot,
-  BidStateType,
   IPartialCreateAuctionArgs,
   MetaplexModal,
-  notify,
   PriceFloor,
   PriceFloorType,
   TokenAccount,
@@ -48,12 +44,9 @@ import {
 } from '../auctionCreate';
 import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
-import { sendPlaceBid } from '../../actions/sendPlaceBid';
-import { sendRedeemBid } from '../../actions/sendRedeemBid';
 import { getTokenAccountByMint } from '../../contexts/getTokenAccountByMint';
 import { BottomSection } from './BottomSection';
-import { NewAuction } from './NewAuction';
-import { endSale } from './hooks/endSale';
+import { ArtOwnerAction } from './ArtOwnerAction';
 // import { getGlobalActivityByMint } from '../../contexts/getGlobalActivityByMint';
 
 const { Panel } = Collapse;
@@ -360,7 +353,7 @@ export const ArtView = () => {
                   artview={true}
                 />
               </div>
-              <Collapse className="price-history" expandIconPosition="right">
+              <Collapse className="price-history" expandIconPosition="right" defaultActiveKey={0}>
                 <Panel
                   key={0}
                   header="Price History"
@@ -381,7 +374,7 @@ export const ArtView = () => {
               <div className="art-title">
                 {art.title || <Skeleton paragraph={{ rows: 0 }} />}
               </div>
-              <CollectionInfo />
+              <ArtInfo />
               <ViewOn id={id} />
               {auctionView ? (
                 <ArtAction
@@ -395,7 +388,7 @@ export const ArtView = () => {
                   buyNow={buyNow}
                 />
               ) : (
-                <NewAuction
+                <ArtOwnerAction
                   loading={loading}
                   attributes={attributes}
                   setAttributes={setAttributes}
@@ -403,7 +396,7 @@ export const ArtView = () => {
                 />
               )}
 
-              <ArtInfo art={art} data={data} account={account} />
+              <ArtDetails art={art} data={data} account={account} />
             </Col>
           </Row>
           <BottomSection offers={[]} />
