@@ -11,7 +11,6 @@ import { BidLines } from './components/BidLines';
 export const AuctionView = () => {
   const { id } = useParams<{ id: string }>();
   const auction = useAuction(id);
-  console.log(auction);
   const art = useArt(auction?.thumbnail.metadata.pubkey);
   const { ref, data } = useExtendedArt(auction?.thumbnail.metadata.pubkey);
   const { pullAuctionPage } = useMeta();

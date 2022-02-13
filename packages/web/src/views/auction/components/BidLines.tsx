@@ -23,7 +23,6 @@ import { Button, Row, Col, Statistic, Spin, Form, InputNumber } from 'antd';
 import BN from 'bn.js';
 import {
   AuctionView,
-  AuctionViewState,
   useBidsForAuction,
   useUserBalance,
 } from '../../../hooks';
@@ -42,7 +41,7 @@ import { sendPlaceBid } from '../../../actions/sendPlaceBid';
 import { useAuctionExtended } from '../../../hooks/useAuctionDataExtend';
 import { startAuctionManually } from '../../../actions/startAuctionManually';
 import { QUOTE_MINT } from '../../../constants';
-import CongratulationsModal from '../../../components/Modals/CongratulationsModal';
+import { useAuctionStatus } from '../../../components/AuctionRenderCard/hooks/useAuctionStatus';
 
 const { Countdown } = Statistic;
 
@@ -155,17 +154,18 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const wallet = useWallet();
   const mintKey = auctionView.auction.info.tokenMint;
   const balance = useUserBalance(mintKey);
-
+  const { amount, status } = useAuctionStatus(auctionView);
+  const [bidValue, setBidValue] = useState({
+    amount: typeof amount === 'string' ? parseFloat(amount) : amount,
+    status: status
+  });
   const connection = useConnection();
-  const { prizeTrackingTickets, bidRedemptions, pullAuctionPage } = useMeta();
+  const { prizeTrackingTickets, bidRedemptions } = useMeta();
   const { accountByMint } = useUserAccounts();
   const [loading, setLoading] = useState<boolean>(false);
   const [value, setValue] = useState<number>();
   const [showPlaceBid, setShowPlaceBid] = useState<boolean>(false);
   const [showWarningModal, setShowWarningModal] = useState<boolean>(false);
-  const [showRedeemedBidModal, setShowRedeemedBidModal] =
-    useState<boolean>(false);
-  const [showEndingBidModal, setShowEndingBidModal] = useState<boolean>(false);
   const [showRedemptionIssue, setShowRedemptionIssue] =
     useState<boolean>(false);
   const [printingCost, setPrintingCost] = useState<number>();
@@ -178,26 +178,25 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const [hide, setHide] = useState(true);
   const bids = useBidsForAuction(auctionView.auction.pubkey || '');
   const auctionExtended = useAuctionExtended(auctionView);
+  const [tickInfo, setTickInfo] = useState({
+    gapTick: auctionExtended ? auctionExtended.info.gapTickSizePercentage : 0,
+    tickSize: auctionExtended?.info?.tickSize ? auctionExtended.info.tickSize : new BN(0)
+  });
   const mintInfo = useMint(mintKey);
   const symbol = '◎';
   const LAMPORTS_PER_MINT = LAMPORTS_PER_SOL;
 
   const gapTime = (auctionView.auction.info.auctionGap?.toNumber() || 0) / 60;
-  const gapTick = auctionExtended
-    ? auctionExtended.info.gapTickSizePercentage
-    : 0;
-  const tickSize = auctionExtended?.info?.tickSize
-    ? auctionExtended.info.tickSize
-    : new BN(0);
+  
   const tickSizeInvalid = !!(
-    tickSize &&
+    tickInfo.tickSize &&
     value &&
-    (value * LAMPORTS_PER_MINT) % tickSize.toNumber() != 0
+    (value * LAMPORTS_PER_MINT) % tickInfo.tickSize.toNumber() != 0
   );
 
   const gapBidInvalid = useGapTickCheck(
     value,
-    gapTick,
+    tickInfo.gapTick,
     gapTime,
     auctionView,
     LAMPORTS_PER_MINT,
@@ -218,10 +217,6 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
 
   const myPayingAccount = balance.accounts[0];
 
-  const participationOnly =
-    auctionView.auctionManager.numWinners.toNumber() === 0;
-  const participationFixedPrice =
-    auctionView.auctionManager.participationConfig?.fixedPrice || 0;
   const priceFloor =
     auctionView.auction.info.priceFloor.type === PriceFloorType.Minimum
       ? auctionView.auction.info.priceFloor.minPrice?.toNumber() || 0
@@ -231,20 +226,10 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
     auctionView.auctionManager.authority === wallet.publicKey?.toBase58();
   const isAuctionNotStarted =
     auctionView.auction.info.state === AuctionState.Created;
-  const isUpcoming = auctionView.state === AuctionViewState.Upcoming;
 
-  const bidValue =
-    isUpcoming || bids.length === 0
-      ? fromLamports(
-          participationOnly ? participationFixedPrice : priceFloor,
-          mintInfo,
-        )
-      : parseFloat(
-          formatTokenAmount(bids[0].info.lastBid, mintInfo, 1.0, '', ``, 2),
-        );
-  const minBid = tickSize
-    ? bidValue + tickSize.toNumber() / LAMPORTS_PER_MINT
-    : bidValue;
+  const minBid = tickInfo.tickSize
+    ? bidValue.amount + tickInfo.tickSize.toNumber() / LAMPORTS_PER_MINT
+    : bidValue.amount;
 
   const invalidBid =
     tickSizeInvalid ||
@@ -260,11 +245,27 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const isEnded = auctionView.auction.info.ended();
 
   useEffect(() => {
+    setBidValue({
+      amount: typeof amount === 'string' ? parseFloat(amount) : amount,
+      status: status,
+    })
+  }, [amount, status]);
+
+  useEffect(() => {
+    if (auctionView.auctionDataExtended) {
+      setTickInfo({
+        gapTick: auctionView.auctionDataExtended.info.gapTickSizePercentage,
+        tickSize: auctionView.auctionDataExtended.info.tickSize || new BN(0)
+      });
+    }
+  }, [auctionView.auctionDataExtended]);
+
+  useEffect(() => {
     async function runSendPlaceBid() {
       if (!invalidBid) {
         setLoading(true);
         try {
-          await sendPlaceBid(
+          const newBid = await sendPlaceBid(
             connection,
             wallet,
             myPayingAccount.pubkey,
@@ -272,10 +273,15 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
             accountByMint,
             value
           );
-          await pullAuctionPage(auctionView.auction.pubkey);
           notify({
             message: 'Your bid was successed',
             type: 'success'
+          });
+          setBidValue(prev => {
+            return {
+              ...prev,
+              amount: fromLamports(newBid.amount, mintInfo),
+            }
           });
         } catch (e) {
           console.error(e);
@@ -303,8 +309,8 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
         <Row gutter={8} className="auction-content">
           <Col span={24} lg={10}>
             <Statistic
-              title={isEnded ? 'FINAL BID' : 'CURRENT BID'}
-              value={`${bidValue} ◎`}
+              title={bidValue.status}
+              value={`${bidValue.amount} ◎`}
             />
             {!isEnded && (
               <span className="minimum-label">{`Minimum bid: ${minBid} ◎`}</span>
@@ -315,7 +321,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
               className="countdown"
               title={isEnded ? 'AUCTION ENDED' : 'AUCTION ENDS IN'}
               value={deadline}
-              format="H mm ss"
+              format="HH mm ss"
             />
             <div>
               <span className="time-label">Hours</span>
@@ -372,7 +378,11 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                       prizeTrackingTickets,
                       bidRedemptions,
                       bids,
-                    ).then(() => setShowRedeemedBidModal(true));
+                    );
+                    notify({
+                      message: 'Transaction successed',
+                      type: 'success'
+                    });
                   } else {
                     await sendCancelBid(
                       connection,
@@ -384,6 +394,10 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                       bidRedemptions,
                       prizeTrackingTickets,
                     );
+                    notify({
+                      message: 'Transaction successed',
+                      type: 'success'
+                    });
                   }
                 } catch (e) {
                   console.error(e);
@@ -439,7 +453,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
             )}
           {wallet.connected && !isEnded && (
             <Button type="primary" size="large" className="action-btn"
-              disabled={loading}
+              disabled={loading || tickInfo.tickSize.toNumber() === 0}
               onClick={() => {
                 setShowPlaceBid(true);
                 form.setFieldsValue({
@@ -456,14 +470,14 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
               again.
             </span>
           )}
-          {tickSizeInvalid && tickSize && (
+          {((tickSizeInvalid && tickInfo.tickSize) || tickInfo.tickSize.toNumber() === 0) && (
             <span style={{ color: 'red' }}>
-              Tick size is ◎{tickSize.toNumber() / LAMPORTS_PER_MINT}.
+              Tick size is ◎{tickInfo.tickSize.toNumber() / LAMPORTS_PER_MINT}.
             </span>
           )}
           {gapBidInvalid && (
             <span style={{ color: 'red' }}>
-              Your bid needs to be at least {gapTick}% larger than an exiting
+              Your bid needs to be at least {tickInfo.gapTick}% larger than an exiting
               bid during gap periods to be eligible.
             </span>
           )}
@@ -528,7 +542,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
         <span style={{ fontWeight: 600 }}>How it works:</span>
         <span>
           1. Connect your wallet and place a bid. The bid must be at least{' '}
-          {tickSize && tickSize.toNumber() / LAMPORTS_PER_MINT} {symbol} greater
+          {tickInfo.tickSize && tickInfo.tickSize.toNumber() / LAMPORTS_PER_MINT} {symbol} greater
           than the current bid
         </span>
         <span>

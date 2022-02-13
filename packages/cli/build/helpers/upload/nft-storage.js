@@ -32,21 +32,19 @@ async function nftStorageUpload(nftStorageKey, image, animation, manifestBuffer)
         });
     }
     // Copied from ipfsUpload
-    const imageUrl = `${await uploadMedia(image)}?ext=${path_1.default.extname(image).replace('.', '')}`;
-    const animationUrl = animation ? `${await uploadMedia(animation)}?ext=${path_1.default.extname(animation).replace('.', '')}` : undefined;
+    const imageUrl = `${await uploadMedia(image)}?ext=${path_1.default
+        .extname(image)
+        .replace('.', '')}`;
+    const animationUrl = animation
+        ? `${await uploadMedia(animation)}?ext=${path_1.default
+            .extname(animation)
+            .replace('.', '')}`
+        : undefined;
     const manifestJson = JSON.parse(manifestBuffer.toString('utf8'));
     manifestJson.image = imageUrl;
     if (animation) {
         manifestJson.animation_url = animationUrl;
     }
-    manifestJson.properties.files = manifestJson.properties.files.map(f => {
-        if (f.type.startsWith('image/')) {
-            return { ...f, uri: imageUrl };
-        }
-        else {
-            return { ...f, uri: animationUrl };
-        }
-    });
     loglevel_1.default.info('Upload metadata');
     const metaData = Buffer.from(JSON.stringify(manifestJson));
     return (0, node_fetch_1.default)('https://api.nft.storage/upload', {

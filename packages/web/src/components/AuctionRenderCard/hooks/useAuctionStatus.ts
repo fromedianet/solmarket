@@ -75,7 +75,7 @@ export const useAuctionStatus = (
     };
   }
 
-  if (bids.length > 0 && !isOpen) {
+  if (winningBid && !isOpen) {
     amount = formatTokenAmount(winningBid.info.lastBid);
     status = 'Current Bid';
   }
