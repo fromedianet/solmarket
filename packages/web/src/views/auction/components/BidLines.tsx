@@ -2,8 +2,8 @@ import {
   AuctionState,
   BidderMetadata,
   BidRedemptionTicket,
-  formatAmount,
   formatTokenAmount,
+  fromLamports,
   MAX_EDITION_LEN,
   MAX_METADATA_LEN,
   MAX_PRIZE_TRACKING_TICKET_SIZE,
@@ -41,7 +41,6 @@ import { sendPlaceBid } from '../../../actions/sendPlaceBid';
 import { useAuctionExtended } from '../../../hooks/useAuctionDataExtend';
 import { startAuctionManually } from '../../../actions/startAuctionManually';
 import { QUOTE_MINT } from '../../../constants';
-import CongratulationsModal from '../../../components/Modals/CongratulationsModal';
 import { useAuctionStatus } from '../../../components/AuctionRenderCard/hooks/useAuctionStatus';
 
 const { Countdown } = Statistic;
@@ -167,9 +166,6 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const [value, setValue] = useState<number>();
   const [showPlaceBid, setShowPlaceBid] = useState<boolean>(false);
   const [showWarningModal, setShowWarningModal] = useState<boolean>(false);
-  const [showRedeemedBidModal, setShowRedeemedBidModal] =
-    useState<boolean>(false);
-  const [showEndingBidModal, setShowEndingBidModal] = useState<boolean>(false);
   const [showRedemptionIssue, setShowRedemptionIssue] =
     useState<boolean>(false);
   const [printingCost, setPrintingCost] = useState<number>();
@@ -284,7 +280,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
           setBidValue(prev => {
             return {
               ...prev,
-              amount: newBid.amount.toNumber()
+              amount: fromLamports(newBid.amount, mintInfo),
             }
           });
         } catch (e) {
@@ -314,10 +310,10 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
           <Col span={24} lg={10}>
             <Statistic
               title={bidValue.status}
-              value={`${formatAmount(bidValue.amount)} ◎`}
+              value={`${bidValue.amount} ◎`}
             />
             {!isEnded && (
-              <span className="minimum-label">{`Minimum bid: ${formatAmount(minBid)} ◎`}</span>
+              <span className="minimum-label">{`Minimum bid: ${minBid} ◎`}</span>
             )}
           </Col>
           <Col span={24} lg={14}>
@@ -382,7 +378,11 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                       prizeTrackingTickets,
                       bidRedemptions,
                       bids,
-                    ).then(() => setShowRedeemedBidModal(true));
+                    );
+                    notify({
+                      message: 'Transaction successed',
+                      type: 'success'
+                    });
                   } else {
                     await sendCancelBid(
                       connection,
@@ -394,6 +394,10 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                       bidRedemptions,
                       prizeTrackingTickets,
                     );
+                    notify({
+                      message: 'Transaction successed',
+                      type: 'success'
+                    });
                   }
                 } catch (e) {
                   console.error(e);
