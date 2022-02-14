@@ -114,7 +114,7 @@
           font-weight: 600;
         }
         &.countdown .ant-statistic-content {
-          letter-spacing: 1.5rem;
+          letter-spacing: 0.5rem;
         }
       }
   
@@ -163,4 +163,23 @@
   }
 }
 
+.bid-price {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  background-color: @bg-body;
 
+  &:hover {
+    background-color: @bg-body;
+  }
+
+  .ant-input-number-input-wrap {
+    width: 100%;
+  }
+}
+
+.ant-form-item-label > label {
+  color: @text-primary-color;
+}

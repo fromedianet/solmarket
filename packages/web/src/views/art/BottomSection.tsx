@@ -106,7 +106,7 @@ const data = [
 
 export const BottomSection = (props: { offers: [] }) => {
   return (
-    <Collapse expandIconPosition="right" className="art-info bottom-section">
+    <Collapse expandIconPosition="right" className="art-info bottom-section" defaultActiveKey={[1, 2]}>
       <Panel
         header={props.offers.length > 0 ? 'Offers' : 'No offers yet'}
         key={0}

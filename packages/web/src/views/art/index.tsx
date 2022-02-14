@@ -12,17 +12,13 @@ import {
 import { ArtContent } from '../../components/ArtContent';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ViewOn } from '../../components/ViewOn';
+import { ArtDetails } from './ArtDetails';
 import { ArtInfo } from './ArtInfo';
-import { CollectionInfo } from './CollectionInfo';
 import { ArtAction } from './ArtAction';
 import {
   AmountRange,
-  Bid,
-  BidderPot,
-  BidStateType,
   IPartialCreateAuctionArgs,
   MetaplexModal,
-  notify,
   PriceFloor,
   PriceFloorType,
   TokenAccount,
@@ -48,12 +44,9 @@ import {
 } from '../auctionCreate';
 import { QUOTE_MINT } from '../../constants';
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
-import { sendPlaceBid } from '../../actions/sendPlaceBid';
-import { sendRedeemBid } from '../../actions/sendRedeemBid';
 import { getTokenAccountByMint } from '../../contexts/getTokenAccountByMint';
 import { BottomSection } from './BottomSection';
-import { NewAuction } from './NewAuction';
-import { endSale } from './hooks/endSale';
+import { ArtOwnerAction } from './ArtOwnerAction';
 // import { getGlobalActivityByMint } from '../../contexts/getGlobalActivityByMint';
 
 const { Panel } = Collapse;
@@ -203,143 +196,146 @@ export const ArtView = () => {
   };
 
   const listNow = async () => {
+    return;
     setLoading(true);
     await createAuction();
     setLoading(false);
   };
 
   const cancelList = async () => {
-    if (!auctionView) return;
-    setLoading(true);
-    try {
-      console.log('auctionView endedAt', auctionView.auction.info.endedAt);
-      console.log('accountByMint', accountByMint);
-      console.log('bids', bids);
-      console.log('bidRedemptions', bidRedemptions);
-      console.log('prizeTrackingTickets', prizeTrackingTickets);
-      await endSale({
-        auctionView,
-        connection,
-        accountByMint,
-        bids,
-        bidRedemptions,
-        prizeTrackingTickets,
-        wallet,
-      });
+    return;
+    // if (!auctionView) return;
+    // setLoading(true);
+    // try {
+    //   console.log('auctionView endedAt', auctionView.auction.info.endedAt);
+    //   console.log('accountByMint', accountByMint);
+    //   console.log('bids', bids);
+    //   console.log('bidRedemptions', bidRedemptions);
+    //   console.log('prizeTrackingTickets', prizeTrackingTickets);
+    //   await endSale({
+    //     auctionView,
+    //     connection,
+    //     accountByMint,
+    //     bids,
+    //     bidRedemptions,
+    //     prizeTrackingTickets,
+    //     wallet,
+    //   });
 
-      notify({
-        message: 'Transaction successed',
-        description: '',
-        type: 'success',
-      });
-      setLoading(false);
-    } catch (e) {
-      console.error('endAuction', e);
-      setLoading(false);
-      notify({
-        message: 'Transaction failed...',
-        description: 'There was an issue cancel list. Please try again.',
-        type: 'error',
-      });
-      return;
-    }
+    //   notify({
+    //     message: 'Transaction successed',
+    //     description: '',
+    //     type: 'success',
+    //   });
+    //   setLoading(false);
+    // } catch (e) {
+    //   console.error('endAuction', e);
+    //   setLoading(false);
+    //   notify({
+    //     message: 'Transaction failed...',
+    //     description: 'There was an issue cancel list. Please try again.',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
   };
 
   const buyNow = async () => {
-    if (!auctionView) return;
-    setShowBuyModal(true);
+    return;
+    // if (!auctionView) return;
+    // setShowBuyModal(true);
 
-    // Placing a "bid" of the full amount results in a purchase to redeem.
-    try {
-      console.log('sendPlaceBid');
-      await sendPlaceBid(
-        connection,
-        wallet,
-        myPayingAccount.pubkey,
-        auctionView,
-        accountByMint,
-        instantSalePrice,
-        // make sure all accounts are created
-        'finalized',
-      );
-      // setLastBid(bid);
-    } catch (e) {
-      console.error('sendPlaceBid', e);
-      notify({
-        message: 'Transaction failed...',
-        description: 'There was an issue place a bid. Please try again.',
-        type: 'error',
-      });
-      setShowBuyModal(false);
-      return;
-    }
+    // // Placing a "bid" of the full amount results in a purchase to redeem.
+    // try {
+    //   console.log('sendPlaceBid');
+    //   await sendPlaceBid(
+    //     connection,
+    //     wallet,
+    //     myPayingAccount.pubkey,
+    //     auctionView,
+    //     accountByMint,
+    //     instantSalePrice,
+    //     // make sure all accounts are created
+    //     'finalized',
+    //   );
+    //   // setLastBid(bid);
+    // } catch (e) {
+    //   console.error('sendPlaceBid', e);
+    //   notify({
+    //     message: 'Transaction failed...',
+    //     description: 'There was an issue place a bid. Please try again.',
+    //     type: 'error',
+    //   });
+    //   setShowBuyModal(false);
+    //   return;
+    // }
 
-    const newAuctionState = await update(
-      auctionView.auction.pubkey,
-      wallet.publicKey,
-    );
-    auctionView.auction = newAuctionState[0];
-    auctionView.myBidderPot = newAuctionState[1];
-    auctionView.myBidderMetadata = newAuctionState[2];
-    if (
-      wallet.publicKey &&
-      auctionView.auction.info.bidState.type == BidStateType.EnglishAuction
-    ) {
-      const winnerIndex = auctionView.auction.info.bidState.getWinnerIndex(
-        wallet.publicKey.toBase58(),
-      );
-      if (winnerIndex === null)
-        auctionView.auction.info.bidState.bids.unshift(
-          new Bid({
-            key: wallet.publicKey.toBase58(),
-            amount: new BN(instantSalePrice || 0),
-          }),
-        );
-      // It isnt here yet
-      if (!auctionView.myBidderPot)
-        auctionView.myBidderPot = {
-          pubkey: 'none',
-          //@ts-ignore
-          account: {},
-          info: new BidderPot({
-            bidderPot: 'dummy',
-            bidderAct: wallet.publicKey.toBase58(),
-            auctionAct: auctionView.auction.pubkey,
-            emptied: false,
-          }),
-        };
-    }
-    // Claim the purchase
-    try {
-      await sendRedeemBid(
-        connection,
-        wallet,
-        myPayingAccount.pubkey,
-        auctionView,
-        accountByMint,
-        prizeTrackingTickets,
-        bidRedemptions,
-        bids,
-      );
-      await update();
-    } catch (e) {
-      console.error(e);
-      notify({
-        message: 'Transaction failed...',
-        description:
-          'There was an issue redeeming or refunding your bid. Please try again.',
-        type: 'error',
-      });
-      setShowBuyModal(false);
-      return;
-    }
+    // const newAuctionState = await update(
+    //   auctionView.auction.pubkey,
+    //   wallet.publicKey,
+    // );
+    // auctionView.auction = newAuctionState[0];
+    // auctionView.myBidderPot = newAuctionState[1];
+    // auctionView.myBidderMetadata = newAuctionState[2];
+    // if (
+    //   wallet.publicKey &&
+    //   auctionView.auction.info.bidState.type == BidStateType.EnglishAuction
+    // ) {
+    //   const winnerIndex = auctionView.auction.info.bidState.getWinnerIndex(
+    //     wallet.publicKey.toBase58(),
+    //   );
+    //   if (winnerIndex === null)
+    //     auctionView.auction.info.bidState.bids.unshift(
+    //       new Bid({
+    //         key: wallet.publicKey.toBase58(),
+    //         amount: new BN(instantSalePrice || 0),
+    //       }),
+    //     );
+    //   // It isnt here yet
+    //   if (!auctionView.myBidderPot)
+    //     auctionView.myBidderPot = {
+    //       pubkey: 'none',
+    //       //@ts-ignore
+    //       account: {},
+    //       info: new BidderPot({
+    //         bidderPot: 'dummy',
+    //         bidderAct: wallet.publicKey.toBase58(),
+    //         auctionAct: auctionView.auction.pubkey,
+    //         emptied: false,
+    //       }),
+    //     };
+    // }
+    // // Claim the purchase
+    // try {
+    //   await sendRedeemBid(
+    //     connection,
+    //     wallet,
+    //     myPayingAccount.pubkey,
+    //     auctionView,
+    //     accountByMint,
+    //     prizeTrackingTickets,
+    //     bidRedemptions,
+    //     bids,
+    //   );
+    //   await update();
+    // } catch (e) {
+    //   console.error(e);
+    //   notify({
+    //     message: 'Transaction failed...',
+    //     description:
+    //       'There was an issue redeeming or refunding your bid. Please try again.',
+    //     type: 'error',
+    //   });
+    //   setShowBuyModal(false);
+    //   return;
+    // }
 
-    notify({
-      message: 'Transaction successed',
-      description: '',
-      type: 'success',
-    });
-    setShowBuyModal(false);
+    // notify({
+    //   message: 'Transaction successed',
+    //   description: '',
+    //   type: 'success',
+    // });
+    // setShowBuyModal(false);
   };
 
   return (
@@ -357,7 +353,7 @@ export const ArtView = () => {
                   artview={true}
                 />
               </div>
-              <Collapse className="price-history" expandIconPosition="right">
+              <Collapse className="price-history" expandIconPosition="right" defaultActiveKey={0}>
                 <Panel
                   key={0}
                   header="Price History"
@@ -378,7 +374,7 @@ export const ArtView = () => {
               <div className="art-title">
                 {art.title || <Skeleton paragraph={{ rows: 0 }} />}
               </div>
-              <CollectionInfo />
+              <ArtInfo />
               <ViewOn id={id} />
               {auctionView ? (
                 <ArtAction
@@ -392,7 +388,7 @@ export const ArtView = () => {
                   buyNow={buyNow}
                 />
               ) : (
-                <NewAuction
+                <ArtOwnerAction
                   loading={loading}
                   attributes={attributes}
                   setAttributes={setAttributes}
@@ -400,7 +396,7 @@ export const ArtView = () => {
                 />
               )}
 
-              <ArtInfo art={art} data={data} account={account} />
+              <ArtDetails art={art} data={data} account={account} />
             </Col>
           </Row>
           <BottomSection offers={[]} />

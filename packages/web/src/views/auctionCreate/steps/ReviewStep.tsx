@@ -1,19 +1,16 @@
 import {
   MAX_METADATA_LEN,
   useNativeAccount,
-  WRAPPED_SOL_MINT,
 } from '@oyster/common';
 import { MintLayout } from '@solana/spl-token';
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Statistic, Divider, Spin } from 'antd';
+import { Row, Col, Button, Statistic, Spin } from 'antd';
 import { AuctionCategory, AuctionState } from '../index';
-import { useTokenList } from '../../../contexts/tokenList';
 import { MINIMUM_SAFE_FEE_AUCTION_CREATION } from '../../../constants';
 import { FundsIssueModal } from '../../../components/FundsIssueModal';
-import { AmountLabel } from '../../../components/AmountLabel';
-import { ArtContent } from '../../../components/ArtContent';
+import { ArtCard } from '../../../components/ArtCard';
 
 export const ReviewStep = (props: {
   confirm: () => void;
@@ -22,7 +19,7 @@ export const ReviewStep = (props: {
   connection: Connection;
 }) => {
   const [showFundsIssueModal, setShowFundsIssueModal] = useState(false);
-  const [cost, setCost] = useState(0);
+  const [cost, setCost] = useState(props.attributes.priceFloor);
   const { account } = useNativeAccount();
   useEffect(() => {
     Promise.all([
@@ -53,7 +50,13 @@ export const ReviewStep = (props: {
       </Row>
       <Row className="content-action" gutter={16}>
         <Col span={24} lg={12}>
-          {item?.metadata.info && <ArtContent pubkey={item.metadata.pubkey} />}
+          {item?.metadata.info && 
+            <ArtCard pubkey={item.metadata.pubkey}
+              preview={true}
+              noEvent={true}
+              artview={true} 
+            />
+          }
         </Col>
         <Col className="section" span={24} lg={12}>
           <Statistic
@@ -66,53 +69,46 @@ export const ReviewStep = (props: {
             }
           />
           {cost ? (
-            <AmountLabel
-              title="Cost to Create"
-              amount={cost}
-              tokenInfo={useTokenList().tokenMap.get(
-                WRAPPED_SOL_MINT.toString(),
-              )}
+            <Statistic
+              className='create-statistic'
+              title='Cost to create'
+              value={`◎ ${cost}`}
             />
           ) : (
             <Spin />
           )}
-        </Col>
-      </Row>
-      <Row style={{ display: 'block' }}>
-        <Divider />
-        <Statistic
-          className="create-statistic"
-          title="Start date"
-          value={
-            props.attributes.startSaleTS
-              ? moment
-                  .unix(props.attributes.startSaleTS as number)
-                  .format('dddd, MMMM Do YYYY, h:mm a')
-              : 'Right after successfully published'
-          }
-        />
-        <br />
-        {props.attributes.startListTS && (
           <Statistic
             className="create-statistic"
-            title="Listing go live date"
-            value={moment
-              .unix(props.attributes.startListTS as number)
-              .format('dddd, MMMM Do YYYY, h:mm a')}
+            title="Start date"
+            value={
+              props.attributes.startSaleTS
+                ? moment
+                    .unix(props.attributes.startSaleTS as number)
+                    .format('dddd, MMMM Do YYYY, h:mm a')
+                : 'Right after successfully published'
+            }
           />
-        )}
-        <Divider />
-        <Statistic
-          className="create-statistic"
-          title="Sale ends"
-          value={
-            props.attributes.endTS
-              ? moment
-                  .unix(props.attributes.endTS as number)
-                  .format('dddd, MMMM Do YYYY, h:mm a')
-              : 'Until sold'
-          }
-        />
+          {props.attributes.startListTS && (
+            <Statistic
+              className="create-statistic"
+              title="Listing go live date"
+              value={moment
+                .unix(props.attributes.startListTS as number)
+                .format('dddd, MMMM Do YYYY, h:mm a')}
+            />
+          )}
+          <Statistic
+            className="create-statistic"
+            title="Sale ends"
+            value={
+              props.attributes.endTS
+                ? moment
+                    .unix(props.attributes.endTS as number)
+                    .format('dddd, MMMM Do YYYY, h:mm a')
+                : 'Until sold'
+            }
+          />
+        </Col>
       </Row>
       <Row>
         <Button

@@ -40,7 +40,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
   );
 };
 
-export const NewAuction = (props: {
+export const ArtOwnerAction = (props: {
   loading: boolean;
   attributes: AuctionState;
   setAttributes: (attr: AuctionState) => void;

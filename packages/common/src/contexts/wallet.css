@@ -4,17 +4,14 @@ p {
   font-style: normal;
   font-size: 0.9rem;
 }
-.ant-collapse-ghost
-  > .ant-collapse-item
-  > .ant-collapse-content
-  > .ant-collapse-content-box {
+.ant-collapse-ghost > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
   padding: 0 8px;
 }
 .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
   vertical-align: middle !important;
 }
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
-  padding: 36px 8px 20px;
+  padding: 8px;
 }
 .ant-modal-body .modal-top-content {
   display: flex;
@@ -22,11 +19,11 @@ p {
   align-items: center;
 }
 .ant-modal-body .modal-top-content .logo {
-  margin: 40px 0 16px 0;
+  margin: 20px 0 16px 0;
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: turquoise;
+  object-fit: cover;
 }
 .ant-modal-body .modal-top-content .text {
   font-size: 32px;
@@ -37,7 +34,6 @@ p {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 24px;
 }
 .ant-modal-body .wallet-adapter-btn {
   width: 100%;
@@ -75,7 +71,7 @@ p {
 .ant-collapse.modal-collapse > .ant-collapse-item > .ant-collapse-header {
   background-color: #404144;
   border: none;
-  border-radius: 6px !important;
+  border-radius: 6px!important;
   height: 50px;
   line-height: 50px;
   padding: 0 20px;
