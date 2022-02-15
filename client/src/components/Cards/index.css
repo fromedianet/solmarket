@@ -44,18 +44,18 @@ img.card-img {
   text-align: center;
   border: none;
   border-radius: 6px;
-  moz-transition: all .4s ease-in-out;
-  transition: all .4s ease-in-out;
+  moz-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .gradientBorderWrapper {
   display: inline-block;
   padding: 1px;
   border-radius: 6px;
-  background: linear-gradient(123.73deg,#7a00cc 22%,#f72c87 80.67%);
+  background: linear-gradient(123.73deg, #7a00cc 22%, #f72c87 80.67%);
 }
 
 .me-btn.gradientBorder {
   background: #161320;
-  background-clip: padding-box!important;
+  background-clip: padding-box !important;
 }

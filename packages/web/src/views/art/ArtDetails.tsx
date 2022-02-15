@@ -37,7 +37,11 @@ export const ArtDetails = ({
   // }
 
   return (
-    <Collapse expandIconPosition="right" className="art-info" defaultActiveKey={[1, 2]}>
+    <Collapse
+      expandIconPosition="right"
+      className="art-info"
+      defaultActiveKey={[1, 2]}
+    >
       <Panel
         header={`About ${art.title}`}
         key={0}

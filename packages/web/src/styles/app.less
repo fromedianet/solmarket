@@ -32,29 +32,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 ::-webkit-scrollbar {
-  height:12px;
-  width:12px;
-  background:#000
+  height: 12px;
+  width: 12px;
+  background: #000;
 }
 /* Track */
 // ::-webkit-scrollbar-track {
-//   background: rgba(0, 0, 0, 0.5); 
+//   background: rgba(0, 0, 0, 0.5);
 // }
- 
+
 /* Handle */
-::-webkit-scrollbar-thumb{
-  background:#2a2a36;
+::-webkit-scrollbar-thumb {
+  background: #2a2a36;
   -webkit-border-radius: 1ex;
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .75)
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
 }
 
-::-webkit-scrollbar-corner{
-  background: #000
+::-webkit-scrollbar-corner {
+  background: #000;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #444; 
+  background: #444;
 }
 
 .main-area {
@@ -261,10 +261,11 @@ h1 {
 .ant-steps {
   padding-left: 2px;
 }
-.ant-steps-item-process, .ant-steps-item-finish {
+.ant-steps-item-process,
+.ant-steps-item-finish {
   > .ant-steps-item-container
-  > .ant-steps-item-content
-  > .ant-steps-item-title {
+    > .ant-steps-item-content
+    > .ant-steps-item-title {
     color: hsla(0, 0%, 100%, 0.85);
   }
 }
@@ -280,15 +281,14 @@ h1 {
   .ant-steps-icon-dot {
   background: hsla(0, 0%, 100%, 0.3);
 }
-.ant-steps-item-process, .ant-steps-item-finish {
-  .ant-steps-item-icon
-  > .ant-steps-icon
-  .ant-steps-icon-dot {
+.ant-steps-item-process,
+.ant-steps-item-finish {
+  .ant-steps-item-icon > .ant-steps-icon .ant-steps-icon-dot {
     background: hsla(0, 0%, 100%, 0.85);
   }
 }
-.ant-steps-item-finish 
-  > .ant-steps-item-container 
+.ant-steps-item-finish
+  > .ant-steps-item-container
   > .ant-steps-item-tail::after {
   background-color: hsla(0, 0%, 100%, 0.85);
 }
@@ -313,7 +313,8 @@ h1 {
   color: white;
   border-radius: 8px;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: @bg-pink-gradient;
     color: white;
   }
@@ -321,9 +322,9 @@ h1 {
   &.ant-btn-primary {
     background: @bg-pink-gradient;
     border-color: @bg-purple;
-  
+
     &:hover {
-      opacity: .7;
+      opacity: 0.7;
       border-color: @bg-purple;
     }
   }
@@ -369,7 +370,8 @@ h1 {
   &.ant-btn-dashed {
     border-color: white;
     color: white;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: white;
       border-color: @border-purple;
       background: @bg-pink-gradient;

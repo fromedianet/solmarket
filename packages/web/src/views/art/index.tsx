@@ -353,7 +353,11 @@ export const ArtView = () => {
                   artview={true}
                 />
               </div>
-              <Collapse className="price-history" expandIconPosition="right" defaultActiveKey={0}>
+              <Collapse
+                className="price-history"
+                expandIconPosition="right"
+                defaultActiveKey={0}
+              >
                 <Panel
                   key={0}
                   header="Price History"

@@ -15,7 +15,7 @@
   border-radius: 8px;
   height: 40px;
   padding: 0 12px;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 .edit-btn:hover {
   background-color: #7a00cc;
@@ -47,5 +47,5 @@
   border: 1px solid #e93a88;
 }
 .me-tabs.nav-tabs .nav-link:hover {
-  opacity: .8;
+  opacity: 0.8;
 }

@@ -149,12 +149,12 @@
       &.ant-collapse {
         background: transparent;
         border: none;
-    
+
         & > .ant-collapse-item {
           border: none;
           border-bottom: 1px solid @border-primary-color;
         }
-    
+
         & > .ant-collapse-item > .ant-collapse-header {
           height: 60px;
           color: @text-secondary-color;
@@ -163,19 +163,19 @@
           border-bottom: 1px solid @border-primary-color;
           flex-direction: row-reverse;
           align-items: center;
-    
+
           div {
             &:first-child {
               margin-right: auto;
             }
           }
-    
+
           .ant-collapse-extra {
             margin-right: 8px;
             margin-left: 0px;
           }
         }
-    
+
         .ant-collapse-content {
           background: transparent;
           border: none;
@@ -199,37 +199,38 @@
           background: transparent;
           border: none;
         }
-  
-        .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+
+        .ant-select-disabled.ant-select:not(.ant-select-customize-input)
+          .ant-select-selector {
           color: @text-primary-color;
           background: transparent;
         }
-  
+
         .ant-input-number {
           border: none;
           border-radius: 8px;
-  
+
           .ant-input-number-input {
             height: 40px;
           }
         }
-  
+
         .gradient-wrapper {
           display: inline-block;
           width: 100%;
           padding: 1px;
           border-radius: 8px;
           background: @bg-pink-gradient;
-  
+
           .apply-btn {
             width: 100%;
-            background: #282828!important;
+            background: #282828 !important;
             border: none;
             border-radius: 8px;
             height: 40px;
 
             &:hover {
-              background: transparent!important;
+              background: transparent !important;
             }
           }
         }
@@ -270,7 +271,6 @@
   }
 
   .collection-container {
-
     .items-container {
       display: flex;
       flex-direction: column;
@@ -288,7 +288,7 @@
           cursor: pointer;
 
           &:hover {
-            opacity: .8;
+            opacity: 0.8;
           }
         }
 
@@ -299,7 +299,7 @@
           cursor: pointer;
 
           &:hover {
-            opacity: .8;
+            opacity: 0.8;
           }
 
           @media screen and (min-width: 768px) {
@@ -362,6 +362,7 @@
   }
 }
 
-.ant-select-item-option-selected:not(.ant-select-item-option-disabled) .ant-select-item-option-state {
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+  .ant-select-item-option-state {
   color: @text-primary-color;
 }

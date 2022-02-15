@@ -8,10 +8,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "ignoreChanges": [
-    "**/__tests__/**",
-    "**/*.md"
-  ],
+  "ignoreChanges": ["**/__tests__/**", "**/*.md"],
   "command": {
     "publish": {
       "conventionalCommits": true,

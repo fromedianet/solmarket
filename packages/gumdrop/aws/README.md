@@ -2,11 +2,12 @@
 
 WIP AWS configuration placeholders that can be used as a starting point to
 build a separate instance for gumdrop distribution and OTP verification. Any
-instances of {PLACEHOLDER-*} should be replaced with the appropriate values
+instances of {PLACEHOLDER-\*} should be replaced with the appropriate values
 after construction (and `us-east-2` replaced with an appropriate region if
 necessary).
 
 ### OTP
+
 The main driver is `aws/index.js` that needs to be added to a lambda function.
 Roughly, this depends on a service role that gives it the policy permissions to
 do

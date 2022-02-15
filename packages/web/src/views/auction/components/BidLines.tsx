@@ -21,11 +21,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Row, Col, Statistic, Spin, Form, InputNumber } from 'antd';
 import BN from 'bn.js';
-import {
-  AuctionView,
-  useBidsForAuction,
-  useUserBalance,
-} from '../../../hooks';
+import { AuctionView, useBidsForAuction, useUserBalance } from '../../../hooks';
 import { format } from 'timeago.js';
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -157,7 +153,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const { amount, status } = useAuctionStatus(auctionView);
   const [bidValue, setBidValue] = useState({
     amount: typeof amount === 'string' ? parseFloat(amount) : amount,
-    status: status
+    status: status,
   });
   const connection = useConnection();
   const { prizeTrackingTickets, bidRedemptions } = useMeta();
@@ -180,14 +176,16 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
   const auctionExtended = useAuctionExtended(auctionView);
   const [tickInfo, setTickInfo] = useState({
     gapTick: auctionExtended ? auctionExtended.info.gapTickSizePercentage : 0,
-    tickSize: auctionExtended?.info?.tickSize ? auctionExtended.info.tickSize : new BN(0)
+    tickSize: auctionExtended?.info?.tickSize
+      ? auctionExtended.info.tickSize
+      : new BN(0),
   });
   const mintInfo = useMint(mintKey);
   const symbol = '◎';
   const LAMPORTS_PER_MINT = LAMPORTS_PER_SOL;
 
   const gapTime = (auctionView.auction.info.auctionGap?.toNumber() || 0) / 60;
-  
+
   const tickSizeInvalid = !!(
     tickInfo.tickSize &&
     value &&
@@ -248,14 +246,14 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
     setBidValue({
       amount: typeof amount === 'string' ? parseFloat(amount) : amount,
       status: status,
-    })
+    });
   }, [amount, status]);
 
   useEffect(() => {
     if (auctionView.auctionDataExtended) {
       setTickInfo({
         gapTick: auctionView.auctionDataExtended.info.gapTickSizePercentage,
-        tickSize: auctionView.auctionDataExtended.info.tickSize || new BN(0)
+        tickSize: auctionView.auctionDataExtended.info.tickSize || new BN(0),
       });
     }
   }, [auctionView.auctionDataExtended]);
@@ -271,47 +269,44 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
             myPayingAccount.pubkey,
             auctionView,
             accountByMint,
-            value
+            value,
           );
           notify({
             message: 'Your bid was successed',
-            type: 'success'
+            type: 'success',
           });
           setBidValue(prev => {
             return {
               ...prev,
               amount: fromLamports(newBid.amount, mintInfo),
-            }
+            };
           });
         } catch (e) {
           console.error(e);
           notify({
             message: 'Transaction failed...',
             description: 'There was an issue to place a bid. Please try again',
-            type: 'error'
+            type: 'error',
           });
         }
-        
+
         setLoading(false);
       }
     }
     runSendPlaceBid();
   }, [value]);
 
-  const onFinish = async (values) => {
+  const onFinish = async values => {
     setValue(values.bidPrice);
     setShowPlaceBid(false);
-  }
+  };
 
   return (
     <div>
       <div className="auction-card-container">
         <Row gutter={8} className="auction-content">
           <Col span={24} lg={10}>
-            <Statistic
-              title={bidValue.status}
-              value={`${bidValue.amount} ◎`}
-            />
+            <Statistic title={bidValue.status} value={`${bidValue.amount} ◎`} />
             {!isEnded && (
               <span className="minimum-label">{`Minimum bid: ${minBid} ◎`}</span>
             )}
@@ -381,7 +376,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                     );
                     notify({
                       message: 'Transaction successed',
-                      type: 'success'
+                      type: 'success',
                     });
                   } else {
                     await sendCancelBid(
@@ -396,7 +391,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
                     );
                     notify({
                       message: 'Transaction successed',
-                      type: 'success'
+                      type: 'success',
                     });
                   }
                 } catch (e) {
@@ -452,12 +447,15 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
               </Button>
             )}
           {wallet.connected && !isEnded && (
-            <Button type="primary" size="large" className="action-btn"
+            <Button
+              type="primary"
+              size="large"
+              className="action-btn"
               disabled={loading || tickInfo.tickSize.toNumber() === 0}
               onClick={() => {
                 setShowPlaceBid(true);
                 form.setFieldsValue({
-                  bidPrice: minBid
+                  bidPrice: minBid,
                 });
               }}
             >
@@ -470,15 +468,16 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
               again.
             </span>
           )}
-          {((tickSizeInvalid && tickInfo.tickSize) || tickInfo.tickSize.toNumber() === 0) && (
+          {((tickSizeInvalid && tickInfo.tickSize) ||
+            tickInfo.tickSize.toNumber() === 0) && (
             <span style={{ color: 'red' }}>
               Tick size is ◎{tickInfo.tickSize.toNumber() / LAMPORTS_PER_MINT}.
             </span>
           )}
           {gapBidInvalid && (
             <span style={{ color: 'red' }}>
-              Your bid needs to be at least {tickInfo.gapTick}% larger than an exiting
-              bid during gap periods to be eligible.
+              Your bid needs to be at least {tickInfo.gapTick}% larger than an
+              exiting bid during gap periods to be eligible.
             </span>
           )}
           {!loading && value != undefined && invalidBid && (
@@ -542,8 +541,9 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
         <span style={{ fontWeight: 600 }}>How it works:</span>
         <span>
           1. Connect your wallet and place a bid. The bid must be at least{' '}
-          {tickInfo.tickSize && tickInfo.tickSize.toNumber() / LAMPORTS_PER_MINT} {symbol} greater
-          than the current bid
+          {tickInfo.tickSize &&
+            tickInfo.tickSize.toNumber() / LAMPORTS_PER_MINT}{' '}
+          {symbol} greater than the current bid
         </span>
         <span>
           2. You will automatically get your SOL returned to your wallet if
@@ -571,24 +571,31 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
         visible={showPlaceBid}
         onCancel={() => setShowPlaceBid(false)}
         centered={true}
-        title='Place bid'
+        title="Place bid"
       >
-        <Form
-          form={form}
-          layout='vertical'
-          onFinish={onFinish}
-        >
-          <Form.Item label='Bid amount in SOL' name='bidPrice' style={{ color: 'white'}} required>
+        <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            label="Bid amount in SOL"
+            name="bidPrice"
+            style={{ color: 'white' }}
+            required
+          >
             <InputNumber
               autoFocus
-              className='bid-price'
+              className="bid-price"
               min={minBid}
               bordered={false}
               controls={false}
             />
           </Form.Item>
           <Form.Item style={{ marginBottom: '8px' }}>
-            <Button type='primary' style={{ width: '100%', height: '40px' }} htmlType='submit'>Place bid</Button>
+            <Button
+              type="primary"
+              style={{ width: '100%', height: '40px' }}
+              htmlType="submit"
+            >
+              Place bid
+            </Button>
           </Form.Item>
         </Form>
       </MetaplexModal>

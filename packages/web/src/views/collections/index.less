@@ -15,17 +15,17 @@
     border: 1px solid @border-card;
     cursor: pointer;
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.12);
-    transition-timing-function: cubic-bezier(.25,.25,.75,.75);
-    transition-duration: .3s;
-    transition-property: opacity,transform,-webkit-transform;
+    transition-timing-function: cubic-bezier(0.25, 0.25, 0.75, 0.75);
+    transition-duration: 0.3s;
+    transition-property: opacity, transform, -webkit-transform;
     &:hover {
       transform: translate(0, -5px);
     }
-  
+
     .ant-card-body {
       padding: 0;
       background: transparent;
-  
+
       .image-container {
         display: flex;
         align-items: center;
@@ -33,14 +33,14 @@
         aspect-ratio: 1/1;
         border-radius: 16px;
         background: @bg-primary-color;
-    
+
         .image {
           width: 100%;
           object-fit: cover;
           border-radius: 6px;
         }
       }
-  
+
       .card-caption {
         min-height: 1px;
         padding: 16px 24px;

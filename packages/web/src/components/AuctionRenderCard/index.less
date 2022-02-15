@@ -7,9 +7,9 @@
   cursor: pointer;
   color: @text-primary-color;
   box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.12);
-  transition-timing-function: cubic-bezier(.25,.25,.75,.75);
-  transition-duration: .3s;
-  transition-property: opacity,transform,-webkit-transform;
+  transition-timing-function: cubic-bezier(0.25, 0.25, 0.75, 0.75);
+  transition-duration: 0.3s;
+  transition-property: opacity, transform, -webkit-transform;
 
   &:hover {
     transform: translate(0, -5px);
@@ -27,7 +27,7 @@
       min-height: 160px;
       border-radius: 16px;
       background: @bg-primary-color;
-  
+
       .auction-image {
         width: 100%;
         aspect-ratio: 1/1;
@@ -113,7 +113,6 @@
             font-weight: 600;
           }
         }
-        
       }
     }
   }

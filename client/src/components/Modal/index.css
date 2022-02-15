@@ -14,7 +14,7 @@
   color: #8e8e8e;
 }
 .connect-modal .close-button:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 .connect-modal .wallet-adapter-button {
   width: 100%;

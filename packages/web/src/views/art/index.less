@@ -5,12 +5,12 @@
     font-size: 20px;
     line-height: 28px;
     color: @text-primary-color;
-  
+
     @media screen and (max-width: 768px) {
       margin-top: 20px;
     }
   }
-  
+
   .artwork-view {
     margin-bottom: 20px;
     .artwork-image {
@@ -18,11 +18,11 @@
       min-width: 300px;
       min-height: 300px;
       margin: 0 auto;
-  
+
       display: flex !important;
     }
   }
-  
+
   .info-view {
     display: flex;
     align-items: center;
@@ -32,7 +32,7 @@
         margin-left: 32px;
       }
     }
-  
+
     .info-title {
       font-weight: normal;
       font-size: 14px;
@@ -41,75 +41,76 @@
       color: @text-secondary-color;
     }
   }
-  
+
   .collection-container {
     display: flex;
     align-items: center;
     margin-bottom: 8px;
-  
+
     .collection-name {
       display: flex;
       align-items: center;
       flex: 1 1;
       margin-right: 8px;
     }
-  
+
     .social-share {
       display: flex;
       align-items: center;
       margin-right: 8px;
     }
-  
+
     span {
       margin-left: 4px;
       color: @text-purple;
       font-size: 16px;
     }
   }
-  
+
   .ant-dropdown {
     color: @text-primary-color;
     border: 1px solid @border-primary-color;
     border-radius: 4px;
-  
+
     .ant-dropdown-menu {
       background-color: black;
-  
-      .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+
+      .ant-dropdown-menu-item,
+      .ant-dropdown-menu-submenu-title {
         color: @text-primary-color;
-  
+
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
         }
       }
     }
   }
-  
+
   .social-menu-item {
     display: flex;
     align-items: center;
-  
+
     span {
       margin-left: 6px;
       font-size: 16px;
       color: @text-primary-color;
     }
   }
-  
-  .art-info, .price-history {
+
+  .art-info,
+  .price-history {
     .details-container {
       display: flex;
       flex-direction: column;
       color: @text-primary-color;
       font-size: 1rem;
-  
+
       .sub-container {
         display: flex;
         align-items: center;
         margin-bottom: 4px;
-  
+
         .details-key {
-          
         }
         .details-value {
           color: @text-secondary-color;
@@ -117,16 +118,16 @@
         }
       }
     }
-  
+
     &.ant-collapse {
       background: @bg-body;
       border: none;
-  
+
       & > .ant-collapse-item {
         border: none;
         margin-bottom: 8px;
       }
-  
+
       & > .ant-collapse-item > .ant-collapse-header {
         color: @text-primary-color;
         border: 1px solid @border-primary-color;
@@ -136,43 +137,43 @@
         font-weight: 500;
         flex-direction: row-reverse;
         align-items: center;
-  
+
         div {
           &:first-child {
             margin-right: auto;
           }
         }
-  
+
         .ant-collapse-extra {
           margin-right: 8px;
           margin-left: 0px;
         }
       }
-  
+
       .ant-collapse-content {
         background: @bg-body;
         border: 1px solid @border-primary-color;
         border-radius: 8px;
         color: @text-primary-color;
       }
-  
+
       .bg-secondary .ant-collapse-content {
         background: @bg-secondary-color;
       }
     }
-  
+
     .ant-statistic {
       background: @bg-secondary-color;
       border: none;
       border-radius: 8px;
       padding: 16px;
-  
+
       .ant-statistic-title {
         color: @text-secondary-color;
         text-transform: uppercase;
         font-size: 12px;
       }
-  
+
       .ant-statistic-content {
         color: @text-primary-color;
         font-size: 14px;
@@ -242,7 +243,7 @@
       tr:nth-child(even) {
         background: @bg-table-even;
       }
-      & >tr {
+      & > tr {
         td {
           border: none;
 
@@ -253,12 +254,12 @@
             text-decoration: underline;
           }
         }
-        &.ant-table-row:hover >td, & >td.ant-table-cell-row-hover {
+        &.ant-table-row:hover > td,
+        & > td.ant-table-cell-row-hover {
           background: transparent;
         }
       }
     }
-    
   }
 }
 .main-modal .ant-modal-body {
@@ -271,7 +272,7 @@
     flex-direction: column;
     align-items: center;
     padding: 24px 32px;
-  
+
     .header-text {
       color: @text-secondary-color;
       font-size: 16px;
