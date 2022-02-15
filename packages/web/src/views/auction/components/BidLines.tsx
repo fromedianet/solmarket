@@ -336,7 +336,7 @@ export const BidLines = ({ auctionView }: { auctionView: AuctionView }) => {
               Connect Wallet
             </Button>
           )}
-          {wallet.connected && isEnded && (
+          {wallet.connected && isEnded && isAuctionManagerAuthorityWalletOwner && (
             <Button
               type="primary"
               size="large"
