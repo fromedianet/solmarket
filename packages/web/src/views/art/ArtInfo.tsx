@@ -4,19 +4,19 @@ import { Dropdown, Menu } from 'antd';
 
 const menu = (
   <Menu>
-    <Menu.Item key={0}>
+    <Menu.Item key="facebook">
       <Link to={'/'} className="social-menu-item">
         <img width={24} src={'/icons/facebook2.png'} />
         <span>Share on Facebook</span>
       </Link>
     </Menu.Item>
-    <Menu.Item key={1}>
+    <Menu.Item key="twitter">
       <Link to={'/'} className="social-menu-item">
         <img width={24} src={'/icons/twitter2.png'} />
         <span>Share on Twitter</span>
       </Link>
     </Menu.Item>
-    <Menu.Item key={2}>
+    <Menu.Item key="telegram">
       <Link to={'/'} className="social-menu-item">
         <img width={24} src={'/icons/telegram2.png'} />
         <span>Share on Telegram</span>

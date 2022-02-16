@@ -40,13 +40,13 @@ export const ArtDetails = ({
     <Collapse
       expandIconPosition="right"
       className="art-info"
-      defaultActiveKey={[1, 2]}
+      defaultActiveKey={["attributes", "details"]}
     >
       <Panel
         header={`About ${art.title}`}
-        key={0}
+        key="about"
         className="bg-secondary"
-        extra={<img src="/icons/user.svg" width={24} alt="price history" />}
+        extra={<img src="/icons/user.svg" width={24} alt="about" />}
       >
         <div>
           {hasDescription && <Skeleton paragraph={{ rows: 1 }} />}
@@ -57,8 +57,8 @@ export const ArtDetails = ({
       </Panel>
       <Panel
         header="Attributes"
-        key={1}
-        extra={<img src="/icons/shield.svg" width={24} alt="price history" />}
+        key="attributes"
+        extra={<img src="/icons/shield.svg" width={24} alt="attributes" />}
       >
         {attributes === undefined ? (
           <Skeleton paragraph={{ rows: 3 }} />
@@ -74,9 +74,9 @@ export const ArtDetails = ({
       </Panel>
       <Panel
         header="Details"
-        key={2}
+        key="details"
         className="bg-secondary"
-        extra={<img src="/icons/detail.svg" width={24} alt="price history" />}
+        extra={<img src="/icons/detail.svg" width={24} alt="details" />}
       >
         <div className="details-container">
           <div className="sub-container">
