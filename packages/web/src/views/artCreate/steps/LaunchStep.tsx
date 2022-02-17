@@ -61,8 +61,8 @@ export const LaunchStep = (props: {
           your audience.
         </p>
       </Row>
-      <Row className="content-action" justify="space-around">
-        <Col>
+      <Row gutter={[16, 16]}>
+        <Col span={24} md={12}>
           {props.attributes.image && (
             <ArtCard
               image={image}
@@ -77,7 +77,7 @@ export const LaunchStep = (props: {
             />
           )}
         </Col>
-        <Col className="section" style={{ minWidth: 300 }}>
+        <Col span={24} md={12}>
           <Statistic
             className="create-statistic"
             title="Royalty Percentage"

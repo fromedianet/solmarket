@@ -109,7 +109,7 @@ export const BottomSection = (props: { offers: [] }) => {
     <Collapse
       expandIconPosition="right"
       className="art-info bottom-section"
-      defaultActiveKey={["activities", "more"]}
+      defaultActiveKey={['activities', 'more']}
     >
       <Panel
         header={props.offers.length > 0 ? 'Offers' : 'No offers yet'}
