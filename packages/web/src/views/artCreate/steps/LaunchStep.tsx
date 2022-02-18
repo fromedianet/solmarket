@@ -3,16 +3,13 @@ import {
   IMetadataExtension,
   LAMPORT_MULTIPLIER,
   MAX_METADATA_LEN,
-  WRAPPED_SOL_MINT,
 } from '@oyster/common';
 import { MintLayout } from '@solana/spl-token';
 import { Connection } from '@solana/web3.js';
 import React, { useEffect, useState } from 'react';
 import { ArtCard } from '../../../components/ArtCard';
-import { useTokenList } from '../../../contexts/tokenList';
 import { useArtworkFiles } from '../useArtworkFiles';
 import { Row, Col, Statistic, Spin, Button } from 'antd';
-import { AmountLabel } from '../../../components/AmountLabel';
 
 export const LaunchStep = (props: {
   confirm: () => void;
@@ -86,13 +83,19 @@ export const LaunchStep = (props: {
             suffix="%"
           />
           {cost ? (
-            <AmountLabel
-              title="Cost to Create"
-              amount={cost.toFixed(5)}
-              tokenInfo={useTokenList().tokenMap.get(
-                WRAPPED_SOL_MINT.toString(),
-              )}
+            <Statistic
+              className="create-statistic"
+              title="Royalty Percentage"
+              value={cost.toFixed(5)}
+              suffix="◎"
             />
+            // <AmountLabel
+            //   title="Cost to Create"
+            //   amount={cost.toFixed(5)}
+            //   tokenInfo={useTokenList().tokenMap.get(
+            //     WRAPPED_SOL_MINT.toString(),
+            //   )}
+            // />
           ) : (
             <Spin />
           )}
