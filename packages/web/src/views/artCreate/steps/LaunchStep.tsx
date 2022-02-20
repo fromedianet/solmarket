@@ -89,6 +89,7 @@ export const LaunchStep = (props: {
               value={cost.toFixed(5)}
               suffix="◎"
             />
+          ) : (
             // <AmountLabel
             //   title="Cost to Create"
             //   amount={cost.toFixed(5)}
@@ -96,7 +97,6 @@ export const LaunchStep = (props: {
             //     WRAPPED_SOL_MINT.toString(),
             //   )}
             // />
-          ) : (
             <Spin />
           )}
         </Col>
