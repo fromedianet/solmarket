@@ -27,6 +27,12 @@ export const Items = (props: {
   const [filterList, setFilterList] = useState(props.list);
 
   useEffect(() => {
+    if (props.list.length > 0) {
+      setFilterList(props.list);
+    }
+  }, [props.list]);
+
+  useEffect(() => {
     if (props.filter.price !== priceFilter) {
       setPriceFilter(props.filter.price);
     }
