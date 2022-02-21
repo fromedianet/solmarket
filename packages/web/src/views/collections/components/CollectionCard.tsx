@@ -9,7 +9,7 @@ export const CollectionCard = (props: { pubkey: StringPublicKey }) => {
   const { ref, data } = useExtendedArt(props.pubkey);
 
   return (
-    <Link ref={ref} to={`/collection/${data?.symbol}`}>
+    <Link ref={ref} to={`/collection/${props.pubkey}`}>
       <Card className="collection-card" hoverable={true} bordered={false}>
         <div className="image-over image-container">
           <ArtContent

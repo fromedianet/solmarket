@@ -1,53 +1,53 @@
-import { Col, Divider, Row } from 'antd';
+import { shortenAddress } from '@oyster/common';
+import { Col, Row } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { ArtCard } from '../../components/ArtCard';
-import { CardLoader } from '../../components/MyLoader';
-import { useCreator, useCreatorArts } from '../../hooks';
+import { EmptyView } from '../../components/EmptyView';
+import { useCreator } from '../../hooks';
+import { useCollection } from '../../hooks/useCollection';
+import { CollectionCard } from '../collections/components/CollectionCard';
 
 export const ArtistView = () => {
   const { id } = useParams<{ id: string }>();
   const creator = useCreator(id);
-  const artwork = useCreatorArts(id);
-
-  const artworkGrid = (
-    <Row gutter={[16, 16]}>
-      {artwork.length > 0
-        ? artwork.map(m => {
-            const id = m.pubkey;
-            return (
-              <Col key={id} span={12} md={8} lg={6} xl={4}>
-                <ArtCard pubkey={m.pubkey} preview={false} artview={true} />
-              </Col>
-            );
-          })
-        : [...Array(6)].map((_, idx) => (
-            <Col key={idx} span={24} md={8} lg={6} xl={4}>
-              <CardLoader />
-            </Col>
-          ))}
-    </Row>
+  const collections = useCollection();
+  const ownCollections = collections.filter(item =>
+    item.info.data.creators?.map(it => it.address).includes(id),
   );
 
   return (
     <div className="main-area">
-      <div className="main-page">
+      <div className="creator-page">
         <div className="container">
-          <Divider />
-          <Row style={{ textAlign: 'left', fontSize: '1.4rem' }}>
-            <Col span={24}>
-              <h2>
-                {/* <MetaAvatar creators={creator ? [creator] : []} size={100} /> */}
-                {creator?.info.name || creator?.info.address}
-              </h2>
-              <br />
-              <div className="info-header">ABOUT THE CREATOR</div>
-              <div className="info-content">{creator?.info.description}</div>
-              <br />
-              <div className="info-header">Art Created</div>
-              {artworkGrid}
-            </Col>
-          </Row>
+          <div className="creator-info">
+            {creator?.info.image ? (
+              <img
+                src={creator.info.image}
+                alt="profile"
+                className="creator-image"
+              />
+            ) : (
+              <img
+                src={`https://avatars.dicebear.com/api/jdenticon/${creator?.info.address}.svg`}
+                className="creator-image"
+              />
+            )}
+            <h1>{shortenAddress(creator?.info.address || '')}</h1>
+          </div>
+          <div className="collection-area">
+            <span className="section-title">Collections</span>
+            {ownCollections.length > 0 ? (
+              <Row gutter={[16, 16]}>
+                {ownCollections.map((item, index) => (
+                  <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
+                    <CollectionCard pubkey={item.pubkey} />
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <EmptyView />
+            )}
+          </div>
         </div>
       </div>
     </div>
