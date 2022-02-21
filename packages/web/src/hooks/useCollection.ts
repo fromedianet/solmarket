@@ -6,7 +6,6 @@ export const useCollection = (): ParsedAccount<Metadata>[] => {
   const symbols: string[] = [];
   metadata.forEach(item => {
     if (!symbols.includes(item.info.data.symbol)) {
-      console.log('item', item);
       collections.push(item);
       symbols.push(item.info.data.symbol);
     }

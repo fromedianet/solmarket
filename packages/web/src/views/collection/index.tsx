@@ -8,11 +8,14 @@ import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useMeta } from '@oyster/common';
 import { useParams } from 'react-router-dom';
+import { useExtendedArt } from '../../hooks';
 
 const { Content } = Layout;
 
 export const CollectionView = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const { id } = useParams<{ id: string }>();
+  const { data } = useExtendedArt(id);
+  console.log('data', data);
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
@@ -26,7 +29,7 @@ export const CollectionView = () => {
   });
 
   const { metadata } = useMeta();
-  const collections = metadata.filter(item => item.info.data.symbol === symbol);
+  const collections = metadata.filter(item => item.info.data.symbol === data?.symbol);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -55,7 +58,7 @@ export const CollectionView = () => {
   return (
     <div className="collection-page">
       <div className="collection-info">
-        <CollectionInfo />
+        <CollectionInfo data={data} />
       </div>
       <div className="collection-tabs">
         <div

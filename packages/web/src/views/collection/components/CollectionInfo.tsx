@@ -1,17 +1,20 @@
 import React from 'react';
 import { Row, Col, Statistic } from 'antd';
 import ReadMore from '../../../components/ReadMore';
+import { IMetadataExtension } from '@oyster/common';
 
-export const CollectionInfo = () => {
+export const CollectionInfo = (props: {
+  data: IMetadataExtension | undefined;
+}) => {
   return (
     <div className="info-container">
       <img
         loading="lazy"
         className="info-image"
-        src="/preview.gif"
+        src={props.data?.image}
         alt="avatar"
       />
-      <h1 className="info-title">EYE NFT</h1>
+      <h1 className="info-title">{props.data?.symbol}</h1>
       <div
         role="group"
         className="info-group flex relative lg:absolute lg:top-20 lg:right-6 mb-2"
@@ -67,17 +70,7 @@ export const CollectionInfo = () => {
       <div className="info-description">
         <ReadMore
           // eslint-disable-next-line react/no-children-prop
-          children="Space Runners is the first NFT Metaverse Fashion brand in
-          collaboration with artists and brands, designing digitally through
-          through Augmented Reality (AR) and plug-in's into the Metaverse as
-          as items. As the genesis batch, Space Runners teamed up with NBA
-          Champions Kyle Kuzma and Nick Young to launch a 10K Sneaker NFT
-          Collection. Owners of the NFTs become members of an exclusive
-          RUNNERS club, where they can reap members-only benefits such as
-          tickets to NBA basketball games, signed Kyle Kuzma &amp; Nick Young
-          merchandise, exclusive invites to NBA parties &amp; pick up games,
-          auto-whitelist for Space Runners' next drop, and more. Visit
-          www.spacerunners.com for more information."
+          children={props.data?.description || ''}
           maxLength={300}
         />
       </div>
