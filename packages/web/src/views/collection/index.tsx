@@ -29,7 +29,9 @@ export const CollectionView = () => {
   });
 
   const { metadata } = useMeta();
-  const collections = metadata.filter(item => item.info.data.symbol === data?.symbol);
+  const collections = metadata.filter(
+    item => item.info.data.symbol === data?.symbol,
+  );
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);

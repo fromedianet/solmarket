@@ -3,7 +3,7 @@ import { MenuOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Select } from 'antd';
 import { ConnectButton, shortenAddress, useMeta } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 
@@ -43,14 +43,15 @@ export const LogoLink = () => {
 };
 
 export const AppBar = () => {
+  const history = useHistory();
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
   const { whitelistedCreatorsByCreator } = useMeta();
   const creators = Object.values(whitelistedCreatorsByCreator);
 
-  const onChange = (value) => {
-    window.location.href = `/art/${value}`;
-  }
+  const onChange = value => {
+    history.push(`/artists/${value}`);
+  };
 
   return (
     <div className="navbar-expand-lg">
@@ -66,18 +67,23 @@ export const AppBar = () => {
           )}
           <div className={`search-container ${!showSearchBar && 'tw-hidden'}`}>
             <Select
-              className='search-control'
-              placeholder='Search Creators'
-              optionFilterProp='children'
+              className="search-control"
+              placeholder="Search Creators"
+              optionFilterProp="children"
               onChange={onChange}
               suffixIcon={<SearchOutlined />}
+              value={null}
             >
-              {creators.map((item, index) => 
+              {creators.map((item, index) => (
                 <Option key={index} value={item.info.address}>
-                  <img src={`https://avatars.dicebear.com/api/jdenticon/${item.info.address}.svg`} className='creator-icon' alt={item.info.address}/>
+                  <img
+                    src={`https://avatars.dicebear.com/api/jdenticon/${item.info.address}.svg`}
+                    className="creator-icon"
+                    alt={item.info.address}
+                  />
                   <span>{shortenAddress(item.info.address)}</span>
-                </Option>  
-              )}
+                </Option>
+              ))}
             </Select>
           </div>
         </div>

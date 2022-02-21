@@ -1,4 +1,4 @@
-import { Metadata, ParsedAccount, useMeta } from "@oyster/common"
+import { Metadata, ParsedAccount, useMeta } from '@oyster/common';
 
 export const useCollection = (): ParsedAccount<Metadata>[] => {
   const { metadata } = useMeta();
@@ -9,6 +9,6 @@ export const useCollection = (): ParsedAccount<Metadata>[] => {
       collections.push(item);
       symbols.push(item.info.data.symbol);
     }
-  })
+  });
   return collections;
 };
