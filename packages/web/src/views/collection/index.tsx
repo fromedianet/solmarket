@@ -7,10 +7,15 @@ import { FilterSidebar } from './components/FilterSidebar';
 import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useMeta } from '@oyster/common';
+import { useParams } from 'react-router-dom';
+import { useExtendedArt } from '../../hooks';
 
 const { Content } = Layout;
 
 export const CollectionView = () => {
+  const { id } = useParams<{ id: string }>();
+  const { data } = useExtendedArt(id);
+  console.log('data', data);
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
@@ -24,6 +29,9 @@ export const CollectionView = () => {
   });
 
   const { metadata } = useMeta();
+  const collections = metadata.filter(
+    item => item.info.data.symbol === data?.symbol,
+  );
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -52,7 +60,7 @@ export const CollectionView = () => {
   return (
     <div className="collection-page">
       <div className="collection-info">
-        <CollectionInfo />
+        <CollectionInfo data={data} />
       </div>
       <div className="collection-tabs">
         <div
@@ -81,7 +89,7 @@ export const CollectionView = () => {
         <Content className="collection-container">
           {isItems ? (
             <Items
-              list={metadata}
+              list={collections}
               updateFilters={onUpdateFilters}
               filter={filter}
             />
