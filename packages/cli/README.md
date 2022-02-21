@@ -85,6 +85,7 @@ Stop a mint after a certain amount have sold
 }
 
 ```
+
 ### Whitelist Mint Settings
 
 Here are some examples to help you construct your settings file.
@@ -163,14 +164,14 @@ applied to all.
 
 There are great tools that can make generative art for you. One of the open source tools we like is [HashLips](https://github.com/HashLips/hashlips_art_engine).
 
-
 ## Assets folder
 
 - Folder with file pairs named with incrementing integer numbers starting from `0.png` (or other supported image format) and `0.json` (example below)
 - If you are using an animation format, you must also include a numbered animation file with a supported format (`mp4`, `html`, `glb`, etc...).
 - JSON format can be checked out here: https://docs.metaplex.com/token-metadata/specification.
 
-### Example `0.json` File 
+### Example `0.json` File
+
 ```json
 {
   "name": "SolanaArtProject #0",

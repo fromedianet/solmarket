@@ -42,6 +42,7 @@ export const ArtCreateView = () => {
   const [attributes, setAttributes] = useState<IMetadataExtension>({
     name: '',
     symbol: '',
+    collection: '',
     description: '',
     external_url: '',
     image: '',
@@ -73,6 +74,7 @@ export const ArtCreateView = () => {
     const metadata = {
       name: attributes.name,
       symbol: attributes.symbol,
+      collection: attributes.collection,
       creators: attributes.creators,
       description: attributes.description,
       sellerFeeBasisPoints: attributes.seller_fee_basis_points,

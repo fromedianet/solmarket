@@ -67,7 +67,7 @@ const data = [
     seller: '8BSfryfQ9Qs1MWFWAg58MmB2QAwnLom8LcxtKb4ohT6q',
   },
   {
-    key: 1,
+    key: 2,
     img: 'https://www.arweave.net/0LGLLlB_4e3IMFhoz2aBW78re1rZ7z1g3_0jjHY0EwE?ext=png',
     name: 'Eye #1',
     transaction_id:
@@ -79,7 +79,7 @@ const data = [
     seller: '8BSfryfQ9Qs1MWFWAg58MmB2QAwnLom8LcxtKb4ohT6q',
   },
   {
-    key: 1,
+    key: 3,
     img: 'https://www.arweave.net/0LGLLlB_4e3IMFhoz2aBW78re1rZ7z1g3_0jjHY0EwE?ext=png',
     name: 'Eye #1',
     transaction_id:
@@ -91,7 +91,7 @@ const data = [
     seller: '8BSfryfQ9Qs1MWFWAg58MmB2QAwnLom8LcxtKb4ohT6q',
   },
   {
-    key: 1,
+    key: 4,
     img: 'https://www.arweave.net/0LGLLlB_4e3IMFhoz2aBW78re1rZ7z1g3_0jjHY0EwE?ext=png',
     name: 'Eye #1',
     transaction_id:
@@ -106,10 +106,14 @@ const data = [
 
 export const BottomSection = (props: { offers: [] }) => {
   return (
-    <Collapse expandIconPosition="right" className="art-info bottom-section" defaultActiveKey={[1, 2]}>
+    <Collapse
+      expandIconPosition="right"
+      className="art-info bottom-section"
+      defaultActiveKey={['activities', 'more']}
+    >
       <Panel
         header={props.offers.length > 0 ? 'Offers' : 'No offers yet'}
-        key={0}
+        key="offers"
         className="bg-secondary"
         extra={<img src="/icons/zap.svg" width={24} alt="offers" />}
       >
@@ -117,7 +121,7 @@ export const BottomSection = (props: { offers: [] }) => {
       </Panel>
       <Panel
         header="Activities"
-        key={1}
+        key="activities"
         className="bg-secondary"
         extra={<img src="/icons/price.svg" width={24} alt="activites" />}
       >
@@ -130,7 +134,7 @@ export const BottomSection = (props: { offers: [] }) => {
       </Panel>
       <Panel
         header="More from this collection"
-        key={2}
+        key="more"
         className="bg-secondary"
         extra={
           <img src="/icons/compass.svg" width={24} alt="more collection" />

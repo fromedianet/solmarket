@@ -71,7 +71,7 @@ p {
 .ant-collapse.modal-collapse > .ant-collapse-item > .ant-collapse-header {
   background-color: #404144;
   border: none;
-  border-radius: 6px!important;
+  border-radius: 6px !important;
   height: 50px;
   line-height: 50px;
   padding: 0 20px;

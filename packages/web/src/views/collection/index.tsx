@@ -70,7 +70,7 @@ export const CollectionView = () => {
           onClick={() => setIsItems(false)}
         >
           <img
-            src="icons/activity.svg"
+            src="/icons/activity.svg"
             style={{ width: '24px', marginRight: '8px' }}
           />
           Activities

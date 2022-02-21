@@ -4,7 +4,7 @@ header {
 }
 
 header .navbar {
-  padding: 0!important;
+  padding: 0 !important;
 }
 
 .navbar-expand-lg {
@@ -13,9 +13,12 @@ header .navbar {
   z-index: 2;
   width: 100%;
   pointer-events: auto;
-  transition: rgba(166,175,189,.3) .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
-  transition: rgba(166,175,189,.3) .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s!important;
-  transition: rgba(166,175,189,.3) .3s ease 0s,transform .3s ease 0s,box-shadow .3s ease 0s,border 0s .3s,-webkit-transform .3s ease 0s!important;
+  transition: rgba(166, 175, 189, 0.3) 0.3s ease 0s, box-shadow 0.3s ease 0s,
+    border 0s 0.3s, -webkit-transform 0.3s ease 0s !important;
+  transition: rgba(166, 175, 189, 0.3) 0.3s ease 0s, transform 0.3s ease 0s,
+    box-shadow 0.3s ease 0s, border 0s 0.3s !important;
+  transition: rgba(166, 175, 189, 0.3) 0.3s ease 0s, transform 0.3s ease 0s,
+    box-shadow 0.3s ease 0s, border 0s 0.3s, -webkit-transform 0.3s ease 0s !important;
 }
 
 .navbar-sticky {
@@ -62,7 +65,7 @@ li {
 }
 
 .ms-auto {
-  margin-left: auto!important;
+  margin-left: auto !important;
 }
 
 .navbar-collapse {
@@ -135,13 +138,13 @@ li {
 
 @media (min-width: 991px) {
   .navbar-collapse {
-    overflow: unset!important;
+    overflow: unset !important;
   }
   .nav-item--main-nav {
     margin: 0 1rem 0 0;
   }
   .navbar-nav .nav-item a:not(.btn) {
-    font-size: .75rem;
+    font-size: 0.75rem;
   }
   .navbar-expand-lg .navbar-nav .nav-link {
     padding-right: 0.5rem;
@@ -155,7 +158,7 @@ li {
     padding-bottom: 0;
   }
   .subnav-nav-link {
-    font-size: .875rem;
+    font-size: 0.875rem;
     line-height: 1.25rem;
   }
 }
@@ -170,6 +173,6 @@ li {
   }
   .nav-item--inner {
     padding-left: 1rem;
-    padding-right: 1rem
+    padding-right: 1rem;
   }
 }

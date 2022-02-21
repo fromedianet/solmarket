@@ -54,11 +54,7 @@ const AuctionItemCard = ({
       preview={false}
       noEvent={true}
       onClick={onSelect}
-      className={
-        isSelected
-          ? 'selected-card art-card-for-selector'
-          : 'not-selected-card art-card-for-selector'
-      }
+      className={isSelected ? 'selected-card' : 'not-selected-card'}
       onClose={onClose}
     />
   );

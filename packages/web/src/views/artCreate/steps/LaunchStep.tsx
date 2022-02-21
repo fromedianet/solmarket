@@ -3,16 +3,13 @@ import {
   IMetadataExtension,
   LAMPORT_MULTIPLIER,
   MAX_METADATA_LEN,
-  WRAPPED_SOL_MINT,
 } from '@oyster/common';
 import { MintLayout } from '@solana/spl-token';
 import { Connection } from '@solana/web3.js';
 import React, { useEffect, useState } from 'react';
 import { ArtCard } from '../../../components/ArtCard';
-import { useTokenList } from '../../../contexts/tokenList';
 import { useArtworkFiles } from '../useArtworkFiles';
 import { Row, Col, Statistic, Spin, Button } from 'antd';
-import { AmountLabel } from '../../../components/AmountLabel';
 
 export const LaunchStep = (props: {
   confirm: () => void;
@@ -61,8 +58,8 @@ export const LaunchStep = (props: {
           your audience.
         </p>
       </Row>
-      <Row className="content-action" justify="space-around">
-        <Col>
+      <Row gutter={[16, 16]}>
+        <Col span={24} md={12}>
           {props.attributes.image && (
             <ArtCard
               image={image}
@@ -77,7 +74,7 @@ export const LaunchStep = (props: {
             />
           )}
         </Col>
-        <Col className="section" style={{ minWidth: 300 }}>
+        <Col span={24} md={12}>
           <Statistic
             className="create-statistic"
             title="Royalty Percentage"
@@ -86,14 +83,20 @@ export const LaunchStep = (props: {
             suffix="%"
           />
           {cost ? (
-            <AmountLabel
-              title="Cost to Create"
-              amount={cost.toFixed(5)}
-              tokenInfo={useTokenList().tokenMap.get(
-                WRAPPED_SOL_MINT.toString(),
-              )}
+            <Statistic
+              className="create-statistic"
+              title="Royalty Percentage"
+              value={cost.toFixed(5)}
+              suffix="◎"
             />
           ) : (
+            // <AmountLabel
+            //   title="Cost to Create"
+            //   amount={cost.toFixed(5)}
+            //   tokenInfo={useTokenList().tokenMap.get(
+            //     WRAPPED_SOL_MINT.toString(),
+            //   )}
+            // />
             <Spin />
           )}
         </Col>

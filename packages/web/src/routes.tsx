@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Providers } from './providers';
 import {
   AnalyticsView,
@@ -29,7 +29,7 @@ export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
   return (
     <>
-      <HashRouter basename={'/'}>
+      <BrowserRouter basename={'/'}>
         <Providers>
           <Switch>
             {shouldEnableNftPacks && (
@@ -103,7 +103,7 @@ export function Routes() {
             <Route path="/" component={() => <HomeView />} />
           </Switch>
         </Providers>
-      </HashRouter>
+      </BrowserRouter>
     </>
   );
 }

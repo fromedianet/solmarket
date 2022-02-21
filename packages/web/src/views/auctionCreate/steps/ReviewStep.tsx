@@ -1,7 +1,4 @@
-import {
-  MAX_METADATA_LEN,
-  useNativeAccount,
-} from '@oyster/common';
+import { MAX_METADATA_LEN, useNativeAccount } from '@oyster/common';
 import { MintLayout } from '@solana/spl-token';
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import moment from 'moment';
@@ -50,13 +47,14 @@ export const ReviewStep = (props: {
       </Row>
       <Row className="content-action" gutter={16}>
         <Col span={24} lg={12}>
-          {item?.metadata.info && 
-            <ArtCard pubkey={item.metadata.pubkey}
+          {item?.metadata.info && (
+            <ArtCard
+              pubkey={item.metadata.pubkey}
               preview={true}
               noEvent={true}
-              artview={true} 
+              artview={true}
             />
-          }
+          )}
         </Col>
         <Col className="section" span={24} lg={12}>
           <Statistic
@@ -70,8 +68,8 @@ export const ReviewStep = (props: {
           />
           {cost ? (
             <Statistic
-              className='create-statistic'
-              title='Cost to create'
+              className="create-statistic"
+              title="Cost to create"
               value={`◎ ${cost}`}
             />
           ) : (
