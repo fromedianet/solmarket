@@ -88,7 +88,7 @@ export function Routes() {
             />
             <Route
               exact
-              path="/collection/:id"
+              path="/collection/:symbol"
               component={() => <CollectionView />}
             />
             <Route
