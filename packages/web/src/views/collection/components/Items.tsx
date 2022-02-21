@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Select, Tag } from 'antd';
-import { SearchBar } from '../../../components/SearchBar';
+import { Row, Col, Select, Tag, Input } from 'antd';
 import { Metadata, ParsedAccount } from '@oyster/common';
 import { ArtCard } from '../../../components/ArtCard';
 import { EmptyView } from '../../../components/EmptyView';
 
+const { Search } = Input;
 const DELIMITER = '|&=&|';
 
 export const Items = (props: {
@@ -24,6 +24,7 @@ export const Items = (props: {
     props.filter.attributes,
   );
   const [priceTag, setPriceTag] = useState<string | undefined>();
+  const [filterList, setFilterList] = useState(props.list);
 
   useEffect(() => {
     if (props.filter.price !== priceFilter) {
@@ -53,6 +54,15 @@ export const Items = (props: {
 
   const onRefresh = () => {
     console.log('refresh');
+  };
+
+  const onSearch = value => {
+    // TODO: attribute filters, sort by options
+    const filters = props.list.filter(
+      item =>
+        item.info.data.name.toLowerCase().indexOf(value.toLowerCase()) > -1,
+    );
+    setFilterList(filters);
   };
 
   const onClosePriceTag = () => {
@@ -98,7 +108,12 @@ export const Items = (props: {
           <div className="refresh-btn" onClick={onRefresh}>
             <img src="/icons/refresh.svg" alt="refresh" />
           </div>
-          <SearchBar placeholder="Search" controlClass="search-control" />
+          <Search
+            placeholder="Search"
+            className="search-control"
+            onSearch={onSearch}
+            allowClear
+          />
         </Col>
         <Col span={24} md={12} className="control-container">
           <div className="filter-btn" onClick={onRefresh}>
@@ -141,8 +156,8 @@ export const Items = (props: {
         )}
       </div>
       <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
-        {props.list && props.list.length > 0 ? (
-          props.list.map((item, index) => (
+        {filterList.length > 0 ? (
+          filterList.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
               <ArtCard pubkey={item.pubkey} preview={false} artview={true} />
             </Col>
