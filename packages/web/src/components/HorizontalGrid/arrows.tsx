@@ -50,10 +50,10 @@ export function LeftArrow() {
 }
 
 export function RightArrow() {
-  const { isLastItemVisible, scrollNext, visibleItemsWithoutSeparators } =
+  const { isLastItemVisible, scrollNext, visibleItemsWithoutSeparators, items } =
     useContext(VisibilityContext);
   const [disabled, setDisabled] = useState(
-    !visibleItemsWithoutSeparators.length && isLastItemVisible,
+    !items.size || (!visibleItemsWithoutSeparators.length && isLastItemVisible),
   );
 
   useEffect(() => {
