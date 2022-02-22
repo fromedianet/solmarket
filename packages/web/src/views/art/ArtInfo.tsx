@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, Menu } from 'antd';
+import { IMetadataExtension } from '@oyster/common';
 
 const menu = (
   <Menu>
@@ -25,12 +26,15 @@ const menu = (
   </Menu>
 );
 
-export const ArtInfo = () => {
+export const ArtInfo = (props: {
+  pubkey: string;
+  data: IMetadataExtension | undefined;
+}) => {
   return (
     <div className="collection-container">
-      <Link to={''} className="collection-name">
+      <Link to={`/collection/${props.pubkey}`} className="collection-name">
         <img width={20} src={'/icons/check.svg'} />
-        <span>{'collection_name'}</span>
+        <span>{props.data?.symbol}</span>
       </Link>
       <Dropdown overlay={menu} trigger={['click']}>
         <a className="social-share" onClick={e => e.preventDefault()}>

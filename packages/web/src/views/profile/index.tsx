@@ -1,8 +1,12 @@
-import { ConnectButton, MetaplexModal, shortenAddress } from '@oyster/common';
+import {
+  ConnectButton,
+  CopySpan,
+  MetaplexModal,
+  shortenAddress,
+} from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useState } from 'react';
 import { Button, Row, Col, Statistic, Tabs, Form, Input, message } from 'antd';
-import { CopySpan } from '../../components/CopySpan';
 import { useCreator, useCreatorArts } from '../../hooks';
 import { ArtCard } from '../../components/ArtCard';
 

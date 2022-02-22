@@ -9,6 +9,7 @@ const DELIMITER = '|&=&|';
 
 export const Items = (props: {
   list: ParsedAccount<Metadata>[];
+  symbol: string | undefined;
   filter: {
     price: {
       symbol: string | undefined;
@@ -165,7 +166,12 @@ export const Items = (props: {
         {filterList.length > 0 ? (
           filterList.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <ArtCard pubkey={item.pubkey} preview={false} artview={true} />
+              <ArtCard
+                pubkey={item.pubkey}
+                symbol={props.symbol}
+                preview={false}
+                artview={true}
+              />
             </Col>
           ))
         ) : (

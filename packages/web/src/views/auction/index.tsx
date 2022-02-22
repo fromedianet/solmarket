@@ -4,8 +4,7 @@ import { Col, Row, Skeleton, Statistic } from 'antd';
 import { useArt, useAuction, useExtendedArt } from '../../hooks';
 import { ArtContent } from '../../components/ArtContent';
 
-import { shortenAddress, useMeta } from '@oyster/common';
-import { CopySpan } from '../../components/CopySpan';
+import { CopySpan, shortenAddress, useMeta } from '@oyster/common';
 import { BidLines } from './components/BidLines';
 
 export const AuctionView = () => {

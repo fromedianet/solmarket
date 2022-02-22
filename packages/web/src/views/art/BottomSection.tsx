@@ -1,7 +1,6 @@
 import React from 'react';
 import { Collapse, Table } from 'antd';
-import { CopySpan } from '../../components/CopySpan';
-import { shortenAddress } from '@oyster/common';
+import { CopySpan, shortenAddress } from '@oyster/common';
 
 const { Panel } = Collapse;
 
@@ -39,17 +38,13 @@ const columns = [
     title: 'BUYER',
     dataIndex: 'buyer',
     key: 'buyer',
-    render: text => (
-      <CopySpan value={shortenAddress(text)} copyText={text} className="" />
-    ),
+    render: text => <CopySpan value={shortenAddress(text)} copyText={text} />,
   },
   {
     title: 'SELLER',
     dataIndex: 'seller',
     key: 'seller',
-    render: text => (
-      <CopySpan value={shortenAddress(text)} copyText={text} className="" />
-    ),
+    render: text => <CopySpan value={shortenAddress(text)} copyText={text} />,
   },
 ];
 

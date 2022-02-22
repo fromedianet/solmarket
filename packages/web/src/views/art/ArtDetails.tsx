@@ -1,12 +1,12 @@
 import React from 'react';
 import { Collapse, Skeleton, Row, Col, Statistic } from 'antd';
 import {
+  CopySpan,
   IMetadataExtension,
   shortenAddress,
   TokenAccount,
 } from '@oyster/common';
 import { Art } from '../../types';
-import { CopySpan } from '../../components/CopySpan';
 
 const { Panel } = Collapse;
 export const ArtDetails = ({
@@ -88,7 +88,6 @@ export const ArtDetails = ({
                 <CopySpan
                   value={shortenAddress(art.mint)}
                   copyText={art.mint}
-                  className=""
                 />
               )}
             </div>
@@ -101,7 +100,6 @@ export const ArtDetails = ({
                   <CopySpan
                     value={shortenAddress(account.pubkey)}
                     copyText={account.pubkey}
-                    className=""
                   />
                 </div>
               </div>
@@ -111,7 +109,6 @@ export const ArtDetails = ({
                   <CopySpan
                     value={shortenAddress(account.info.owner.toBase58())}
                     copyText={account.info.owner.toBase58()}
-                    className=""
                   />
                 </div>
               </div>

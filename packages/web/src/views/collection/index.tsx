@@ -90,6 +90,7 @@ export const CollectionView = () => {
           {isItems ? (
             <Items
               list={collections}
+              symbol={data?.symbol}
               updateFilters={onUpdateFilters}
               filter={filter}
             />

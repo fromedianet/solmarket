@@ -378,7 +378,7 @@ export const ArtView = () => {
               <div className="art-title">
                 {art.title || <Skeleton paragraph={{ rows: 0 }} />}
               </div>
-              <ArtInfo />
+              <ArtInfo pubkey={id} data={data} />
               <ViewOn id={id} />
               {auctionView ? (
                 <ArtAction
