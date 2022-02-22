@@ -12,13 +12,63 @@ footer.ant-layout-footer {
   width: 100%;
 }
 
-.auction-section {
+.home-section {
   width: 100%;
   margin-top: 40px;
 
-  .auction-title {
-    color: @text-primary-color;
-    font-size: 32px;
-    font-weight: 800;
+  .section-header {
+    display: flex;
+    align-items: center;
+
+    .section-title {
+      color: @text-primary-color;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .see-all {
+      margin-left: auto;
+      color: @text-primary-color;
+      padding: 4px 8px;
+      border: 2px solid @border-primary-color;
+      border-radius: 2px;
+    }
+
+    .section-radio.ant-radio-group {
+      border: 1px solid @border-primary-color;
+      border-radius: 20px;
+      margin-left: 32px;
+
+      .ant-radio-button-wrapper {
+        border: none;
+        border-radius: 20px;
+        background: transparent;
+        color: @text-primary-color;
+      }
+
+      .ant-radio-button-wrapper-checked {
+        background: @bg-pink;
+      }
+
+      .ant-radio-button-wrapper:not(:first-child)::before {
+        width: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-title {
+        color: @text-primary-color;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .see-all {
+        display: none;
+      }
+    }
+  }
+
+  .home-collection {
+    width: 218px!important;
   }
 }
