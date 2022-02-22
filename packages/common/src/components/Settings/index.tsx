@@ -1,9 +1,7 @@
 import React from 'react';
-import { Tooltip } from 'antd';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { shortenAddress } from '../../utils';
-import { CopyOutlined } from '@ant-design/icons';
-import { Identicon } from '../Identicon';
+import { CopySpan } from '../CopySpan';
 
 export const Settings = ({
   additionalSettings,
@@ -22,30 +20,20 @@ export const Settings = ({
           padding: '15px 0',
         }}
       >
-        <Identicon
-          address={publicKey?.toBase58()}
+        <img
+          src={`https://avatars.dicebear.com/api/jdenticon/${publicKey?.toBase58()}.svg`}
           style={{
             width: 48,
+            borderRadius: 24,
+            border: '1px solid white',
+            marginBottom: 4,
           }}
         />
         {publicKey && (
-          <>
-            <Tooltip title="Address copied">
-              <div
-                style={{
-                  fontWeight: 600,
-                  letterSpacing: '-0.02em',
-                  color: '#FFFFFF',
-                }}
-                onClick={() =>
-                  navigator.clipboard.writeText(publicKey?.toBase58() || '')
-                }
-              >
-                <CopyOutlined />
-                &nbsp;{shortenAddress(publicKey?.toBase58())}
-              </div>
-            </Tooltip>
-          </>
+          <CopySpan
+            value={shortenAddress(publicKey.toBase58())}
+            copyText={publicKey.toBase58()}
+          />
         )}
         <br />
         <span

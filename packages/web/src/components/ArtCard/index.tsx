@@ -17,7 +17,7 @@ export interface ArtCardProps extends CardProps {
   category?: MetadataCategory;
 
   name?: string;
-  symbol?: string;
+  symbol?: string | undefined;
   description?: string;
   creators?: Artist[];
   preview?: boolean;
@@ -41,6 +41,7 @@ export const ArtCard = (props: ArtCardProps) => {
     animationURL,
     name,
     preview,
+    symbol,
     // creators,
     // description,
     onClose,
@@ -92,7 +93,7 @@ export const ArtCard = (props: ArtCardProps) => {
         <div className="card-caption">
           <h6>{artName}</h6>
           <div className="card-collection-name">
-            <span>collection_name</span>
+            <span>{symbol}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
           {!noEvent && instantSalePrice > 0 && (

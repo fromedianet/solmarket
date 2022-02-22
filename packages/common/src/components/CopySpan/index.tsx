@@ -8,7 +8,7 @@ export const CopySpan = ({
 }: {
   value: string;
   copyText: string;
-  className: string;
+  className?: string;
 }) => {
   const [clicked, setClicked] = useState(false);
 
@@ -28,7 +28,7 @@ export const CopySpan = ({
     <Tooltip title={clicked ? 'Copied' : 'Click to copy'}>
       <span
         className={className}
-        style={{ cursor: 'pointer' }}
+        style={{ cursor: 'pointer', color: 'white' }}
         onClick={onClick}
       >
         {value}
