@@ -39,9 +39,9 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         <Menu.Item key="all-collections">
           <Link to="/collections">All</Link>
         </Menu.Item>
-        <Menu.Item key="popular-collections">
+        {/* <Menu.Item key="popular-collections">
           <Link to="/collections?type=popular">Popular</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="new-collections">
           <Link to="/collections?type=new">new</Link>
         </Menu.Item>
