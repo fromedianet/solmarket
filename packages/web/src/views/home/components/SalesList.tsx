@@ -30,69 +30,115 @@ export const SalesListView = () => {
         useBannerBg
       />
       <div className="home-section">
-        <div className='section-header'>
+        <div className="section-header">
           <span className="section-title">Collections</span>
-          <Radio.Group defaultValue={collectionStatus} buttonStyle='solid' className='section-radio'>
-            <Radio.Button value='all' onClick={() => setCollectionStatus('all')}>All</Radio.Button>
-            <Radio.Button value='new' onClick={() => setCollectionStatus('new')}>New</Radio.Button>
+          <Radio.Group
+            defaultValue={collectionStatus}
+            buttonStyle="solid"
+            className="section-radio"
+          >
+            <Radio.Button
+              value="all"
+              onClick={() => setCollectionStatus('all')}
+            >
+              All
+            </Radio.Button>
+            <Radio.Button
+              value="new"
+              onClick={() => setCollectionStatus('new')}
+            >
+              New
+            </Radio.Button>
           </Radio.Group>
-          <Link to={`/collections?type=${collectionStatus}`} className='see-all'>See All</Link>
+          <Link
+            to={`/collections?type=${collectionStatus}`}
+            className="see-all"
+          >
+            See All
+          </Link>
         </div>
         {isLoading ? (
           [...Array(10)].map((_, idx) => <CardLoader key={idx} />)
         ) : (
-          <HorizontalGrid childrens={collections.map((it, index) =>
-            <CollectionCard
-              key={index}
-              itemId={`${index}`}
-              pubkey={it.pubkey}
-              className="home-collection"
-            />
-          )} />
+          <HorizontalGrid
+            childrens={collections.map((it, index) => (
+              <CollectionCard
+                key={index}
+                itemId={`${index}`}
+                pubkey={it.pubkey}
+                className="home-collection"
+              />
+            ))}
+          />
         )}
       </div>
       <div className="home-section">
-        <div className='section-header'>
+        <div className="section-header">
           <span className="section-title">Auctions</span>
-          <Radio.Group defaultValue={auctionStatus} buttonStyle='solid' className='section-radio'>
-            <Radio.Button value={AuctionViewState.Live} onClick={() => setAuctionStatus(AuctionViewState.Live)}>Live</Radio.Button>
-            <Radio.Button value={AuctionViewState.Upcoming} onClick={() => setAuctionStatus(AuctionViewState.Upcoming)}>Upcoming</Radio.Button>
-            <Radio.Button value={AuctionViewState.Ended} onClick={() => setAuctionStatus(AuctionViewState.Ended)}>Ended</Radio.Button>
+          <Radio.Group
+            defaultValue={auctionStatus}
+            buttonStyle="solid"
+            className="section-radio"
+          >
+            <Radio.Button
+              value={AuctionViewState.Live}
+              onClick={() => setAuctionStatus(AuctionViewState.Live)}
+            >
+              Live
+            </Radio.Button>
+            <Radio.Button
+              value={AuctionViewState.Upcoming}
+              onClick={() => setAuctionStatus(AuctionViewState.Upcoming)}
+            >
+              Upcoming
+            </Radio.Button>
+            <Radio.Button
+              value={AuctionViewState.Ended}
+              onClick={() => setAuctionStatus(AuctionViewState.Ended)}
+            >
+              Ended
+            </Radio.Button>
           </Radio.Group>
-          <Link to={`/auctions`} className='see-all'>See All</Link>
+          <Link to={`/auctions`} className="see-all">
+            See All
+          </Link>
         </div>
-        {isLoading && (
-          [...Array(10)].map((_, idx) => <CardLoader key={idx} />)
-        )}
+        {isLoading && [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
         {!isLoading && auctionStatus === AuctionViewState.Live && (
-          <HorizontalGrid childrens={liveAuctions.map((auction, index) =>
-            <AuctionRenderCard
-              key={index}
-              auctionView={auction}
-              itemId={`${index}`}
-              className="home-collection"
-            />
-          )} />
+          <HorizontalGrid
+            childrens={liveAuctions.map((auction, index) => (
+              <AuctionRenderCard
+                key={index}
+                auctionView={auction}
+                itemId={`${index}`}
+                className="home-collection"
+              />
+            ))}
+          />
         )}
         {!isLoading && auctionStatus === AuctionViewState.Upcoming && (
-          <HorizontalGrid childrens={upcomingAuctions.map((auction, index) =>
-            <AuctionRenderCard
-              key={index}
-              auctionView={auction}
-              itemId={`${index}`}
-              className="home-collection"
-            />
-          )} />
+          <HorizontalGrid
+            childrens={upcomingAuctions.map((auction, index) => (
+              <AuctionRenderCard
+                key={index}
+                auctionView={auction}
+                itemId={`${index}`}
+                className="home-collection"
+              />
+            ))}
+          />
         )}
         {!isLoading && auctionStatus === AuctionViewState.Ended && (
-          <HorizontalGrid childrens={endedAuctions.map((auction, index) =>
-            <AuctionRenderCard
-              key={index}
-              auctionView={auction}
-              itemId={`${index}`}
-              className="home-collection"
-            />
-          )} />
+          <HorizontalGrid
+            childrens={endedAuctions.map((auction, index) => (
+              <AuctionRenderCard
+                key={index}
+                auctionView={auction}
+                itemId={`${index}`}
+                className="home-collection"
+              />
+            ))}
+          />
         )}
       </div>
     </div>

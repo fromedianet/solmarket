@@ -56,7 +56,11 @@ export const AuctionRenderCard = (props: AuctionCard) => {
       : 'ENDED';
 
   const card = (
-    <Card hoverable={true} className={`auction-render-card ${props.className && props.className}`} bordered={false}>
+    <Card
+      hoverable={true}
+      className={`auction-render-card ${props.className && props.className}`}
+      bordered={false}
+    >
       <Link
         key={auctionView.auction.pubkey}
         to={`/auction/${auctionView.auction.pubkey}`}
