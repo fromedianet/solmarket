@@ -119,7 +119,9 @@ export const ArtAction = (props: {
                 </Button>
               </Col>
               <Col span={14}>
-                <Button className="button" disabled>Make an offer</Button>
+                <Button className="button" disabled>
+                  Make an offer
+                </Button>
               </Col>
             </Row>
           )

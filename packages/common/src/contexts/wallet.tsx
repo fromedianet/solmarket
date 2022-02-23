@@ -68,7 +68,7 @@ export const WalletModal: FC = () => {
   return (
     <MetaplexModal visible={visible} onCancel={close}>
       <div className="modal-top-content">
-        <img src="/solana-logo.jpg" alt="logo" className="logo" />
+        <img src="/favicon-96x96.png" alt="logo" className="logo" />
         <p className="text">Connect Wallet</p>
       </div>
       <div className="modal-btn-container">
