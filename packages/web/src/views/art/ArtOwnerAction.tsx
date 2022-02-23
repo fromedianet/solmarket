@@ -86,7 +86,7 @@ export const ArtOwnerAction = (props: {
               </Col>
               <Col span={12}>
                 <Form.Item>
-                  <Button className="button" htmlType="submit">
+                  <Button className="button" htmlType="submit" disabled>
                     {props.loading ? <Spin /> : 'List Now'}
                   </Button>
                 </Form.Item>
