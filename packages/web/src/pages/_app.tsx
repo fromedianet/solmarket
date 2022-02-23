@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Solana NFT Marketplace</title>
+        <title>PAPERCITY</title>
       </Head>
       <div id="root">
         <Component {...pageProps} />

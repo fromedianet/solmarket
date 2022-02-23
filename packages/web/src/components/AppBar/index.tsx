@@ -37,7 +37,7 @@ export const WalletInfo = () => {
 export const LogoLink = () => {
   return (
     <Link to={`/`} className="navbar-brand">
-      <img src={'/solana-logo.jpg'} />
+      <img src={'/papercity-logo.png'} />
     </Link>
   );
 };
