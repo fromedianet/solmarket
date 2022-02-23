@@ -309,9 +309,10 @@ h1 {
   font-weight: 600;
   font-size: 16px;
   line-height: 16px;
-  background-color: transparent !important;
+  background: transparent;
   color: white;
   border-radius: 8px;
+  border-color: @border-pink;
 
   &:hover,
   &:focus {
@@ -321,11 +322,11 @@ h1 {
 
   &.ant-btn-primary {
     background: @bg-pink;
-    border-color: @bg-pink;
+    border-color: @border-pink;
 
     &:hover {
       opacity: 0.7;
-      border-color: @bg-pink;
+      border-color: @border-pink;
     }
   }
 
