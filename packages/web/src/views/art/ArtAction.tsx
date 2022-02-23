@@ -80,7 +80,7 @@ export const ArtAction = (props: {
           <ConnectButton className="button" />
         ) : props.isOwner ? (
           alreadyListed ? (
-            <Button className="button" onClick={props.cancelList}>
+            <Button className="button" onClick={props.cancelList} disabled>
               {props.loading ? <Spin /> : 'Cancel Listing'}
             </Button>
           ) : (
@@ -102,7 +102,7 @@ export const ArtAction = (props: {
                 </Col>
                 <Col span={12}>
                   <Form.Item>
-                    <Button className="button" htmlType="submit">
+                    <Button className="button" htmlType="submit" disabled>
                       {props.loading ? <Spin /> : 'List Now'}
                     </Button>
                   </Form.Item>
@@ -114,12 +114,12 @@ export const ArtAction = (props: {
           alreadyListed && (
             <Row gutter={16}>
               <Col span={10}>
-                <Button className="button" onClick={props.buyNow}>
+                <Button className="button" disabled onClick={props.buyNow}>
                   Buy now
                 </Button>
               </Col>
               <Col span={14}>
-                <Button className="button">Make an offer</Button>
+                <Button className="button" disabled>Make an offer</Button>
               </Col>
             </Row>
           )
