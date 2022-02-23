@@ -4,7 +4,6 @@
     "packages": [
       "packages/cli",
       "packages/common",
-      "packages/gumdrop",
       "packages/web"
     ]
   },
@@ -15,7 +14,7 @@
   },
   "scripts": {
     "bootstrap": "lerna link && lerna bootstrap",
-    "build": "lerna run build --ignore=token-entangler --ignore=candy-machine-ui",
+    "build": "lerna run build",
     "build-web": "lerna run build --stream --scope @oyster/common --scope web",
     "start": "cross-env CI=true lerna run start --scope @oyster/common --stream --parallel --scope web",
     "lint": "prettier -c 'packages/*/{src,test}/**/*.{ts,tsx}' && npm run lint:eslint",
