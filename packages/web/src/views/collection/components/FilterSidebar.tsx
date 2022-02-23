@@ -183,11 +183,12 @@ export const FilterSidebar = (props: {
                   </Form.Item>
                 </Space>
                 <Form.Item>
-                  {/* <div className="gradient-wrapper"> */}
-                  <Button htmlType="submit" className="button">
+                  <Button
+                    htmlType="submit"
+                    style={{ height: '40px', width: '100%' }}
+                  >
                     Apply
                   </Button>
-                  {/* </div> */}
                 </Form.Item>
               </Form>
             </Panel>
