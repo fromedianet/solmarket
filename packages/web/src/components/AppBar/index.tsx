@@ -47,7 +47,9 @@ export const AppBar = () => {
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
   const { whitelistedCreatorsByCreator } = useMeta();
-  const creators = Object.values(whitelistedCreatorsByCreator);
+  const creators = Object.values(whitelistedCreatorsByCreator).filter(
+    item => item.info.activated,
+  );
 
   const onChange = value => {
     history.push(`/artists/${value}`);
