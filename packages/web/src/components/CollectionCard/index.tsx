@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card } from 'antd';
 import { Link } from 'react-router-dom';
-import { useExtendedArt } from '../../../hooks';
-import { ArtContent } from '../../../components/ArtContent';
 import { StringPublicKey } from '@oyster/common';
+import { useExtendedArt } from '../../hooks';
+import { ArtContent } from '../ArtContent';
 
 export const CollectionCard = (props: {
   pubkey: StringPublicKey;
@@ -31,7 +31,7 @@ export const CollectionCard = (props: {
           />
         </div>
         <div className="card-caption">
-          <h6>{data?.symbol}</h6>
+          <h6>{data?.name}</h6>
           <span className="description">{data?.description}</span>
         </div>
       </Card>

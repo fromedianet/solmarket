@@ -8,8 +8,8 @@ import { AuctionRenderCard } from '../../../components/AuctionRenderCard';
 import { AuctionViewState, useAuctions } from '../../../hooks';
 import { HorizontalGrid } from '../../../components/HorizontalGrid';
 import { useCollection } from '../../../hooks/useCollection';
-import { CollectionCard } from '../../collections/components/CollectionCard';
 import { Link } from 'react-router-dom';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 export const SalesListView = () => {
   const [collectionStatus, setCollectionStatus] = useState('all');

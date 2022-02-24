@@ -15,7 +15,7 @@ import {
   PlusOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import { useArtworkFiles } from '../useArtworkFiles';
+import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
 import { ArtContent } from '../../../components/ArtContent';
 
 const { Dragger } = Upload;

@@ -45,16 +45,28 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
       {store && (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {canCreate && (
-            <Link to={`/art/create`}>
-              <Button
-                onClick={() => {
-                  props.onClick ? props.onClick() : null;
-                }}
-                style={btnStyle}
-              >
-                Create
-              </Button>
-            </Link>
+            <>
+              <Link to={`/collection/create`}>
+                <Button
+                  onClick={() => {
+                    props.onClick ? props.onClick() : null;
+                  }}
+                  style={btnStyle}
+                >
+                  Create collection
+                </Button>
+              </Link>
+              <Link to={`/art/create`}>
+                <Button
+                  onClick={() => {
+                    props.onClick ? props.onClick() : null;
+                  }}
+                  style={btnStyle}
+                >
+                  Create NFT
+                </Button>
+              </Link>
+            </>
           )}
           <Link to={`/auction/create/0`}>
             <Button

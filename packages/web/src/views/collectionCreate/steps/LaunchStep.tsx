@@ -7,9 +7,9 @@ import {
 import { MintLayout } from '@solana/spl-token';
 import { Connection } from '@solana/web3.js';
 import React, { useEffect, useState } from 'react';
-import { ArtCard } from '../../../components/ArtCard';
 import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
-import { Row, Col, Statistic, Spin, Button } from 'antd';
+import { Row, Col, Statistic, Spin, Button, Card } from 'antd';
+import { ArtContent } from '../../../components/ArtContent';
 
 export const LaunchStep = (props: {
   confirm: () => void;
@@ -21,6 +21,7 @@ export const LaunchStep = (props: {
   const { image } = useArtworkFiles(props.files, props.attributes);
   const files = props.files;
   const metadata = props.attributes;
+
   useEffect(() => {
     const rentCall = Promise.all([
       props.connection.getMinimumBalanceForRentExemption(MintLayout.span),
@@ -61,27 +62,31 @@ export const LaunchStep = (props: {
       <Row gutter={[16, 16]}>
         <Col span={24} md={12}>
           {props.attributes.image && (
-            <ArtCard
-              image={image}
-              animationURL={props.attributes.animation_url}
-              category={props.attributes.properties?.category}
-              name={props.attributes.name}
-              symbol={props.attributes.symbol}
-              noEvent={true}
-              preview={true}
-              artview={props.files[1]?.type === 'unknown'}
-              className="art-create-card"
-            />
+            <Card
+              className="collection-card"
+              hoverable={true}
+              bordered={false}
+            >
+              <div className="image-over image-container">
+                <ArtContent
+                  className="image no-event"
+                  uri={image}
+                  animationURL={props.attributes.animation_url}
+                  category={props.attributes.properties?.category}
+                  preview={true}
+                  artview={props.files[1]?.type === 'unknown'}
+                  allowMeshRender={false}
+                />
+              </div>
+              <div className="card-caption" style={{ height: '120px'}}>
+                <h6>{props.attributes.name}</h6>
+                <span className="description">{props.attributes.symbol}</span>
+                <span className="description">{props.attributes.description}</span>
+              </div>
+            </Card>
           )}
         </Col>
         <Col span={24} md={12}>
-          <Statistic
-            className="create-statistic"
-            title="Royalty Percentage"
-            value={props.attributes.seller_fee_basis_points / 100}
-            precision={2}
-            suffix="%"
-          />
           {cost ? (
             <Statistic
               className="create-statistic"
