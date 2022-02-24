@@ -28,9 +28,7 @@ export const CollectionView = () => {
   });
 
   const { metadata } = useMeta();
-  const list = metadata.filter(
-    item => item.info.collection?.key === id,
-  );
+  const list = metadata.filter(item => item.info.collection?.key === id);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);

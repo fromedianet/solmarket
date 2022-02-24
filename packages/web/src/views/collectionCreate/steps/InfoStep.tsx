@@ -1,11 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Row,
-  Button,
-  Col,
-  Input,
-  Form,
-} from 'antd';
+import { Row, Button, Col, Input, Form } from 'antd';
 import { Creator, IMetadataExtension } from '@oyster/common';
 import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
 import { ArtContent } from '../../../components/ArtContent';
@@ -28,7 +22,7 @@ export const InfoStep = (props: {
     form.setFieldsValue({
       title: props.attributes.name,
       symbol: props.attributes.symbol,
-      description: props.attributes.description
+      description: props.attributes.description,
     });
   }, []);
 
@@ -36,18 +30,20 @@ export const InfoStep = (props: {
     if (publicKey) {
       props.setAttributes({
         ...props.attributes,
-        creators: [new Creator({
-          address: publicKey.toBase58(),
-          verified: true,
-          share: 100
-        })]
+        creators: [
+          new Creator({
+            address: publicKey.toBase58(),
+            verified: true,
+            share: 100,
+          }),
+        ],
       });
     }
   }, [connected]);
 
   const onFinish = () => {
     props.confirm();
-  }
+  };
 
   return (
     <>
@@ -60,7 +56,7 @@ export const InfoStep = (props: {
       </Row>
       <Form
         form={form}
-        layout='vertical'
+        layout="vertical"
         requiredMark={true}
         onFinish={onFinish}
       >
@@ -80,7 +76,11 @@ export const InfoStep = (props: {
             )}
           </Col>
           <Col span={24} lg={12}>
-            <Form.Item label="Title" name="title" rules={[{required: true, message: "Title is required."}]}>
+            <Form.Item
+              label="Title"
+              name="title"
+              rules={[{ required: true, message: 'Title is required.' }]}
+            >
               <Input
                 autoFocus
                 className="input"
@@ -96,7 +96,11 @@ export const InfoStep = (props: {
                 }
               />
             </Form.Item>
-            <Form.Item label="Symbol" name="symbol" rules={[{required: true, message: "Symbol is required."}]}>
+            <Form.Item
+              label="Symbol"
+              name="symbol"
+              rules={[{ required: true, message: 'Symbol is required.' }]}
+            >
               <Input
                 className="input"
                 placeholder="Max 10 characters"
@@ -133,7 +137,7 @@ export const InfoStep = (props: {
           <Button
             type="primary"
             size="large"
-            htmlType='submit'
+            htmlType="submit"
             className="action-btn"
           >
             Continue to review

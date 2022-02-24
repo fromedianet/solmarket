@@ -58,8 +58,8 @@ export const AdminView = () => {
   }, [store, storeAddress, wallet.publicKey]);
 
   return (
-    <div className='main-area'>
-      <div className='container'>
+    <div className="main-area">
+      <div className="container">
         {!wallet.connected ? (
           <p>
             <Button type="primary" className="app-btn" onClick={connect}>
@@ -161,7 +161,9 @@ function ArtistModal({
           onChange={e => setModalAddress(e.target.value)}
         />
       </Modal>
-      <Button onClick={() => setModalOpen(true)} className='admin-btn'>Add Creator</Button>
+      <Button onClick={() => setModalOpen(true)} className="admin-btn">
+        Add Creator
+      </Button>
     </>
   );
 }
@@ -262,18 +264,18 @@ function InnerAdminView({
                       newStore.public,
                       Object.values(updatedCreators),
                     );
-                    resolve("");
+                    resolve('');
                   } catch (e) {
                     reject(e);
                   }
                 });
-                
+
                 toast.promise(
                   resolveWithData,
                   {
-                    pending: "Saving info...",
-                    error: "Saving rejected.",
-                    success: "saving successed.",
+                    pending: 'Saving info...',
+                    error: 'Saving rejected.',
+                    success: 'saving successed.',
                   },
                   {
                     position: 'top-center',
@@ -281,11 +283,11 @@ function InnerAdminView({
                     autoClose: 6000,
                     hideProgressBar: false,
                     pauseOnFocusLoss: false,
-                  }
+                  },
                 );
               }}
               type="primary"
-              className='admin-btn'
+              className="admin-btn"
             >
               Submit
             </Button>
@@ -329,7 +331,7 @@ function InnerAdminView({
         <Row>
           <Button
             disabled={loading}
-            className='admin-btn'
+            className="admin-btn"
             onClick={async () => {
               setLoading(true);
               await cacheAllAuctions(wallet, connection, state);

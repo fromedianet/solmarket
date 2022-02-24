@@ -165,11 +165,7 @@ export const Items = (props: {
         {filterList.length > 0 ? (
           filterList.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <ArtCard
-                pubkey={item.pubkey}
-                preview={false}
-                artview={true}
-              />
+              <ArtCard pubkey={item.pubkey} preview={false} artview={true} />
             </Col>
           ))
         ) : (

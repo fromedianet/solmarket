@@ -27,7 +27,8 @@ export const InfoStep = (props: {
   setAttributes: (attr: IMetadataExtension) => void;
   confirm: () => void;
 }) => {
-  const [selectedCollection, setSelectedCollection] = useState<ParsedAccount<Metadata>>();
+  const [selectedCollection, setSelectedCollection] =
+    useState<ParsedAccount<Metadata>>();
   const [showCollectionError, setShowCollectionError] = useState(false);
 
   const { image, animation_url } = useArtworkFiles(
@@ -42,7 +43,7 @@ export const InfoStep = (props: {
       symbol: props.attributes.symbol,
       description: props.attributes.description,
       min_supply: props.attributes.properties.maxSupply,
-      attributes: props.attributes.attributes
+      attributes: props.attributes.attributes,
     });
   }, []);
 
@@ -52,7 +53,7 @@ export const InfoStep = (props: {
     }
   }, [selectedCollection]);
 
-  const onFinish = (values) => {
+  const onFinish = values => {
     const nftAttributes = values.attributes;
     // value is number if possible
     for (const nftAttribute of nftAttributes || []) {
@@ -70,12 +71,12 @@ export const InfoStep = (props: {
       props.setAttributes({
         ...props.attributes,
         collection: selectedCollection.pubkey,
-      })
+      });
       props.confirm();
     } else {
       setShowCollectionError(true);
     }
-  }
+  };
 
   return (
     <>
@@ -88,7 +89,7 @@ export const InfoStep = (props: {
       </Row>
       <Form
         form={form}
-        layout='vertical'
+        layout="vertical"
         requiredMark={true}
         autoComplete="off"
         onFinish={onFinish}
@@ -132,7 +133,7 @@ export const InfoStep = (props: {
                         title: intern.name,
                         symbol: intern.symbol,
                         description: intern.description,
-                        attributes: intern.attributes
+                        attributes: intern.attributes,
                       });
                     }
                   };
@@ -155,7 +156,11 @@ export const InfoStep = (props: {
             </Row>
           </Col>
           <Col span={24} lg={12}>
-            <Form.Item label="Title" name="title" rules={[{ required: true, message: "Title is required." }]}>
+            <Form.Item
+              label="Title"
+              name="title"
+              rules={[{ required: true, message: 'Title is required.' }]}
+            >
               <Input
                 autoFocus
                 className="input"
@@ -170,7 +175,11 @@ export const InfoStep = (props: {
                 }
               />
             </Form.Item>
-            <Form.Item label="Symbol" name="symbol" rules={[{required: true, message: "Symbol is required"}]}>
+            <Form.Item
+              label="Symbol"
+              name="symbol"
+              rules={[{ required: true, message: 'Symbol is required' }]}
+            >
               <Input
                 className="input"
                 placeholder="Max 10 characters"
@@ -216,13 +225,19 @@ export const InfoStep = (props: {
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <label className='action-field'>
-              <div className="field-title form-field"><span className='required-mark'>*</span>Collection</div>
+            <label className="action-field">
+              <div className="field-title form-field">
+                <span className="required-mark">*</span>Collection
+              </div>
               <CollectionSelector
                 selected={selectedCollection}
                 setSelected={setSelectedCollection}
               />
-              {showCollectionError && <span style={{ color: '#ff4d4f'}}>Collection is required.</span>}
+              {showCollectionError && (
+                <span style={{ color: '#ff4d4f' }}>
+                  Collection is required.
+                </span>
+              )}
             </label>
             <label className="action-field">
               <span className="field-title form-field">Attributes</span>
@@ -265,7 +280,7 @@ export const InfoStep = (props: {
           <Button
             type="primary"
             size="large"
-            htmlType='submit'
+            htmlType="submit"
             className="action-btn"
           >
             Continue to royalties

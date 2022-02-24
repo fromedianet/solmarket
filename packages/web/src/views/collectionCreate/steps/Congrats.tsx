@@ -40,7 +40,9 @@ export const Congrats = (props: {
 
   return (
     <>
-      <div className="waiting-title">Congratulations, you created a collection!</div>
+      <div className="waiting-title">
+        Congratulations, you created a collection!
+      </div>
       <div className="congrats-button-container">
         <Button
           style={{ marginBottom: 16, height: 40 }}
@@ -50,9 +52,7 @@ export const Congrats = (props: {
         </Button>
         <Button
           style={{ marginBottom: 16, height: 40 }}
-          onClick={() =>
-            window.location.href = "/art/create"
-          }
+          onClick={() => (window.location.href = '/art/create')}
         >
           <span>Create NFT</span>
         </Button>

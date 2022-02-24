@@ -1,8 +1,4 @@
-import {
-  Metadata,
-  ParsedAccount,
-  useUserAccounts,
-} from '@oyster/common';
+import { Metadata, ParsedAccount, useUserAccounts } from '@oyster/common';
 import { useMeta } from './../contexts';
 
 export const useUserCollections = (): ParsedAccount<Metadata>[] => {

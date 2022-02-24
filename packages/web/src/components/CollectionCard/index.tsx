@@ -38,7 +38,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
     noEvent,
     onClose,
     onClick,
-    className
+    className,
   } = props;
   const collection = useArt(pubkey);
 
@@ -67,8 +67,8 @@ export const CollectionCard = (props: CollectionCardProps) => {
           {description && <span className="description">{description}</span>}
         </div>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <Card

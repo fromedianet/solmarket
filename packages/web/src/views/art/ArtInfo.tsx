@@ -30,13 +30,16 @@ const menu = (
 
 export const ArtInfo = (props: {
   pubkey: string;
-  art: Art
+  art: Art;
   data: IMetadataExtension | undefined;
 }) => {
   const collection = useArt(props.art.collection || '');
   return (
     <div className="collection-container">
-      <Link to={`/collection/${props.art.collection}`} className="collection-name">
+      <Link
+        to={`/collection/${props.art.collection}`}
+        className="collection-name"
+      >
         <img width={20} src={'/icons/check.svg'} />
         <span>{collection.title}</span>
       </Link>

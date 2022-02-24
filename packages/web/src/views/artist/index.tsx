@@ -40,7 +40,7 @@ export const ArtistView = () => {
               <Row gutter={[16, 16]}>
                 {ownCollections.map((item, index) => (
                   <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-                    <CollectionCard pubkey={item.pubkey} preview={false}/>
+                    <CollectionCard pubkey={item.pubkey} preview={false} />
                   </Col>
                 ))}
               </Row>

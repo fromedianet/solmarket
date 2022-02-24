@@ -82,7 +82,7 @@ export const metadataToArt = (
     maxSupply,
     supply,
     type,
-    collection
+    collection,
   } as Art;
 };
 
