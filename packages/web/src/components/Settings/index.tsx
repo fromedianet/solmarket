@@ -20,7 +20,6 @@ export const Settings = () => {
             window.location.href = `${
               window.location.origin
             }?${routerSearchParams.toString()}`;
-            console.log(window.location);
           }}
           value={endpoint.name}
           style={{ marginBottom: 20 }}
