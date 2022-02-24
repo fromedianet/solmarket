@@ -8,8 +8,8 @@ import { MintLayout } from '@solana/spl-token';
 import { Connection } from '@solana/web3.js';
 import React, { useEffect, useState } from 'react';
 import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
-import { Row, Col, Statistic, Spin, Button, Card } from 'antd';
-import { ArtContent } from '../../../components/ArtContent';
+import { Row, Col, Statistic, Spin, Button } from 'antd';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 export const LaunchStep = (props: {
   confirm: () => void;
@@ -62,28 +62,16 @@ export const LaunchStep = (props: {
       <Row gutter={[16, 16]}>
         <Col span={24} md={12}>
           {props.attributes.image && (
-            <Card
-              className="collection-card"
-              hoverable={true}
-              bordered={false}
-            >
-              <div className="image-over image-container">
-                <ArtContent
-                  className="image no-event"
-                  uri={image}
-                  animationURL={props.attributes.animation_url}
-                  category={props.attributes.properties?.category}
-                  preview={true}
-                  artview={props.files[1]?.type === 'unknown'}
-                  allowMeshRender={false}
-                />
-              </div>
-              <div className="card-caption" style={{ height: '120px'}}>
-                <h6>{props.attributes.name}</h6>
-                <span className="description">{props.attributes.symbol}</span>
-                <span className="description">{props.attributes.description}</span>
-              </div>
-            </Card>
+            <CollectionCard
+              image={image}
+              animationURL={props.attributes.animation_url}
+              category={props.attributes.properties?.category}
+              preview={true}
+              noEvent={true}
+              name={props.attributes.name}
+              symbol={props.attributes.symbol}
+              description={props.attributes.description}
+            />
           )}
         </Col>
         <Col span={24} md={12}>

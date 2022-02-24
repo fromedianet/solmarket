@@ -67,6 +67,7 @@ export const SalesListView = () => {
                 itemId={`${index}`}
                 pubkey={it.pubkey}
                 className="home-collection"
+                preview={false}
               />
             ))}
           />

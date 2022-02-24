@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Row,
   Button,
@@ -9,7 +9,7 @@ import {
   Space,
   Upload,
 } from 'antd';
-import { IMetadataExtension } from '@oyster/common';
+import { IMetadataExtension, Metadata, ParsedAccount } from '@oyster/common';
 import {
   MinusCircleOutlined,
   PlusOutlined,
@@ -17,6 +17,7 @@ import {
 } from '@ant-design/icons';
 import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
 import { ArtContent } from '../../../components/ArtContent';
+import { CollectionSelector } from '../collectionSelector';
 
 const { Dragger } = Upload;
 
@@ -26,6 +27,9 @@ export const InfoStep = (props: {
   setAttributes: (attr: IMetadataExtension) => void;
   confirm: () => void;
 }) => {
+  const [selectedCollection, setSelectedCollection] = useState<ParsedAccount<Metadata>>();
+  const [showCollectionError, setShowCollectionError] = useState(false);
+
   const { image, animation_url } = useArtworkFiles(
     props.files,
     props.attributes,
@@ -42,6 +46,12 @@ export const InfoStep = (props: {
     });
   }, []);
 
+  useEffect(() => {
+    if (selectedCollection) {
+      setShowCollectionError(false);
+    }
+  }, [selectedCollection]);
+
   const onFinish = (values) => {
     const nftAttributes = values.attributes;
     // value is number if possible
@@ -56,7 +66,15 @@ export const InfoStep = (props: {
       attributes: nftAttributes,
     });
 
-    props.confirm();
+    if (selectedCollection) {
+      props.setAttributes({
+        ...props.attributes,
+        collection: selectedCollection.pubkey,
+      })
+      props.confirm();
+    } else {
+      setShowCollectionError(true);
+    }
   }
 
   return (
@@ -194,43 +212,52 @@ export const InfoStep = (props: {
                     },
                   });
                 }}
-                className="royalties-input"
+                className="input"
+                style={{ width: '100%' }}
               />
             </Form.Item>
-            <label className="action-field">
-              <span className="field-title">Attributes</span>
+            <label className='action-field'>
+              <div className="field-title form-field"><span className='required-mark'>*</span>Collection</div>
+              <CollectionSelector
+                selected={selectedCollection}
+                setSelected={setSelectedCollection}
+              />
+              {showCollectionError && <span style={{ color: '#ff4d4f'}}>Collection is required.</span>}
             </label>
-            <Form.List name="attributes">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name }) => (
-                    <Space key={key} align="baseline">
-                      <Form.Item name={[name, 'trait_type']} hasFeedback>
-                        <Input placeholder="trait_type (Optional)" />
-                      </Form.Item>
-                      <Form.Item
-                        name={[name, 'value']}
-                        rules={[{ required: true, message: 'Missing value' }]}
-                        hasFeedback
+            <label className="action-field">
+              <span className="field-title form-field">Attributes</span>
+              <Form.List name="attributes">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} align="baseline">
+                        <Form.Item name={[name, 'trait_type']} hasFeedback>
+                          <Input placeholder="trait_type (Optional)" />
+                        </Form.Item>
+                        <Form.Item
+                          name={[name, 'value']}
+                          rules={[{ required: true, message: 'Missing value' }]}
+                          hasFeedback
+                        >
+                          <Input placeholder="value" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
                       >
-                        <Input placeholder="value" />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add attribute
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
+                        Add attribute
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </label>
           </Col>
         </Row>
 

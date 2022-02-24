@@ -26,7 +26,7 @@ export const CollectionsView = () => {
         <Row gutter={[16, 16]}>
           {collections.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <CollectionCard pubkey={item.pubkey} />
+              <CollectionCard pubkey={item.pubkey} preview={false}/>
             </Col>
           ))}
         </Row>
