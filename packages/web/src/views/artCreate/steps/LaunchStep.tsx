@@ -67,6 +67,7 @@ export const LaunchStep = (props: {
               category={props.attributes.properties?.category}
               name={props.attributes.name}
               symbol={props.attributes.symbol}
+              collectionPubKey={props.attributes.collection}
               noEvent={true}
               preview={true}
               artview={props.files[1]?.type === 'unknown'}

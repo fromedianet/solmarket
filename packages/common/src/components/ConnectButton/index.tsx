@@ -13,15 +13,10 @@ export interface ConnectButtonProps
 }
 
 export const ConnectButton = (props: ConnectButtonProps) => {
-  const { disabled, className, name, ...rest } = props;
-  const { wallet, connect, connected } = useWallet();
+  const { disabled, className, ...rest } = props;
+  const { connected } = useWallet();
   const { setVisible } = useWalletModal();
   const open = useCallback(() => setVisible(true), [setVisible]);
-
-  const handleClick = useCallback(
-    () => (wallet ? connect().catch(() => {}) : open()),
-    [wallet, connect, open],
-  );
 
   return (
     <Button
@@ -29,11 +24,11 @@ export const ConnectButton = (props: ConnectButtonProps) => {
       {...rest}
       onClick={e => {
         props.onClick ? props.onClick(e) : null;
-        handleClick();
+        open();
       }}
       disabled={connected && disabled}
     >
-      {name || 'Connect'}
+      Connect
     </Button>
   );
 };

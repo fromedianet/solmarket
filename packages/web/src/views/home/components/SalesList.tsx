@@ -58,7 +58,7 @@ export const SalesListView = () => {
           </Link>
         </div>
         {isLoading ? (
-          [...Array(10)].map((_, idx) => <CardLoader key={idx} />)
+          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
         ) : (
           <HorizontalGrid
             childrens={collections.map((it, index) => (
@@ -104,7 +104,7 @@ export const SalesListView = () => {
             See All
           </Link>
         </div>
-        {isLoading && [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+        {isLoading && [...Array(2)].map((_, idx) => <CardLoader key={idx} />)}
         {!isLoading && auctionStatus === AuctionViewState.Live && (
           <HorizontalGrid
             childrens={liveAuctions.map((auction, index) => (
