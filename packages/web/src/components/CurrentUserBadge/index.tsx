@@ -23,7 +23,7 @@ import { TokenCircle } from '../Custom';
 ('@solana/wallet-adapter-base');
 
 const btnStyle: React.CSSProperties = {
-  border: 'none',
+  width: '100%',
   height: 40,
   marginTop: '8px',
 };
