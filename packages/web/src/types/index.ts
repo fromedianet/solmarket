@@ -38,7 +38,7 @@ export interface Art {
   edition?: number;
   supply?: number;
   maxSupply?: number;
-  collection?: string;
+  collection: string | undefined;
 }
 
 export interface Presale {

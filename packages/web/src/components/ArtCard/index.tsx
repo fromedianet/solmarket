@@ -10,7 +10,7 @@ import BN from 'bn.js';
 
 export interface ArtCardProps extends CardProps {
   pubkey?: StringPublicKey;
-
+  collectionPubKey?: StringPublicKey;
   image?: string;
   animationURL?: string;
 
@@ -41,11 +41,11 @@ export const ArtCard = (props: ArtCardProps) => {
     animationURL,
     name,
     preview,
-    symbol,
     // creators,
     // description,
     onClose,
     pubkey,
+    collectionPubKey,
     height,
     artview,
     width,
@@ -53,7 +53,13 @@ export const ArtCard = (props: ArtCardProps) => {
     noEvent,
     ...rest
   } = props;
-  const art = useArt(pubkey);
+  const art = useArt(pubkey || '');
+  const cPubKey = art?.collection || collectionPubKey;
+  let collectionName;
+  if (cPubKey) {
+    const collection = useArt(cPubKey);
+    collectionName = collection.title;
+  }
   // const artCreators = art?.creators || creators || [];
   const artName = art?.title || name || ' ';
 
@@ -93,7 +99,7 @@ export const ArtCard = (props: ArtCardProps) => {
         <div className="card-caption">
           <h6>{artName}</h6>
           <div className="card-collection-name">
-            <span>{symbol}</span>
+            <span>{collectionName}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
           {!noEvent && instantSalePrice > 0 && (

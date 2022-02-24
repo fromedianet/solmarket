@@ -21,20 +21,6 @@ export const ArtDetails = ({
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
-  // let badge = '';
-  // let maxSupply = '';
-  // if (art.type === ArtType.NFT) {
-  //   badge = 'Unique';
-  // } else if (art.type === ArtType.Master) {
-  //   badge = 'NFT 0';
-  //   if (art.maxSupply !== undefined) {
-  //     maxSupply = art.maxSupply.toString();
-  //   } else {
-  //     maxSupply = 'Unlimited';
-  //   }
-  // } else if (art.type === ArtType.Print) {
-  //   badge = `${art.edition} of ${art.supply}`;
-  // }
 
   return (
     <Collapse
