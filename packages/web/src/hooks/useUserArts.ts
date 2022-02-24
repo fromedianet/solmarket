@@ -20,6 +20,7 @@ export const useUserArts = (): SafetyDepositDraft[] => {
 
   const ownedMetadata = metadata.filter(
     m =>
+      m.info.collection &&
       accountByMint.has(m.info.mint) &&
       (accountByMint?.get(m.info.mint)?.info?.amount?.toNumber() || 0) > 0,
   );

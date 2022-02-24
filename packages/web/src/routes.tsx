@@ -24,6 +24,7 @@ import { CollectionsView } from './views/collections';
 import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
 import { CollectionView } from './views/collection';
+import { CollectionCreateView } from './views/collectionCreate';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -80,6 +81,11 @@ export function Routes() {
               exact
               path="/auction/:id/billing"
               component={() => <BillingView />}
+            />
+            <Route
+              exact
+              path="/collection/create/:step_param?"
+              component={() => <CollectionCreateView />}
             />
             <Route
               exact

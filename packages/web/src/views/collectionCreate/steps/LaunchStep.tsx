@@ -7,9 +7,9 @@ import {
 import { MintLayout } from '@solana/spl-token';
 import { Connection } from '@solana/web3.js';
 import React, { useEffect, useState } from 'react';
-import { ArtCard } from '../../../components/ArtCard';
 import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
 import { Row, Col, Statistic, Spin, Button } from 'antd';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 export const LaunchStep = (props: {
   confirm: () => void;
@@ -21,6 +21,7 @@ export const LaunchStep = (props: {
   const { image } = useArtworkFiles(props.files, props.attributes);
   const files = props.files;
   const metadata = props.attributes;
+
   useEffect(() => {
     const rentCall = Promise.all([
       props.connection.getMinimumBalanceForRentExemption(MintLayout.span),
@@ -61,28 +62,19 @@ export const LaunchStep = (props: {
       <Row gutter={[16, 16]}>
         <Col span={24} md={12}>
           {props.attributes.image && (
-            <ArtCard
+            <CollectionCard
               image={image}
               animationURL={props.attributes.animation_url}
               category={props.attributes.properties?.category}
+              preview={true}
+              noEvent={true}
               name={props.attributes.name}
               symbol={props.attributes.symbol}
-              collectionPubKey={props.attributes.collection}
-              noEvent={true}
-              preview={true}
-              artview={props.files[1]?.type === 'unknown'}
-              className="art-create-card"
+              description={props.attributes.description}
             />
           )}
         </Col>
         <Col span={24} md={12}>
-          <Statistic
-            className="create-statistic"
-            title="Royalty Percentage"
-            value={props.attributes.seller_fee_basis_points / 100}
-            precision={2}
-            suffix="%"
-          />
           {cost ? (
             <Statistic
               className="create-statistic"

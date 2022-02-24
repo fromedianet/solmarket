@@ -15,7 +15,6 @@ import {
 import { WhitelistedCreator } from '@oyster/common/dist/lib/models/metaplex/index';
 import { Cache } from 'three';
 import { useInView } from 'react-intersection-observer';
-import useWindowDimensions from '../utils/layout';
 
 export const metadataToArt = (
   info: Metadata | undefined,
@@ -33,10 +32,12 @@ export const metadataToArt = (
   let editionNumber: number | undefined = undefined;
   let maxSupply: number | undefined = undefined;
   let supply: number | undefined = undefined;
+  let collection: string | undefined = undefined;
 
   if (info) {
     const masterEdition = masterEditions[info.masterEdition || ''];
     const edition = editions[info.edition || ''];
+    collection = info.collection?.key;
     if (edition) {
       const myMasterEdition = masterEditions[edition.info.parent || ''];
       if (myMasterEdition) {
@@ -81,6 +82,7 @@ export const metadataToArt = (
     maxSupply,
     supply,
     type,
+    collection
   } as Art;
 };
 
@@ -173,7 +175,6 @@ export const useExtendedArt = (id?: StringPublicKey) => {
   const { metadata } = useMeta();
 
   const [data, setData] = useState<IMetadataExtension>();
-  const { width } = useWindowDimensions();
   const { ref, inView } = useInView({ root: null, rootMargin: '-100px 0px' });
   const localStorage = useLocalStorage();
 

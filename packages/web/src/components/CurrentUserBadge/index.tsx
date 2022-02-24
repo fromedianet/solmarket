@@ -23,7 +23,7 @@ import { TokenCircle } from '../Custom';
 ('@solana/wallet-adapter-base');
 
 const btnStyle: React.CSSProperties = {
-  border: 'none',
+  width: '100%',
   height: 40,
   marginTop: '8px',
 };
@@ -45,16 +45,28 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
       {store && (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {canCreate && (
-            <Link to={`/art/create`}>
-              <Button
-                onClick={() => {
-                  props.onClick ? props.onClick() : null;
-                }}
-                style={btnStyle}
-              >
-                Create
-              </Button>
-            </Link>
+            <>
+              <Link to={`/collection/create`}>
+                <Button
+                  onClick={() => {
+                    props.onClick ? props.onClick() : null;
+                  }}
+                  style={btnStyle}
+                >
+                  Create collection
+                </Button>
+              </Link>
+              <Link to={`/art/create`}>
+                <Button
+                  onClick={() => {
+                    props.onClick ? props.onClick() : null;
+                  }}
+                  style={btnStyle}
+                >
+                  Create NFT
+                </Button>
+              </Link>
+            </>
           )}
           <Link to={`/auction/create/0`}>
             <Button

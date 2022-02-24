@@ -15,7 +15,6 @@ const { Content } = Layout;
 export const CollectionView = () => {
   const { id } = useParams<{ id: string }>();
   const { data } = useExtendedArt(id);
-  console.log('data', data);
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
@@ -29,8 +28,8 @@ export const CollectionView = () => {
   });
 
   const { metadata } = useMeta();
-  const collections = metadata.filter(
-    item => item.info.data.symbol === data?.symbol,
+  const list = metadata.filter(
+    item => item.info.collection?.key === id,
   );
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
@@ -89,8 +88,7 @@ export const CollectionView = () => {
         <Content className="collection-container">
           {isItems ? (
             <Items
-              list={collections}
-              symbol={data?.symbol}
+              list={list}
               updateFilters={onUpdateFilters}
               filter={filter}
             />

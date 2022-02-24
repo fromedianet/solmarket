@@ -57,13 +57,12 @@ export const ArtView = () => {
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [account, setAccount] = useState<TokenAccount | undefined>();
 
-  const { storeAddress } = useStore();
-  console.log('storeAddress', storeAddress);
   const connection = useConnection();
   const wallet = useWallet();
 
   const art = useArt(id);
   const { ref, data } = useExtendedArt(id);
+  console.log('art', art);
 
   useEffect(() => {
     if (art.mint) {
@@ -378,7 +377,7 @@ export const ArtView = () => {
               <div className="art-title">
                 {art.title || <Skeleton paragraph={{ rows: 0 }} />}
               </div>
-              <ArtInfo pubkey={id} data={data} />
+              <ArtInfo pubkey={id} art={art} data={data} />
               <ViewOn id={id} />
               {auctionView ? (
                 <ArtAction

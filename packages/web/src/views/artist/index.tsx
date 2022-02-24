@@ -2,10 +2,10 @@ import { shortenAddress } from '@oyster/common';
 import { Col, Row } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { CollectionCard } from '../../components/CollectionCard';
 import { EmptyView } from '../../components/EmptyView';
 import { useCreator } from '../../hooks';
 import { useCollection } from '../../hooks/useCollection';
-import { CollectionCard } from '../collections/components/CollectionCard';
 
 export const ArtistView = () => {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +40,7 @@ export const ArtistView = () => {
               <Row gutter={[16, 16]}>
                 {ownCollections.map((item, index) => (
                   <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-                    <CollectionCard pubkey={item.pubkey} />
+                    <CollectionCard pubkey={item.pubkey} preview={false}/>
                   </Col>
                 ))}
               </Row>

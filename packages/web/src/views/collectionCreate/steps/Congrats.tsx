@@ -5,7 +5,7 @@ import { Button } from 'antd';
 import { Confetti } from '../../../components/Confetti';
 
 export const Congrats = (props: {
-  nft?: {
+  collection?: {
     metadataAccount: StringPublicKey;
   };
   alert?: string;
@@ -14,10 +14,10 @@ export const Congrats = (props: {
 
   const newTweetURL = () => {
     const params = {
-      text: "I've created a new NFT artwork on PaperCity, check it out!",
+      text: "I've created a new collection on PaperCity, check it out!",
       url: `${
         window.location.origin
-      }/art/${props.nft?.metadataAccount.toString()}`,
+      }/art/${props.collection?.metadataAccount.toString()}`,
       hashtags: 'NFT,Crypto,PaperCity',
       related: 'PaperCity,Solana',
     };
@@ -31,8 +31,8 @@ export const Congrats = (props: {
       <>
         <div className="waiting-title">Sorry, there was an error!</div>
         <p>{props.alert}</p>
-        <Button onClick={() => history.push('/art/create')}>
-          Back to Create NFT
+        <Button onClick={() => history.push('/collection/create')}>
+          Back to Create Collection
         </Button>
       </>
     );
@@ -40,27 +40,21 @@ export const Congrats = (props: {
 
   return (
     <>
-      <div className="waiting-title">Congratulations, you created a NFT!</div>
+      <div className="waiting-title">Congratulations, you created a collection!</div>
       <div className="congrats-button-container">
         <Button
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: 16, height: 40 }}
           onClick={() => window.open(newTweetURL(), '_blank')}
         >
           <span>Share it on Twitter &gt;</span>
         </Button>
         <Button
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: 16, height: 40 }}
           onClick={() =>
-            window.location.href = `/art/${props.nft?.metadataAccount.toString()}`
+            window.location.href = "/art/create"
           }
         >
-          <span>See it in your collection &gt;</span>
-        </Button>
-        <Button
-          style={{ marginBottom: 16 }}
-          onClick={() => window.location.href = '/auction/create'}
-        >
-          <span>Sell it via auction &gt;</span>
+          <span>Create NFT</span>
         </Button>
       </div>
       <Confetti />
