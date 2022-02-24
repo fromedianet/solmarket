@@ -80,7 +80,7 @@ export const InfoStep = (props: {
             )}
           </Col>
           <Col span={24} lg={12}>
-            <Form.Item label="Title" name="title" rules={[{required: true}]}>
+            <Form.Item label="Title" name="title" rules={[{required: true, message: "Title is required."}]}>
               <Input
                 autoFocus
                 className="input"
@@ -96,7 +96,7 @@ export const InfoStep = (props: {
                 }
               />
             </Form.Item>
-            <Form.Item label="Symbol" name="symbol" rules={[{required: true}]}>
+            <Form.Item label="Symbol" name="symbol" rules={[{required: true, message: "Symbol is required."}]}>
               <Input
                 className="input"
                 placeholder="Max 10 characters"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Row,
   Button,
@@ -32,6 +32,33 @@ export const InfoStep = (props: {
   );
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    form.setFieldsValue({
+      title: props.attributes.name,
+      symbol: props.attributes.symbol,
+      description: props.attributes.description,
+      min_supply: props.attributes.properties.maxSupply,
+      attributes: props.attributes.attributes
+    });
+  }, []);
+
+  const onFinish = (values) => {
+    const nftAttributes = values.attributes;
+    // value is number if possible
+    for (const nftAttribute of nftAttributes || []) {
+      const newValue = Number(nftAttribute.value);
+      if (!isNaN(newValue)) {
+        nftAttribute.value = newValue;
+      }
+    }
+    props.setAttributes({
+      ...props.attributes,
+      attributes: nftAttributes,
+    });
+
+    props.confirm();
+  }
+
   return (
     <>
       <Row className="call-to-action">
@@ -41,133 +68,138 @@ export const InfoStep = (props: {
           your audience.
         </p>
       </Row>
-      <Row className="content-action" justify="center">
-        <Col span={24} lg={12} style={{ paddingRight: 24 }}>
-          {props.attributes.image && (
-            <div className="thumb-container">
-              <div className="thumb-content">
-                <ArtContent
-                  uri={image}
-                  animationURL={animation_url}
-                  category={props.attributes.properties?.category}
-                  artview={!(props.files.length > 1)}
-                />
+      <Form
+        form={form}
+        layout='vertical'
+        requiredMark={true}
+        autoComplete="off"
+        onFinish={onFinish}
+      >
+        <Row className="content-action" justify="center">
+          <Col span={24} lg={12} style={{ paddingRight: 24 }}>
+            {props.attributes.image && (
+              <div className="thumb-container">
+                <div className="thumb-content">
+                  <ArtContent
+                    uri={image}
+                    animationURL={animation_url}
+                    category={props.attributes.properties?.category}
+                    artview={!(props.files.length > 1)}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-          <Row
-            className="content-action"
-            style={{ marginBottom: 5, marginTop: 30 }}
-          >
-            <p>Add your config file to fill the input fields.</p>
-            <Dragger
-              accept=".json"
-              style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)' }}
-              multiple={false}
-              maxCount={1}
-              onChange={async info => {
-                const file = info.file.originFileObj;
-                const fileReader = new FileReader();
-                fileReader.onload = function (e) {
-                  const content = e.target?.result;
-                  if (typeof content === 'string') {
-                    const intern = JSON.parse(content);
-                    props.setAttributes({
-                      ...intern,
-                    });
-                    form.setFieldsValue({ attributes: intern.attributes });
-                  }
-                };
-                fileReader.readAsText(file);
-              }}
+            )}
+            <Row
+              className="content-action"
+              style={{ marginBottom: 5, marginTop: 30 }}
             >
-              <p className="ant-upload-drag-icon">
-                <UploadOutlined style={{ color: '#6d6d6d' }} />
-              </p>
-              <p
-                className="ant-upload-text"
-                style={{ color: '#f8f7f8', fontSize: 18, fontWeight: 600 }}
+              <p>Add your config file to fill the input fields.</p>
+              <Dragger
+                accept=".json"
+                style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)' }}
+                multiple={false}
+                maxCount={1}
+                onChange={async info => {
+                  const file = info.file.originFileObj;
+                  const fileReader = new FileReader();
+                  fileReader.onload = function (e) {
+                    const content = e.target?.result;
+                    if (typeof content === 'string') {
+                      const intern = JSON.parse(content);
+                      props.setAttributes({
+                        ...props.attributes,
+                        ...intern,
+                      });
+                      form.setFieldsValue({
+                        title: intern.name,
+                        symbol: intern.symbol,
+                        description: intern.description,
+                        attributes: intern.attributes
+                      });
+                    }
+                  };
+                  fileReader.readAsText(file);
+                }}
               >
-                Add your config file(JSON)
-              </p>
-              <p className="ant-upload-text" style={{ color: '#6d6d6d' }}>
-                Drag and drop, or click to browse
-              </p>
-            </Dragger>
-          </Row>
-        </Col>
-        <Col span={24} lg={12}>
-          <label className="action-field">
-            <span className="field-title">Title</span>
-            <Input
-              autoFocus
-              className="input"
-              placeholder="Max 50 characters"
-              maxLength={50}
-              allowClear
-              value={props.attributes.name}
-              onChange={info =>
-                props.setAttributes({
-                  ...props.attributes,
-                  name: info.target.value,
-                })
-              }
-            />
-          </label>
-          <label className="action-field">
-            <span className="field-title">Symbol</span>
-            <Input
-              className="input"
-              placeholder="Max 10 characters"
-              maxLength={10}
-              allowClear
-              value={props.attributes.symbol}
-              onChange={info =>
-                props.setAttributes({
-                  ...props.attributes,
-                  symbol: info.target.value,
-                })
-              }
-            />
-          </label>
-
-          <label className="action-field">
-            <span className="field-title">Description</span>
-            <Input.TextArea
-              className="input textarea"
-              placeholder="Max 500 characters"
-              maxLength={500}
-              value={props.attributes.description}
-              onChange={info =>
-                props.setAttributes({
-                  ...props.attributes,
-                  description: info.target.value,
-                })
-              }
-              allowClear
-            />
-          </label>
-          <label className="action-field">
-            <span className="field-title">Maximum Supply</span>
-            <InputNumber
-              placeholder="Quantity"
-              controls={false}
-              onChange={(val: number) => {
-                props.setAttributes({
-                  ...props.attributes,
-                  properties: {
-                    ...props.attributes.properties,
-                    maxSupply: val,
-                  },
-                });
-              }}
-              className="royalties-input"
-            />
-          </label>
-          <label className="action-field">
-            <span className="field-title">Attributes</span>
-          </label>
-          <Form name="dynamic_attributes" form={form} autoComplete="off">
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined style={{ color: '#6d6d6d' }} />
+                </p>
+                <p
+                  className="ant-upload-text"
+                  style={{ color: '#f8f7f8', fontSize: 18, fontWeight: 600 }}
+                >
+                  Add your config file(JSON)
+                </p>
+                <p className="ant-upload-text" style={{ color: '#6d6d6d' }}>
+                  Drag and drop, or click to browse
+                </p>
+              </Dragger>
+            </Row>
+          </Col>
+          <Col span={24} lg={12}>
+            <Form.Item label="Title" name="title" rules={[{ required: true, message: "Title is required." }]}>
+              <Input
+                autoFocus
+                className="input"
+                placeholder="Max 50 characters"
+                maxLength={50}
+                allowClear
+                onChange={info =>
+                  props.setAttributes({
+                    ...props.attributes,
+                    name: info.target.value,
+                  })
+                }
+              />
+            </Form.Item>
+            <Form.Item label="Symbol" name="symbol" rules={[{required: true, message: "Symbol is required"}]}>
+              <Input
+                className="input"
+                placeholder="Max 10 characters"
+                maxLength={10}
+                allowClear
+                onChange={info =>
+                  props.setAttributes({
+                    ...props.attributes,
+                    symbol: info.target.value,
+                  })
+                }
+              />
+            </Form.Item>
+            <Form.Item label="Description" name="description">
+              <Input.TextArea
+                className="input textarea"
+                placeholder="Max 500 characters"
+                maxLength={500}
+                onChange={info =>
+                  props.setAttributes({
+                    ...props.attributes,
+                    description: info.target.value,
+                  })
+                }
+                allowClear
+              />
+            </Form.Item>
+            <Form.Item label="Minimum Supply" name="min_supply">
+              <InputNumber
+                placeholder="Quantity"
+                controls={false}
+                defaultValue={1}
+                onChange={(val: number) => {
+                  props.setAttributes({
+                    ...props.attributes,
+                    properties: {
+                      ...props.attributes.properties,
+                      maxSupply: val,
+                    },
+                  });
+                }}
+                className="royalties-input"
+              />
+            </Form.Item>
+            <label className="action-field">
+              <span className="field-title">Attributes</span>
+            </label>
             <Form.List name="attributes">
               {(fields, { add, remove }) => (
                 <>
@@ -183,9 +215,6 @@ export const InfoStep = (props: {
                       >
                         <Input placeholder="value" />
                       </Form.Item>
-                      {/* <Form.Item name={[name, 'display_type']} hasFeedback>
-                        <Input placeholder="display_type (Optional)" />
-                      </Form.Item> */}
                       <MinusCircleOutlined onClick={() => remove(name)} />
                     </Space>
                   ))}
@@ -202,37 +231,20 @@ export const InfoStep = (props: {
                 </>
               )}
             </Form.List>
-          </Form>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
 
-      <Row>
-        <Button
-          type="primary"
-          size="large"
-          onClick={() => {
-            form.validateFields().then(values => {
-              const nftAttributes = values.attributes;
-              // value is number if possible
-              for (const nftAttribute of nftAttributes || []) {
-                const newValue = Number(nftAttribute.value);
-                if (!isNaN(newValue)) {
-                  nftAttribute.value = newValue;
-                }
-              }
-              props.setAttributes({
-                ...props.attributes,
-                attributes: nftAttributes,
-              });
-
-              props.confirm();
-            });
-          }}
-          className="action-btn"
-        >
-          Continue to royalties
-        </Button>
-      </Row>
+        <Form.Item>
+          <Button
+            type="primary"
+            size="large"
+            htmlType='submit'
+            className="action-btn"
+          >
+            Continue to royalties
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   );
 };
