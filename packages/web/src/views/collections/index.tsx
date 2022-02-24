@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Row, Col } from 'antd';
-import { CollectionCard } from './components/CollectionCard';
 import { useCollection } from '../../hooks/useCollection';
+import { CollectionCard } from '../../components/CollectionCard';
 
 function useQuery() {
   const { search } = useLocation();
@@ -26,7 +26,7 @@ export const CollectionsView = () => {
         <Row gutter={[16, 16]}>
           {collections.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <CollectionCard pubkey={item.pubkey} />
+              <CollectionCard pubkey={item.pubkey} preview={false} />
             </Col>
           ))}
         </Row>

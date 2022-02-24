@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, Menu } from 'antd';
 import { IMetadataExtension } from '@oyster/common';
+import { Art } from '../../types';
+import { useArt } from '../../hooks';
 
 const menu = (
   <Menu>
@@ -28,13 +30,18 @@ const menu = (
 
 export const ArtInfo = (props: {
   pubkey: string;
+  art: Art;
   data: IMetadataExtension | undefined;
 }) => {
+  const collection = useArt(props.art.collection || '');
   return (
     <div className="collection-container">
-      <Link to={`/collection/${props.pubkey}`} className="collection-name">
+      <Link
+        to={`/collection/${props.art.collection}`}
+        className="collection-name"
+      >
         <img width={20} src={'/icons/check.svg'} />
-        <span>{props.data?.symbol}</span>
+        <span>{collection.title}</span>
       </Link>
       <Dropdown overlay={menu} trigger={['click']}>
         <a className="social-share" onClick={e => e.preventDefault()}>

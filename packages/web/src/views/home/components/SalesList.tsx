@@ -8,8 +8,8 @@ import { AuctionRenderCard } from '../../../components/AuctionRenderCard';
 import { AuctionViewState, useAuctions } from '../../../hooks';
 import { HorizontalGrid } from '../../../components/HorizontalGrid';
 import { useCollection } from '../../../hooks/useCollection';
-import { CollectionCard } from '../../collections/components/CollectionCard';
 import { Link } from 'react-router-dom';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 export const SalesListView = () => {
   const [collectionStatus, setCollectionStatus] = useState('all');
@@ -58,7 +58,7 @@ export const SalesListView = () => {
           </Link>
         </div>
         {isLoading ? (
-          [...Array(10)].map((_, idx) => <CardLoader key={idx} />)
+          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
         ) : (
           <HorizontalGrid
             childrens={collections.map((it, index) => (
@@ -67,6 +67,7 @@ export const SalesListView = () => {
                 itemId={`${index}`}
                 pubkey={it.pubkey}
                 className="home-collection"
+                preview={false}
               />
             ))}
           />
@@ -103,7 +104,7 @@ export const SalesListView = () => {
             See All
           </Link>
         </div>
-        {isLoading && [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+        {isLoading && [...Array(2)].map((_, idx) => <CardLoader key={idx} />)}
         {!isLoading && auctionStatus === AuctionViewState.Live && (
           <HorizontalGrid
             childrens={liveAuctions.map((auction, index) => (

@@ -14,7 +14,8 @@ export const CollectionInfo = (props: {
         src={props.data?.image}
         alt="avatar"
       />
-      <h1 className="info-title">{props.data?.symbol}</h1>
+      <h1 className="info-title">{props.data?.name}</h1>
+      <span className="info-symbol">{props.data?.symbol}</span>
       <div
         role="group"
         className="info-group flex relative lg:absolute lg:top-20 lg:right-6 mb-2"
