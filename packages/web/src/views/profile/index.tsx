@@ -16,7 +16,7 @@ const { TextArea } = Input;
 export const ProfileView = () => {
   const [visible, setVisible] = useState(false);
   const wallet = useWallet();
-  const {arts, listedArts} = useCreatorArts(wallet.publicKey?.toBase58());
+  const { arts, listedArts } = useCreatorArts(wallet.publicKey?.toBase58());
 
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();

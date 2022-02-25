@@ -1,5 +1,6 @@
 import React from 'react';
 // import { Row, Col, Statistic } from 'antd';
+import { Image } from 'antd';
 import ReadMore from '../../../components/ReadMore';
 import { IMetadataExtension } from '@oyster/common';
 
@@ -8,12 +9,17 @@ export const CollectionInfo = (props: {
 }) => {
   return (
     <div className="info-container">
-      <img
-        loading="lazy"
-        className="info-image"
-        src={props.data?.image}
-        alt="avatar"
-      />
+      {props.data?.image ? (
+        <Image
+          loading="lazy"
+          className="info-image"
+          src={props.data?.image}
+          alt="avatar"
+        />
+      ) : (
+        <img className="info-image" src="/image-placeholder.svg" alt="avatar" />
+      )}
+
       <h1 className="info-title">{props.data?.name}</h1>
       <span className="info-symbol">{props.data?.symbol}</span>
       <div
