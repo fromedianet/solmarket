@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Select, Tag, Input } from 'antd';
-import { Metadata, ParsedAccount } from '@oyster/common';
 import { ArtCard } from '../../../components/ArtCard';
 import { EmptyView } from '../../../components/EmptyView';
+import { Attribute } from '@oyster/common';
 
 const { Search } = Input;
 const DELIMITER = '|&=&|';
 
 export const Items = (props: {
-  list: ParsedAccount<Metadata>[];
+  list: any[];
   filter: {
     price: {
       symbol: string | undefined;
@@ -19,17 +19,17 @@ export const Items = (props: {
   };
   updateFilters: (p, a) => void;
 }) => {
+  const searchRef = useRef(null);
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
   const [attributeFilter, setAttributeFilter] = useState(
     props.filter.attributes,
   );
   const [priceTag, setPriceTag] = useState<string | undefined>();
   const [filterList, setFilterList] = useState(props.list);
+  const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
-    if (props.list.length > 0) {
-      setFilterList(props.list);
-    }
+    setFilterList(props.list);
   }, [props.list]);
 
   useEffect(() => {
@@ -39,7 +39,8 @@ export const Items = (props: {
     if (props.filter.attributes !== attributeFilter) {
       setAttributeFilter(props.filter.attributes);
     }
-  }, [props.filter]);
+    searchList();
+  }, [props.filter, searchKey]);
 
   useEffect(() => {
     let newPriceTag: string | undefined;
@@ -62,14 +63,50 @@ export const Items = (props: {
     console.log('refresh');
   };
 
-  const onSearch = value => {
-    // TODO: attribute filters, sort by options
-    const filters = props.list.filter(
+  function searchList() {
+    const searchResult = searchByName(props.list, searchKey);
+    const result = searchByAttrs(searchResult);
+
+    setFilterList(result);
+  }
+
+  function searchByName(list, searchKey) {
+    const filters = list.filter(
       item =>
-        item.info.data.name.toLowerCase().indexOf(value.toLowerCase()) > -1,
+        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) > -1,
     );
-    setFilterList(filters);
-  };
+    return filters;
+  }
+
+  function searchByAttrs(list) {
+    const attrs: Attribute[] = [];
+    const tratis = Object.keys(props.filter.attributes);
+    tratis.forEach(trait => {
+      props.filter.attributes[trait].forEach(val => {
+        attrs.push({
+          trait_type: trait,
+          value: val,
+        });
+      });
+    });
+
+    const BreakException = {};
+    const filters = list.filter(item => {
+      const attrsStr = JSON.stringify(item.attributes);
+      try {
+        attrs.forEach(attr => {
+          if (attrsStr.indexOf(JSON.stringify(attr)) < 0) {
+            throw BreakException;
+          }
+        });
+      } catch (e) {
+        return false;
+      }
+      return true;
+    });
+
+    return filters;
+  }
 
   const onClosePriceTag = () => {
     props.updateFilters(
@@ -115,9 +152,10 @@ export const Items = (props: {
             <img src="/icons/refresh.svg" alt="refresh" />
           </div>
           <Search
+            ref={searchRef}
             placeholder="Search"
             className="search-control"
-            onSearch={onSearch}
+            onSearch={(val) => setSearchKey(val)}
             allowClear
           />
         </Col>
@@ -163,7 +201,7 @@ export const Items = (props: {
       </div>
       <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
         {filterList.length > 0 ? (
-          filterList.map((item, index) => (
+          filterList.map((item: any, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
               <ArtCard pubkey={item.pubkey} preview={false} artview={true} />
             </Col>

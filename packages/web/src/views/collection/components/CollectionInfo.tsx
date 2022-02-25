@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Statistic } from 'antd';
+// import { Row, Col, Statistic } from 'antd';
 import ReadMore from '../../../components/ReadMore';
 import { IMetadataExtension } from '@oyster/common';
 
@@ -35,7 +35,7 @@ export const CollectionInfo = (props: {
           </a>
         </div>
       </div>
-      <Row gutter={[16, 16]}>
+      {/* <Row gutter={[16, 16]}>
         <Col key="floor" span={12} lg={6}>
           <Statistic
             title="Floor Price"
@@ -67,7 +67,7 @@ export const CollectionInfo = (props: {
             className="info-attribute"
           />
         </Col>
-      </Row>
+      </Row> */}
       <div className="info-description">
         <ReadMore
           // eslint-disable-next-line react/no-children-prop

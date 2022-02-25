@@ -15,50 +15,12 @@ import {
   PlusOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import dummy from '../dummy.json';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
-type Details = {
-  value: string;
-  floor: string;
-};
-
-type Attribute = {
-  trait_type: string;
-  data: Details[];
-};
-
-function prepareAttributes() {
-  const data: Attribute[] = [];
-  let traitType = '';
-  let attrs: Attribute = {
-    trait_type: '',
-    data: [],
-  };
-  dummy.availableAttributes.forEach(item => {
-    if (traitType === '') {
-      attrs['trait_type'] = item.attribute.trait_type;
-    } else if (item.attribute.trait_type !== traitType) {
-      data.push(attrs);
-      attrs = {
-        trait_type: item.attribute.trait_type,
-        data: [],
-      };
-    }
-    attrs['data'].push({
-      value: `${item.attribute.value} (${item.count})`,
-      floor: `floor: ${item.floor / Math.pow(10, 9)}`,
-    });
-    traitType = item.attribute.trait_type;
-  });
-  data.push(attrs);
-
-  return data;
-}
-
 export const FilterSidebar = (props: {
+  attributes: Record<string, Record<string | number, number>>,
   filter: {
     price: {
       symbol: string | undefined;
@@ -70,15 +32,10 @@ export const FilterSidebar = (props: {
   updateFilters: (p, a) => void;
 }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [attributeFilter, setAttributeFilter] = useState(
     props.filter.attributes,
   );
   const [form] = Form.useForm();
-
-  useEffect(() => {
-    setAttributes(prepareAttributes());
-  }, []);
 
   useEffect(() => {
     onFillForm(props.filter.price);
@@ -198,22 +155,22 @@ export const FilterSidebar = (props: {
               extra={<UnorderedListOutlined className="filter-icon" />}
             >
               <div className="attr-container">
-                {attributes.map((attr, index) => (
+                {Object.keys(props.attributes).map((trait_type, index) => (
                   <Select
                     key={index}
                     mode="multiple"
-                    placeholder={attr.trait_type}
+                    placeholder={trait_type}
                     allowClear={true}
                     showArrow={true}
-                    onChange={value => onChange(attr.trait_type, value)}
+                    onChange={value => onChange(trait_type, value)}
                     optionLabelProp="label"
-                    value={attributeFilter[attr.trait_type]}
+                    value={attributeFilter[trait_type]}
                   >
-                    {attr.data.map((item, idx) => (
+                    {Object.keys(props.attributes[trait_type]).map((value, idx) => (
                       <Select.Option
                         key={idx}
-                        value={item.value}
-                        label={item.value}
+                        value={value}
+                        label={value}
                       >
                         <div
                           style={{
@@ -222,8 +179,7 @@ export const FilterSidebar = (props: {
                             paddingRight: '16px',
                           }}
                         >
-                          <span>{item.value}</span>
-                          <span>{item.floor}</span>
+                          <span>{`${value} (${props.attributes[trait_type][value]})`}</span>
                         </div>
                       </Select.Option>
                     ))}

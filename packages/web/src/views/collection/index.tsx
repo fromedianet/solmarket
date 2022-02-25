@@ -6,9 +6,9 @@ import { CollectionInfo } from './components/CollectionInfo';
 import { FilterSidebar } from './components/FilterSidebar';
 import { Items } from './components/Items';
 import { Activities } from './components/Activities';
-import { useMeta } from '@oyster/common';
 import { useParams } from 'react-router-dom';
 import { useExtendedArt } from '../../hooks';
+import { useAttributesByCollection } from '../../hooks/useAttributes';
 
 const { Content } = Layout;
 
@@ -18,6 +18,8 @@ export const CollectionView = () => {
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
+  const [attributes, setAttributes] = useState({});
+  const [list, setList] = useState<any[]>([]);
   const [filter, setFilter] = useState({
     price: {
       symbol: 'SOL',
@@ -27,8 +29,12 @@ export const CollectionView = () => {
     attributes: {},
   });
 
-  const { metadata } = useMeta();
-  const list = metadata.filter(item => item.info.collection?.key === id);
+  const { attrs, newList } = useAttributesByCollection(id);
+
+  useEffect(() => {
+    setAttributes(attrs);
+    setList(newList);
+  }, [id, attrs, newList]);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -82,7 +88,7 @@ export const CollectionView = () => {
         </div>
       </div>
       <Layout hasSider>
-        <FilterSidebar updateFilters={onUpdateFilters} filter={filter} />
+        <FilterSidebar updateFilters={onUpdateFilters} filter={filter} attributes={attributes} />
         <Content className="collection-container">
           {isItems ? (
             <Items
