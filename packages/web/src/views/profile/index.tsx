@@ -16,7 +16,7 @@ const { TextArea } = Input;
 export const ProfileView = () => {
   const [visible, setVisible] = useState(false);
   const wallet = useWallet();
-  const artwork = useCreatorArts(wallet.publicKey?.toBase58());
+  const {arts, listedArts} = useCreatorArts(wallet.publicKey?.toBase58());
 
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
@@ -120,9 +120,9 @@ export const ProfileView = () => {
           </Row>
           <Tabs defaultActiveKey="1" className="profile-tabs">
             <TabPane tab="My items" key="1">
-              {artwork && artwork.length > 0 ? (
+              {arts && arts.length > 0 ? (
                 <Row gutter={[16, 16]}>
-                  {artwork.map((item, index) => (
+                  {arts.map((item, index) => (
                     <Col key={index} span={12} md={8} lg={6} xl={4}>
                       <ArtCard
                         pubkey={item.pubkey}
@@ -137,7 +137,21 @@ export const ProfileView = () => {
               )}
             </TabPane>
             <TabPane tab="Listed items" key="2">
-              Listed items - Comming soon
+              {listedArts && listedArts.length > 0 ? (
+                <Row gutter={[16, 16]}>
+                  {listedArts.map((item, index) => (
+                    <Col key={index} span={12} md={8} lg={6} xl={4}>
+                      <ArtCard
+                        pubkey={item.pubkey}
+                        preview={false}
+                        artview={true}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              ) : (
+                <EmptyView />
+              )}
             </TabPane>
             <TabPane tab="Offers made" key="3">
               Offers made - Comming soom
