@@ -50,6 +50,7 @@
         margin-bottom: 0;
         white-space: nowrap;
         text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       .card-collection-name {
@@ -59,7 +60,13 @@
         font-size: 13px;
         color: @text-pink;
         gap: 4px;
-        white-space: nowrap;
+
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
       }
     }
   }
