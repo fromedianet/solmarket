@@ -5,7 +5,8 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
   const { metadata } = useMeta();
   const list = metadata.filter(item => item.info.collection?.key === pubkey);
   const localStorage = useLocalStorage();
-  const [attributes, setAttributes] = useState<Record<string, Record<string | number, number>>>({});
+  const [attrs, setAttrs] = useState<Record<string, Record<string | number, number>>>({});
+  const [newList, setNewList] = useState([]);
 
   useEffect(() => {
     fetchAll();
@@ -13,15 +14,24 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
 
   async function fetchAll() {
     const result: any[] = [];
+    const newValues = [];
     let prom = Promise.resolve();
     list.forEach((item, index) => {
       prom = prom.then(() => {
         // eslint-disable-next-line no-async-promise-executor
         new Promise(async (resolve) => {
           const data = await fetchData(item.info.data.uri);
+          const idx = newValues.findIndex(it => it.pubkey === item.pubkey);
+          if (idx < 0) {
+            newValues.push({
+              ...data,
+              pubkey: item.pubkey,
+            });
+          }
           result.push(data);
           if (index === list.length - 1) {
             prepareAttrubutes(result.map(val => val.attributes));
+            setNewList(newValues);
           }
           resolve("");
         })
@@ -65,8 +75,8 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
       });
     });
 
-    setAttributes(data);
+    setAttrs(data);
   }
 
-  return attributes;
+  return {attrs, newList};
 }
