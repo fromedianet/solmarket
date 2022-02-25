@@ -1,11 +1,13 @@
-import { StringPublicKey, useLocalStorage, useMeta } from "@oyster/common";
-import { useEffect, useState } from "react";
+import { StringPublicKey, useLocalStorage, useMeta } from '@oyster/common';
+import { useEffect, useState } from 'react';
 
 export const useAttributesByCollection = (pubkey: StringPublicKey) => {
   const { metadata } = useMeta();
   const list = metadata.filter(item => item.info.collection?.key === pubkey);
   const localStorage = useLocalStorage();
-  const [attrs, setAttrs] = useState<Record<string, Record<string | number, number>>>({});
+  const [attrs, setAttrs] = useState<
+    Record<string, Record<string | number, number>>
+  >({});
   const [newList, setNewList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
     list.forEach((item, index) => {
       prom = prom.then(() => {
         // eslint-disable-next-line no-async-promise-executor
-        new Promise(async (resolve) => {
+        new Promise(async resolve => {
           const data = await fetchData(item.info.data.uri);
           const idx = newValues.findIndex(it => it.pubkey === item.pubkey);
           if (idx < 0) {
@@ -33,9 +35,9 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
             prepareAttrubutes(result.map(val => val.attributes));
             setNewList(newValues);
           }
-          resolve("");
-        })
-      })
+          resolve('');
+        });
+      });
     });
     await prom;
   }
@@ -78,5 +80,5 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
     setAttrs(data);
   }
 
-  return {attrs, newList};
-}
+  return { attrs, newList };
+};

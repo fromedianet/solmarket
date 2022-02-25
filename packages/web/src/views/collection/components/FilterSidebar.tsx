@@ -20,7 +20,7 @@ const { Sider } = Layout;
 const { Panel } = Collapse;
 
 export const FilterSidebar = (props: {
-  attributes: Record<string, Record<string | number, number>>,
+  attributes: Record<string, Record<string | number, number>>;
   filter: {
     price: {
       symbol: string | undefined;
@@ -166,23 +166,21 @@ export const FilterSidebar = (props: {
                     optionLabelProp="label"
                     value={attributeFilter[trait_type]}
                   >
-                    {Object.keys(props.attributes[trait_type]).map((value, idx) => (
-                      <Select.Option
-                        key={idx}
-                        value={value}
-                        label={value}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            paddingRight: '16px',
-                          }}
-                        >
-                          <span>{`${value} (${props.attributes[trait_type][value]})`}</span>
-                        </div>
-                      </Select.Option>
-                    ))}
+                    {Object.keys(props.attributes[trait_type]).map(
+                      (value, idx) => (
+                        <Select.Option key={idx} value={value} label={value}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              paddingRight: '16px',
+                            }}
+                          >
+                            <span>{`${value} (${props.attributes[trait_type][value]})`}</span>
+                          </div>
+                        </Select.Option>
+                      ),
+                    )}
                   </Select>
                 ))}
               </div>

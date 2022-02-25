@@ -88,7 +88,11 @@ export const CollectionView = () => {
         </div>
       </div>
       <Layout hasSider>
-        <FilterSidebar updateFilters={onUpdateFilters} filter={filter} attributes={attributes} />
+        <FilterSidebar
+          updateFilters={onUpdateFilters}
+          filter={filter}
+          attributes={attributes}
+        />
         <Content className="collection-container">
           {isItems ? (
             <Items
