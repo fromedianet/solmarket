@@ -26,7 +26,7 @@ export const Items = (props: {
   );
   const [priceTag, setPriceTag] = useState<string | undefined>();
   const [filterList, setFilterList] = useState(props.list);
-  const [searchKey, setSearchKey] = useState("");
+  const [searchKey, setSearchKey] = useState('');
 
   useEffect(() => {
     setFilterList(props.list);
@@ -72,8 +72,7 @@ export const Items = (props: {
 
   function searchByName(list, searchKey) {
     const filters = list.filter(
-      item =>
-        item.name.toLowerCase().indexOf(searchKey.toLowerCase()) > -1,
+      item => item.name.toLowerCase().indexOf(searchKey.toLowerCase()) > -1,
     );
     return filters;
   }
@@ -155,7 +154,7 @@ export const Items = (props: {
             ref={searchRef}
             placeholder="Search"
             className="search-control"
-            onSearch={(val) => setSearchKey(val)}
+            onSearch={val => setSearchKey(val)}
             allowClear
           />
         </Col>
