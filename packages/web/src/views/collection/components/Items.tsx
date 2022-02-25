@@ -8,7 +8,7 @@ const { Search } = Input;
 const DELIMITER = '|&=&|';
 
 export const Items = (props: {
-  list: [];
+  list: any[];
   filter: {
     price: {
       symbol: string | undefined;
@@ -26,6 +26,7 @@ export const Items = (props: {
   );
   const [priceTag, setPriceTag] = useState<string | undefined>();
   const [filterList, setFilterList] = useState(props.list);
+  const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
     setFilterList(props.list);
@@ -38,9 +39,8 @@ export const Items = (props: {
     if (props.filter.attributes !== attributeFilter) {
       setAttributeFilter(props.filter.attributes);
     }
-    const searchKey = searchRef?.current?.state?.value || '';
-    searchList(searchKey);
-  }, [props.filter]);
+    searchList();
+  }, [props.filter, searchKey]);
 
   useEffect(() => {
     let newPriceTag: string | undefined;
@@ -63,7 +63,7 @@ export const Items = (props: {
     console.log('refresh');
   };
 
-  function searchList(searchKey: string) {
+  function searchList() {
     const searchResult = searchByName(props.list, searchKey);
     const result = searchByAttrs(searchResult);
 
@@ -155,7 +155,7 @@ export const Items = (props: {
             ref={searchRef}
             placeholder="Search"
             className="search-control"
-            onSearch={(val) => searchList(val)}
+            onSearch={(val) => setSearchKey(val)}
             allowClear
           />
         </Col>
@@ -201,7 +201,7 @@ export const Items = (props: {
       </div>
       <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
         {filterList.length > 0 ? (
-          filterList.map((item, index) => (
+          filterList.map((item: any, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
               <ArtCard pubkey={item.pubkey} preview={false} artview={true} />
             </Col>

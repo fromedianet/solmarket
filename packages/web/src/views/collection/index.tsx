@@ -19,7 +19,7 @@ export const CollectionView = () => {
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
   const [attributes, setAttributes] = useState({});
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<any[]>([]);
   const [filter, setFilter] = useState({
     price: {
       symbol: 'SOL',

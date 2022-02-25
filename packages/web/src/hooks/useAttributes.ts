@@ -6,7 +6,7 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
   const list = metadata.filter(item => item.info.collection?.key === pubkey);
   const localStorage = useLocalStorage();
   const [attrs, setAttrs] = useState<Record<string, Record<string | number, number>>>({});
-  const [newList, setNewList] = useState([]);
+  const [newList, setNewList] = useState<any[]>([]);
 
   useEffect(() => {
     fetchAll();
@@ -14,7 +14,7 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
 
   async function fetchAll() {
     const result: any[] = [];
-    const newValues = [];
+    const newValues: any[] = [];
     let prom = Promise.resolve();
     list.forEach((item, index) => {
       prom = prom.then(() => {

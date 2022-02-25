@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Statistic } from 'antd';
+// import { Row, Col, Statistic } from 'antd';
 import ReadMore from '../../../components/ReadMore';
 import { IMetadataExtension } from '@oyster/common';
 
