@@ -8,6 +8,7 @@ import {
   CopyrightOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
+  ShoppingOutlined,
   TagOutlined,
   UsergroupAddOutlined,
   UserOutlined,
@@ -91,6 +92,30 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         <Menu.Item key="faq">
           <Link to="/faq">FAQ</Link>
         </Menu.Item>
+      </SubMenu>
+      <SubMenu
+        key="inventory"
+        title="Inventory"
+        icon={<ShoppingOutlined style={{ fontSize: 20 }} />}
+      >
+        <Menu.Item key="magiceden">
+          <Link to="/inventory/magiceden">Magic Eden</Link>
+        </Menu.Item>
+        <Menu.Item key="solanart">
+          <Link to="/inventory/solanart">Solanart</Link>
+        </Menu.Item>
+        <Menu.Item key="digital_eyes">
+          <Link to="/inventory/digital_eyes">Digital Eyes</Link>
+        </Menu.Item>
+        <Menu.Item key="alpha_art">
+          <Link to="/inventory/alpha_art">Alpha Art</Link>
+        </Menu.Item>
+        {/* <Menu.Item key="exchange_art">
+          <Link to="/inventory/exchange_art">Exchange Art</Link>
+        </Menu.Item>
+        <Menu.Item key="solsea">
+          <Link to="/inventory/solsea">Solsea</Link>
+        </Menu.Item> */}
       </SubMenu>
     </Menu>
   );
