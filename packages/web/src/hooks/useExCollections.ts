@@ -58,9 +58,9 @@ export const useExCollection = (symbol: string, market: string) => {
       fetch(statsUri)
         .then(res => res.json())
         .then(data => {
-          const result = parseMagicEdenAttributes(data['availableAttributes']);
+          const result = parseMagicEdenAttributes(data['results']['availableAttributes']);
           setAttributes(result);
-          const stats = parseMagicEdenCollectionStats(data);
+          const stats = parseMagicEdenCollectionStats(data['results']);
           if (stats) {
             setCollectionStats(stats);
           }
@@ -125,6 +125,7 @@ export const useExCollection = (symbol: string, market: string) => {
        * Request URL: https://us-central1-digitaleyes-prod.cloudfunctions.net/collection-retriever?collection=HexaHero
        */
       const collectionUri = `${DIGITAL_EYES_URIS.collection}${symbol}`;
+      console.log(collectionUri);
       fetch(collectionUri)
         .then(res => res.json())
         .then(data => {
@@ -157,9 +158,11 @@ export const useExCollection = (symbol: string, market: string) => {
        * Request URL: https://apis.alpha.art/api/v1/collection/santaminers
        */
       const collectionUri = `${ALPHA_ART_URIS.collection}${symbol}`;
+      console.log(collectionUri)
       fetch(collectionUri)
         .then(res => res.json())
         .then(data => {
+          console.log(data);
           // Get collection
           const result = parseCollection(market, data['collection']);
           if (result) {
@@ -300,7 +303,7 @@ function parseAlphaArtCollection(data: any, market: string) {
     const item: ExCollection = {
       name: data['title'],
       description: '',
-      symbol: data['symbol'] || data['slug'],
+      symbol: data['slug'],
       banner: data['banner'],
       thumbnail: data['thumbnail'],
       discord: discord,
@@ -340,24 +343,28 @@ function parseDigitalEyesCollection(data: any, market: string) {
 function parseMagicEdenAttributes(data: any) {
   const attrs: ExAttribute[] = [];
   try {
-    const prevKey = '';
-    const attr: ExAttribute = {
+    let prevKey = '';
+    let attr: ExAttribute = {
       key: '',
       numbers: [],
     };
     data.forEach((item, index) => {
+      const val: ExAttrValue = {
+        value: item['attribute']['value'].toString(),
+        amount: item['count'] && parseInt(item['count'].toString()),
+        floor: item['floor'] && parseInt(item['floor'].toString()) / LAMPORTS_PER_SOL,
+      };
+
       if (prevKey !== item['attribute']['trait_type'].toString()) {
         if (index > 0) {
           attrs.push(attr);
         }
-        attr.key = item['attribute']['trait_type'].toString();
-        attr.numbers = [];
-      } else {
-        const val: ExAttrValue = {
-          value: item['attribute']['value'].toString(),
-          amount: item['count'] && parseInt(item['count'].toString()),
-          floor: item['floor'] && parseInt(item['floor'].toString()) / LAMPORTS_PER_SOL,
+        attr = {
+          key: item['attribute']['trait_type'].toString(),
+          numbers: [val],
         };
+        prevKey = item['attribute']['trait_type'].toString();
+      } else {
         attr.numbers.push(val);
       }
 

@@ -15,12 +15,13 @@ import {
   PlusOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
+import { ExAttribute } from '../../../models/exCollection';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
 export const FilterSidebar = (props: {
-  attributes: Record<string, Record<string | number, number>>;
+  attributes: ExAttribute[];
   filter: {
     price: {
       symbol: string | undefined;
@@ -155,20 +156,20 @@ export const FilterSidebar = (props: {
               extra={<UnorderedListOutlined className="filter-icon" />}
             >
               <div className="attr-container">
-                {Object.keys(props.attributes).map((trait_type, index) => (
+                {props.attributes.map((attr, index) => (
                   <Select
                     key={index}
                     mode="multiple"
-                    placeholder={trait_type}
+                    placeholder={attr.key}
                     allowClear={true}
                     showArrow={true}
-                    onChange={value => onChange(trait_type, value)}
+                    onChange={value => onChange(attr.key, value)}
                     optionLabelProp="label"
-                    value={attributeFilter[trait_type]}
+                    value={attributeFilter[attr.key]}
                   >
-                    {Object.keys(props.attributes[trait_type]).map(
+                    {attr.numbers.map(
                       (value, idx) => (
-                        <Select.Option key={idx} value={value} label={value}>
+                        <Select.Option key={idx} value={value.value} label={value.value}>
                           <div
                             style={{
                               display: 'flex',
@@ -176,7 +177,10 @@ export const FilterSidebar = (props: {
                               paddingRight: '16px',
                             }}
                           >
-                            <span>{`${value} (${props.attributes[trait_type][value]})`}</span>
+                            <span>{value.value}{value.amount && ` (${value.amount})`}</span>
+                            {value.floor && (
+                              <span>{`floor: ${value.floor.toFixed(2)}`}</span>
+                            )}
                           </div>
                         </Select.Option>
                       ),

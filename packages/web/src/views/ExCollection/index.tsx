@@ -6,19 +6,22 @@ import { CollectionInfo } from './components/CollectionInfo';
 import { FilterSidebar } from './components/FilterSidebar';
 import { Items } from './components/Items';
 import { Activities } from './components/Activities';
-import { useParams } from 'react-router-dom';
-import { useExtendedArt } from '../../hooks';
-import { useAttributesByCollection } from '../../hooks/useAttributes';
+import { useLocation, useParams } from 'react-router-dom';
+import { useExCollection } from '../../hooks/useExCollections';
 
 const { Content } = Layout;
 
+function useQuery() {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+}
+
 export const ExCollectionView = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data } = useExtendedArt(id);
+  const { symbol } = useParams<{ symbol: string }>();
+  const market = useQuery().get('market') || '';
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
-  const [attributes, setAttributes] = useState({});
   const [list, setList] = useState<any[]>([]);
   const [filter, setFilter] = useState({
     price: {
@@ -28,13 +31,8 @@ export const ExCollectionView = () => {
     },
     attributes: {},
   });
-
-  const { attrs, newList } = useAttributesByCollection(id);
-
-  useEffect(() => {
-    setAttributes(attrs);
-    setList(newList);
-  }, [id, attrs, newList]);
+  const { collection, attributes, collectionStats } = useExCollection(symbol, market);
+  console.log(collection, attributes, collectionStats);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -62,8 +60,11 @@ export const ExCollectionView = () => {
 
   return (
     <div className="collection-page">
+      {collection && collection.banner && (
+        <img src={collection.banner} className="collection-background" />
+      )}
       <div className="collection-info">
-        <CollectionInfo data={data} />
+        <CollectionInfo collection={collection} stats={collectionStats} />
       </div>
       <div className="collection-tabs">
         <div
