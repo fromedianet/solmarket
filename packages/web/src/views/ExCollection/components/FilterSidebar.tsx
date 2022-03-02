@@ -169,7 +169,7 @@ export const FilterSidebar = (props: {
                   >
                     {attr.numbers.map(
                       (value, idx) => (
-                        <Select.Option key={idx} value={value.value} label={value.value}>
+                        <Select.Option key={idx} value={value.value}>
                           <div
                             style={{
                               display: 'flex',

@@ -32,7 +32,6 @@ export const ExCollectionView = () => {
     attributes: {},
   });
   const { collection, attributes, collectionStats } = useExCollection(symbol, market);
-  console.log(collection, attributes, collectionStats);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);

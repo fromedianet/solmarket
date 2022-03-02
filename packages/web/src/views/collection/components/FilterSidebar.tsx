@@ -168,7 +168,7 @@ export const FilterSidebar = (props: {
                   >
                     {Object.keys(props.attributes[trait_type]).map(
                       (value, idx) => (
-                        <Select.Option key={idx} value={value} label={value}>
+                        <Select.Option key={idx} value={value}>
                           <div
                             style={{
                               display: 'flex',
