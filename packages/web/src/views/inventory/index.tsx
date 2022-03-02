@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Col, Input } from 'antd';
 import { TITLE } from './constants';
-import { useExCollection } from './hooks/useExCollection';
+import { useExCollections } from '../../hooks/useExCollections';
 import { ExCollection } from '../../models/exCollection';
 import { ExCollectionCard } from './ExCollectionCard';
 import { CardLoader } from '../../components/MyLoader';
@@ -13,7 +13,7 @@ const { Search } = Input;
 
 export const InventoryView = () => {
   const { id } = useParams<{ id: string }>();
-  const { loading, collections } = useExCollection(id);
+  const { loading, collections } = useExCollections(id);
   const [hasMore, setHasMore] = useState(true);
   const [filters, setFilters] = useState<ExCollection[]>([]);
   const [items, setItems] = useState<ExCollection[]>([]);
