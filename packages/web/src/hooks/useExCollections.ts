@@ -1,6 +1,6 @@
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
-import { ExAttribute, ExAttrValue, ExCollection, ExCollectionStats } from '../models/exCollection';
+import { ExAttribute, ExAttrValue, ExCollection, ExCollectionStats, ExNFT } from '../models/exCollection';
 import { ALPHA_ART_URIS, COLLECTIONS_URI, DIGITAL_EYES_URIS, MAGIC_EDEN_URIS, SOLANART_URIS } from '../views/inventory/constants';
 
 export const useExCollections = (id: string) => {
@@ -29,6 +29,8 @@ export const useExCollection = (symbol: string, market: string) => {
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
   const [collectionStats, setCollectionStats] = useState<ExCollectionStats>({});
+  const [nfts, setNFTs] = useState<ExNFT[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (market === 'magiceden') {
@@ -65,6 +67,7 @@ export const useExCollection = (symbol: string, market: string) => {
             setCollectionStats(stats);
           }
         });
+
     } else if (market === 'solanart') {
       /**
        * Get collection by filtering the collections by symbol
@@ -135,6 +138,7 @@ export const useExCollection = (symbol: string, market: string) => {
             }));
           }
         });
+
     } else if (market === 'digital_eyes') {
       /**
        * Get collection, attributes and stats in DigitalEyes
@@ -201,9 +205,76 @@ export const useExCollection = (symbol: string, market: string) => {
         });
     }
     
+    /**
+     * Get NFTs
+     */
+    getListedNFTsByCollection({
+      market: market,
+      symbol: symbol,
+      sort: 1
+    });
+
   }, [symbol]);
 
-  return { collection, attributes, collectionStats };
+  const getListedNFTsByCollection = (param: QUERIES) => {
+    if (loading) return;
+    setLoading(true);
+    if (param.market === 'magiceden') {
+      const uri = getNFTUriForMagicEden(param);
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const result = parseMagicEdenNFTs(data);
+          setNFTs(result);
+          setLoading(false);
+        });
+    } else if (market === 'solanart') {
+      const uri = getNFTUriForSolanart(param);
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const result = parseSolanartNFTs(data, param.symbol);
+          setNFTs(result);
+          setLoading(false);
+        });
+    } else if (market === 'digital_eyes') {
+      const uri = getNFTUriForDigitalEyes(param);
+      console.log(uri);
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const result = parseDigitalEyesNFTs(data, param.symbol);
+          setNFTs(result);
+          setCollectionStats(prev => ({
+            ...prev,
+            listedCount: data["count"],
+            floorPrice: data["price_floor"] / LAMPORTS_PER_SOL
+          }));
+          setLoading(false);
+        });
+    } else if (market === 'alpha_art') {
+      const uri = ALPHA_ART_URIS.listedNFTs;
+      const postParams = getNFTUriForAlphaArt(param);
+      fetch(uri, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postParams)
+      })
+        .then(res => res.json())
+        .then(data => {
+          const result = parseAlphaArtNFTs(data, param.symbol);
+          setNFTs(result);
+          setCollectionStats(prev => ({
+            ...prev,
+            listedCount: data['total'],
+            floorPrice: data["floorPrice"] / LAMPORTS_PER_SOL
+          }));
+          setLoading(false);
+        });
+    }
+  }
+
+  return { collection, attributes, collectionStats, nfts, loading, getListedNFTsByCollection };
 }
 
 function parseCollections(id: string, data: any) {
@@ -403,14 +474,16 @@ function parseSolanartAttributes(data: any) {
     data.forEach(item => {
       if (item['countListed'] > 0) {
         const attr: string[] = item['attributes'].toString().split(': ');
-        const val: ExAttrValue = {
-          value: attr[1].trim(),
-          amount: item['contListed'],
-          floor: item['floorPrice'] && item['floorPrice'],
-        };
-        const numbers = dict[attr[0]] || [];
-        numbers.push(val);
-        dict[attr[0]] = numbers;
+        if (attr[0] !== "Amount of Attributes") {
+          const val: ExAttrValue = {
+            value: attr[1].trim(),
+            amount: item['contListed'],
+            floor: item['floorPrice'] && item['floorPrice'],
+          };
+          const numbers = dict[attr[0]] || [];
+          numbers.push(val);
+          dict[attr[0]] = numbers;
+        }
       }
     });
 
@@ -515,4 +588,218 @@ function parseAlphaArtCollectionStats(data: any) {
     console.error(e);
     return undefined;
   }
+}
+
+export type QUERIES = {
+  market: string,
+  symbol: string,
+  sort: number,
+  searchKey?: string,
+  attributes?: {},
+  min?: number,
+  max?: number,
+  skip?: number,
+}
+
+function getNFTUriForMagicEden(param: QUERIES) {
+  const queries = {
+    "$skip": param.skip ? param.skip : 0,
+    "$limit": 20,
+  }
+  const match = {};
+  match["collectionSymbol"] = param.symbol;
+  if (param.searchKey) {
+    match["$text"] = {
+      "$search": param.searchKey
+    };
+  }
+  if (param.min || param.max) {
+    const takerAmount = {};
+    if (param.min) {
+      takerAmount["$gte"] = param.min * 1000000000;
+    }
+    if (param.max) {
+      takerAmount["$lte"] = param.max * 1000000000;
+    }
+    match["takerAmount"] = takerAmount;
+  }
+
+  if (param.attributes && Object.keys(param.attributes).length > 0) {
+    const attrs: any[] = [];
+    Object.keys(param.attributes).forEach(key => {
+      const subAttrs = param.attributes[key].map(val => (
+        {
+          "attributes": {
+            "$elemMatch": {
+              "trait_type": key,
+              "value": val
+            }
+          }
+        }
+      ));
+      attrs.push({"$or": subAttrs});
+    });
+
+    match["$and"] = attrs;
+  }
+
+  queries["$match"] = match;
+
+  const sortQuery = {};
+  if (param.sort === 2) {
+    sortQuery["takerAmount"] = 1;
+  } else if (param.sort === 3) {
+    sortQuery["takerAmount"] = -1;
+  }
+  sortQuery["createdAt"] = -1;
+
+  queries["$sort"] = sortQuery;
+
+  const queryStr = `?q=${encodeURIComponent(JSON.stringify(queries))}`
+  const uri = MAGIC_EDEN_URIS.listedNFTs + queryStr;
+  return uri;
+}
+
+function getNFTUriForSolanart(param: QUERIES) {
+  let queries = "?collection=" + param.symbol;
+  queries += "&listed=true&fits=any&bid=all";
+  queries += "&page=" + (param.skip ? param.skip : 0);
+  queries += "&limit=20";
+  if (param.min) {
+    queries += "&min=" + param.min;
+  }
+  if (param.max) {
+    queries += "&max=" + param.max;
+  }
+  let order = "recent";
+  if (param.sort === 2) {
+    order = "price-ASC";
+  } else if (param.sort === 3) {
+    order = "price-DESC";
+  }
+  queries += "&order=" + order;
+  if (param.searchKey && param.searchKey.length > 0) {
+    queries += "&search=" + param.searchKey;
+  }
+  if (param.attributes && Object.keys(param.attributes).length > 0) {
+    Object.keys(param.attributes).forEach(key => {
+      param.attributes[key].forEach(val => {
+        queries += `&trait[]=${key}: ${val}`;
+      });
+    })
+  }
+
+  queries = queries.replaceAll(" ", "+");
+  const uri = SOLANART_URIS.listedNFTs + queries;
+  return uri;
+}
+
+function getNFTUriForDigitalEyes(param: QUERIES) {
+  let queries = "collection=" + param.symbol;
+  if (param.sort === 1) {
+    queries += "&addEpoch=desc";
+  } else if (param.sort === 2) {
+    queries += "&price=asc";
+  } else if (param.sort === 3) {
+    queries += "&price=desc";
+  }
+  if (param.attributes && Object.keys(param.attributes).length > 0) {
+    Object.keys(param.attributes).forEach(key => {
+      param.attributes[key].forEach(val => {
+        queries += `&${key}=${val}`;
+      })
+    })
+  }
+
+  const uri = DIGITAL_EYES_URIS.listedNFTs + "?" + queries;
+  return uri;
+}
+
+function getNFTUriForAlphaArt(param: QUERIES) {
+  const queries = {};
+  queries["collectionId"] = param.symbol;
+  queries["status"] = ["BUY_NOW"];
+  if (param.sort === 2) {
+    queries["orderBy"] = "PRICE_LOW_TO_HIGH";
+  } else if (param.sort === 3) {
+    queries["orderBy"] = "PRICE_HIGH_TO_LOW";
+  } else {
+    queries["orderBy"] = "RECENTLY_LISTED";
+  }
+
+  if (param.attributes && Object.keys(param.attributes).length > 0) {
+    queries["traits"] = Object.keys(param.attributes).map(key => ({
+      key: key,
+      values: param.attributes[key]
+    }));
+  } else {
+    queries["traits"] = [];
+  }
+
+  return queries;
+}
+
+function parseMagicEdenNFTs(data: any) {
+  let result: ExNFT[] = [];
+  try {
+    result = data['results'].map(item => ({
+      mintAddress: item["mintAddress"],
+      name: item["title"],
+      image: item["img"],
+      collection: item["collectionTitle"],
+      price: item["price"]
+    }))
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseSolanartNFTs(data: any, collection: string) {
+  let result: ExNFT[] = [];
+  try {
+    result = data['items'].map(item => ({
+      mintAddress: item["token_add"],
+      name: item["name"],
+      image: item["link_img"],
+      collection: collection,
+      price: item["price"]
+    }))
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseDigitalEyesNFTs(data: any, collection: string) {
+  let result: ExNFT[] = [];
+  try {
+    result = data['offers'].map(item => ({
+      mintAddress: item["mint"],
+      pk: item["pk"],
+      name: item["metadata"]["name"],
+      image: item["metadata"]["image"],
+      collection: item["metadata"]["collection"] ? item["metadata"]["collection"]["name"] : collection,
+      price: item["price"] / LAMPORTS_PER_SOL
+    }));
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseAlphaArtNFTs(data: any, collection: string) {
+  let result: ExNFT[] = [];
+  try {
+    result = data['tokens'].map(item => ({
+      mintAddress: item["mintId"],
+      name: item["title"],
+      image: item["image"],
+      collection: collection,
+      price: item["price"] / LAMPORTS_PER_SOL
+    }))
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
 }

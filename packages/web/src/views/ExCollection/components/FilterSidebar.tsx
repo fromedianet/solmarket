@@ -21,6 +21,7 @@ const { Sider } = Layout;
 const { Panel } = Collapse;
 
 export const FilterSidebar = (props: {
+  market: string;
   attributes: ExAttribute[];
   filter: {
     price: {
@@ -103,53 +104,55 @@ export const FilterSidebar = (props: {
               )
             }
           >
-            <Panel
-              key="price"
-              header="Price filter"
-              extra={<UnorderedListOutlined className="filter-icon" />}
-            >
-              <Form
-                form={form}
-                name="price_form"
-                className="price-form"
-                onFinish={onFinish}
-                autoComplete="off"
+            {(props.market !== "digital_eyes" && props.market !== "alpha_art") && (
+              <Panel
+                key="price"
+                header="Price filter"
+                extra={<UnorderedListOutlined className="filter-icon" />}
               >
-                <Form.Item initialValue="SOL" name="symbol">
-                  <Select disabled>
-                    <Select.Option value="SOL">SOL</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Space
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                  align="baseline"
+                <Form
+                  form={form}
+                  name="price_form"
+                  className="price-form"
+                  onFinish={onFinish}
+                  autoComplete="off"
                 >
-                  <Form.Item name="min">
-                    <InputNumber
-                      placeholder="Min"
-                      style={{ width: '125px' }}
-                      controls={false}
-                    />
+                  <Form.Item initialValue="SOL" name="symbol">
+                    <Select disabled>
+                      <Select.Option value="SOL">SOL</Select.Option>
+                    </Select>
                   </Form.Item>
-                  <span>to</span>
-                  <Form.Item name="max">
-                    <InputNumber
-                      placeholder="Max"
-                      style={{ width: '125px' }}
-                      controls={false}
-                    />
-                  </Form.Item>
-                </Space>
-                <Form.Item>
-                  <Button
-                    htmlType="submit"
-                    style={{ height: '40px', width: '100%' }}
+                  <Space
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                    align="baseline"
                   >
-                    Apply
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Panel>
+                    <Form.Item name="min">
+                      <InputNumber
+                        placeholder="Min"
+                        style={{ width: '125px' }}
+                        controls={false}
+                      />
+                    </Form.Item>
+                    <span>to</span>
+                    <Form.Item name="max">
+                      <InputNumber
+                        placeholder="Max"
+                        style={{ width: '125px' }}
+                        controls={false}
+                      />
+                    </Form.Item>
+                  </Space>
+                  <Form.Item>
+                    <Button
+                      htmlType="submit"
+                      style={{ height: '40px', width: '100%' }}
+                    >
+                      Apply
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Panel>
+            )}
             <Panel
               key="attributes"
               header="Attributes filter"

@@ -8,6 +8,8 @@ import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useLocation, useParams } from 'react-router-dom';
 import { useExCollection } from '../../hooks/useExCollections';
+import { ExNFT } from '../../models/exCollection';
+import { CardLoader } from '../../components/MyLoader';
 
 const { Content } = Layout;
 
@@ -22,7 +24,7 @@ export const ExCollectionView = () => {
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<ExNFT[]>([]);
   const [filter, setFilter] = useState({
     price: {
       symbol: 'SOL',
@@ -31,7 +33,9 @@ export const ExCollectionView = () => {
     },
     attributes: {},
   });
-  const { collection, attributes, collectionStats } = useExCollection(symbol, market);
+  const [searchKey, setSearchKey] = useState("");
+  const [sort, setSort] = useState(1);
+  const { collection, attributes, collectionStats, nfts, loading, getListedNFTsByCollection } = useExCollection(symbol, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -52,6 +56,22 @@ export const ExCollectionView = () => {
       handleToggle(false);
     }
   });
+
+  useEffect(() => {
+    setList(nfts);
+  }, [nfts]);
+
+  useEffect(() => {
+    getListedNFTsByCollection({
+      market: market,
+      symbol: symbol,
+      sort: sort,
+      searchKey: searchKey,
+      attributes: filter.attributes,
+      min: filter.price.min,
+      max: filter.price.max,
+    });
+  }, [searchKey, sort, filter]);
 
   const onUpdateFilters = (priceFilter, attributeFilter) => {
     setFilter({ price: priceFilter, attributes: attributeFilter });
@@ -89,17 +109,28 @@ export const ExCollectionView = () => {
       </div>
       <Layout hasSider>
         <FilterSidebar
+          market={market}
           updateFilters={onUpdateFilters}
           filter={filter}
           attributes={attributes}
         />
         <Content className="collection-container">
           {isItems ? (
-            <Items
-              list={list}
-              updateFilters={onUpdateFilters}
-              filter={filter}
-            />
+            loading ? (
+              [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+            ) : (
+              <Items
+                list={list}
+                sort={sort}
+                market={market}
+                searchKey={searchKey}
+                updateFilters={onUpdateFilters}
+                onSearch={(val) => setSearchKey(val)}
+                onSortChange={(val) => setSort(val)}
+                filter={filter}
+              />
+            )
+            
           ) : (
             <Activities />
           )}

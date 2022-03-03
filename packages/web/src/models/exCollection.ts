@@ -27,3 +27,12 @@ export type ExCollectionStats = {
   volume?: number | undefined,
   listedCount? : number | undefined,
 }
+
+export interface ExNFT {
+  mintAddress: string,
+  pk?: string,
+  name: string,
+  image: string,
+  collection: string,
+  price?: number,
+}
