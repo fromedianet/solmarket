@@ -67,6 +67,24 @@ export const useExCollection = (symbol: string, market: string) => {
         });
     } else if (market === 'solanart') {
       /**
+       * Get collection by filtering the collections by symbol
+       * 
+       * Request URL: https://api.solanart.io/get_collections
+       */
+      const collectionUri = SOLANART_URIS.collections;
+      fetch(collectionUri)
+        .then(res => res.json())
+        .then(data => {
+          const filters = data.filter(item => item.url === symbol);
+          if (filters.length > 0) {
+            const res = filters[0];
+            const result = parseSolanartCollection(res, market);
+            if (result) {
+              setCollection(result);
+            }
+          }
+        })
+      /**
        * Get collection attributes in Solanart
        * 
        * Sample
