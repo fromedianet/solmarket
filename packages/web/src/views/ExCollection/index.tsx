@@ -9,7 +9,6 @@ import { Activities } from './components/Activities';
 import { useLocation, useParams } from 'react-router-dom';
 import { useExCollection } from '../../hooks/useExCollections';
 import { ExNFT } from '../../models/exCollection';
-import { CardLoader } from '../../components/MyLoader';
 
 const { Content } = Layout;
 
@@ -40,8 +39,10 @@ export const ExCollectionView = () => {
     attributes,
     collectionStats,
     nfts,
-    loading,
     getListedNFTsByCollection,
+    skip,
+    cursor,
+    hasMore,
   } = useExCollection(symbol, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
@@ -65,7 +66,11 @@ export const ExCollectionView = () => {
   });
 
   useEffect(() => {
-    setList(nfts);
+    if (skip > 0 || cursor) {
+      setList(prev => prev.concat(nfts));
+    } else {
+      setList(nfts);
+    }
   }, [nfts]);
 
   useEffect(() => {
@@ -82,6 +87,22 @@ export const ExCollectionView = () => {
 
   const onUpdateFilters = (priceFilter, attributeFilter) => {
     setFilter({ price: priceFilter, attributes: attributeFilter });
+  };
+
+  const fetchMore = () => {
+    if (hasMore) {
+      getListedNFTsByCollection({
+        market: market,
+        symbol: symbol,
+        sort: sort,
+        searchKey: searchKey,
+        attributes: filter.attributes,
+        min: filter.price.min,
+        max: filter.price.max,
+        skip: skip,
+        cursor: cursor,
+      });
+    }
   };
 
   return (
@@ -123,20 +144,18 @@ export const ExCollectionView = () => {
         />
         <Content className="collection-container">
           {isItems ? (
-            loading ? (
-              [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-            ) : (
-              <Items
-                list={list}
-                sort={sort}
-                market={market}
-                searchKey={searchKey}
-                updateFilters={onUpdateFilters}
-                onSearch={val => setSearchKey(val)}
-                onSortChange={val => setSort(val)}
-                filter={filter}
-              />
-            )
+            <Items
+              list={list}
+              sort={sort}
+              market={market}
+              searchKey={searchKey}
+              updateFilters={onUpdateFilters}
+              onSearch={val => setSearchKey(val)}
+              onSortChange={val => setSort(val)}
+              filter={filter}
+              hasMore={hasMore}
+              fetchMore={fetchMore}
+            />
           ) : (
             <Activities />
           )}

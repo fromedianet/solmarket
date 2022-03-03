@@ -66,6 +66,7 @@ export const InventoryView = () => {
         {loading ? (
           [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
         ) : items.length > 0 ? (
+          // @ts-ignore
           <InfiniteScroll
             dataLength={items.length}
             next={fetchMoreData}

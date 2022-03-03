@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Select, Tag, Input, Card } from 'antd';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../../components/EmptyView';
 import { ExNFT } from '../../../models/exCollection';
 import { Link } from 'react-router-dom';
@@ -13,6 +14,7 @@ export const Items = (props: {
   list: ExNFT[];
   sort: number;
   searchKey: string;
+  hasMore: boolean;
   filter: {
     price: {
       symbol: string | undefined;
@@ -24,6 +26,7 @@ export const Items = (props: {
   onSearch: (a: string) => void;
   onSortChange: (a: number) => void;
   updateFilters: (p, a) => void;
+  fetchMore: () => void;
 }) => {
   const searchRef = useRef(null);
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
@@ -161,17 +164,33 @@ export const Items = (props: {
           </div>
         )}
       </div>
-      <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
-        {props.list.length > 0 ? (
-          props.list.map((item, index) => (
-            <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <NFTCard item={item} />
-            </Col>
-          ))
-        ) : (
-          <EmptyView />
-        )}
-      </Row>
+      {
+        // @ts-ignore
+        <InfiniteScroll
+          dataLength={props.list.length}
+          className="ant-row"
+          next={props.fetchMore}
+          hasMore={props.hasMore}
+        >
+          {props.list.length > 0 ? (
+            props.list.map((item, index) => (
+              <Col
+                key={index}
+                span={12}
+                md={8}
+                lg={8}
+                xl={6}
+                xxl={4}
+                style={{ padding: 8 }}
+              >
+                <NFTCard item={item} />
+              </Col>
+            ))
+          ) : (
+            <EmptyView />
+          )}
+        </InfiniteScroll>
+      }
     </div>
   );
 };
