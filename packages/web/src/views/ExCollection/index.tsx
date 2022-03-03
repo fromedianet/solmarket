@@ -33,9 +33,16 @@ export const ExCollectionView = () => {
     },
     attributes: {},
   });
-  const [searchKey, setSearchKey] = useState("");
+  const [searchKey, setSearchKey] = useState('');
   const [sort, setSort] = useState(1);
-  const { collection, attributes, collectionStats, nfts, loading, getListedNFTsByCollection } = useExCollection(symbol, market);
+  const {
+    collection,
+    attributes,
+    collectionStats,
+    nfts,
+    loading,
+    getListedNFTsByCollection,
+  } = useExCollection(symbol, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -125,12 +132,11 @@ export const ExCollectionView = () => {
                 market={market}
                 searchKey={searchKey}
                 updateFilters={onUpdateFilters}
-                onSearch={(val) => setSearchKey(val)}
-                onSortChange={(val) => setSort(val)}
+                onSearch={val => setSearchKey(val)}
+                onSortChange={val => setSort(val)}
                 filter={filter}
               />
             )
-            
           ) : (
             <Activities />
           )}

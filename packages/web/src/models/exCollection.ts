@@ -12,27 +12,27 @@ export interface ExCollection {
 }
 
 export type ExAttribute = {
-  key: string,
-  numbers: ExAttrValue[],
-}
+  key: string;
+  numbers: ExAttrValue[];
+};
 
 export type ExAttrValue = {
-  value: string,
-  amount?: number | undefined,
-  floor?: number | undefined,
-}
+  value: string;
+  amount?: number | undefined;
+  floor?: number | undefined;
+};
 
 export type ExCollectionStats = {
-  floorPrice?: number | undefined,
-  volume?: number | undefined,
-  listedCount? : number | undefined,
-}
+  floorPrice?: number | undefined;
+  volume?: number | undefined;
+  listedCount?: number | undefined;
+};
 
 export interface ExNFT {
-  mintAddress: string,
-  pk?: string,
-  name: string,
-  image: string,
-  collection: string,
-  price?: number,
+  mintAddress: string;
+  pk?: string;
+  name: string;
+  image: string;
+  collection: string;
+  price?: number;
 }

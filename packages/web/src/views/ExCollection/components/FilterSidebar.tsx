@@ -104,7 +104,7 @@ export const FilterSidebar = (props: {
               )
             }
           >
-            {(props.market !== "digital_eyes" && props.market !== "alpha_art") && (
+            {props.market !== 'digital_eyes' && props.market !== 'alpha_art' && (
               <Panel
                 key="price"
                 header="Price filter"
@@ -170,24 +170,25 @@ export const FilterSidebar = (props: {
                     optionLabelProp="label"
                     value={attributeFilter[attr.key]}
                   >
-                    {attr.numbers.map(
-                      (value, idx) => (
-                        <Select.Option key={idx} value={value.value}>
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              paddingRight: '16px',
-                            }}
-                          >
-                            <span>{value.value}{value.amount && ` (${value.amount})`}</span>
-                            {value.floor && (
-                              <span>{`floor: ${value.floor.toFixed(2)}`}</span>
-                            )}
-                          </div>
-                        </Select.Option>
-                      ),
-                    )}
+                    {attr.numbers.map((value, idx) => (
+                      <Select.Option key={idx} value={value.value}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            paddingRight: '16px',
+                          }}
+                        >
+                          <span>
+                            {value.value}
+                            {value.amount && ` (${value.amount})`}
+                          </span>
+                          {value.floor && (
+                            <span>{`floor: ${value.floor.toFixed(2)}`}</span>
+                          )}
+                        </div>
+                      </Select.Option>
+                    ))}
                   </Select>
                 ))}
               </div>

@@ -110,7 +110,9 @@ export const Items = (props: {
             placeholder="Search"
             className="search-control"
             value={props.searchKey}
-            disabled={props.market === "digital_eyes" || props.market === "alpha_art"}
+            disabled={
+              props.market === 'digital_eyes' || props.market === 'alpha_art'
+            }
             onChange={event => props.onSearch(event.target.value)}
             allowClear
           />
@@ -119,7 +121,11 @@ export const Items = (props: {
           <div className="filter-btn" onClick={onRefresh}>
             <img src="/icons/filter.svg" alt="filter" />
           </div>
-          <Select className="select-container" value={props.sort} onSelect={val => props.onSortChange(val)}>
+          <Select
+            className="select-container"
+            value={props.sort}
+            onSelect={val => props.onSortChange(val)}
+          >
             <Select.Option value={1}>Recently Listed</Select.Option>
             <Select.Option value={2}>Price: Low to high</Select.Option>
             <Select.Option value={3}>Price: High to low</Select.Option>
@@ -159,7 +165,7 @@ export const Items = (props: {
         {props.list.length > 0 ? (
           props.list.map((item, index) => (
             <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <NFTCard item={item}/>
+              <NFTCard item={item} />
             </Col>
           ))
         ) : (
@@ -170,13 +176,9 @@ export const Items = (props: {
   );
 };
 
-const NFTCard = (props: {item: ExNFT}) => {
+const NFTCard = (props: { item: ExNFT }) => {
   return (
-    <Card
-      hoverable={true}
-      className="art-card"
-      bordered={false}
-    >
+    <Card hoverable={true} className="art-card" bordered={false}>
       <Link to={`/item-details/${props.item.mintAddress}`}>
         <div className="image-over art-image-container">
           <ArtContent
@@ -193,9 +195,9 @@ const NFTCard = (props: {item: ExNFT}) => {
             <span>{props.item.collection}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
-          <h6>{`${props.item.price ? props.item.price : "--"} SOL`}</h6>
+          <h6>{`${props.item.price ? props.item.price : '--'} SOL`}</h6>
         </div>
       </Link>
     </Card>
   );
-}
+};

@@ -21,11 +21,10 @@ export const CollectionInfo = (props: {
         <img className="info-image" src="/image-placeholder.svg" alt="avatar" />
       )}
 
-      <h1 className="info-title">{props.collection && props.collection.name}</h1>
-      <div
-        role="group"
-        className="info-group"
-      >
+      <h1 className="info-title">
+        {props.collection && props.collection.name}
+      </h1>
+      <div role="group" className="info-group">
         {props.collection && (
           <div className="inline mr-1">
             {props.collection.website && (
@@ -77,7 +76,9 @@ export const CollectionInfo = (props: {
         <Col key="floor" span={12} lg={8}>
           <Statistic
             title="Floor Price"
-            value={props.stats.floorPrice ? props.stats.floorPrice.toFixed(2) : '--'}
+            value={
+              props.stats.floorPrice ? props.stats.floorPrice.toFixed(2) : '--'
+            }
             suffix="◎"
             className="info-attribute"
           />
