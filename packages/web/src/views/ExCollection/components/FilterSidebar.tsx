@@ -15,12 +15,14 @@ import {
   PlusOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
+import { ExAttribute } from '../../../models/exCollection';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
 export const FilterSidebar = (props: {
-  attributes: Record<string, Record<string | number, number>>;
+  market: string;
+  attributes: ExAttribute[];
   filter: {
     price: {
       symbol: string | undefined;
@@ -102,85 +104,91 @@ export const FilterSidebar = (props: {
               )
             }
           >
-            <Panel
-              key="price"
-              header="Price filter"
-              extra={<UnorderedListOutlined className="filter-icon" />}
-            >
-              <Form
-                form={form}
-                name="price_form"
-                className="price-form"
-                onFinish={onFinish}
-                autoComplete="off"
+            {props.market !== 'digital_eyes' && props.market !== 'alpha_art' && (
+              <Panel
+                key="price"
+                header="Price filter"
+                extra={<UnorderedListOutlined className="filter-icon" />}
               >
-                <Form.Item initialValue="SOL" name="symbol">
-                  <Select disabled>
-                    <Select.Option value="SOL">SOL</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Space
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                  align="baseline"
+                <Form
+                  form={form}
+                  name="price_form"
+                  className="price-form"
+                  onFinish={onFinish}
+                  autoComplete="off"
                 >
-                  <Form.Item name="min">
-                    <InputNumber
-                      placeholder="Min"
-                      style={{ width: '125px' }}
-                      controls={false}
-                    />
+                  <Form.Item initialValue="SOL" name="symbol">
+                    <Select disabled>
+                      <Select.Option value="SOL">SOL</Select.Option>
+                    </Select>
                   </Form.Item>
-                  <span>to</span>
-                  <Form.Item name="max">
-                    <InputNumber
-                      placeholder="Max"
-                      style={{ width: '125px' }}
-                      controls={false}
-                    />
-                  </Form.Item>
-                </Space>
-                <Form.Item>
-                  <Button
-                    htmlType="submit"
-                    style={{ height: '40px', width: '100%' }}
+                  <Space
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                    align="baseline"
                   >
-                    Apply
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Panel>
+                    <Form.Item name="min">
+                      <InputNumber
+                        placeholder="Min"
+                        style={{ width: '125px' }}
+                        controls={false}
+                      />
+                    </Form.Item>
+                    <span>to</span>
+                    <Form.Item name="max">
+                      <InputNumber
+                        placeholder="Max"
+                        style={{ width: '125px' }}
+                        controls={false}
+                      />
+                    </Form.Item>
+                  </Space>
+                  <Form.Item>
+                    <Button
+                      htmlType="submit"
+                      style={{ height: '40px', width: '100%' }}
+                    >
+                      Apply
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Panel>
+            )}
             <Panel
               key="attributes"
               header="Attributes filter"
               extra={<UnorderedListOutlined className="filter-icon" />}
             >
               <div className="attr-container">
-                {Object.keys(props.attributes).map((trait_type, index) => (
+                {props.attributes.map((attr, index) => (
                   <Select
                     key={index}
                     mode="multiple"
-                    placeholder={trait_type}
+                    placeholder={attr.key}
                     allowClear={true}
                     showArrow={true}
-                    onChange={value => onChange(trait_type, value)}
+                    onChange={value => onChange(attr.key, value)}
                     optionLabelProp="label"
-                    value={attributeFilter[trait_type]}
+                    value={attributeFilter[attr.key]}
                   >
-                    {Object.keys(props.attributes[trait_type]).map(
-                      (value, idx) => (
-                        <Select.Option key={idx} value={value}>
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              paddingRight: '16px',
-                            }}
-                          >
-                            <span>{`${value} (${props.attributes[trait_type][value]})`}</span>
-                          </div>
-                        </Select.Option>
-                      ),
-                    )}
+                    {attr.numbers.map((value, idx) => (
+                      <Select.Option key={idx} value={value.value}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            paddingRight: '16px',
+                          }}
+                        >
+                          <span>
+                            {value.value}
+                            {value.amount && ` (${value.amount})`}
+                          </span>
+                          {value.floor && (
+                            <span>{`floor: ${value.floor.toFixed(2)}`}</span>
+                          )}
+                        </div>
+                      </Select.Option>
+                    ))}
                   </Select>
                 ))}
               </div>
