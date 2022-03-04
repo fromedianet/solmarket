@@ -1,17 +1,12 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import { Row, Col } from 'antd';
 import { useCollection } from '../../hooks/useCollection';
 import { CollectionCard } from '../../components/CollectionCard';
-
-function useQuery() {
-  const { search } = useLocation();
-  return new URLSearchParams(search);
-}
+import { useQuerySearch } from '@oyster/common';
 
 export const CollectionsView = () => {
-  const query = useQuery();
-  const type = query.get('type');
+  const searchParams = useQuerySearch();
+  const type = searchParams.get('type');
   const collections = useCollection();
   let caption = 'All Collections';
   if (type === 'popular') {

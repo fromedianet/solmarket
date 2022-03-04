@@ -1,0 +1,42 @@
+.inventory-page {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    text-align: center;
+    color: @text-primary-color;
+  }
+
+  .search-control {
+    height: 40px;
+    flex: 1 1 auto;
+    border: 1px solid #595280;
+    border-radius: 4px;
+    width: 100%;
+    align-self: center;
+
+    @media screen and (min-width: 768px) {
+      width: 600px;
+    }
+
+    .ant-input-group {
+      .ant-input-affix-wrapper {
+        background: transparent;
+        border: none;
+        padding: 8px 10px;
+
+        input {
+          background: transparent;
+        }
+      }
+
+      .ant-input-group-addon {
+        background: transparent;
+
+        button {
+          border: none;
+        }
+      }
+    }
+  }
+}

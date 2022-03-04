@@ -57,6 +57,10 @@ body {
   background: #444;
 }
 
+.mr-1 {
+  margin-right: 4px;
+}
+
 .main-area {
   width: 100%;
   padding: 20px;
@@ -485,6 +489,40 @@ model-viewer {
     font-weight: bold;
     font-size: 16px;
     line-height: 24px;
+  }
+}
+
+.ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next {
+  .ant-pagination-item-link {
+    background: transparent;
+    border: none;
+  }
+
+  button {
+    color: white;
+  }
+}
+
+.ant-pagination-disabled {
+  .ant-pagination-item-link, &:hover .ant-pagination-item-link, &:focus-visible .ant-pagination-item-link {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.ant-pagination-item {
+  background: transparent;
+  border: none;
+  a, &:hover a, &:focus a {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.ant-pagination-item-active {
+  background: transparent;
+  border: none;
+
+  a, &:hover a, &:focus a {
+    color: rgba(255, 255, 255, 1);
   }
 }
 

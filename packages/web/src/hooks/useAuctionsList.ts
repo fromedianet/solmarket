@@ -1,18 +1,22 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { AuctionView, AuctionViewState, useAuctions } from './useAuctions';
+import { useMeta } from '@oyster/common';
 
 export const useAuctionsList = (
   activeKey: AuctionViewState,
 ): { auctions: AuctionView[]; hasResaleAuctions: boolean } => {
   const { publicKey } = useWallet();
-  const auctions = useAuctions().filter(item => {
-    return (
-      item.auction.info.auctionGap &&
-      (item.auction.info.endAuctionAt || item.auction.info.endedAt)
-    );
-  });
+  const auctions = useAuctions();
+  const { pullAuctionListData, isLoading } = useMeta();
+
+  useEffect(() => {
+    if (!auctions.length || isLoading) return;
+    for (const auction of auctions) {
+      pullAuctionListData(auction.auction.pubkey);
+    }
+  }, [auctions.length, isLoading]);
 
   const filteredAuctions = useMemo(() => {
     const filterFn = getFilterFunction(activeKey);

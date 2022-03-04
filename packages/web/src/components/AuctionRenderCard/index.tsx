@@ -98,11 +98,13 @@ export const AuctionRenderCard = (props: AuctionCard) => {
                 />
               }
             />
-            <Statistic
-              className="bid-statistic tw-text-right"
-              title="ENDDING IN"
-              value={countdown}
-            />
+            {!auctionView.isInstantSale && (
+              <Statistic
+                className="bid-statistic tw-text-right"
+                title="ENDDING IN"
+                value={countdown}
+              />
+            )}
           </div>
         </div>
       </Link>

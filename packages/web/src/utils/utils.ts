@@ -13,3 +13,9 @@ export const getLast = <T>(arr: T[]) => {
 
   return arr[arr.length - 1];
 };
+
+export const getDateStringFromUnixTimestamp = (unix: number) => {
+  const date = new Date(unix * 1000);
+  const str = date.toLocaleString();
+  return str;
+};

@@ -23,7 +23,7 @@ export const useItems = ({
   }
 
   if (activeKey === ArtworkViewState.Created) {
-    return createdMetadata;
+    return createdMetadata.arts;
   }
 
   return metadata;
