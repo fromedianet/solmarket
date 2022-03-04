@@ -127,7 +127,7 @@ export const BottomSection = (props: {
             columns={columns}
             dataSource={props.transactions}
             style={{ overflowX: 'auto' }}
-            pagination={{ position: ['bottomLeft'] }}
+            pagination={{ position: ['bottomLeft'], pageSize: 10 }}
           />
         )}
       </Panel>

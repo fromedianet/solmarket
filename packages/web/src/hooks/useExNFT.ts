@@ -124,7 +124,7 @@ function parseNFTData(data: any) {
 function parseTransactionsForMagicEden(data: any) {
   const result: Transaction[] = [];
   try {
-    data['results'].forEach(item => {
+    data['results'].forEach((item, index) => {
       let txType = '';
       let price;
       switch (item['txType']) {
@@ -148,7 +148,7 @@ function parseTransactionsForMagicEden(data: any) {
           break;
       }
       const tx: Transaction = {
-        key: item['transaction_id'],
+        key: index,
         blockTime: item['blockTime'],
         buyer: item['buyer_address'],
         seller: item['seller_address'],
@@ -172,9 +172,9 @@ function parseTransactionsForMagicEden(data: any) {
 function parseTransactionsForDigitalEyes(data: any) {
   const result: Transaction[] = [];
   try {
-    data['sales_history'].forEach(item => {
+    data['sales_history'].forEach((item, index) => {
       const tx: Transaction = {
-        key: item['transaction'],
+        key: index,
         blockTime: item['epoch'],
         buyer: item['buyer'],
         seller: item['seller'],

@@ -492,6 +492,40 @@ model-viewer {
   }
 }
 
+.ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next {
+  .ant-pagination-item-link {
+    background: transparent;
+    border: none;
+  }
+
+  button {
+    color: white;
+  }
+}
+
+.ant-pagination-disabled {
+  .ant-pagination-item-link, &:hover .ant-pagination-item-link, &:focus-visible .ant-pagination-item-link {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.ant-pagination-item {
+  background: transparent;
+  border: none;
+  a, &:hover a, &:focus a {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.ant-pagination-item-active {
+  background: transparent;
+  border: none;
+
+  a, &:hover a, &:focus a {
+    color: rgba(255, 255, 255, 1);
+  }
+}
+
 /* Optional, different gutter size on mobile */
 @media (max-width: 800px) {
   .my-masonry-grid {
