@@ -7,7 +7,9 @@ import TimeAgo from 'javascript-time-ago';
 import { useExCollection } from '../../hooks/useExCollections';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { NFTCard } from '../ExCollection/components/Items';
+import en from 'javascript-time-ago/locale/en.json';
 
+TimeAgo.addDefaultLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo('en-US');
 

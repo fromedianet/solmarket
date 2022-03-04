@@ -5,6 +5,15 @@ import { ArtContent } from '../../components/ArtContent';
 import { Link } from 'react-router-dom';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ConnectButton, CopySpan, shortenAddress } from '@oyster/common';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 const { Panel } = Collapse;
 
@@ -12,6 +21,7 @@ export const InfoSection = (props: {
   nft: NFTData;
   collection: string;
   market: string;
+  priceData: any[];
   onRefresh: () => void;
   onBuy: () => void;
 }) => {
@@ -46,7 +56,32 @@ export const InfoSection = (props: {
               <img src="/icons/activity.svg" width={24} alt="price history" />
             }
           >
-            <Skeleton paragraph={{ rows: 3 }} active />
+            {props.priceData.length > 0 && (
+              <div style={{ width: '100%', height: 250 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={props.priceData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis
+                      label={{
+                        value: 'Price (SOL)',
+                        angle: -90,
+                        position: 'insideLeft',
+                        textAnchor: 'middle',
+                        fill: '#888888',
+                      }}
+                    />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="price"
+                      stroke="#8884d8"
+                      activeDot={{ r: 8 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </Panel>
         </Collapse>
       </Col>

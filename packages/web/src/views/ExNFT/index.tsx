@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { BottomSection } from './BottomSection';
@@ -6,6 +6,8 @@ import { MetaplexModal, useQuerySearch } from '@oyster/common';
 import { useExNFT } from '../../hooks/useExNFT';
 import { InfoSection } from './InfoSection';
 import { EmptyView } from '../../components/EmptyView';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 
 export const ExNFTView = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,12 +16,25 @@ export const ExNFTView = () => {
   const price = searchParams.get('price') || '0';
   const collection = searchParams.get('collection') || '';
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const [priceData, setPriceData] = useState<any[]>([]);
 
   const { nft, loading, transactions } = useExNFT(
     id,
     market,
     parseFloat(price),
   );
+
+  useEffect(() => {
+    const filters = transactions.filter(item => item.txType === 'SALE');
+    const data = filters.map(item => ({
+      date: getDateStringFromUnixTimestamp(item.blockTime),
+      price: (item.price || 0) / LAMPORTS_PER_SOL,
+    }));
+    console.log(data);
+    if (data.length > 0) {
+      setPriceData(data);
+    }
+  }, [transactions]);
 
   return (
     <div className="main-area">
@@ -33,6 +48,7 @@ export const ExNFTView = () => {
                 nft={nft}
                 market={market}
                 collection={collection}
+                priceData={priceData}
                 onBuy={() => {}}
                 onRefresh={() => {}}
               />

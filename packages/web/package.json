@@ -51,6 +51,7 @@
     "react-toastify": "^8.1.0",
     "react-transition-group": "^4.4.2",
     "react-virtualized": "^9.22.3",
+    "recharts": "^2.1.9",
     "styled-components": "^5.0.0",
     "three": "^0.128.0",
     "timeago.js": "^4.0.2"
