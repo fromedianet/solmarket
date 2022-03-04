@@ -12,6 +12,7 @@ export const ExNFTView = () => {
   const searchParams = useQuerySearch();
   const market = searchParams.get('market') || '';
   const price = searchParams.get('price') || '0';
+  const collection = searchParams.get('collection') || '';
   const [showBuyModal, setShowBuyModal] = useState(false);
 
   const { nft, loading, transactions } = useExNFT(
@@ -28,12 +29,22 @@ export const ExNFTView = () => {
             <Spin />
           ) : nft ? (
             <>
-              <InfoSection nft={nft} onBuy={() => {}} onRefresh={() => {}} />
+              <InfoSection
+                nft={nft}
+                market={market}
+                collection={collection}
+                onBuy={() => {}}
+                onRefresh={() => {}}
+              />
               <BottomSection
                 transactions={transactions}
+                mintAddress={id}
                 market={market}
-                price={price}
-                mint={id}
+                collection={
+                  (market === 'digital_eyes'
+                    ? nft.collectionTitle
+                    : nft.collectionName) || collection
+                }
               />
             </>
           ) : (

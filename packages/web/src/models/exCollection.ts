@@ -45,8 +45,8 @@ export type NFTData = {
   img: string;
   animationURL?: string;
   price?: number;
-  collectionName?: string;
-  collectionTitle?: string;
+  collectionName: string;
+  collectionTitle: string;
   mintAddress: string;
   owner?: string;
   tokenAddress?: string;
@@ -71,6 +71,6 @@ export type Transaction = {
   mint: string;
   seller: string | null;
   transaction: string;
-  price: number;
+  price: number | undefined;
   txType: string;
 };

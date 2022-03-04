@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Collapse, Table } from 'antd';
 import { CopySpan, shortenAddress } from '@oyster/common';
-import { Transaction } from '../../models/exCollection';
+import { ExNFT, Transaction } from '../../models/exCollection';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
-import { Link } from 'react-router-dom';
+import { useExCollection } from '../../hooks/useExCollections';
+import { HorizontalGrid } from '../../components/HorizontalGrid';
+import { NFTCard } from '../ExCollection/components/Items';
 
-TimeAgo.addDefaultLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo('en-US');
 
@@ -15,10 +15,32 @@ const { Panel } = Collapse;
 
 export const BottomSection = (props: {
   transactions: Transaction[];
+  mintAddress: string;
   market: string;
-  price: string;
-  mint: string;
+  collection: string;
 }) => {
+  const [nftList, setNFTList] = useState<ExNFT[]>([]);
+  const { nfts } = useExCollection(props.collection, props.market);
+
+  useEffect(() => {
+    const filters = nfts.filter(item => item.mintAddress !== props.mintAddress);
+    if (filters.length > 0) {
+      setNFTList(filters);
+    }
+  }, [nfts]);
+
+  const getColor = txType => {
+    if (txType === 'SALE') {
+      return '#2fc27d';
+    } else if (txType === 'PLACE BID') {
+      return '#6d79c9';
+    } else if (txType === 'LISTING') {
+      return '#f8f7f8';
+    } else {
+      return '#9c93a5';
+    }
+  };
+
   const columns = [
     {
       title: '',
@@ -30,9 +52,6 @@ export const BottomSection = (props: {
       title: 'NAME',
       dataIndex: 'name',
       key: 'name',
-      render: text => (
-        <Link to={`/exnft/${props.mint}?market=${props.market}`}>{text}</Link>
-      ),
     },
     {
       title: 'TRANSACTION ID',
@@ -40,7 +59,7 @@ export const BottomSection = (props: {
       key: 'transaction',
       render: txId => (
         <a
-          href={`https://explorer.solana.com/tx/${txId}?cluster=mainnet-beta`}
+          href={`https://explorer.solana.com/tx/${txId}`}
           target="_blank"
           rel="noreferrer"
           style={{ cursor: 'pointer' }}
@@ -49,7 +68,12 @@ export const BottomSection = (props: {
         </a>
       ),
     },
-    { title: 'TRANSACTION TYPE', dataIndex: 'txType', key: 'txType' },
+    {
+      title: 'TRANSACTION TYPE',
+      dataIndex: 'txType',
+      key: 'txType',
+      render: type => <span style={{ color: getColor(type) }}>{type}</span>,
+    },
     {
       title: 'TIME',
       dataIndex: 'blockTime',
@@ -60,7 +84,7 @@ export const BottomSection = (props: {
       title: 'TOTAL AMOUNT',
       dataIndex: 'price',
       key: 'price',
-      render: price => `${price / LAMPORTS_PER_SOL} SOL`,
+      render: price => price && `${price / LAMPORTS_PER_SOL} SOL`,
     },
     {
       title: 'BUYER',
@@ -98,12 +122,14 @@ export const BottomSection = (props: {
         className="bg-secondary"
         extra={<img src="/icons/price.svg" width={24} alt="activites" />}
       >
-        <Table
-          columns={columns}
-          dataSource={props.transactions}
-          style={{ overflowX: 'auto' }}
-          pagination={{ position: ['bottomLeft'] }}
-        />
+        {props.transactions.length > 0 && (
+          <Table
+            columns={columns}
+            dataSource={props.transactions}
+            style={{ overflowX: 'auto' }}
+            pagination={{ position: ['bottomLeft'] }}
+          />
+        )}
       </Panel>
       <Panel
         header="More from this collection"
@@ -112,7 +138,20 @@ export const BottomSection = (props: {
         extra={
           <img src="/icons/compass.svg" width={24} alt="more collection" />
         }
-      ></Panel>
+      >
+        {nftList.length > 0 && (
+          <HorizontalGrid
+            childrens={nftList.map((item, index) => (
+              <NFTCard
+                key={index}
+                itemId={`${index}`}
+                item={item}
+                market={props.market}
+              />
+            ))}
+          />
+        )}
+      </Panel>
     </Collapse>
   );
 };

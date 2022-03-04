@@ -10,12 +10,16 @@ const { Panel } = Collapse;
 
 export const InfoSection = (props: {
   nft: NFTData;
+  collection: string;
+  market: string;
   onRefresh: () => void;
   onBuy: () => void;
 }) => {
   const wallet = useWallet();
   const alreadyListed = props.nft.price || 0 > 0;
-
+  const collectionUri = `/excollection/${encodeURIComponent(
+    props.nft.collectionName || props.collection,
+  )}?market=${props.market}`;
   return (
     <Row gutter={24}>
       <Col span={24} lg={12}>
@@ -51,12 +55,9 @@ export const InfoSection = (props: {
           {props.nft.title || <Skeleton paragraph={{ rows: 0 }} />}
         </div>
         <div className="collection-container">
-          <Link
-            to={`/excollection/${props.nft.collectionName}`}
-            className="collection-name"
-          >
+          <Link to={collectionUri} className="collection-name">
             <img width={20} src={'/icons/check.svg'} />
-            <span>{props.nft.collectionTitle}</span>
+            <span>{props.nft.collectionTitle || props.collection}</span>
           </Link>
           <div
             onClick={props.onRefresh}

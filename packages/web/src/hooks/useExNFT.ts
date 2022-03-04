@@ -125,11 +125,27 @@ function parseTransactionsForMagicEden(data: any) {
   const result: Transaction[] = [];
   try {
     data['results'].forEach(item => {
-      let price = 0;
-      if (item['parsedTransaction']) {
-        price = item['parsedTransaction']['total_amount'];
-      } else if (item['parsedList']) {
-        price = item['parsedList']['amount'];
+      let txType = '';
+      let price;
+      switch (item['txType']) {
+        case 'initializeEscrow':
+          txType = 'LISTING';
+          price = item['parsedList']['amount'];
+          break;
+        case 'cancelEscrow':
+          txType = 'CANCEL LISTING';
+          break;
+        case 'cancelBid':
+          txType = 'CANCEL BID';
+          break;
+        case 'placeBid':
+          txType = 'PLACE BID';
+          price = item['parsedPlacebid']['amount'];
+          break;
+        case 'exchange':
+          txType = 'SALE';
+          price = item['parsedTransaction']['total_amount'];
+          break;
       }
       const tx: Transaction = {
         key: item['transaction_id'],
@@ -140,12 +156,13 @@ function parseTransactionsForMagicEden(data: any) {
         mint: item['mint'],
         price: price,
         transaction: item['transaction_id'],
-        txType: item['txType'],
+        txType: txType,
         name: item['mintObject']['title'],
         image: item['mintObject']['img'],
       };
       result.push(tx);
     });
+    result.sort((a, b) => b.blockTime - a.blockTime);
   } catch (e) {
     console.error(e);
   }
