@@ -14,7 +14,7 @@ export const InfoSection = (props: {
   onBuy: () => void;
 }) => {
   const wallet = useWallet();
-  const alreadyListed = props.nft.price > 0;
+  const alreadyListed = props.nft.price || 0 > 0;
 
   return (
     <Row gutter={24}>
@@ -145,8 +145,8 @@ export const InfoSection = (props: {
                 <span className="details-key">Token Address</span>
                 <div className="details-value">
                   <CopySpan
-                    value={shortenAddress(props.nft.tokenAddress)}
-                    copyText={props.nft.tokenAddress}
+                    value={shortenAddress(props.nft.tokenAddress || '')}
+                    copyText={props.nft.tokenAddress || ''}
                   />
                 </div>
               </div>
@@ -154,8 +154,8 @@ export const InfoSection = (props: {
                 <span className="details-key">Owner</span>
                 <div className="details-value">
                   <CopySpan
-                    value={shortenAddress(props.nft.owner)}
-                    copyText={props.nft.owner}
+                    value={shortenAddress(props.nft.owner || '')}
+                    copyText={props.nft.owner || ''}
                   />
                 </div>
               </div>

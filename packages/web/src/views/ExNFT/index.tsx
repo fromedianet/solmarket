@@ -10,10 +10,15 @@ import { EmptyView } from '../../components/EmptyView';
 export const ExNFTView = () => {
   const { id } = useParams<{ id: string }>();
   const searchParams = useQuerySearch();
+  const market = searchParams.get('market') || '';
   const price = searchParams.get('price') || '0';
   const [showBuyModal, setShowBuyModal] = useState(false);
 
-  const { nft, loading } = useExNFT(id, parseFloat(price));
+  const { nft, loading, transactions } = useExNFT(
+    id,
+    market,
+    parseFloat(price),
+  );
 
   return (
     <div className="main-area">
@@ -24,7 +29,12 @@ export const ExNFTView = () => {
           ) : nft ? (
             <>
               <InfoSection nft={nft} onBuy={() => {}} onRefresh={() => {}} />
-              <BottomSection offers={[]} />
+              <BottomSection
+                transactions={transactions}
+                market={market}
+                price={price}
+                mint={id}
+              />
             </>
           ) : (
             <EmptyView />

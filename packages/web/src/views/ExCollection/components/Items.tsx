@@ -183,7 +183,7 @@ export const Items = (props: {
                 xxl={4}
                 style={{ padding: 8 }}
               >
-                <NFTCard item={item} />
+                <NFTCard item={item} market={props.market} />
               </Col>
             ))
           ) : (
@@ -195,10 +195,12 @@ export const Items = (props: {
   );
 };
 
-const NFTCard = (props: { item: ExNFT }) => {
+const NFTCard = (props: { item: ExNFT; market: string }) => {
   return (
     <Card hoverable={true} className="art-card" bordered={false}>
-      <Link to={`/exnft/${props.item.mintAddress}?price=${props.item.price}`}>
+      <Link
+        to={`/exnft/${props.item.mintAddress}?market=${props.market}&price=${props.item.price}`}
+      >
         <div className="image-over art-image-container">
           <ArtContent
             className="art-image no-event"

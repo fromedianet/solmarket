@@ -50,6 +50,8 @@ export const DIGITAL_EYES_URIS = {
     'https://us-central1-digitaleyes-prod.cloudfunctions.net/offers-retriever',
   getNFTByMintAddress:
     'https://us-central1-digitaleyes-prod.cloudfunctions.net/offers-retriever',
+  getTransactions:
+    'https://us-central1-digitaleyes-prod.cloudfunctions.net/sales-history-v3?&mint=',
 };
 
 export const ALPHA_ART_URIS = {
