@@ -115,19 +115,21 @@ export const InfoSection = (props: {
             )}
           </div>
           {!alreadyListed && <span className="value">Not listed</span>}
-          <div className="btn-container">
-            {!wallet.connected ? (
-              <ConnectButton className="button" />
-            ) : (
-              <Button
-                className="button"
-                onClick={props.onBuy}
-                disabled={!alreadyListed}
-              >
-                Buy now
-              </Button>
-            )}
-          </div>
+          {alreadyListed && (
+            <div className="btn-container">
+              {!wallet.connected ? (
+                <ConnectButton className="button" />
+              ) : (
+                <Button
+                  className="button"
+                  onClick={props.onBuy}
+                  disabled
+                >
+                  Buy now
+                </Button>
+              )}
+            </div>
+          )}
         </div>
         <Collapse
           expandIconPosition="right"
