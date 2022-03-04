@@ -56,11 +56,7 @@ export const ExNFTView = () => {
                 transactions={transactions}
                 mintAddress={id}
                 market={market}
-                collection={
-                  (market === 'digital_eyes'
-                    ? nft.collectionTitle
-                    : nft.collectionName) || collection
-                }
+                collection={collection}
               />
             </>
           ) : (

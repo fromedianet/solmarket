@@ -28,7 +28,7 @@ export const InfoSection = (props: {
   const wallet = useWallet();
   const alreadyListed = props.nft.price || 0 > 0;
   const collectionUri = `/excollection/${encodeURIComponent(
-    props.nft.collectionName || props.collection,
+    props.collection,
   )}?market=${props.market}`;
   return (
     <Row gutter={24}>
