@@ -6,7 +6,11 @@ import { Link } from 'react-router-dom';
 
 export const ExCollectionCard = (props: { item: ExCollection }) => {
   return (
-    <Link to={`/excollection/${props.item.symbol}?market=${props.item.market}`}>
+    <Link
+      to={`/excollection/${encodeURIComponent(props.item.symbol)}?market=${
+        props.item.market
+      }`}
+    >
       <Card className={`collection-card`} hoverable={true} bordered={false}>
         <div className="image-over image-container">
           <ArtContent

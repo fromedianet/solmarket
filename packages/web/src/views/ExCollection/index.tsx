@@ -6,20 +6,17 @@ import { CollectionInfo } from './components/CollectionInfo';
 import { FilterSidebar } from './components/FilterSidebar';
 import { Items } from './components/Items';
 import { Activities } from './components/Activities';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useExCollection } from '../../hooks/useExCollections';
 import { ExNFT } from '../../models/exCollection';
+import { useQuerySearch } from '@oyster/common';
 
 const { Content } = Layout;
 
-function useQuery() {
-  const { search } = useLocation();
-  return new URLSearchParams(search);
-}
-
 export const ExCollectionView = () => {
   const { symbol } = useParams<{ symbol: string }>();
-  const market = useQuery().get('market') || '';
+  const searchParams = useQuerySearch();
+  const market = searchParams.get('market') || '';
   const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();

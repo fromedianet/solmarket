@@ -22,6 +22,14 @@ export const MAGIC_EDEN_URIS = {
   collectionStats:
     'https://api-mainnet.magiceden.io/rpc/getCollectionEscrowStats/',
   listedNFTs: 'https://api-mainnet.magiceden.io/rpc/getListedNFTsByQuery',
+  getNFTByMintAddress:
+    'https://api-mainnet.magiceden.io/rpc/getNFTByMintAddress/',
+  getNFTStatsByMintAddress:
+    'https://api-mainnet.magiceden.io/rpc/getNFTStatsByMintAddress/',
+  getTransactions:
+    'https://api-mainnet.magiceden.io/rpc/getGlobalActivitiesByQuery?q=',
+  getBiddingsByQuery:
+    'https://api-mainnet.magiceden.io/rpc/getBiddingsByQuery?q=',
 };
 
 export const SOLANART_URIS = {
@@ -40,6 +48,10 @@ export const DIGITAL_EYES_URIS = {
     'https://us-central1-digitaleyes-prod.cloudfunctions.net/collection-retriever?collection=',
   listedNFTs:
     'https://us-central1-digitaleyes-prod.cloudfunctions.net/offers-retriever',
+  getNFTByMintAddress:
+    'https://us-central1-digitaleyes-prod.cloudfunctions.net/offers-retriever',
+  getTransactions:
+    'https://us-central1-digitaleyes-prod.cloudfunctions.net/sales-history-v3?&mint=',
 };
 
 export const ALPHA_ART_URIS = {
