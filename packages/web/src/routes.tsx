@@ -27,6 +27,7 @@ import { CollectionView } from './views/collection';
 import { CollectionCreateView } from './views/collectionCreate';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
+import { ExNFTView } from './views/ExNFT';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -109,6 +110,7 @@ export function Routes() {
               path="/excollection/:symbol"
               component={() => <ExCollectionView />}
             />
+            <Route exact path="/exnft/:id" component={() => <ExNFTView />} />
             <Route
               exact
               path="/launchpad"

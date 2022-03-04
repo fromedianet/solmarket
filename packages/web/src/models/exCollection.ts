@@ -1,3 +1,5 @@
+import { Attribute, Creator } from '@oyster/common';
+
 export interface ExCollection {
   name: string;
   description: string | undefined;
@@ -28,11 +30,33 @@ export type ExCollectionStats = {
   listedCount?: number | undefined;
 };
 
-export interface ExNFT {
+export type ExNFT = {
   mintAddress: string;
   pk?: string;
   name: string;
   image: string;
   collection: string;
   price?: number;
-}
+};
+
+export type NFTData = {
+  title: string;
+  content: string;
+  img: string;
+  animationURL?: string;
+  price: number;
+  collectionName: string;
+  collectionTitle: string;
+  mintAddress: string;
+  owner: string;
+  tokenAddress: string;
+  updateAuthority: string;
+  externalURL?: string;
+  propertyCategory: string;
+  sellerFeeBasisPoints: number;
+  supply: number;
+  primarySaleHappened: boolean;
+  tokenDelegateValid: boolean;
+  attributes: Attribute[];
+  creators: Creator[];
+};

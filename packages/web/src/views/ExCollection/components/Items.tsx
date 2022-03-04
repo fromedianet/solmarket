@@ -198,7 +198,7 @@ export const Items = (props: {
 const NFTCard = (props: { item: ExNFT }) => {
   return (
     <Card hoverable={true} className="art-card" bordered={false}>
-      <Link to={`/item-details/${props.item.mintAddress}`}>
+      <Link to={`/exnft/${props.item.mintAddress}?price=${props.item.price}`}>
         <div className="image-over art-image-container">
           <ArtContent
             className="art-image no-event"
