@@ -39,6 +39,7 @@ export const SOLANART_URIS = {
   volumeOnlyCollection:
     'https://api.solanart.io/volume_only_collection?collection=',
   listedNFTs: 'https://api.solanart.io/get_nft',
+  getTransactions: 'https://api.solanart.io/all_sold_per_collection_day?collection='
 };
 
 export const DIGITAL_EYES_URIS = {
@@ -51,11 +52,12 @@ export const DIGITAL_EYES_URIS = {
   getNFTByMintAddress:
     'https://us-central1-digitaleyes-prod.cloudfunctions.net/offers-retriever',
   getTransactions:
-    'https://us-central1-digitaleyes-prod.cloudfunctions.net/sales-history-v3?&mint=',
+    'https://us-central1-digitaleyes-prod.cloudfunctions.net/sales-history-v3?',
 };
 
 export const ALPHA_ART_URIS = {
   collections: 'https://apis.alpha.art/api/v1/collections?order=recent',
   collection: 'https://apis.alpha.art/api/v1/collection/',
   listedNFTs: 'https://apis.alpha.art/api/v1/collection',
+  getTransactions: 'https://apis.alpha.art/api/v2/activity/collection/'
 };

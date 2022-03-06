@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'antd';
+import { Layout, Tabs } from 'antd';
 import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { CollectionInfo } from './components/CollectionInfo';
@@ -12,12 +12,12 @@ import { ExNFT } from '../../models/exCollection';
 import { useQuerySearch } from '@oyster/common';
 
 const { Content } = Layout;
+const { TabPane } = Tabs;
 
 export const ExCollectionView = () => {
   const { id } = useParams<{ id: string }>();
   const searchParams = useQuerySearch();
   const market = searchParams.get('market') || '';
-  const [isItems, setIsItems] = useState(true);
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
   const [list, setList] = useState<ExNFT[]>([]);
@@ -36,6 +36,7 @@ export const ExCollectionView = () => {
     attributes,
     collectionStats,
     nfts,
+    transactions,
     getListedNFTsByCollection,
     skip,
     cursor,
@@ -110,55 +111,62 @@ export const ExCollectionView = () => {
       <div className="collection-info">
         <CollectionInfo collection={collection} stats={collectionStats} />
       </div>
-      <div className="collection-tabs">
-        <div
-          className={`my-tab ${isItems && 'my-tab-active'}`}
-          onClick={() => setIsItems(true)}
+      <Tabs defaultActiveKey='items' centered>
+        <TabPane
+          key='items'
+          tab={
+            <span>
+              <img
+                src="/icons/list.svg"
+                style={{ width: '24px', marginRight: '8px' }}
+              />
+              Items
+            </span>
+          }
         >
-          <img
-            src="/icons/list.svg"
-            style={{ width: '24px', marginRight: '8px' }}
-          />
-          Items
-        </div>
-        <div
-          className={`my-tab ${!isItems && 'my-tab-active'}`}
-          onClick={() => setIsItems(false)}
-        >
-          <img
-            src="/icons/activity.svg"
-            style={{ width: '24px', marginRight: '8px' }}
-          />
-          Activities
-        </div>
-      </div>
-      <Layout hasSider>
-        <FilterSidebar
-          market={market}
-          updateFilters={onUpdateFilters}
-          filter={filter}
-          attributes={attributes}
-        />
-        <Content className="collection-container">
-          {isItems ? (
-            <Items
-              list={list}
-              sort={sort}
+          <Layout hasSider>
+            <FilterSidebar
               market={market}
-              id={id}
-              searchKey={searchKey}
               updateFilters={onUpdateFilters}
-              onSearch={val => setSearchKey(val)}
-              onSortChange={val => setSort(val)}
               filter={filter}
-              hasMore={hasMore}
-              fetchMore={fetchMore}
+              attributes={attributes}
             />
-          ) : (
-            <Activities />
-          )}
-        </Content>
-      </Layout>
+            <Content className="collection-container">
+              <Items
+                list={list}
+                sort={sort}
+                market={market}
+                id={id}
+                searchKey={searchKey}
+                updateFilters={onUpdateFilters}
+                onSearch={val => setSearchKey(val)}
+                onSortChange={val => setSort(val)}
+                filter={filter}
+                hasMore={hasMore}
+                fetchMore={fetchMore}
+              />
+            </Content>
+          </Layout>
+        </TabPane>
+        <TabPane
+          key='activities'
+          tab={
+            <span>
+              <img
+                src="/icons/activity.svg"
+                style={{ width: '24px', marginRight: '8px' }}
+              />
+              Activities
+            </span>
+          }
+        >
+          <Activities
+            market={market}
+            id={id}
+            transactions={transactions}
+          />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };

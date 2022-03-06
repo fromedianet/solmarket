@@ -6,6 +6,7 @@ import {
   ExCollection,
   ExCollectionStats,
   ExNFT,
+  Transaction,
 } from '../models/exCollection';
 import {
   ALPHA_ART_URIS,
@@ -44,6 +45,7 @@ export const useExCollection = (symbol: string, market: string) => {
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
   const [collectionStats, setCollectionStats] = useState<ExCollectionStats>({});
   const [nfts, setNFTs] = useState<ExNFT[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [skip, setSkip] = useState(0);
   const [cursor, setCursor] = useState();
@@ -77,13 +79,15 @@ export const useExCollection = (symbol: string, market: string) => {
       fetch(statsUri)
         .then(res => res.json())
         .then(data => {
-          const result = parseMagicEdenAttributes(
-            data['results']['availableAttributes'],
-          );
-          setAttributes(result);
-          const stats = parseMagicEdenCollectionStats(data['results']);
-          if (stats) {
-            setCollectionStats(stats);
+          if (data['results']) {
+            const result = parseMagicEdenAttributes(
+              data['results']['availableAttributes'],
+            );
+            setAttributes(result);
+            const stats = parseMagicEdenCollectionStats(data['results']);
+            if (stats) {
+              setCollectionStats(stats);
+            }
           }
         });
     } else if (market === 'solanart') {
@@ -226,6 +230,15 @@ export const useExCollection = (symbol: string, market: string) => {
       symbol: symbol,
       sort: 1,
     });
+
+    /**
+     * Get transactions
+     */
+    getTransactions({
+      market: market,
+      symbol: symbol,
+      sort: 1,
+    });
   }, [symbol]);
 
   const getListedNFTsByCollection = (param: QUERIES) => {
@@ -310,11 +323,55 @@ export const useExCollection = (symbol: string, market: string) => {
     }
   };
 
+  const getTransactions = (param: QUERIES) => {
+    if (param.market === 'magiceden') {
+      const query = {
+        $match: { collection_symbol: param.symbol },
+        $sort: { blockTime: -1, createdAt: -1 },
+        $skip: 0,
+      };
+      const uri =
+        MAGIC_EDEN_URIS.getTransactions + encodeURI(JSON.stringify(query));
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const txs = parseTransactionsForMagicEden(data);
+          setTransactions(txs);
+        });
+    } else if (param.market === 'solanart') {
+      const uri = SOLANART_URIS.getTransactions + param.symbol;
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const txs = parseTransactionsForSolanart(data);
+          setTransactions(txs);
+        });
+    } else if (param.market === 'solanart' || param.market === 'digital_eyes') {
+      const uri = DIGITAL_EYES_URIS.getTransactions + "collection=" + encodeURIComponent(param.symbol);
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const txs = parseTransactionsForDigitalEyes(data);
+          setTransactions(txs);
+        });
+    } else if (param.market === 'alpha_art') {
+      const query = `${param.symbol}?trading_types=1%2C2&no_foreign_listing=true`;
+      const uri = ALPHA_ART_URIS.getTransactions + query;
+      fetch(uri)
+        .then(res => res.json())
+        .then(data => {
+          const txs = parseTransactionsForAlphaArt(data, param.symbol);
+          setTransactions(txs);
+        });
+    }
+  }
+
   return {
     collection,
     attributes,
     collectionStats,
     nfts,
+    transactions,
     loading,
     getListedNFTsByCollection,
     skip,
@@ -801,13 +858,15 @@ function getNFTUriForAlphaArt(param: QUERIES) {
 function parseMagicEdenNFTs(data: any) {
   let result: ExNFT[] = [];
   try {
-    result = data['results'].map(item => ({
-      mintAddress: item['mintAddress'],
-      name: item['title'],
-      image: item['img'],
-      collection: item['collectionTitle'],
-      price: item['price'],
-    }));
+    if (data['results']) {
+      result = data['results'].map(item => ({
+        mintAddress: item['mintAddress'],
+        name: item['title'],
+        image: item['img'],
+        collection: item['collectionTitle'],
+        price: item['price'],
+      }));
+    }
   } catch (e) {
     console.error(e);
   }
@@ -817,13 +876,15 @@ function parseMagicEdenNFTs(data: any) {
 function parseSolanartNFTs(data: any, collection: string) {
   let result: ExNFT[] = [];
   try {
-    result = data['items'].map(item => ({
-      mintAddress: item['token_add'],
-      name: item['name'],
-      image: item['link_img'],
-      collection: collection,
-      price: item['price'],
-    }));
+    if (data['items']) {
+      result = data['items'].map(item => ({
+        mintAddress: item['token_add'],
+        name: item['name'],
+        image: item['link_img'],
+        collection: collection,
+        price: item['price'],
+      }));
+    }
   } catch (e) {
     console.error(e);
   }
@@ -833,16 +894,18 @@ function parseSolanartNFTs(data: any, collection: string) {
 function parseDigitalEyesNFTs(data: any, collection: string) {
   let result: ExNFT[] = [];
   try {
-    result = data['offers'].map(item => ({
-      mintAddress: item['mint'],
-      pk: item['pk'],
-      name: item['metadata']['name'],
-      image: item['metadata']['image'],
-      collection: item['metadata']['collection']
-        ? item['metadata']['collection']['name']
-        : collection,
-      price: item['price'] / LAMPORTS_PER_SOL,
-    }));
+    if (data['offers']) {
+      result = data['offers'].map(item => ({
+        mintAddress: item['mint'],
+        pk: item['pk'],
+        name: item['metadata']['name'],
+        image: item['metadata']['image'],
+        collection: item['metadata']['collection']
+          ? item['metadata']['collection']['name']
+          : collection,
+        price: item['price'] / LAMPORTS_PER_SOL,
+      }));
+    }
   } catch (e) {
     console.error(e);
   }
@@ -852,13 +915,144 @@ function parseDigitalEyesNFTs(data: any, collection: string) {
 function parseAlphaArtNFTs(data: any, collection: string) {
   let result: ExNFT[] = [];
   try {
-    result = data['tokens'].map(item => ({
-      mintAddress: item['mintId'],
-      name: item['title'],
-      image: item['image'],
-      collection: collection,
-      price: item['price'] / LAMPORTS_PER_SOL,
-    }));
+    if (data['tokens']) {
+      result = data['tokens'].map(item => ({
+        mintAddress: item['mintId'],
+        name: item['title'],
+        image: item['image'],
+        collection: collection,
+        price: parseInt(item['price']) / LAMPORTS_PER_SOL,
+      }));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseTransactionsForMagicEden(data: any) {
+  const result: Transaction[] = [];
+  try {
+    if (data['results']) {
+      data['results'].forEach((item, index) => {
+        let txType = '';
+        let price;
+        switch (item['txType']) {
+          case 'initializeEscrow':
+            txType = 'LISTING';
+            price = item['parsedList']['amount'];
+            break;
+          case 'cancelEscrow':
+            txType = 'CANCEL LISTING';
+            break;
+          case 'cancelBid':
+            txType = 'CANCEL BID';
+            break;
+          case 'placeBid':
+            txType = 'PLACE BID';
+            price = item['parsedPlacebid']['amount'];
+            break;
+          case 'exchange':
+            txType = 'SALE';
+            price = item['parsedTransaction']['total_amount'];
+            break;
+        }
+        const tx: Transaction = {
+          key: index,
+          blockTime: item['blockTime'],
+          buyer: item['buyer_address'],
+          seller: item['seller_address'],
+          collection: item['collection_symbol'],
+          mint: item['mint'],
+          price: price,
+          transaction: item['transaction_id'],
+          txType: txType,
+          name: item['mintObject']['title'],
+          image: item['mintObject']['img'],
+        };
+        result.push(tx);
+      });
+      result.sort((a, b) => b.blockTime - a.blockTime);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseTransactionsForSolanart(data: any) {
+  const result: Transaction[] = [];
+  try {
+    data.forEach((item, index) => {
+      const tx: Transaction = {
+        key: index,
+        collection: item['type'],
+        blockTime: Date.parse(item['date']) / 1000,
+        mint: item['token_add'],
+        price: item['price'],
+        name: item['name'],
+        image: item['link_img'],
+        transaction: '',
+        txType: item['state'] === 1 ? 'OFFER' : 'SALE',
+        buyer: item['buyerAdd'],
+        seller: item['seller_address'],
+      };
+      result.push(tx);
+    })
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseTransactionsForDigitalEyes(data: any) {
+  const result: Transaction[] = [];
+  try {
+    if (data['sales_history']) {
+      data['sales_history'].forEach((item, index) => {
+        const tx: Transaction = {
+          key: index,
+          blockTime: item['epoch'],
+          buyer: item['buyer'],
+          seller: item['seller'],
+          collection: item['collection'],
+          mint: item['mint'],
+          price: item['price'],
+          transaction: item['transaction'],
+          txType: item['type'],
+          name: item['tags']['name'],
+          image: item['tags']['image'],
+        };
+        result.push(tx);
+      });
+      result.sort((a, b) => b.blockTime - a.blockTime);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return result;
+}
+
+function parseTransactionsForAlphaArt(data: any, collection: string) {
+  const result: Transaction[] = [];
+  try {
+    data.forEach((item, index) => {
+      const tx: Transaction = {
+        key: index,
+        collection: collection,
+        blockTime: Date.parse(item['createdAt']) / 1000,
+        mint: item['mintPubkey'],
+        price: parseInt(item['price']),
+        name: item['name'],
+        image: item['image'],
+        transaction: item['signature'],
+        txType: item['tradingType'],
+        buyer: null,
+        seller: null,
+      };
+      result.push(tx);
+    });
+    result.sort((a, b) => b.blockTime - a.blockTime);
   } catch (e) {
     console.error(e);
   }
