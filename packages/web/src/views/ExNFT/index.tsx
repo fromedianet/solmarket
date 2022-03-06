@@ -30,7 +30,6 @@ export const ExNFTView = () => {
       date: getDateStringFromUnixTimestamp(item.blockTime),
       price: (item.price || 0) / LAMPORTS_PER_SOL,
     }));
-    console.log(data);
     if (data.length > 0) {
       setPriceData(data);
     }

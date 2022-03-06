@@ -53,7 +53,6 @@ export const useExNFT = (
   // }
 
   function getTransactions(mint: string, market: string) {
-    console.log('getTransactions', market);
     if (market === 'magiceden' || market === 'alpha_art') {
       const query = {
         $match: { mint: mint },
@@ -66,7 +65,6 @@ export const useExNFT = (
         .then(res => res.json())
         .then(data => {
           const txs = parseTransactionsForMagicEden(data);
-          console.log(txs);
           setTransactions(txs);
         });
     } else if (market === 'solanart' || market === 'digital_eyes') {
@@ -75,7 +73,6 @@ export const useExNFT = (
         .then(res => res.json())
         .then(data => {
           const txs = parseTransactionsForDigitalEyes(data);
-          console.log(txs);
           setTransactions(txs);
         });
     }

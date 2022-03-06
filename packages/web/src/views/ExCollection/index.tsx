@@ -14,7 +14,7 @@ import { useQuerySearch } from '@oyster/common';
 const { Content } = Layout;
 
 export const ExCollectionView = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const { id } = useParams<{ id: string }>();
   const searchParams = useQuerySearch();
   const market = searchParams.get('market') || '';
   const [isItems, setIsItems] = useState(true);
@@ -40,7 +40,7 @@ export const ExCollectionView = () => {
     skip,
     cursor,
     hasMore,
-  } = useExCollection(symbol, market);
+  } = useExCollection(id, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -73,7 +73,7 @@ export const ExCollectionView = () => {
   useEffect(() => {
     getListedNFTsByCollection({
       market: market,
-      symbol: symbol,
+      symbol: id,
       sort: sort,
       searchKey: searchKey,
       attributes: filter.attributes,
@@ -90,7 +90,7 @@ export const ExCollectionView = () => {
     if (hasMore) {
       getListedNFTsByCollection({
         market: market,
-        symbol: symbol,
+        symbol: id,
         sort: sort,
         searchKey: searchKey,
         attributes: filter.attributes,
@@ -145,6 +145,7 @@ export const ExCollectionView = () => {
               list={list}
               sort={sort}
               market={market}
+              id={id}
               searchKey={searchKey}
               updateFilters={onUpdateFilters}
               onSearch={val => setSearchKey(val)}

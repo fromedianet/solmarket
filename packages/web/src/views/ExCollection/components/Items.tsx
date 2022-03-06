@@ -15,6 +15,7 @@ export const Items = (props: {
   sort: number;
   searchKey: string;
   hasMore: boolean;
+  id: string;
   filter: {
     price: {
       symbol: string | undefined;
@@ -183,7 +184,11 @@ export const Items = (props: {
                 xxl={4}
                 style={{ padding: 8 }}
               >
-                <NFTCard item={item} market={props.market} />
+                <NFTCard
+                  item={item}
+                  market={props.market}
+                  collection={props.id}
+                />
               </Col>
             ))
           ) : (
@@ -198,6 +203,7 @@ export const Items = (props: {
 export const NFTCard = (props: {
   item: ExNFT;
   market: string;
+  collection: string;
   itemId?: string;
 }) => {
   return (
@@ -208,7 +214,7 @@ export const NFTCard = (props: {
       bordered={false}
     >
       <Link
-        to={`/exnft/${props.item.mintAddress}?market=${props.market}&price=${props.item.price}&collection=${props.item.collection}`}
+        to={`/exnft/${props.item.mintAddress}?market=${props.market}&price=${props.item.price}&collection=${props.collection}`}
       >
         <div className="image-over art-image-container">
           <ArtContent
