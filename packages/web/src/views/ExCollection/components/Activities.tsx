@@ -11,9 +11,9 @@ TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
 export const Activities = (props: {
-  market: string,
-  id: string,
-  transactions: Transaction[],
+  market: string;
+  id: string;
+  transactions: Transaction[];
 }) => {
   const getColor = txType => {
     if (txType === 'SALE') {
@@ -43,7 +43,7 @@ export const Activities = (props: {
       title: 'TRANSACTION ID',
       dataIndex: 'transaction',
       key: 'transaction',
-      render: txId => (
+      render: txId =>
         txId && txId !== '' ? (
           <a
             href={`https://explorer.solana.com/tx/${txId}`}
@@ -55,9 +55,7 @@ export const Activities = (props: {
           </a>
         ) : (
           '...'
-        )
-        
-      ),
+        ),
     },
     {
       title: 'TRANSACTION TYPE',
@@ -75,7 +73,7 @@ export const Activities = (props: {
       title: 'TOTAL AMOUNT',
       dataIndex: 'price',
       key: 'price',
-      render: price => (price && price > 0) && `${price / LAMPORTS_PER_SOL} SOL`,
+      render: price => price && price > 0 && `${price / LAMPORTS_PER_SOL} SOL`,
     },
     {
       title: 'MINT ADDRESS',
@@ -87,7 +85,7 @@ export const Activities = (props: {
         ) : (
           '...'
         ),
-    }
+    },
   ];
 
   return (

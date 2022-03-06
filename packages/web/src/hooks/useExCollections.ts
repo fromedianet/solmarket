@@ -347,7 +347,10 @@ export const useExCollection = (symbol: string, market: string) => {
           setTransactions(txs);
         });
     } else if (param.market === 'solanart' || param.market === 'digital_eyes') {
-      const uri = DIGITAL_EYES_URIS.getTransactions + "collection=" + encodeURIComponent(param.symbol);
+      const uri =
+        DIGITAL_EYES_URIS.getTransactions +
+        'collection=' +
+        encodeURIComponent(param.symbol);
       fetch(uri)
         .then(res => res.json())
         .then(data => {
@@ -364,7 +367,7 @@ export const useExCollection = (symbol: string, market: string) => {
           setTransactions(txs);
         });
     }
-  }
+  };
 
   return {
     collection,
@@ -998,7 +1001,7 @@ function parseTransactionsForSolanart(data: any) {
         seller: item['seller_address'],
       };
       result.push(tx);
-    })
+    });
   } catch (e) {
     console.error(e);
   }

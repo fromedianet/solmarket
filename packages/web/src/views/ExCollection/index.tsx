@@ -111,9 +111,9 @@ export const ExCollectionView = () => {
       <div className="collection-info">
         <CollectionInfo collection={collection} stats={collectionStats} />
       </div>
-      <Tabs defaultActiveKey='items' centered>
+      <Tabs defaultActiveKey="items" centered>
         <TabPane
-          key='items'
+          key="items"
           tab={
             <span>
               <img
@@ -149,7 +149,7 @@ export const ExCollectionView = () => {
           </Layout>
         </TabPane>
         <TabPane
-          key='activities'
+          key="activities"
           tab={
             <span>
               <img
@@ -160,11 +160,7 @@ export const ExCollectionView = () => {
             </span>
           }
         >
-          <Activities
-            market={market}
-            id={id}
-            transactions={transactions}
-          />
+          <Activities market={market} id={id} transactions={transactions} />
         </TabPane>
       </Tabs>
     </div>
