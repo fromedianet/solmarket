@@ -107,7 +107,7 @@ export function Routes() {
             />
             <Route
               exact
-              path="/excollection/:symbol"
+              path="/excollection/:id"
               component={() => <ExCollectionView />}
             />
             <Route exact path="/exnft/:id" component={() => <ExNFTView />} />

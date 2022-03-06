@@ -164,7 +164,6 @@ export const useExCollection = (symbol: string, market: string) => {
        * Request URL: https://us-central1-digitaleyes-prod.cloudfunctions.net/collection-retriever?collection=HexaHero
        */
       const collectionUri = `${DIGITAL_EYES_URIS.collection}${symbol}`;
-      console.log(collectionUri);
       fetch(collectionUri)
         .then(res => res.json())
         .then(data => {
@@ -196,11 +195,9 @@ export const useExCollection = (symbol: string, market: string) => {
        * Request URL: https://apis.alpha.art/api/v1/collection/santaminers
        */
       const collectionUri = `${ALPHA_ART_URIS.collection}${symbol}`;
-      console.log(collectionUri);
       fetch(collectionUri)
         .then(res => res.json())
         .then(data => {
-          console.log(data);
           // Get collection
           const result = parseCollection(market, data['collection']);
           if (result) {
@@ -270,7 +267,6 @@ export const useExCollection = (symbol: string, market: string) => {
         });
     } else if (market === 'digital_eyes') {
       const uri = getNFTUriForDigitalEyes(param);
-      console.log(uri);
       fetch(uri)
         .then(res => res.json())
         .then(data => {

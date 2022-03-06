@@ -149,6 +149,7 @@ export const BottomSection = (props: {
                 itemId={`${index}`}
                 item={item}
                 market={props.market}
+                collection={props.collection}
               />
             ))}
           />
