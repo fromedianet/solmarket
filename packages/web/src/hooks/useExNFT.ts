@@ -68,7 +68,7 @@ export const useExNFT = (
           setTransactions(txs);
         });
     } else if (market === 'solanart' || market === 'digital_eyes') {
-      const uri = DIGITAL_EYES_URIS.getTransactions + mint;
+      const uri = DIGITAL_EYES_URIS.getTransactions + 'mint=' + mint;
       fetch(uri)
         .then(res => res.json())
         .then(data => {

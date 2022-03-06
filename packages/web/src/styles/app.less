@@ -526,6 +526,16 @@ model-viewer {
   }
 }
 
+.ant-pagination-jump-prev, .ant-pagination-jump-next {
+  .ant-pagination-item-container .ant-pagination-item-ellipsis {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.ant-pagination-options {
+  display: none;
+}
+
 /* Optional, different gutter size on mobile */
 @media (max-width: 800px) {
   .my-masonry-grid {
@@ -547,4 +557,47 @@ model-viewer {
       max-width: calc(100% - 20px);
     }
   }
+}
+
+.ant-table {
+  background: transparent;
+  color: @text-primary-color;
+
+  th.ant-table-cell {
+    background: @bg-secondary-color;
+    color: @text-pink;
+    border: none;
+  }
+  .ant-table-tbody {
+    tr:nth-child(odd) {
+      background: @bg-table-odd;
+    }
+    tr:nth-child(even) {
+      background: @bg-table-even;
+    }
+    & > tr {
+      td {
+        border: none;
+
+        a {
+          color: @text-primary-color;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+      &.ant-table-row:hover > td,
+      & > td.ant-table-cell-row-hover {
+        background: transparent;
+      }
+    }
+
+    tr.ant-table-placeholder:hover > td {
+      background: transparent;
+    }
+  }
+}
+
+.ant-empty .ant-empty-normal {
+  color: rgba(255, 255, 255, 0.8);
 }

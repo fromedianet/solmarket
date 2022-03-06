@@ -70,7 +70,7 @@ export type Transaction = {
   collection: string;
   mint: string;
   seller: string | null;
-  transaction: string;
+  transaction: string | null;
   price: number | undefined;
   txType: string;
 };
