@@ -20,6 +20,7 @@ export const BottomSection = (props: {
   mintAddress: string;
   market: string;
   collection: string;
+  collectionName: string;
 }) => {
   const [nftList, setNFTList] = useState<ExNFT[]>([]);
   const { nfts } = useExCollection(props.collection, props.market);
@@ -150,6 +151,7 @@ export const BottomSection = (props: {
                 item={item}
                 market={props.market}
                 collection={props.collection}
+                collectionName={props.collectionName}
               />
             ))}
           />

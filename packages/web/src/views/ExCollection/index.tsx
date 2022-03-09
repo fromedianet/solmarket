@@ -137,6 +137,7 @@ export const ExCollectionView = () => {
                 sort={sort}
                 market={market}
                 id={id}
+                collection={collection}
                 searchKey={searchKey}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}

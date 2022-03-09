@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Select, Tag, Input, Card } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../../components/EmptyView';
-import { ExNFT } from '../../../models/exCollection';
+import { ExCollection, ExNFT } from '../../../models/exCollection';
 import { Link } from 'react-router-dom';
 import { ArtContent } from '../../../components/ArtContent';
 
@@ -16,6 +16,7 @@ export const Items = (props: {
   searchKey: string;
   hasMore: boolean;
   id: string;
+  collection: ExCollection | undefined,
   filter: {
     price: {
       symbol: string | undefined;
@@ -188,6 +189,7 @@ export const Items = (props: {
                   item={item}
                   market={props.market}
                   collection={props.id}
+                  collectionName={props.collection?.name || props.id}
                 />
               </Col>
             ))
@@ -204,6 +206,7 @@ export const NFTCard = (props: {
   item: ExNFT;
   market: string;
   collection: string;
+  collectionName: string;
   itemId?: string;
 }) => {
   return (
@@ -214,7 +217,7 @@ export const NFTCard = (props: {
       bordered={false}
     >
       <Link
-        to={`/exnft/${props.item.mintAddress}?market=${props.market}&price=${props.item.price}&collection=${props.collection}`}
+        to={`/exnft/${props.item.mintAddress}?market=${props.market}&collection=${props.collection}&price=${props.item.price}`}
       >
         <div className="image-over art-image-container">
           <ArtContent
@@ -228,7 +231,7 @@ export const NFTCard = (props: {
         <div className="card-caption">
           <h6>{props.item.name}</h6>
           <div className="card-collection-name">
-            <span>{props.item.collection || props.collection}</span>
+            <span>{props.collectionName}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
           <h6>{`${props.item.price ? props.item.price : '--'} SOL`}</h6>

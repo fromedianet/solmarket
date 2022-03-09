@@ -35,7 +35,7 @@ export type ExNFT = {
   pk?: string;
   name: string;
   image: string;
-  collection: string;
+  collection?: string;
   price?: number;
 };
 
