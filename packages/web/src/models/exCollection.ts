@@ -20,14 +20,14 @@ export type ExAttribute = {
 
 export type ExAttrValue = {
   value: string;
-  amount?: number | undefined;
-  floor?: number | undefined;
+  amount?: number | null;
+  floor?: number | null;
 };
 
 export type ExCollectionStats = {
-  floorPrice?: number | undefined;
-  volume?: number | undefined;
-  listedCount?: number | undefined;
+  floorPrice?: number;
+  totalVolume?: number;
+  listedCount?: number;
 };
 
 export type ExNFT = {

@@ -228,7 +228,7 @@ export const NFTCard = (props: {
         <div className="card-caption">
           <h6>{props.item.name}</h6>
           <div className="card-collection-name">
-            <span>{props.item.collection}</span>
+            <span>{props.item.collection || props.collection}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
           <h6>{`${props.item.price ? props.item.price : '--'} SOL`}</h6>
