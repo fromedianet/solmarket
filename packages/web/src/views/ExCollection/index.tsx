@@ -112,7 +112,7 @@ export const ExCollectionView = () => {
       <div className="collection-info">
         <CollectionInfo collection={collection} stats={collectionStats} />
       </div>
-      <Tabs defaultActiveKey="items" centered>
+      <Tabs defaultActiveKey="items" centered style={{ overflow: 'unset' }}>
         <TabPane
           key="items"
           tab={
