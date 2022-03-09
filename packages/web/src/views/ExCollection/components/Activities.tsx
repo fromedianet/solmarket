@@ -6,7 +6,8 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
-TimeAgo.addDefaultLocale(en);
+TimeAgo.setDefaultLocale(en.locale)
+TimeAgo.addLocale(en)
 // Create formatter (English).
 const timeAgo = new TimeAgo('en-US');
 
