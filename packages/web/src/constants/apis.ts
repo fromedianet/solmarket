@@ -5,4 +5,4 @@ export const APIS = {
   transactionsByCollection: 'excollections/transactions',
   getNFTByMintAddress: 'exnft',
   transactionsByMint: 'exnft/transactions',
-}
+};

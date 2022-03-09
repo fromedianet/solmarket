@@ -6,7 +6,7 @@ import {
   ExNFT,
   Transaction,
 } from '../models/exCollection';
-import {APIS} from '../constants';
+import { APIS } from '../constants';
 
 const PER_PAGE = 20;
 
@@ -18,7 +18,7 @@ export const useExCollections = (id: string) => {
     if (!loading) {
       setLoading(true);
       // Get collections in selected marketplace.
-      
+
       const uri = APIS.base_url + APIS.collections + id;
       fetch(uri)
         .then(res => res.json())
@@ -44,7 +44,8 @@ export const useExCollection = (symbol: string, market: string) => {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    const collectionUri = APIS.base_url + APIS.collections + market + '/' + encodeURI(symbol);
+    const collectionUri =
+      APIS.base_url + APIS.collections + market + '/' + encodeURI(symbol);
     fetch(collectionUri)
       .then(res => res.json())
       .then(result => {
@@ -142,7 +143,7 @@ export const useExCollection = (symbol: string, market: string) => {
             }));
           }
         }
-        
+
         setLoading(false);
       });
   };
@@ -160,14 +161,17 @@ export const useExCollection = (symbol: string, market: string) => {
     } else if (param.market === 'solanart' || param.market === 'digital_eyes') {
       queryBody['params'] = encodeURI(`?collection=${param.symbol}`);
     } else if (param.market === 'alpha_art') {
-      queryBody['params'] = encodeURI(`${param.symbol}?trading_types=1%2C2%2C3&no_foreign_listing=true`);
+      queryBody['params'] = encodeURI(
+        `${param.symbol}?trading_types=1%2C2%2C3&no_foreign_listing=true`,
+      );
     }
 
     fetch(uri, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(queryBody),
-    }).then(res => res.json())
+    })
+      .then(res => res.json())
       .then(result => {
         setTransactions(result['data']);
       });
@@ -253,10 +257,10 @@ function getParamsForMagicEden(param: QUERIES) {
   queries['$sort'] = sortQuery;
 
   const queryStr = `?q=${JSON.stringify(queries)}`;
-  
+
   const result = {
     market: param.market,
-    params: encodeURI(queryStr)
+    params: encodeURI(queryStr),
   };
 
   return result;
@@ -293,11 +297,11 @@ function getParamsForSolanart(param: QUERIES) {
   }
 
   queries = queries.replaceAll(' ', '+');
-  
+
   const result = {
     market: param.market,
-    params: encodeURI(queries)
-  }
+    params: encodeURI(queries),
+  };
 
   return result;
 }
@@ -325,7 +329,7 @@ function getParamsForDigitalEyes(param: QUERIES) {
 
   const result = {
     market: param.market,
-    params: encodeURI(queries)
+    params: encodeURI(queries),
   };
 
   return result;
@@ -355,7 +359,7 @@ function getParamsForAlphaArt(param: QUERIES) {
 
   const result = {
     market: param.market,
-    params: queries
-  }
+    params: queries,
+  };
   return result;
 }

@@ -41,7 +41,7 @@ export const ExCollectionView = () => {
     skip,
     cursor,
     hasMore,
-    loading
+    loading,
   } = useExCollection(id, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
