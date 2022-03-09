@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Collapse, Table } from 'antd';
 import { CopySpan, shortenAddress } from '@oyster/common';
 import { ExNFT, Transaction } from '../../models/exCollection';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import TimeAgo from 'javascript-time-ago';
 import { useExCollection } from '../../hooks/useExCollections';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { NFTCard } from '../ExCollection/components/Items';
 import en from 'javascript-time-ago/locale/en.json';
 
-TimeAgo.addDefaultLocale(en);
+TimeAgo.setDefaultLocale(en.locale);
+TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo('en-US');
 
@@ -87,7 +87,7 @@ export const BottomSection = (props: {
       title: 'TOTAL AMOUNT',
       dataIndex: 'price',
       key: 'price',
-      render: price => price && `${price / LAMPORTS_PER_SOL} SOL`,
+      render: price => price > 0 && `${price} SOL`,
     },
     {
       title: 'BUYER',

@@ -4,7 +4,6 @@ import { Table } from 'antd';
 import { Transaction } from '../../../models/exCollection';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
@@ -74,7 +73,7 @@ export const Activities = (props: {
       title: 'TOTAL AMOUNT',
       dataIndex: 'price',
       key: 'price',
-      render: price => price && price > 0 && `${price / LAMPORTS_PER_SOL} SOL`,
+      render: price => price > 0 && `${price} SOL`,
     },
     {
       title: 'MINT ADDRESS',

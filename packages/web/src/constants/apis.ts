@@ -3,6 +3,6 @@ export const APIS = {
   collections: 'excollections/',
   listedNFTs: 'excollections/list',
   transactionsByCollection: 'excollections/transactions',
-  getNFTByMintAddress: 'exnft',
+  getNFTByMintAddress: 'exnft/',
   transactionsByMint: 'exnft/transactions',
 };
