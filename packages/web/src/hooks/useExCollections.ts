@@ -15,6 +15,7 @@ import {
   MAGIC_EDEN_URIS,
   SOLANART_URIS,
 } from '../views/inventory/constants';
+import {APIS} from '../constants';
 
 const PER_PAGE = 20;
 
@@ -26,12 +27,12 @@ export const useExCollections = (id: string) => {
     if (!loading) {
       setLoading(true);
       // Get collections in selected marketplace.
-      const uri = COLLECTIONS_URI[id];
+      
+      const uri = APIS.base_url + APIS.collections + id;
       fetch(uri)
         .then(res => res.json())
-        .then(data => {
-          const result = parseCollections(id, data);
-          setCollections(result);
+        .then(result => {
+          setCollections(result['data']);
           setLoading(false);
         });
     }

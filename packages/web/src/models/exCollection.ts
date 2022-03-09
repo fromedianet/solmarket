@@ -2,14 +2,14 @@ import { Attribute, Creator } from '@oyster/common';
 
 export interface ExCollection {
   name: string;
-  description: string | undefined;
+  description: string | null;
   symbol: string;
-  banner?: string | undefined;
+  banner?: string | null;
   thumbnail: string;
-  discord?: string | undefined;
-  twitter?: string | undefined;
-  website?: string | undefined;
-  createdAt?: string | number | undefined;
+  discord?: string | null;
+  twitter?: string | null;
+  website?: string | null;
+  createdAt?: number | null;
   market: string;
 }
 
