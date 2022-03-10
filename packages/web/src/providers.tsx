@@ -6,6 +6,7 @@ import {
   MetaProvider,
 } from '@oyster/common';
 import React, { FC } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ConfettiProvider } from './components/Confetti';
 import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
@@ -14,6 +15,9 @@ import SidebarProvider from './contexts/sidebar';
 import { SPLTokenListProvider } from './contexts/tokenList';
 
 export const Providers: FC = ({ children }) => {
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
+  console.log('isDashboard', isDashboard);
   return (
     <ConnectionProvider>
       <WalletProvider>
@@ -28,7 +32,7 @@ export const Providers: FC = ({ children }) => {
                   <LoaderProvider>
                     <ConfettiProvider>
                       <SidebarProvider>
-                        <AppLayout>{children}</AppLayout>
+                        {isDashboard ? children : <AppLayout>{children}</AppLayout>}
                       </SidebarProvider>
                     </ConfettiProvider>
                   </LoaderProvider>
