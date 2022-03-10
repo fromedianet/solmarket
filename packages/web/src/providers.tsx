@@ -17,31 +17,35 @@ import { SPLTokenListProvider } from './contexts/tokenList';
 export const Providers: FC = ({ children }) => {
   const location = useLocation();
   const isDashboard = location.pathname === '/dashboard';
-  console.log('isDashboard', isDashboard);
+  
   return (
-    <ConnectionProvider>
-      <WalletProvider>
-        <AccountsProvider>
-          <SPLTokenListProvider>
-            <CoingeckoProvider>
-              <StoreProvider
-                ownerAddress={process.env.NEXT_PUBLIC_STORE_OWNER_ADDRESS}
-                storeAddress={process.env.NEXT_PUBLIC_STORE_ADDRESS}
-              >
-                <MetaProvider>
-                  <LoaderProvider>
-                    <ConfettiProvider>
-                      <SidebarProvider>
-                        {isDashboard ? children : <AppLayout>{children}</AppLayout>}
-                      </SidebarProvider>
-                    </ConfettiProvider>
-                  </LoaderProvider>
-                </MetaProvider>
-              </StoreProvider>
-            </CoingeckoProvider>
-          </SPLTokenListProvider>
-        </AccountsProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    <>
+      {isDashboard ? children : (
+        <ConnectionProvider>
+          <WalletProvider>
+            <AccountsProvider>
+              <SPLTokenListProvider>
+                <CoingeckoProvider>
+                  <StoreProvider
+                    ownerAddress={process.env.NEXT_PUBLIC_STORE_OWNER_ADDRESS}
+                    storeAddress={process.env.NEXT_PUBLIC_STORE_ADDRESS}
+                  >
+                    <MetaProvider>
+                      <LoaderProvider>
+                        <ConfettiProvider>
+                          <SidebarProvider>
+                            <AppLayout>{children}</AppLayout>
+                          </SidebarProvider>
+                        </ConfettiProvider>
+                      </LoaderProvider>
+                    </MetaProvider>
+                  </StoreProvider>
+                </CoingeckoProvider>
+              </SPLTokenListProvider>
+            </AccountsProvider>
+          </WalletProvider>
+        </ConnectionProvider>
+      )}
+    </>
   );
 };
