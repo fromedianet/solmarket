@@ -4,21 +4,20 @@ import Router from 'next/router';
 import { Form, Input, Button } from 'antd';
 import { useUser } from './lib/hooks';
 
-export const LoginView = () => {
+export const Login = () => {
   useUser({ redirectTo: '/dashboard', redirectIfFound: true });
   const [errorMsg, setErrorMsg] = useState('');
 
   async function handleSubmit(values) {
-
     if (errorMsg) setErrorMsg('');
     const body = {
-      email: values.email
+      email: values.email,
     };
 
     try {
       const magic = new Magic(process.env.NEXT_PUBLIC_MAGICLINK_KEY || '');
       const didToken = await magic.auth.loginWithMagicLink({
-        email: body.email
+        email: body.email,
       });
       const res = await fetch('/api/login', {
         method: 'POST',
@@ -31,7 +30,7 @@ export const LoginView = () => {
       if (res.status === 200) {
         Router.push('/dashboard');
       } else {
-        throw new Error(await res.text())
+        throw new Error(await res.text());
       }
     } catch (error) {
       console.error('An unexpected error happened occurred:', error);
@@ -41,31 +40,35 @@ export const LoginView = () => {
   }
 
   return (
-    <div className='login-page'>
-      <div className='login-area'>
-        <div className='login-container'>
-          <img src='/favicon-96x96.png' className='logo' alt='logo'/>
+    <div className="login-page">
+      <div className="login-area">
+        <div className="login-container">
+          <img src="/favicon-96x96.png" className="logo" alt="logo" />
           <h1>Welcome back</h1>
           <Form
-            className='login-form'
+            className="login-form"
             onFinish={handleSubmit}
-            autoComplete='off'
+            autoComplete="off"
           >
             <Form.Item
-              name='email'
+              name="email"
               rules={[{ required: true, message: 'Please input your email!' }]}
             >
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button htmlType='submit'>Log in / Sign up</Button>
+              <Button htmlType="submit">Log in / Sign up</Button>
             </Form.Item>
           </Form>
-          {errorMsg && <span className='error-msg'>{errorMsg}</span>}
-          <div className='bottom-container'>
-            <a href='https://magic.link/' target='_blank' rel="noreferer noreferrer">
-              <span className='text'>Secured by</span>
-              <img src='/icons/magiclink.svg' alt='magiclink' />
+          {errorMsg && <span className="error-msg">{errorMsg}</span>}
+          <div className="bottom-container">
+            <a
+              href="https://magic.link/"
+              target="_blank"
+              rel="noreferer noreferrer"
+            >
+              <span className="text">Secured by</span>
+              <img src="/icons/magiclink.svg" alt="magiclink" />
             </a>
           </div>
         </div>
