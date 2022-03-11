@@ -2,10 +2,8 @@ import { Magic } from 'magic-sdk';
 import React, { useState } from 'react';
 import Router from 'next/router';
 import { Form, Input, Button } from 'antd';
-import { useUser } from './lib/hooks';
 
 export const Login = () => {
-  useUser({ redirectTo: '/dashboard', redirectIfFound: true });
   const [errorMsg, setErrorMsg] = useState('');
 
   async function handleSubmit(values) {

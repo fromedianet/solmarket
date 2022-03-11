@@ -9,12 +9,14 @@ const fetcher = url =>
       return { user: data?.user || null };
     });
 
-export function useUser({ redirectTo, redirectIfFound }) {
+// @ts-ignore
+export function useUser({ redirectTo, redirectIfFound } = {}) {
   const { data, error } = useSWR('/api/user', fetcher);
   const user = data?.user;
   const finished = Boolean(data);
   const hasUser = Boolean(user);
 
+  console.log('call useUser');
   useEffect(() => {
     if (!redirectTo || !finished) return;
     if (

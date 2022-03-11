@@ -10,7 +10,7 @@ export function setTokenCookie(res, token) {
     expires: new Date(Date.now() + MAX_AGE * 1000),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    path: '/',
+    path: '/dashboard',
     sameSite: 'lax',
   });
 
