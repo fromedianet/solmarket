@@ -1,25 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Dashboard } from './dashboard';
 import { Spin } from 'antd';
 import { Login } from './login';
-import { Magic } from 'magic-sdk';
+import { useDashboard } from '../../contexts/dashboardProvider';
 
 export const DashboardView = () => {
-  const [data, setData] = useState<{ loading?: boolean; user?: any }>({});
+  const { loading, user, isConfigured } = useDashboard();
 
-  useEffect(() => {
-    setData({ loading: true });
-    const magic = new Magic(process.env.NEXT_PUBLIC_MAGICLINK_KEY || '');
-    magic.user.isLoggedIn().then(isLoggedIn => {
-      if (isLoggedIn) {
-        magic.user.getMetadata().then(userData => {
-          setData({ loading: false, user: userData });
-        });
-      } else {
-        setData({ loading: false, user: null });
-      }
-    });
-  }, []);
+  if (!isConfigured) {
+    return;
+  }
 
-  return <>{data.loading ? <Spin /> : data.user ? <Dashboard /> : <Login />}</>;
+  return <>{loading ? <Spin /> : user ? <Dashboard /> : <Login />}</>;
 };
