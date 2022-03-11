@@ -16,7 +16,6 @@ export function useUser({ redirectTo, redirectIfFound } = {}) {
   const finished = Boolean(data);
   const hasUser = Boolean(user);
 
-  console.log('call useUser');
   useEffect(() => {
     if (!redirectTo || !finished) return;
     if (

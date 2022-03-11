@@ -1,13 +1,15 @@
 import { Magic } from 'magic-sdk';
 import React, { useState } from 'react';
 import Router from 'next/router';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Spin } from 'antd';
 
 export const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(values) {
     if (errorMsg) setErrorMsg('');
+    setLoading(true);
     const body = {
       email: values.email,
     };
@@ -35,6 +37,7 @@ export const Login = () => {
       // @ts-ignore
       setErrorMsg(error.message);
     }
+    setLoading(false);
   }
 
   return (
@@ -55,7 +58,9 @@ export const Login = () => {
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit">Log in / Sign up</Button>
+              <Button htmlType="submit" disabled={loading}>
+                {loading ? <Spin /> : 'Log in / Sign up'}
+              </Button>
             </Form.Item>
           </Form>
           {errorMsg && <span className="error-msg">{errorMsg}</span>}
