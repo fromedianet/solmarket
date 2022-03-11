@@ -121,7 +121,11 @@ export function Routes() {
             <Route exact path="/faq" component={() => <FAQView />} />
             <Route exact path="/profile" component={() => <ProfileView />} />
             <Route path="/about" component={() => <StaticPageView />} />
-            <Route exact path="/dashboard" component={() => <DashboardView />} />
+            <Route
+              exact
+              path="/dashboard"
+              component={() => <DashboardView />}
+            />
             <Route path="/" component={() => <HomeView />} />
           </Switch>
         </Providers>

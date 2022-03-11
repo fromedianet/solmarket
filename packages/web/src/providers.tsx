@@ -17,10 +17,12 @@ import { SPLTokenListProvider } from './contexts/tokenList';
 export const Providers: FC = ({ children }) => {
   const location = useLocation();
   const isDashboard = location.pathname === '/dashboard';
-  
+
   return (
     <>
-      {isDashboard ? children : (
+      {isDashboard ? (
+        children
+      ) : (
         <ConnectionProvider>
           <WalletProvider>
             <AccountsProvider>
