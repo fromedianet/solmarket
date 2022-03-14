@@ -28,6 +28,7 @@ import { CollectionCreateView } from './views/collectionCreate';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
+import { DashboardView } from './views/dashboard';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -120,6 +121,11 @@ export function Routes() {
             <Route exact path="/faq" component={() => <FAQView />} />
             <Route exact path="/profile" component={() => <ProfileView />} />
             <Route path="/about" component={() => <StaticPageView />} />
+            <Route
+              exact
+              path="/dashboard"
+              component={() => <DashboardView />}
+            />
             <Route path="/" component={() => <HomeView />} />
           </Switch>
         </Providers>
