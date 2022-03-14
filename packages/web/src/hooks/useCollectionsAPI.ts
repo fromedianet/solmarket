@@ -1,12 +1,11 @@
 import { APIS } from '../constants';
 
 export const useCollectionsAPI = () => {
-
   const createCollection = async (id: string, email: string) => {
     const url = APIS.base_url + APIS.collectionCreate;
     const params = {
       _id: id,
-      email: email
+      email: email,
     };
 
     const res = await fetch(url, {
@@ -16,9 +15,9 @@ export const useCollectionsAPI = () => {
     });
 
     return res.json();
-  }
+  };
 
-  const getCollectionsByEmail = async(email: string) => {
+  const getCollectionsByEmail = async (email: string) => {
     const url = APIS.base_url + APIS.collections;
     const params = { email: email };
 
@@ -29,7 +28,13 @@ export const useCollectionsAPI = () => {
     });
 
     return res.json();
-  }
+  };
 
-  return { createCollection, getCollectionsByEmail };
-}
+  const getCollectionById = async (id: string) => {
+    const url = APIS.base_url + APIS.collections + '/' + id;
+    const res = await fetch(url);
+    return res.json();
+  };
+
+  return { createCollection, getCollectionsByEmail, getCollectionById };
+};

@@ -7,5 +7,5 @@ export const APIS = {
   transactionsByMint: 'exnft/transactions',
 
   collections: 'collections',
-  collectionCreate: 'collections/create'
+  collectionCreate: 'collections/create',
 };

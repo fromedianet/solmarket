@@ -1,0 +1,90 @@
+.listing-page {
+  .listing-container {
+    padding: 60px 32px;
+
+    .editor-menu {
+      padding: 16px;
+      background: transparent;
+
+      h6 {
+        font-size: 16px;
+        font-weight: 700;
+        color: @text-primary-color;
+        margin-bottom: 24px;
+      }
+
+      .ant-menu-item-selected {
+        background: #1d1326;
+        border-radius: 6px;
+      }
+
+      .menu-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .step-page {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      padding-left: 24px;
+
+      @media screen and (min-width: 768px) {
+        padding-left: 40px;
+      }
+
+      p.step {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        padding: 0;
+        color: @text-secondary-color;
+      }
+
+      h1 {
+        font-weight: 700;
+        font-size: 36px;
+        line-height: 48px;
+        margin-bottom: 16px;
+        color: @text-primary-color;
+      }
+
+      p.label {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: @text-primary-color;
+        margin-bottom: 16px;
+      }
+
+      .radio-btn {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        height: 56px;
+        background: #1c1326;
+        color: @text-primary-color;
+        font-size: 16px;
+        border-radius: 8px;
+        padding-left: 24px;
+      }
+
+      .step-btn {
+        width: 220px;
+        height: 48px;
+        background: @bg-pink;
+        margin-top: 32px;
+        border: none;
+
+        &.ant-btn[disabled] {
+          opacity: 0.6;
+        }
+      }
+    }
+
+  }
+}

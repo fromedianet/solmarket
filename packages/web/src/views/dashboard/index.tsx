@@ -31,7 +31,7 @@ export const DashboardView = () => {
           <Spin size="large" />
         </div>
       ) : user ? (
-        <Dashboard user={user}/>
+        <Dashboard user={user} />
       ) : (
         <Login />
       )}

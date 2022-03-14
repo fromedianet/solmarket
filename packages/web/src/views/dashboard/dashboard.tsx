@@ -17,34 +17,32 @@ const timeAgo = new TimeAgo('en-US');
 
 const { TabPane } = Tabs;
 
-export const Dashboard = ({user}: {user:any}) => {
+export const Dashboard = ({ user }: { user: any }) => {
   const { createCollection, getCollectionsByEmail } = useCollectionsAPI();
   const [lists, setLists] = useState({
     drafts: [],
     submissions: [],
     reviewed: [],
     listed: [],
-    rejected: []
+    rejected: [],
   });
 
   useEffect(() => {
-    getCollectionsByEmail(user.email)
-      .then(res => {
-        if (res.data) {
-          setLists({
-            drafts: res.data.filter(item => item.status === 'draft'),
-            submissions: res.data.filter(item => item.status === 'submitted'),
-            reviewed: res.data.filter(item => item.status === 'reviewed'),
-            listed: res.data.filter(item => item.status === 'listed'),
-            rejected: res.data.filter(item => item.status === 'rejected'),
-          })
-        }
-      });
+    getCollectionsByEmail(user.email).then(res => {
+      if (res.data) {
+        setLists({
+          drafts: res.data.filter(item => item.status === 'draft'),
+          submissions: res.data.filter(item => item.status === 'submitted'),
+          reviewed: res.data.filter(item => item.status === 'reviewed'),
+          listed: res.data.filter(item => item.status === 'listed'),
+          rejected: res.data.filter(item => item.status === 'rejected'),
+        });
+      }
+    });
   }, []);
 
   const handleCreate = async () => {
     const _id = uuid();
-    console.log(_id, user.email);
     // call createCollection api
     const res = await createCollection(_id, user.email);
     if (res.data) {
@@ -52,11 +50,15 @@ export const Dashboard = ({user}: {user:any}) => {
     }
   };
 
-  const CardItem = ({item}: {item: {}}) => {
-    console.log('cardItem', item);
+  const CardItem = ({ item }: { item: {} }) => {
+    console.log(item);
     return (
       <Card className={`collection-card`} hoverable={true} bordered={false}>
-        <Link to={`/dashboard/listing/${item['_id']}`} >
+        <Link
+          to={`/dashboard/listing/${item['_id']}/${item[
+            'completed_status'
+          ].toString()}`}
+        >
           <div className="image-over image-container">
             <ArtContent
               className="image no-event"
@@ -68,12 +70,14 @@ export const Dashboard = ({user}: {user:any}) => {
           </div>
           <div className="card-caption">
             <h6>{item['name'] || 'Untitled'}</h6>
-            <span>{`Edited: ${timeAgo.format(Date.parse(item['updated_at']))}`}</span>
+            <span>{`Edited: ${timeAgo.format(
+              Date.parse(item['updated_at']),
+            )}`}</span>
           </div>
         </Link>
       </Card>
-    )
-  }
+    );
+  };
 
   return (
     <div className="dashboard-page">
