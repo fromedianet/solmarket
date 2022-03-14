@@ -40,7 +40,7 @@ export const DashboardProvider: FC<{
         }
       });
     }
-  }, [magicLinkKey]);
+  }, []);
 
   return (
     <DashboardContext.Provider value={{ ...data, isConfigured }}>

@@ -19,7 +19,7 @@ export const useExCollections = (id: string) => {
       setLoading(true);
       // Get collections in selected marketplace.
 
-      const uri = APIS.base_url + APIS.collections + id;
+      const uri = APIS.base_url + APIS.exCollections + id;
       fetch(uri)
         .then(res => res.json())
         .then(result => {
@@ -45,7 +45,7 @@ export const useExCollection = (symbol: string, market: string) => {
 
   useEffect(() => {
     const collectionUri =
-      APIS.base_url + APIS.collections + market + '/' + encodeURI(symbol);
+      APIS.base_url + APIS.exCollections + market + '/' + encodeURI(symbol);
     fetch(collectionUri)
       .then(res => res.json())
       .then(result => {
