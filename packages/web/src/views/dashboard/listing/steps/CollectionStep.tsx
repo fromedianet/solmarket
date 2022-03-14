@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 
@@ -7,12 +7,17 @@ export const CollectionStep = ({
   handleAction,
 }: {
   collection: {};
-  handleAction: (permission: string) => void;
+  handleAction: ({ name, symbol }) => void;
 }) => {
   const [form] = Form.useForm();
-  const [symbol, setSymbol] = useState<string>(collection['symbol'] || '');
 
-  const onFinish = value => {};
+  useEffect(() => {
+    console.log('collection step', collection);
+    form.setFieldsValue({
+      name: collection['name'] || '',
+      symbol: collection['symbol'] || '',
+    });
+  }, [collection]);
 
   return (
     <div className="step-page">
@@ -23,7 +28,7 @@ export const CollectionStep = ({
         form={form}
         layout="vertical"
         autoComplete="off"
-        onFinish={onFinish}
+        onFinish={values => handleAction(values)}
       >
         <Form.Item
           label="Collection Name"
@@ -34,7 +39,7 @@ export const CollectionStep = ({
             autoFocus
             placeholder="Super NFT Collection"
             maxLength={50}
-            value={collection['name']}
+            className="step-input"
           />
         </Form.Item>
         <Form.Item
@@ -44,12 +49,10 @@ export const CollectionStep = ({
             { required: true, message: 'Collection symbol is required.' },
           ]}
         >
-          <span>{`https://papercity.io/marketplace/${symbol}`}</span>
           <Input
             placeholder="super_nft_collection"
             maxLength={20}
-            value={symbol}
-            onChange={event => setSymbol(event.target.value)}
+            className="step-input"
           />
         </Form.Item>
         <Form.Item>

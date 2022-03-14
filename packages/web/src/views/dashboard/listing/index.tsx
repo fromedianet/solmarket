@@ -11,7 +11,7 @@ import { CollectionStep } from './steps/CollectionStep';
 
 export const DashboardListingView = () => {
   const { id }: { id: string } = useParams();
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(1);
   const {
     getCollectionById,
     collectionStep1,
@@ -46,7 +46,7 @@ export const DashboardListingView = () => {
       .then((res: {}) => {
         if (res['data']) {
           setCollection(res['data']);
-          setStep(1);
+          setStep(2);
         } else {
           notify({
             message: 'Step 1 has failed!',
@@ -57,7 +57,22 @@ export const DashboardListingView = () => {
       });
   };
 
-  const processStep2 = () => {};
+  const processStep2 = (params: { name: string; symbol: string }) => {
+    collectionStep2({ _id: id, ...params })
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollection(res['data']);
+          setStep(3);
+        } else {
+          notify({
+            message: 'Step 1 has failed!',
+            description: res['message'],
+            type: 'error',
+          });
+        }
+      });
+  };
 
   return (
     <div className="listing-page">
@@ -75,13 +90,13 @@ export const DashboardListingView = () => {
               <SideMenu step={step} setStep={setStep} collection={collection} />
             </Col>
             <Col span={24} md={18} lg={20}>
-              {step === 0 && (
+              {step === 1 && (
                 <IntroStep
                   collection={collection}
                   handleAction={processStep1}
                 />
               )}
-              {step === 1 && (
+              {step === 2 && (
                 <CollectionStep
                   collection={collection}
                   handleAction={processStep2}
