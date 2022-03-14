@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { ArtContent } from '../../components/ArtContent';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
+import { notify } from '@oyster/common';
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
@@ -28,14 +29,20 @@ export const Dashboard = ({ user }: { user: any }) => {
   });
 
   useEffect(() => {
-    getCollectionsByEmail(user.email).then(res => {
-      if (res.data) {
+    // @ts-ignore
+    getCollectionsByEmail(user.email).then((res: {}) => {
+      if (res['data']) {
         setLists({
-          drafts: res.data.filter(item => item.status === 'draft'),
-          submissions: res.data.filter(item => item.status === 'submitted'),
-          reviewed: res.data.filter(item => item.status === 'reviewed'),
-          listed: res.data.filter(item => item.status === 'listed'),
-          rejected: res.data.filter(item => item.status === 'rejected'),
+          drafts: res['data'].filter(item => item.status === 'draft'),
+          submissions: res['data'].filter(item => item.status === 'submitted'),
+          reviewed: res['data'].filter(item => item.status === 'reviewed'),
+          listed: res['data'].filter(item => item.status === 'listed'),
+          rejected: res['data'].filter(item => item.status === 'rejected'),
+        });
+      } else {
+        notify({
+          message: res['message'],
+          type: 'error',
         });
       }
     });
@@ -43,11 +50,22 @@ export const Dashboard = ({ user }: { user: any }) => {
 
   const handleCreate = async () => {
     const _id = uuid();
-    // call createCollection api
-    const res = await createCollection(_id, user.email);
-    if (res.data) {
-      Router.push(`/dashboard/listing/${_id}`);
-    }
+
+    createCollection({
+      _id: _id,
+      email: user['email'],
+      // @ts-ignore
+    }).then((res: {}) => {
+      if (res['message']) {
+        notify({
+          message: 'Create collection has failed!',
+          description: res['message'],
+          type: 'error',
+        });
+      } else {
+        Router.push(`/dashboard/listing/${_id}`);
+      }
+    });
   };
 
   const CardItem = ({ item }: { item: {} }) => {

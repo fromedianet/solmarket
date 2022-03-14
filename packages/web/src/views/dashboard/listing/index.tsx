@@ -6,6 +6,7 @@ import { DashboardHeader } from '../header';
 import { EmptyView } from '../../../components/EmptyView';
 import { SideMenu } from './SideMenu';
 import { IntroStep } from './steps/IntroStep';
+import { notify } from '@oyster/common';
 
 export const DashboardListingView = () => {
   const history = useHistory();
@@ -17,10 +18,15 @@ export const DashboardListingView = () => {
 
   useEffect(() => {
     setLoading(true);
-    getCollectionById(id).then(res => {
-      console.log('getCollectionById', res);
-      if (res.data) {
-        setCollection(res.data);
+    // @ts-ignore
+    getCollectionById(id).then((res: {}) => {
+      if (res['data']) {
+        setCollection(res['data']);
+      } else {
+        notify({
+          message: res['message'],
+          type: 'error',
+        });
       }
       setLoading(false);
     });
