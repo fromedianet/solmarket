@@ -72,11 +72,7 @@ export const Dashboard = ({ user }: { user: any }) => {
     console.log(item);
     return (
       <Card className={`collection-card`} hoverable={true} bordered={false}>
-        <Link
-          to={`/dashboard/listing/${item['_id']}/${item[
-            'completed_status'
-          ].toString()}`}
-        >
+        <Link to={`/dashboard/listing/${item['_id']}`}>
           <div className="image-over image-container">
             <ArtContent
               className="image no-event"

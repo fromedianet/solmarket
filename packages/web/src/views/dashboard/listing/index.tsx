@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Row, Col, Spin } from 'antd';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
 import { DashboardHeader } from '../header';
@@ -7,12 +7,19 @@ import { EmptyView } from '../../../components/EmptyView';
 import { SideMenu } from './SideMenu';
 import { IntroStep } from './steps/IntroStep';
 import { notify } from '@oyster/common';
+import { CollectionStep } from './steps/CollectionStep';
 
 export const DashboardListingView = () => {
-  const history = useHistory();
-  const { id, step_param }: { id: string; step_param: string } = useParams();
+  const { id }: { id: string } = useParams();
   const [step, setStep] = useState<number>(0);
-  const { getCollectionById } = useCollectionsAPI();
+  const {
+    getCollectionById,
+    collectionStep1,
+    collectionStep2,
+    collectionStep3,
+    collectionStep4,
+    collectionSubmit,
+  } = useCollectionsAPI();
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState({});
 
@@ -20,6 +27,7 @@ export const DashboardListingView = () => {
     setLoading(true);
     // @ts-ignore
     getCollectionById(id).then((res: {}) => {
+      console.log('call getCollectionById', res);
       if (res['data']) {
         setCollection(res['data']);
       } else {
@@ -32,21 +40,24 @@ export const DashboardListingView = () => {
     });
   }, [id]);
 
-  const gotoStep = useCallback(
-    (_step: number) => {
-      history.push(`/dashboard/listing/${id}/${_step.toString()}`);
-    },
-    [history],
-  );
-
-  useEffect(() => {
-    if (step_param) setStep(parseInt(step_param));
-    else gotoStep(0);
-  }, [step_param, gotoStep]);
-
   const processStep1 = permission => {
-    console.log('processStep1', permission);
+    collectionStep1({ _id: id, permission: permission })
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollection(res['data']);
+          setStep(1);
+        } else {
+          notify({
+            message: 'Step 1 has failed!',
+            description: res['message'],
+            type: 'error',
+          });
+        }
+      });
   };
+
+  const processStep2 = () => {};
 
   return (
     <div className="listing-page">
@@ -61,13 +72,19 @@ export const DashboardListingView = () => {
         <div className="listing-container">
           <Row>
             <Col span={24} md={6} lg={4}>
-              <SideMenu step={step} collection={collection} />
+              <SideMenu step={step} setStep={setStep} collection={collection} />
             </Col>
             <Col span={24} md={18} lg={20}>
               {step === 0 && (
                 <IntroStep
                   collection={collection}
                   handleAction={processStep1}
+                />
+              )}
+              {step === 1 && (
+                <CollectionStep
+                  collection={collection}
+                  handleAction={processStep2}
                 />
               )}
             </Col>

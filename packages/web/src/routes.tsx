@@ -129,7 +129,7 @@ export function Routes() {
             />
             <Route
               exact
-              path="/dashboard/listing/:id/:step_param"
+              path="/dashboard/listing/:id"
               component={() => <DashboardListingView />}
             />
             <Route path="/" component={() => <HomeView />} />

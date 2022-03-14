@@ -2,16 +2,20 @@
   .listing-container {
     padding: 60px 32px;
 
-    .editor-menu {
-      padding: 16px;
-      background: transparent;
+    .editor {
+      display: flex;
+      flex-direction: column;
 
       h6 {
         font-size: 16px;
         font-weight: 700;
         color: @text-primary-color;
-        margin-bottom: 24px;
+        margin-bottom: 8px;
       }
+    }
+
+    .editor-menu {
+      background: transparent;
 
       .ant-menu-item-selected {
         background: #1d1326;
