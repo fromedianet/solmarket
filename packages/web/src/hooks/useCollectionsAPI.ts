@@ -140,7 +140,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
-  function collectionStep4(props: { _id: string; candymachine_ids: string, mint_supply: number, launch_time: number }) {
+  function collectionStep4(props: {
+    _id: string;
+    candymachine_ids: string;
+    mint_supply: number;
+    launch_time: number;
+  }) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collections + '/step4';
       fetch(url, {
@@ -157,12 +162,7 @@ export const useCollectionsAPI = () => {
     });
   }
 
-  function collectionSubmit(props: {
-    _id: string;
-    launch_time: EpochTimeStamp;
-    mint_supply: number;
-    mint_price: number;
-  }) {
+  function collectionSubmit(props: { _id: string; extra_info: string | null }) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collections + '/submit';
       fetch(url, {

@@ -66,7 +66,6 @@ export const DetailsStep = ({
   }, [collection]);
 
   const onFinish = values => {
-    console.log(values);
     if (selectedImage || collection['image']) {
       const formData = {
         description: values.description,
@@ -133,7 +132,6 @@ export const DetailsStep = ({
               onChange={e => {
                 if (e.target.files) {
                   const file = e.target.files[0];
-                  console.log('file size', file.size);
                   if (file.size > MAX_FILE_SIZE) {
                     notify({
                       message: 'Image size error',
@@ -222,7 +220,10 @@ export const DetailsStep = ({
             name="primary_category"
             extra="Select the primary category that you would like for this collection to be listed under"
           >
-            <Select className="category-select" onChange={val => setPrimaryCategory(val)}>
+            <Select
+              className="category-select"
+              onChange={val => setPrimaryCategory(val)}
+            >
               {categories.map((val, index) => (
                 <Select.Option key={index} value={val}>
                   {val}
@@ -237,7 +238,11 @@ export const DetailsStep = ({
           >
             <Select className="category-select">
               {categories.map((val, index) => (
-                <Select.Option key={index} value={val} disabled={primaryCategory !== '-' && val === primaryCategory}>
+                <Select.Option
+                  key={index}
+                  value={val}
+                  disabled={primaryCategory !== '-' && val === primaryCategory}
+                >
                   {val}
                 </Select.Option>
               ))}

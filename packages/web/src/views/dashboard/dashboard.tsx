@@ -70,7 +70,6 @@ export const Dashboard = ({ user }: { user: any }) => {
   };
 
   const CardItem = ({ item }: { item: {} }) => {
-    console.log(item);
     return (
       <Card className={`collection-card`} hoverable={true} bordered={false}>
         <Link to={`/dashboard/listing/${item['_id']}`}>

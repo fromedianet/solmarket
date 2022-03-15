@@ -10,9 +10,12 @@ import { notify } from '@oyster/common';
 import { CollectionStep } from './steps/CollectionStep';
 import { DetailsStep } from './steps/DetailsStep';
 import { CandyMachineStep } from './steps/CandyMachineStep';
+import { SubmitStep } from './steps/SubmitStep';
+import { useHistory } from 'react-router-dom';
 
 export const DashboardListingView = () => {
   const { id }: { id: string } = useParams();
+  const history = useHistory();
   const [step, setStep] = useState<number>(1);
   const {
     getCollectionById,
@@ -30,7 +33,6 @@ export const DashboardListingView = () => {
     setLoading(true);
     // @ts-ignore
     getCollectionById(id).then((res: {}) => {
-      console.log('call getCollectionById', res);
       if (res['data']) {
         setCollection(res['data']);
       } else {
@@ -60,7 +62,7 @@ export const DashboardListingView = () => {
         }
         setSaving(false);
       })
-      .catch((err) => {
+      .catch(err => {
         notify({
           message: 'Step 1 has failed!',
           description: err['message'],
@@ -87,7 +89,7 @@ export const DashboardListingView = () => {
         }
         setSaving(false);
       })
-      .catch((err) => {
+      .catch(err => {
         notify({
           message: 'Step 2 has failed!',
           description: err['message'],
@@ -114,7 +116,7 @@ export const DashboardListingView = () => {
         }
         setSaving(false);
       })
-      .catch((err) => {
+      .catch(err => {
         notify({
           message: 'Step 3 has failed!',
           description: err['message'],
@@ -141,7 +143,7 @@ export const DashboardListingView = () => {
         }
         setSaving(false);
       })
-      .catch((err) => {
+      .catch(err => {
         notify({
           message: 'Step 4 has failed!',
           description: err['message'],
@@ -149,7 +151,38 @@ export const DashboardListingView = () => {
         });
         setSaving(false);
       });
-  }
+  };
+
+  const processStep5 = extra_info => {
+    setSaving(true);
+    collectionSubmit({ _id: id, extra_info: extra_info })
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollection(res['data']);
+          notify({
+            message: 'Submit has successed!',
+            type: 'success',
+          });
+          history.goBack();
+        } else {
+          notify({
+            message: 'Submit has failed!',
+            description: res['message'],
+            type: 'error',
+          });
+        }
+        setSaving(false);
+      })
+      .catch(err => {
+        notify({
+          message: 'Submit has failed!',
+          description: err['message'],
+          type: 'error',
+        });
+        setSaving(false);
+      });
+  };
 
   return (
     <div className="listing-page">
@@ -161,7 +194,7 @@ export const DashboardListingView = () => {
       ) : Object.keys(collection).length === 0 ? (
         <EmptyView />
       ) : (
-        <div className="listing-container">
+        <div className="listing-container container">
           <Row>
             <Col span={24} md={6} lg={4}>
               <SideMenu step={step} setStep={setStep} collection={collection} />
@@ -193,6 +226,13 @@ export const DashboardListingView = () => {
                   collection={collection}
                   saving={saving}
                   handleAction={processStep4}
+                />
+              )}
+              {step === 5 && (
+                <SubmitStep
+                  collection={collection}
+                  saving={saving}
+                  handleAction={processStep5}
                 />
               )}
             </Col>
