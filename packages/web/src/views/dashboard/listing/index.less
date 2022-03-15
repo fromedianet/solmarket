@@ -114,6 +114,7 @@
         height: 48px;
         background: @bg-table-even;
         border: 1px solid @bg-table-odd;
+        color: @text-primary-color;
 
         &.focus-visible {
           border-color: @border-pink;
@@ -124,11 +125,59 @@
         }
       }
 
+      .step-input-number {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        height: 48px;
+        background: @bg-table-even;
+        border: 1px solid @bg-table-odd;
+        border-radius: 6px;
+        color: @text-primary-color;
+
+        &.ant-input-number-focused {
+          border-color: @border-pink;
+        }
+
+        &.ant-input-number-status-error {
+          border-color: #ff4d4f;
+        }
+      }
+
+      .step-picker {
+        width: 100%;
+        max-width: 400px;
+        height: 48px;
+        background: @bg-table-even;
+        border: 1px solid @bg-table-odd;
+        border-radius: 6px;
+        color: @text-primary-color;
+
+        &.ant-picker-focused {
+          border-color: @border-pink;
+        }
+
+        &.ant-picker-status-error {
+          border-color: #ff4d4f;
+        }
+
+        .ant-picker-suffix {
+          color: @text-secondary-color;
+        }
+
+        .ant-picker-clear {
+          background-color: @bg-table-even;
+          color: @text-secondary-color;
+        }
+      }
+
       .step-textarea {
         width: 100%;
         max-width: 400px;
         background: @bg-table-even;
         border: 1px solid @bg-table-odd;
+        color: @text-primary-color;
 
         &.focus-visible {
           border-color: @border-pink;

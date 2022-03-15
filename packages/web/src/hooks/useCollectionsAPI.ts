@@ -140,7 +140,7 @@ export const useCollectionsAPI = () => {
     });
   }
 
-  function collectionStep4(props: { _id: string; candymachine_ids: string }) {
+  function collectionStep4(props: { _id: string; candymachine_ids: string, mint_supply: number, launch_time: number }) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collections + '/step4';
       fetch(url, {

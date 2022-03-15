@@ -9,6 +9,7 @@ import { IntroStep } from './steps/IntroStep';
 import { notify } from '@oyster/common';
 import { CollectionStep } from './steps/CollectionStep';
 import { DetailsStep } from './steps/DetailsStep';
+import { CandyMachineStep } from './steps/CandyMachineStep';
 
 export const DashboardListingView = () => {
   const { id }: { id: string } = useParams();
@@ -61,7 +62,7 @@ export const DashboardListingView = () => {
       })
       .catch((err) => {
         notify({
-          message: 'Step 3 has failed!',
+          message: 'Step 1 has failed!',
           description: err['message'],
           type: 'error',
         });
@@ -88,7 +89,7 @@ export const DashboardListingView = () => {
       })
       .catch((err) => {
         notify({
-          message: 'Step 3 has failed!',
+          message: 'Step 2 has failed!',
           description: err['message'],
           type: 'error',
         });
@@ -122,6 +123,33 @@ export const DashboardListingView = () => {
         setSaving(false);
       });
   };
+
+  const processStep4 = params => {
+    setSaving(true);
+    collectionStep4({ _id: id, ...params })
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollection(res['data']);
+          setStep(5);
+        } else {
+          notify({
+            message: 'Step 4 has failed!',
+            description: res['message'],
+            type: 'error',
+          });
+        }
+        setSaving(false);
+      })
+      .catch((err) => {
+        notify({
+          message: 'Step 4 has failed!',
+          description: err['message'],
+          type: 'error',
+        });
+        setSaving(false);
+      });
+  }
 
   return (
     <div className="listing-page">
@@ -158,6 +186,13 @@ export const DashboardListingView = () => {
                   collection={collection}
                   handleAction={processStep3}
                   saving={saving}
+                />
+              )}
+              {step === 4 && (
+                <CandyMachineStep
+                  collection={collection}
+                  saving={saving}
+                  handleAction={processStep4}
                 />
               )}
             </Col>
