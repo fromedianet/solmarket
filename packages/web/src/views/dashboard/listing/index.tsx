@@ -58,6 +58,14 @@ export const DashboardListingView = () => {
           });
         }
         setSaving(false);
+      })
+      .catch((err) => {
+        notify({
+          message: 'Step 3 has failed!',
+          description: err['message'],
+          type: 'error',
+        });
+        setSaving(false);
       });
   };
 
@@ -77,6 +85,14 @@ export const DashboardListingView = () => {
           });
         }
         setSaving(false);
+      })
+      .catch((err) => {
+        notify({
+          message: 'Step 3 has failed!',
+          description: err['message'],
+          type: 'error',
+        });
+        setSaving(false);
       });
   };
 
@@ -95,6 +111,14 @@ export const DashboardListingView = () => {
             type: 'error',
           });
         }
+        setSaving(false);
+      })
+      .catch((err) => {
+        notify({
+          message: 'Step 3 has failed!',
+          description: err['message'],
+          type: 'error',
+        });
         setSaving(false);
       });
   };

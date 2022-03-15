@@ -58,7 +58,7 @@ export const CollectionStep = ({
           />
         </Form.Item>
         <Form.Item>
-          <Button className="step-btn" htmlType="submit">
+          <Button className="step-btn" htmlType="submit" disabled={saving}>
             {saving ? (
               <Spin />
             ) : (

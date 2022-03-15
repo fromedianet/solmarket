@@ -42,7 +42,7 @@ export const IntroStep = ({
       </Radio.Group>
       <Button
         className="step-btn"
-        disabled={permission === 'no'}
+        disabled={permission === 'no' || saving}
         onClick={() => handleAction(permission)}
       >
         {saving ? (

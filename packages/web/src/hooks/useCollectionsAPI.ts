@@ -132,11 +132,6 @@ export const useCollectionsAPI = () => {
       const url = APIS.base_url + APIS.collections + '/step3';
       fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type':
-            'multipart/form-data; boundary=' +
-            Math.random().toString().substring(2),
-        },
         body: formData,
       })
         .then(res => res.json())
