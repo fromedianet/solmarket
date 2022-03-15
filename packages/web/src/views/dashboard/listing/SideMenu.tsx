@@ -11,7 +11,7 @@ export const SideMenu = ({
   setStep: (val) => void;
 }) => {
   return (
-    <div className="editor">
+    <div className="editor editor-sticky">
       <h6>Apply for Listing</h6>
       <Menu
         className="editor-menu"
