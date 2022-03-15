@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Switch, Select } from 'antd';
+import { Form, Input, Button, Switch, Select, Spin } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { notify } from '@oyster/common';
 
@@ -19,9 +19,11 @@ const MAX_FILE_SIZE = 5120 * 1024; // 5MB
 export const DetailsStep = ({
   collection,
   handleAction,
+  saving,
 }: {
   collection: {};
   handleAction: (params) => void;
+  saving: boolean;
 }) => {
   const [form] = Form.useForm();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -70,10 +72,16 @@ export const DetailsStep = ({
         image: selectedImage,
         banner: selectedBanner,
         is_derivative: isDerivative ? 1 : 0,
-        original_derivative_link: isDerivative ? values.original_derivative_link : null,
-        original_derivative_name: isDerivative ? values.original_derivative_name : null,
-        primary_category: values.primary_category === '-' ? null : values.primary_category,
-        secondary_category: values.secondary_category === '-' ? null : values.secondary_category,
+        original_derivative_link: isDerivative
+          ? values.original_derivative_link
+          : null,
+        original_derivative_name: isDerivative
+          ? values.original_derivative_name
+          : null,
+        primary_category:
+          values.primary_category === '-' ? null : values.primary_category,
+        secondary_category:
+          values.secondary_category === '-' ? null : values.secondary_category,
         twitter: values.twitter,
         discord: values.discord,
         website: values.website,
@@ -82,7 +90,7 @@ export const DetailsStep = ({
     } else {
       notify({
         message: 'Profile image is missing',
-        type: 'error'
+        type: 'error',
       });
     }
   };
@@ -130,7 +138,7 @@ export const DetailsStep = ({
                       message: 'Image size error',
                       description: 'Image size cannot exceed more then 5MB.',
                       type: 'error',
-                    })
+                    });
                   } else {
                     setSelectedImage(file);
                   }
@@ -163,7 +171,7 @@ export const DetailsStep = ({
                       message: 'Image size error',
                       description: 'Image size cannot exceed more then 5M.',
                       type: 'error',
-                    })
+                    });
                   } else {
                     setSelectedBanner(file);
                   }
@@ -288,7 +296,13 @@ export const DetailsStep = ({
         </>
         <Form.Item>
           <Button className="step-btn" htmlType="submit">
-            Sav & Proceed <ArrowRightOutlined />
+            {saving ? (
+              <Spin />
+            ) : (
+              <>
+                Sav & Proceed <ArrowRightOutlined />
+              </>
+            )}
           </Button>
         </Form.Item>
       </Form>

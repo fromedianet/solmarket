@@ -22,6 +22,7 @@ export const DashboardListingView = () => {
     collectionSubmit,
   } = useCollectionsAPI();
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [collection, setCollection] = useState({});
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export const DashboardListingView = () => {
   }, [id]);
 
   const processStep1 = permission => {
+    setSaving(true);
     collectionStep1({ _id: id, permission: permission })
       // @ts-ignore
       .then((res: {}) => {
@@ -55,10 +57,12 @@ export const DashboardListingView = () => {
             type: 'error',
           });
         }
+        setSaving(false);
       });
   };
 
   const processStep2 = (params: { name: string; symbol: string }) => {
+    setSaving(true);
     collectionStep2({ _id: id, ...params })
       // @ts-ignore
       .then((res: {}) => {
@@ -72,10 +76,12 @@ export const DashboardListingView = () => {
             type: 'error',
           });
         }
+        setSaving(false);
       });
   };
 
-  const processStep3 = (params) => {
+  const processStep3 = params => {
+    setSaving(true);
     collectionStep3({ _id: id, ...params })
       // @ts-ignore
       .then((res: {}) => {
@@ -89,6 +95,7 @@ export const DashboardListingView = () => {
             type: 'error',
           });
         }
+        setSaving(false);
       });
   };
 
@@ -112,18 +119,21 @@ export const DashboardListingView = () => {
                 <IntroStep
                   collection={collection}
                   handleAction={processStep1}
+                  saving={saving}
                 />
               )}
               {step === 2 && (
                 <CollectionStep
                   collection={collection}
                   handleAction={processStep2}
+                  saving={saving}
                 />
               )}
               {step === 3 && (
                 <DetailsStep
                   collection={collection}
                   handleAction={processStep3}
+                  saving={saving}
                 />
               )}
             </Col>

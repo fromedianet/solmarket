@@ -111,10 +111,20 @@ export const useCollectionsAPI = () => {
       if (props.image) formData.append('image', props.image);
       if (props.banner) formData.append('banner', props.banner);
       formData.append('is_derivative', props.is_derivative.toString());
-      if (props.derivative_original_link) formData.append('original_derivative_link', props.derivative_original_link);
-      if (props.derivative_original_name) formData.append('original_derivative_name', props.derivative_original_name);
-      if (props.primary_category) formData.append('primary_category', props.primary_category);
-      if (props.secondary_category) formData.append('secondary_category', props.secondary_category);
+      if (props.derivative_original_link)
+        formData.append(
+          'original_derivative_link',
+          props.derivative_original_link,
+        );
+      if (props.derivative_original_name)
+        formData.append(
+          'original_derivative_name',
+          props.derivative_original_name,
+        );
+      if (props.primary_category)
+        formData.append('primary_category', props.primary_category);
+      if (props.secondary_category)
+        formData.append('secondary_category', props.secondary_category);
       formData.append('twitter', props.twitter);
       formData.append('discord', props.discord);
       if (props.website) formData.append('website', props.website);
@@ -123,7 +133,9 @@ export const useCollectionsAPI = () => {
       fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'multipart/form-data; boundary=' + Math.random().toString().substring(2)
+          'Content-Type':
+            'multipart/form-data; boundary=' +
+            Math.random().toString().substring(2),
         },
         body: formData,
       })

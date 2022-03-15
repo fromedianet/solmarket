@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Spin } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 
 export const CollectionStep = ({
   collection,
   handleAction,
+  saving,
 }: {
   collection: {};
   handleAction: ({ name, symbol }) => void;
+  saving: boolean;
 }) => {
   const [form] = Form.useForm();
 
@@ -57,7 +59,13 @@ export const CollectionStep = ({
         </Form.Item>
         <Form.Item>
           <Button className="step-btn" htmlType="submit">
-            Save & Proceed <ArrowRightOutlined />
+            {saving ? (
+              <Spin />
+            ) : (
+              <>
+                Save & Proceed <ArrowRightOutlined />
+              </>
+            )}
           </Button>
         </Form.Item>
       </Form>

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Radio, Button, Space } from 'antd';
+import { Radio, Button, Space, Spin } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 
 export const IntroStep = ({
   collection,
   handleAction,
+  saving,
 }: {
   collection: {};
   handleAction: (permission: string) => void;
+  saving: boolean;
 }) => {
   const [permission, setPermission] = useState(
     collection['permission'] || 'author',
@@ -43,7 +45,13 @@ export const IntroStep = ({
         disabled={permission === 'no'}
         onClick={() => handleAction(permission)}
       >
-        Let&apos; Go <ArrowRightOutlined />
+        {saving ? (
+          <Spin />
+        ) : (
+          <>
+            Let&apos; Go <ArrowRightOutlined />
+          </>
+        )}
       </Button>
     </div>
   );
