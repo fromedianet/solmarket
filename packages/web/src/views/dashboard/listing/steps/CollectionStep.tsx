@@ -49,7 +49,9 @@ export const CollectionStep = ({
           name="symbol"
           rules={[
             { required: true, message: 'Collection symbol is required.' },
+            { pattern: new RegExp("^[a-zA-Z0-9_]+$"), message: 'Format is wrong'}
           ]}
+          extra='A-Z, a-z, 0-9, "_" is only available'
         >
           <Input
             placeholder="super_nft_collection"
