@@ -31,6 +31,7 @@ export const DetailsStep = ({
   const [selectedBanner, setSelectedBanner] = useState<File | null>(null);
   const [bannerUrl, setBannerUrl] = useState(collection['banner']);
   const [isDerivative, setDerivative] = useState(collection['is_derivative']);
+  const [primaryCategory, setPrimaryCategory] = useState('');
 
   useEffect(() => {
     if (selectedImage) {
@@ -221,7 +222,7 @@ export const DetailsStep = ({
             name="primary_category"
             extra="Select the primary category that you would like for this collection to be listed under"
           >
-            <Select className="category-select">
+            <Select className="category-select" onChange={val => setPrimaryCategory(val)}>
               {categories.map((val, index) => (
                 <Select.Option key={index} value={val}>
                   {val}
@@ -236,7 +237,7 @@ export const DetailsStep = ({
           >
             <Select className="category-select">
               {categories.map((val, index) => (
-                <Select.Option key={index} value={val}>
+                <Select.Option key={index} value={val} disabled={primaryCategory !== '-' && val === primaryCategory}>
                   {val}
                 </Select.Option>
               ))}
