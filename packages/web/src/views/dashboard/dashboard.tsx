@@ -64,6 +64,7 @@ export const Dashboard = ({ user }: { user: any }) => {
         });
       } else {
         Router.push(`/dashboard/listing/${_id}`);
+        Router.reload();
       }
     });
   };
