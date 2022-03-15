@@ -103,7 +103,7 @@ export const Dashboard = ({ user }: { user: any }) => {
               <Button onClick={handleCreate}>Create New Collection</Button>
             }
           >
-            <TabPane tab={<BadgeText count={5}>Drafts</BadgeText>} key={1}>
+            <TabPane tab={<BadgeText count={lists['drafts'].length}>Drafts</BadgeText>} key={1}>
               <span className="note">
                 These are your unsubmitted applications - only you can see
                 these. You can return and update these at any time.
@@ -117,7 +117,7 @@ export const Dashboard = ({ user }: { user: any }) => {
               </Row>
             </TabPane>
             <TabPane
-              tab={<BadgeText count={500}>Submissions</BadgeText>}
+              tab={<BadgeText count={lists['submissions'].length}>Submissions</BadgeText>}
               key={2}
             >
               <span className="note">
@@ -134,7 +134,7 @@ export const Dashboard = ({ user }: { user: any }) => {
                 ))}
               </Row>
             </TabPane>
-            <TabPane tab={<BadgeText count={5}>Reviewed</BadgeText>} key={3}>
+            <TabPane tab={<BadgeText count={lists['reviewed'].length}>Reviewed</BadgeText>} key={3}>
               <span className="note">
                 These applications have been reviewed and are awaiting final
                 action from you to go live. You can update the information in
@@ -151,7 +151,7 @@ export const Dashboard = ({ user }: { user: any }) => {
                 ))}
               </Row>
             </TabPane>
-            <TabPane tab={<BadgeText count={5}>Listed</BadgeText>} key={4}>
+            <TabPane tab={<BadgeText count={lists['listed'].length}>Listed</BadgeText>} key={4}>
               <span className="note">
                 These applications are live. You can update these at any time.
                 Please note: updates still need to be reviewed and accepted
@@ -165,7 +165,7 @@ export const Dashboard = ({ user }: { user: any }) => {
                 ))}
               </Row>
             </TabPane>
-            <TabPane tab={<BadgeText count={5}>Rejected</BadgeText>} key={5}>
+            <TabPane tab={<BadgeText count={lists['rejected'].length}>Rejected</BadgeText>} key={5}>
               <span className="note">
                 These applications have been reviewed and rejected. Please refer
                 to our content guidelines. You can edit your application and
