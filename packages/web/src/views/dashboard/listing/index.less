@@ -64,6 +64,24 @@
         margin-bottom: 16px;
       }
 
+      p.caption {
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 32px;
+        color: @text-primary-color;
+        margin-bottom: 16px;
+        margin-top: 32px;
+      }
+
+      p.description {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 18px;
+        padding: 0;
+        margin: 0;
+        color: @text-secondary-color;
+      }
+
       .radio-btn {
         display: flex;
         align-items: center;
@@ -98,14 +116,97 @@
         border: 1px solid @bg-table-odd;
 
         &.focus-visible {
-          border-color: #2563eb;
+          border-color: @border-pink;
         }
 
         &.ant-input-status-error {
           border-color: #ff4d4f;
         }
       }
+
+      .step-textarea {
+        width: 100%;
+        max-width: 400px;
+        background: @bg-table-even;
+        border: 1px solid @bg-table-odd;
+
+        &.focus-visible {
+          border-color: @border-pink;
+        }
+
+        &.ant-input-status-error {
+          border-color: #ff4d4f;
+        }
+      }
+
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 700px;
+        margin-top: 24px;
+
+        .preview-image {
+          max-width: 300px;
+          height: auto;
+          max-height: 300px;
+          object-fit: contain;
+          margin-bottom: 8px;
+        }
+
+        .preview-banner {
+          max-width: 600px;
+          height: auto;
+          max-height: 300px;
+          object-fit: contain;
+          margin-bottom: 8px;
+        }
+
+        .upload-btn {
+          width: 222px;
+          background: @bg-pink;
+          border-radius: 6px;
+          color: @text-primary-color;
+          font-size: 16px;
+          line-height: 48px;
+          font-weight: 700;
+          margin-bottom: 16px;
+          padding: 0;
+          cursor: pointer;
+          text-align: center;
+          transition: background-color .1s linear;
+
+          &:hover, &:focus {
+            opacity: 0.8;
+          }
+        }
+
+        .my-switch {
+          width: 44px;
+          margin-bottom: 8px;
+        }
+      }
     }
 
+  }
+}
+
+.category-select {
+  width: 400px !important;
+  height: 48px;
+  color: @text-primary-color;
+  background: @bg-table-even;
+  border: 1px solid @bg-table-odd;
+  border-radius: 6px;
+  margin-bottom: 8px;
+
+  &.ant-select-open {
+    border-color: @border-pink;
+  }
+
+  .ant-select-selector {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 }

@@ -8,6 +8,7 @@ import { SideMenu } from './SideMenu';
 import { IntroStep } from './steps/IntroStep';
 import { notify } from '@oyster/common';
 import { CollectionStep } from './steps/CollectionStep';
+import { DetailsStep } from './steps/DetailsStep';
 
 export const DashboardListingView = () => {
   const { id }: { id: string } = useParams();
@@ -74,6 +75,8 @@ export const DashboardListingView = () => {
       });
   };
 
+  const processStep3 = () => {};
+
   return (
     <div className="listing-page">
       <DashboardHeader />
@@ -100,6 +103,12 @@ export const DashboardListingView = () => {
                 <CollectionStep
                   collection={collection}
                   handleAction={processStep2}
+                />
+              )}
+              {step === 3 && (
+                <DetailsStep
+                  collection={collection}
+                  handleAction={processStep3}
                 />
               )}
             </Col>
