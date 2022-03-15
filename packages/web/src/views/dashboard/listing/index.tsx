@@ -67,7 +67,7 @@ export const DashboardListingView = () => {
           setStep(3);
         } else {
           notify({
-            message: 'Step 1 has failed!',
+            message: 'Step 2 has failed!',
             description: res['message'],
             type: 'error',
           });
@@ -75,7 +75,22 @@ export const DashboardListingView = () => {
       });
   };
 
-  const processStep3 = () => {};
+  const processStep3 = (params) => {
+    collectionStep3({ _id: id, ...params })
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollection(res['data']);
+          setStep(4);
+        } else {
+          notify({
+            message: 'Step 3 has failed!',
+            description: res['message'],
+            type: 'error',
+          });
+        }
+      });
+  };
 
   return (
     <div className="listing-page">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Switch, Select } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
+import { notify } from '@oyster/common';
 
 const { TextArea } = Input;
 const categories = [
@@ -13,13 +14,14 @@ const categories = [
   'photograpy',
   'sports',
 ];
+const MAX_FILE_SIZE = 5120 * 1024; // 5MB
 
 export const DetailsStep = ({
   collection,
   handleAction,
 }: {
   collection: {};
-  handleAction: (permission: string) => void;
+  handleAction: (params) => void;
 }) => {
   const [form] = Form.useForm();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -62,6 +64,27 @@ export const DetailsStep = ({
 
   const onFinish = values => {
     console.log(values);
+    if (selectedImage || collection['image']) {
+      const formData = {
+        description: values.description,
+        image: selectedImage,
+        banner: selectedBanner,
+        is_derivative: isDerivative ? 1 : 0,
+        original_derivative_link: isDerivative ? values.original_derivative_link : null,
+        original_derivative_name: isDerivative ? values.original_derivative_name : null,
+        primary_category: values.primary_category === '-' ? null : values.primary_category,
+        secondary_category: values.secondary_category === '-' ? null : values.secondary_category,
+        twitter: values.twitter,
+        discord: values.discord,
+        website: values.website,
+      };
+      handleAction(formData);
+    } else {
+      notify({
+        message: 'Profile image is missing',
+        type: 'error'
+      });
+    }
   };
 
   return (
@@ -100,7 +123,17 @@ export const DetailsStep = ({
               style={{ display: 'none' }}
               onChange={e => {
                 if (e.target.files) {
-                  setSelectedImage(e.target.files[0]);
+                  const file = e.target.files[0];
+                  console.log('file size', file.size);
+                  if (file.size > MAX_FILE_SIZE) {
+                    notify({
+                      message: 'Image size error',
+                      description: 'Image size cannot exceed more then 5MB.',
+                      type: 'error',
+                    })
+                  } else {
+                    setSelectedImage(file);
+                  }
                 }
               }}
             />
@@ -124,7 +157,16 @@ export const DetailsStep = ({
               style={{ display: 'none' }}
               onChange={e => {
                 if (e.target.files) {
-                  setSelectedBanner(e.target.files[0]);
+                  const file = e.target.files[0];
+                  if (file.size > MAX_FILE_SIZE) {
+                    notify({
+                      message: 'Image size error',
+                      description: 'Image size cannot exceed more then 5M.',
+                      type: 'error',
+                    })
+                  } else {
+                    setSelectedBanner(file);
+                  }
                 }
               }}
             />
