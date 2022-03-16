@@ -14,6 +14,6 @@ export default async function logout(req, res) {
     console.error(error);
   }
 
-  res.writeHead(302, { Location: '/dashboard/dashboard' });
+  res.writeHead(302, { Location: '/dashboard' });
   res.end();
 }

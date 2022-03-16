@@ -72,7 +72,7 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
       >
         <Menu.Item key="dashboard">
           <Link
-            to="/dashboard/dashboard"
+            to="/dashboard"
             target="_blank"
             rel="noopener noreferrer"
           >

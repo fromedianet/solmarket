@@ -7,7 +7,7 @@ export const DashboardHeader = () => {
         <img src="/papercity-logo.png" height={50} />
       </a>
       <div>
-        <a href="/dashboard/dashboard" className="header-menu">
+        <a href="/dashboard" className="header-menu">
           Dashboard
         </a>
         <a href="/dashboard/admin" className="header-menu">
