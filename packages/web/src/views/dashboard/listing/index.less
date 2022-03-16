@@ -179,22 +179,6 @@
         }
       }
 
-      .step-textarea {
-        width: 100%;
-        max-width: 400px;
-        background: @bg-table-even;
-        border: 1px solid @bg-table-odd;
-        color: @text-primary-color;
-
-        &.focus-visible {
-          border-color: @border-pink;
-        }
-
-        &.ant-input-status-error {
-          border-color: @bg-error;
-        }
-      }
-
       .form-container {
         display: flex;
         flex-direction: column;
@@ -331,3 +315,18 @@
   }
 }
 
+.step-textarea {
+  width: 100%;
+  max-width: 400px;
+  background: @bg-table-even;
+  border: 1px solid @bg-table-odd;
+  color: @text-primary-color;
+
+  &.focus-visible {
+    border-color: @border-pink;
+  }
+
+  &.ant-input-status-error {
+    border-color: @bg-error;
+  }
+}

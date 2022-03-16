@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Input, Button, Spin } from 'antd';
+import { Row, Col, Input, Button, Spin, Form } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { notify, useQuerySearch } from '@oyster/common';
+import { MetaplexModal, notify, useQuerySearch } from '@oyster/common';
 import moment from 'moment';
 import { useCollectionsAPI } from '../../../../hooks/useCollectionsAPI';
 
@@ -9,9 +9,11 @@ export const DashboardAdminDetails = () => {
   const { id } = useParams<{ id: string }>();
   const searchParams = useQuerySearch();
   const type = searchParams.get('type') || '';
+  const [form] = Form.useForm();
   const history = useHistory();
   const [collection, setCollection] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const { getCollectionById, updateCollectionStatus } = useCollectionsAPI();
 
   useEffect(() => {
@@ -36,8 +38,7 @@ export const DashboardAdminDetails = () => {
     updateCollectionStatus({
       _id: id,
       status: status,
-      // @ts-ignore
-    })
+    }) // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
           history.goBack();
@@ -56,7 +57,31 @@ export const DashboardAdminDetails = () => {
       });
   };
 
-  const handleReject = () => {};
+  const handleReject = (values) => {
+    updateCollectionStatus({
+      _id: id,
+      status: "rejected",
+      extra_info: values.reject_info
+    }) // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          history.goBack();
+        } else {
+          notify({
+            description: res['message'],
+            type: 'error',
+          });
+        }
+      })
+      .catch(err => {
+        notify({
+          message: err.message,
+          type: 'error',
+        });
+      });
+
+    setShowRejectModal(false);
+  };
 
   return (
     <div className="listing-page">
@@ -201,7 +226,7 @@ export const DashboardAdminDetails = () => {
                   <Button className="approve-btn" onClick={handleApprove}>
                     {type === 'submission' ? 'Approve' : 'List Now'}
                   </Button>
-                  <Button className="reject-btn" onClick={handleReject}>
+                  <Button className="reject-btn" onClick={() => setShowRejectModal(true)}>
                     Reject
                   </Button>
                 </div>
@@ -210,6 +235,35 @@ export const DashboardAdminDetails = () => {
           </div>
         )
       )}
+      <MetaplexModal
+        visible={showRejectModal}
+        onCancel={() => setShowRejectModal(false)}
+        centered={true}
+        title="Reject collection"
+      >
+        <Form form={form} layout="vertical" onFinish={handleReject}>
+          <Form.Item
+            label="Reject reason"
+            name="reject_info"
+            rules={[{ required: true, message: "Reject reason is required" }]}
+          >
+            <Input.TextArea
+              autoFocus
+              rows={4}
+              maxLength={1000}
+              className="step-textarea"
+            />
+          </Form.Item>
+          <Form.Item style={{ marginBottom: '8px' }}>
+            <Button
+              style={{ width: '100%', height: '40px', background: '#ff4d4f', border: 'none' }}
+              htmlType="submit"
+            >
+              Reject
+            </Button>
+          </Form.Item>
+        </Form>
+      </MetaplexModal>
     </div>
   );
 };
