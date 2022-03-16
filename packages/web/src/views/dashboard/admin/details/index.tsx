@@ -1,0 +1,186 @@
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Form, Input, Button, Spin } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
+import { notify, useQuerySearch } from '@oyster/common';
+import moment from 'moment';
+import { useCollectionsAPI } from '../../../../hooks/useCollectionsAPI';
+
+export const DashboardAdminDetails = () => {
+  const { id }: { id: string } = useParams();
+  const searchParams = useQuerySearch();
+  const type = searchParams.get('type') || '';
+  const history = useHistory();
+  const [collection, setCollection] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form] = Form.useForm();
+  const { getCollectionById } = useCollectionsAPI();
+
+  useEffect(() => {
+    console.log('--- useEffect ---', id, type);
+    setLoading(true);
+    // @ts-ignore
+    getCollectionById(id).then((res: {}) => {
+      if (res['data']) {
+        setCollection(res['data']);
+      } else {
+        notify({
+          message: res['message'],
+          type: 'error',
+        });
+        history.goBack();
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  return (
+    <div className='listing-page'>
+      {loading ? (
+        <div className='load-container'><Spin size='large'/></div>
+      ) : collection && (
+        <div className='listing-container'>
+          <div className="step-page">
+            <p className="step">The last step</p>
+            <h1>Review & Submit</h1>
+            <p className="label">
+              You are ready to submit your listing application. Please review the
+              details below and confirm it is correct. Click submit then you are ready
+              to submit.
+            </p>
+            <div className="review-container">
+              <Row style={{ marginBottom: 24 }}>
+                <Col span={10} className="review-label">
+                  legal permission:
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['permission']}
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>name:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['name']}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 24 }}>
+                <Col span={10} className="review-label">
+                  <span>symbol:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['symbol']}
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>total supply:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['mint_supply']}
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>description:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['description']}
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>category primary:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['primary_category']}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 24 }}>
+                <Col span={10} className="review-label">
+                  <span>category secondary:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['secondary_category']}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 24 }}>
+                <Col span={10} className="review-label">
+                  <span>collection pfp:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  <img
+                    src={collection['image']}
+                    alt="profile photo"
+                    width={200}
+                    height={200}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>twitter:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['twitter']}
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>discord:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['discord']}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 24 }}>
+                <Col span={10} className="review-label">
+                  <span>website:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['website']}
+                </Col>
+              </Row>
+              <Row>
+                <Col span={10} className="review-label">
+                  <span>candymachine ids:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {collection['candymachine_ids'].toString()}
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 24 }}>
+                <Col span={10} className="review-label">
+                  <span>mint date:</span>
+                </Col>
+                <Col span={14} className="review-content">
+                  {moment
+                    .utc(collection['launch_time'])
+                    .local()
+                    .format('YYYY-MM-DD HH:mm:ss')}
+                </Col>
+              </Row>
+            </div>
+            {/* <Form
+              form={form}
+              className="review-form"
+              layout="vertical"
+              autoComplete="off"
+              onFinish={onFinish}
+            >
+              <Form.Item label="Anything else we should know?" name="extra_info">
+                <Input.TextArea className="step-textarea" rows={4} maxLength={1000} />
+              </Form.Item>
+              <Form.Item>
+                <Button className="step-btn" htmlType="submit">
+                  {saving ? <Spin /> : <span>Submit</span>}
+                </Button>
+              </Form.Item>
+            </Form> */}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

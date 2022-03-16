@@ -1,6 +1,12 @@
 import { APIS } from '../constants';
 
 export const useCollectionsAPI = () => {
+  /**
+   * Craete new collection with uuid and email
+   * 
+   * @param props 
+   * @returns 
+   */
   function createCollection(props: { _id: string; email: string }) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collectionCreate;
@@ -19,6 +25,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Get collections by email
+   * 
+   * @param email 
+   * @returns 
+   */
   function getCollectionsByEmail(email: string) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collections + '/email/' + email;
@@ -36,9 +48,16 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Get collection by id
+   * 
+   * 
+   * @param _id 
+   * @returns 
+   */
   function getCollectionById(_id: string) {
     return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/' + _id;
+      const url = APIS.base_url + APIS.collections + '/id/' + _id;
       fetch(url, {
         method: 'GET',
         headers: {
@@ -52,6 +71,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Update collection step1 (permission)
+   * 
+   * @param props 
+   * @returns 
+   */
   function collectionStep1(props: { _id: string; permission: string }) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collections + '/step1';
@@ -69,6 +94,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Update colleciton step2 (name, symbol)
+   * 
+   * @param props 
+   * @returns 
+   */
   function collectionStep2(props: {
     _id: string;
     name: string;
@@ -90,6 +121,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Update collection step3 (image, social links, etc)
+   * 
+   * @param props 
+   * @returns 
+   */
   function collectionStep3(props: {
     _id: string;
     description: string | null;
@@ -140,6 +177,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Update collection step4 (candymachine id, launch time, mint supply)
+   * 
+   * @param props 
+   * @returns 
+   */
   function collectionStep4(props: {
     _id: string;
     candymachine_ids: string;
@@ -162,6 +205,12 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Submit collection
+   * 
+   * @param props 
+   * @returns 
+   */
   function collectionSubmit(props: { _id: string; extra_info: string | null }) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.collections + '/submit';
@@ -179,6 +228,27 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Get all collections for review (without draft)
+   * 
+   */
+  function getAllCollections() {
+    return new Promise((resolve, reject) => {
+      const url = APIS.base_url + APIS.collections + '/all';
+
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
   return {
     createCollection,
     getCollectionsByEmail,
@@ -188,5 +258,6 @@ export const useCollectionsAPI = () => {
     collectionStep3,
     collectionStep4,
     collectionSubmit,
+    getAllCollections,
   };
 };

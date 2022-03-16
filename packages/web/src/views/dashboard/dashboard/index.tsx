@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Button, Card, Row, Col } from 'antd';
+import { Tabs, Button, Row, Col } from 'antd';
 import { BadgeText } from '../../../components/BadgeText';
 import uuid from 'react-uuid';
 import Router from 'next/router';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
-import { Link } from 'react-router-dom';
-import { ArtContent } from '../../../components/ArtContent';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
 import { notify } from '@oyster/common';
 import { useDashboard } from '../../../contexts/dashboardProvider';
-
-TimeAgo.setDefaultLocale(en.locale);
-TimeAgo.addLocale(en);
-// Create formatter (English).
-const timeAgo = new TimeAgo('en-US');
+import { DashboardCollectionCard } from '../../../components/DashboardCollectionCard';
 
 const { TabPane } = Tabs;
 
@@ -71,30 +63,6 @@ export const DashboardView = () => {
     });
   };
 
-  const CardItem = ({ item }: { item: {} }) => {
-    return (
-      <Card className={`collection-card`} hoverable={true} bordered={false}>
-        <Link to={`/dashboard/listing/${item['_id']}`}>
-          <div className="image-over image-container">
-            <ArtContent
-              className="image no-event"
-              uri={item['image'] || ''}
-              preview={false}
-              artview={true}
-              allowMeshRender={false}
-            />
-          </div>
-          <div className="card-caption">
-            <h6>{item['name'] || 'Untitled'}</h6>
-            <span>{`Edited: ${timeAgo.format(
-              Date.parse(item['updated_at']),
-            )}`}</span>
-          </div>
-        </Link>
-      </Card>
-    );
-  };
-
   return (
     <div className="dashboard-container">
       <div className="container">
@@ -114,7 +82,7 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['drafts'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <CardItem item={item} />
+                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`} />
                 </Col>
               ))}
             </Row>
@@ -136,7 +104,7 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['submissions'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <CardItem item={item} />
+                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
                 </Col>
               ))}
             </Row>
@@ -158,7 +126,7 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['reviewed'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <CardItem item={item} />
+                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
                 </Col>
               ))}
             </Row>
@@ -175,7 +143,7 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['listed'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <CardItem item={item} />
+                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
                 </Col>
               ))}
             </Row>
@@ -194,7 +162,7 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['rejected'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <CardItem item={item} />
+                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
                 </Col>
               ))}
             </Row>

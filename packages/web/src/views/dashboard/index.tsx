@@ -10,16 +10,18 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
 
   if (!isConfigured) {
     return (
-      <div className="not-configured">
-        <span>Magic Link publishableKey required</span>
-        <Button
-          onClick={() => {
-            Router.push('/');
-            Router.reload();
-          }}
-        >
-          Return
-        </Button>
+      <div className="dashboard-layout">
+        <div className="not-configured">
+          <span>Magic Link publishableKey required</span>
+          <Button
+            onClick={() => {
+              Router.push('/');
+              Router.reload();
+            }}
+          >
+            Return
+          </Button>
+        </div>
       </div>
     );
   }

@@ -10,8 +10,8 @@ export const DashboardHeader = () => {
         <a href="/dashboard/dashboard" className="header-menu">
           Dashboard
         </a>
-        <a href="/dashboard/review" className="header-menu">
-          Review
+        <a href="/dashboard/admin" className="header-menu">
+          Admin
         </a>
       </div>
       {/* <a href="/api/logout" className="signout">
