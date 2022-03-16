@@ -55,8 +55,8 @@ export const CandyMachineStep = ({
         >
           <DatePicker
             placeholder="Pick a date and time"
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
+            showTime={{ format: 'HH:mm:ss' }}
+            format="YYYY-MM-DD HH:mm:ss"
             className="step-picker"
             inputReadOnly
           />

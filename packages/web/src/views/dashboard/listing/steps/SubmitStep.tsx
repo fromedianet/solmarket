@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Form, Input, Button, Spin } from 'antd';
+import moment from 'moment';
 
 const { TextArea } = Input;
 
@@ -140,7 +141,7 @@ export const SubmitStep = ({
             <span>mint date:</span>
           </Col>
           <Col span={14} className="review-content">
-            {collection['launch_time']}
+            {moment.utc(collection['launch_time']).local().format('YYYY-MM-DD HH:mm:ss')}
           </Col>
         </Row>
       </div>
