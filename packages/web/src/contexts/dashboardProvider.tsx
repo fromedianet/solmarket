@@ -1,15 +1,14 @@
 import React, {
   createContext,
   FC,
-  useState,
   useContext,
   useEffect,
+  useState,
 } from 'react';
-import { Magic } from 'magic-sdk';
 
 interface DashboardConfig {
-  user?: {};
-  loading: boolean;
+  user: {} | undefined;
+  fetching: boolean;
   isConfigured: boolean;
 }
 
@@ -21,29 +20,22 @@ export const DashboardProvider: FC<{
   const initMagicLinkKey =
     magicLinkKey || process.env.NEXT_PUBLIC_MAGICLINK_KEY;
   const isConfigured = Boolean(initMagicLinkKey);
-
-  const [data, setData] = useState<{ loading: boolean; user?: any }>({
-    loading: false,
-  });
+  const [user, setUser] = useState();
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
-    if (isConfigured) {
-      setData({ loading: true });
-      const magic = new Magic(initMagicLinkKey || '');
-      magic.user.isLoggedIn().then(isLoggedIn => {
-        if (isLoggedIn) {
-          magic.user.getMetadata().then(userData => {
-            setData({ loading: false, user: userData });
-          });
-        } else {
-          setData({ loading: false, user: null });
-        }
-      });
-    }
+    setFetching(true);
+    fetch('/api/user')
+      .then(res => res.json())
+      .then(data => {
+        setUser(data?.user);
+        setFetching(false);
+      })
+      .catch(() => setFetching(false));
   }, []);
 
   return (
-    <DashboardContext.Provider value={{ ...data, isConfigured }}>
+    <DashboardContext.Provider value={{ user, fetching, isConfigured }}>
       {children}
     </DashboardContext.Provider>
   );

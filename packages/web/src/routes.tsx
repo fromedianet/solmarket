@@ -28,7 +28,10 @@ import { CollectionCreateView } from './views/collectionCreate';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
-import { DashboardView } from './views/dashboard';
+import { DashboardListingView } from './views/dashboard/listing';
+import { DashboardView } from './views/dashboard/dashboard';
+import { DashboardAdmin } from './views/dashboard/admin';
+import { DashboardAdminDetails } from './views/dashboard/admin/details';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -125,6 +128,21 @@ export function Routes() {
               exact
               path="/dashboard"
               component={() => <DashboardView />}
+            />
+            <Route
+              exact
+              path="/dashboard/listing/:id"
+              component={() => <DashboardListingView />}
+            />
+            <Route
+              exact
+              path="/dashboard/admin"
+              component={() => <DashboardAdmin />}
+            />
+            <Route
+              exact
+              path="/dashboard/admin/:id"
+              component={() => <DashboardAdminDetails />}
             />
             <Route path="/" component={() => <HomeView />} />
           </Switch>

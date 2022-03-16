@@ -59,7 +59,7 @@ export function notify({
   toast(content, {
     position: 'top-center',
     theme: 'dark',
-    autoClose: 6000,
+    autoClose: 5000,
     hideProgressBar: false,
     pauseOnFocusLoss: false,
     type: type,

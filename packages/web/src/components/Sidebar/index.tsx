@@ -71,7 +71,9 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         icon={<CopyrightOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="dashboard">
-          <Link to="/dashboard">Apply for listing</Link>
+          <Link to="/dashboard" target="_blank" rel="noopener noreferrer">
+            Apply for listing
+          </Link>
         </Menu.Item>
         {/* <Menu.Item key="apply:2">Apply for Launchpad</Menu.Item> */}
       </SubMenu>

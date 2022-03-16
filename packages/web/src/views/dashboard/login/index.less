@@ -1,0 +1,111 @@
+.login-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  .login-area {
+    width: 100%;
+    background: #323232;
+    padding-bottom: 16px;
+
+    @media screen and (min-width: 480px) {
+      position: relative;
+      top: 48px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 16px;
+      width: 400px;
+      height: fit-content;
+      box-shadow: 0 12px 56px rgb(119 118 122 / 15%);
+      border-radius: 28px;
+    }
+
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 32px 0;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      margin: auto;
+      max-width: 313px;
+
+      .logo {
+        height: 60px;
+        object-fit: contain;
+        max-width: 300px;
+        overflow: hidden;
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        color: white;
+      }
+
+      .login-form {
+        width: 100%;
+        margin-top: 16px;
+
+        .ant-input {
+          width: 100%;
+          border: 1px solid #545454;
+          background: transparent;
+
+          &:hover {
+            border-color: @bg-pink;
+          }
+
+          &:focus {
+            border-color: @bg-pink;
+            border-width: 2px;
+          }
+        }
+
+        .ant-input-status-error {
+          border-color: #ff7875;
+
+          &.ant-input:focus {
+            border-color: #ff7875;
+          }
+        }
+
+        .ant-btn {
+          width: 100%;
+          height: 40px;
+          background: @bg-pink;
+
+          &:hover, &:focus {
+            opacity: 0.8;
+            border-color: @border-pink;
+          }
+        }
+      }
+
+      .error-msg {
+        color: @bg-error;
+        font-size: 14px;
+      }
+
+      .bottom-container, .bottom-container a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-top: 16px;
+        margin-bottom: 16px;
+
+        .text {
+          margin-right: 10px;
+          font-size: 12px;
+          color: #77767a;
+        }
+
+      }
+    }
+  }  
+}

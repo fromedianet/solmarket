@@ -14,6 +14,7 @@ import { CoingeckoProvider } from './contexts/coingecko';
 import { DashboardProvider } from './contexts/dashboardProvider';
 import SidebarProvider from './contexts/sidebar';
 import { SPLTokenListProvider } from './contexts/tokenList';
+import { DashboardLayout } from './views/dashboard';
 
 export const Providers: FC = ({ children }) => {
   const location = useLocation();
@@ -23,7 +24,7 @@ export const Providers: FC = ({ children }) => {
     <>
       {isDashboard ? (
         <DashboardProvider magicLinkKey={process.env.NEXT_PUBLIC_MAGICLINK_KEY}>
-          {children}
+          <DashboardLayout>{children}</DashboardLayout>
         </DashboardProvider>
       ) : (
         <ConnectionProvider>

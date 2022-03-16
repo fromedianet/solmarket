@@ -5,8 +5,6 @@ import { Layout } from 'antd';
 import { AppBar } from '../AppBar';
 // import { Footer } from '../Footer';
 import { Sidebar } from '../Sidebar';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import useWindowDimensions from '../../utils/layout';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 
@@ -34,7 +32,6 @@ export const AppLayout = React.memo(function AppLayoutImpl(props: any) {
         </div>
       </Layout>
       {/*<Footer />*/}
-      <ToastContainer />
     </div>
   );
 });
