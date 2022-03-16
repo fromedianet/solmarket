@@ -2,22 +2,17 @@ import React, {
   createContext,
   FC,
   useContext,
+  useEffect,
+  useState,
 } from 'react';
-import useSWR from 'swr';
 
 interface DashboardConfig {
-  user?: {};
+  user: {} | undefined;
+  fetching: boolean;
   isConfigured: boolean;
 }
 
 export const DashboardContext = createContext<DashboardConfig>(null!);
-
-const fetcher = (url) =>
-  fetch(url)
-    .then((r) => r.json())
-    .then((data) => {
-      return { user: data?.user || null }
-    })
 
 export const DashboardProvider: FC<{
   magicLinkKey?: string;
@@ -25,12 +20,22 @@ export const DashboardProvider: FC<{
   const initMagicLinkKey =
     magicLinkKey || process.env.NEXT_PUBLIC_MAGICLINK_KEY;
   const isConfigured = Boolean(initMagicLinkKey);
+  const [user, setUser] = useState();
+  const [fetching, setFetching] = useState(false);
 
-  const { data } = useSWR('/api/user', fetcher);
-  const user = data?.user || null;
+  useEffect(() => {
+    setFetching(true);
+    fetch('/api/user')
+      .then(res => res.json())
+      .then(data => {
+        setUser(data?.user);
+        setFetching(false);
+      })
+      .catch(() => setFetching(false));
+  }, []);
 
   return (
-    <DashboardContext.Provider value={{ user, isConfigured }}>
+    <DashboardContext.Provider value={{ user, fetching, isConfigured }}>
       {children}
     </DashboardContext.Provider>
   );

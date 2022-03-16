@@ -82,7 +82,10 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['drafts'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`} />
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/listing/${item['_id']}`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -104,7 +107,10 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['submissions'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/listing/${item['_id']}`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -126,7 +132,10 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['reviewed'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/listing/${item['_id']}`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -143,7 +152,10 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['listed'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/listing/${item['_id']}`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -162,7 +174,10 @@ export const DashboardView = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['rejected'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/listing/${item["_id"]}`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/listing/${item['_id']}`}
+                  />
                 </Col>
               ))}
             </Row>

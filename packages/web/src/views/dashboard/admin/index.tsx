@@ -53,7 +53,10 @@ export const DashboardAdmin = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['submissions'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/admin/${item["_id"]}?type=submission`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/admin/${item['_id']}?type=submission`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -71,7 +74,10 @@ export const DashboardAdmin = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['reviewed'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/admin/${item["_id"]}?type=reviewed`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/admin/${item['_id']}?type=reviewed`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -80,13 +86,14 @@ export const DashboardAdmin = () => {
             tab={<BadgeText count={lists['listed'].length}>Listed</BadgeText>}
             key={3}
           >
-            <span className="note">
-              These applications are live.
-            </span>
+            <span className="note">These applications are live.</span>
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['listed'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/admin/${item["_id"]}?type=listed`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/admin/${item['_id']}?type=listed`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -103,7 +110,10 @@ export const DashboardAdmin = () => {
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
               {lists['rejected'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
-                  <DashboardCollectionCard item={item} link={`/dashboard/admin/${item["_id"]}?type=rejected`}/>
+                  <DashboardCollectionCard
+                    item={item}
+                    link={`/dashboard/admin/${item['_id']}?type=rejected`}
+                  />
                 </Col>
               ))}
             </Row>
@@ -111,5 +121,5 @@ export const DashboardAdmin = () => {
         </Tabs>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -128,7 +128,7 @@
         }
 
         &.ant-input-status-error {
-          border-color: #ff4d4f;
+          border-color: @bg-error;
         }
       }
 
@@ -148,7 +148,7 @@
         }
 
         &.ant-input-number-status-error {
-          border-color: #ff4d4f;
+          border-color: @bg-error;
         }
       }
 
@@ -166,7 +166,7 @@
         }
 
         &.ant-picker-status-error {
-          border-color: #ff4d4f;
+          border-color: @bg-error;
         }
 
         .ant-picker-suffix {
@@ -191,7 +191,7 @@
         }
 
         &.ant-input-status-error {
-          border-color: #ff4d4f;
+          border-color: @bg-error;
         }
       }
 
@@ -292,6 +292,40 @@
     .review-form {
       @media screen and (min-width: 768px) {
         margin-left: 48px;
+      }
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+
+      .approve-btn {
+        height: 48px;
+        background: @bg-pink;
+        margin: 0 16px;
+        padding-left: 32px;
+        padding-right: 32px;
+        border: none;
+
+        &:hover {
+          opacity: .8;
+        }
+      }
+
+      .reject-btn {
+        height: 48px;
+        background: transparent;
+        margin: 0 16px;
+        padding-left: 32px;
+        padding-right: 32px;
+        border: 1px solid @bg-error;
+        color: @bg-error;
+
+        &:hover {
+          opacity: .8;
+          background-color: @bg-error;
+          color: white;
+        }
       }
     }
   }

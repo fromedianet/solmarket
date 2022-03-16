@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import { Login } from './login';
 import { useDashboard } from '../../contexts/dashboardProvider';
 import Router from 'next/router';
 import { DashboardHeader } from './header';
 
 export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
-  const { user, isConfigured } = useDashboard();
+  const { user, fetching, isConfigured } = useDashboard();
 
   if (!isConfigured) {
     return (
@@ -28,7 +28,11 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
 
   return (
     <div className="dashboard-layout">
-      {user ? (
+      {fetching ? (
+        <div className="load-container">
+          <Spin size="large" />
+        </div>
+      ) : user ? (
         <>
           <DashboardHeader />
           {props.children}

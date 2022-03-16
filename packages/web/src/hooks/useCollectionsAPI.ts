@@ -3,9 +3,9 @@ import { APIS } from '../constants';
 export const useCollectionsAPI = () => {
   /**
    * Craete new collection with uuid and email
-   * 
-   * @param props 
-   * @returns 
+   *
+   * @param props
+   * @returns
    */
   function createCollection(props: { _id: string; email: string }) {
     return new Promise((resolve, reject) => {
@@ -27,9 +27,9 @@ export const useCollectionsAPI = () => {
 
   /**
    * Get collections by email
-   * 
-   * @param email 
-   * @returns 
+   *
+   * @param email
+   * @returns
    */
   function getCollectionsByEmail(email: string) {
     return new Promise((resolve, reject) => {
@@ -50,10 +50,10 @@ export const useCollectionsAPI = () => {
 
   /**
    * Get collection by id
-   * 
-   * 
-   * @param _id 
-   * @returns 
+   *
+   *
+   * @param _id
+   * @returns
    */
   function getCollectionById(_id: string) {
     return new Promise((resolve, reject) => {
@@ -73,9 +73,9 @@ export const useCollectionsAPI = () => {
 
   /**
    * Update collection step1 (permission)
-   * 
-   * @param props 
-   * @returns 
+   *
+   * @param props
+   * @returns
    */
   function collectionStep1(props: { _id: string; permission: string }) {
     return new Promise((resolve, reject) => {
@@ -96,9 +96,9 @@ export const useCollectionsAPI = () => {
 
   /**
    * Update colleciton step2 (name, symbol)
-   * 
-   * @param props 
-   * @returns 
+   *
+   * @param props
+   * @returns
    */
   function collectionStep2(props: {
     _id: string;
@@ -123,9 +123,9 @@ export const useCollectionsAPI = () => {
 
   /**
    * Update collection step3 (image, social links, etc)
-   * 
-   * @param props 
-   * @returns 
+   *
+   * @param props
+   * @returns
    */
   function collectionStep3(props: {
     _id: string;
@@ -179,9 +179,9 @@ export const useCollectionsAPI = () => {
 
   /**
    * Update collection step4 (candymachine id, launch time, mint supply)
-   * 
-   * @param props 
-   * @returns 
+   *
+   * @param props
+   * @returns
    */
   function collectionStep4(props: {
     _id: string;
@@ -207,13 +207,17 @@ export const useCollectionsAPI = () => {
 
   /**
    * Submit collection
-   * 
-   * @param props 
-   * @returns 
+   *
+   * @param props
+   * @returns
    */
-  function collectionSubmit(props: { _id: string; extra_info: string | null }) {
+  function updateCollectionStatus(props: {
+    _id: string;
+    status: string;
+    extra_info?: string | null;
+  }) {
     return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/submit';
+      const url = APIS.base_url + APIS.collections + '/updateStatus';
       fetch(url, {
         method: 'POST',
         headers: {
@@ -230,7 +234,7 @@ export const useCollectionsAPI = () => {
 
   /**
    * Get all collections for review (without draft)
-   * 
+   *
    */
   function getAllCollections() {
     return new Promise((resolve, reject) => {
@@ -257,7 +261,7 @@ export const useCollectionsAPI = () => {
     collectionStep2,
     collectionStep3,
     collectionStep4,
-    collectionSubmit,
+    updateCollectionStatus,
     getAllCollections,
   };
 };

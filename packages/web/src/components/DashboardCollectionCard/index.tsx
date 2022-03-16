@@ -10,7 +10,13 @@ TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo('en-US');
 
-export const DashboardCollectionCard = ({ item, link }: { item: {}, link: string }) => {
+export const DashboardCollectionCard = ({
+  item,
+  link,
+}: {
+  item: {};
+  link: string;
+}) => {
   return (
     <Card className={`collection-card`} hoverable={true} bordered={false}>
       <Link to={link}>

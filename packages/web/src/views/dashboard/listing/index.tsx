@@ -22,7 +22,7 @@ export const DashboardListingView = () => {
     collectionStep2,
     collectionStep3,
     collectionStep4,
-    collectionSubmit,
+    updateCollectionStatus,
   } = useCollectionsAPI();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -154,7 +154,11 @@ export const DashboardListingView = () => {
 
   const processStep5 = extra_info => {
     setSaving(true);
-    collectionSubmit({ _id: id, extra_info: extra_info })
+    updateCollectionStatus({
+      _id: id,
+      status: 'submitted',
+      extra_info: extra_info,
+    })
       // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
