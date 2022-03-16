@@ -124,7 +124,7 @@ export function Routes() {
             <Route path="/about" component={() => <StaticPageView />} />
             <Route
               exact
-              path="/dashboard"
+              path="/dashboard/dashboard"
               component={() => <DashboardView />}
             />
             <Route

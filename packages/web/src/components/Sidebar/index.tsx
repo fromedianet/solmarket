@@ -71,7 +71,11 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         icon={<CopyrightOutlined style={{ fontSize: 20 }} />}
       >
         <Menu.Item key="dashboard">
-          <Link to="/dashboard" target="_blank" rel="noopener noreferrer">
+          <Link
+            to="/dashboard/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Apply for listing
           </Link>
         </Menu.Item>

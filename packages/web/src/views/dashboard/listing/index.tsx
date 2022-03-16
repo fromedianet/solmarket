@@ -35,7 +35,10 @@ export const DashboardListingView = () => {
       if (res['data']) {
         setCollection(res['data']);
       } else {
-        history.replace('/dashboard');
+        notify({
+          message: res['message'],
+          type: 'error',
+        });
       }
       setLoading(false);
     });
