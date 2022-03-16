@@ -1,143 +1,19 @@
-.login-page {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  max-width: 1600px;
-  margin: 0 auto;
-
-  .login-area {
-    width: 100%;
-    background: #323232;
-    padding-bottom: 16px;
-
-    @media screen and (min-width: 480px) {
-      position: relative;
-      top: 48px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 16px;
-      width: 400px;
-      height: fit-content;
-      box-shadow: 0 12px 56px rgb(119 118 122 / 15%);
-      border-radius: 28px;
-    }
-
-    .login-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px 32px 0;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      margin: auto;
-      max-width: 313px;
-
-      .logo {
-        height: 60px;
-        object-fit: contain;
-        max-width: 300px;
-        overflow: hidden;
-        margin-bottom: 24px;
-      }
-
-      h1 {
-        color: white;
-      }
-
-      .login-form {
-        width: 100%;
-        margin-top: 16px;
-
-        .ant-input {
-          width: 100%;
-          border: 1px solid #545454;
-          background: transparent;
-
-          &:hover {
-            border-color: @bg-pink;
-          }
-
-          &:focus {
-            border-color: @bg-pink;
-            border-width: 2px;
-          }
-        }
-
-        .ant-input-status-error {
-          border-color: #ff7875;
-
-          &.ant-input:focus {
-            border-color: #ff7875;
-          }
-        }
-
-        .ant-btn {
-          width: 100%;
-          height: 40px;
-          background: @bg-pink;
-
-          &:hover, &:focus {
-            opacity: 0.8;
-            border-color: @border-pink;
-          }
-        }
-      }
-
-      .error-msg {
-        color: #ff4d4f;
-        font-size: 14px;
-      }
-
-      .bottom-container, .bottom-container a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        margin-top: 16px;
-        margin-bottom: 16px;
-
-        .text {
-          margin-right: 10px;
-          font-size: 12px;
-          color: #77767a;
-        }
-
-      }
-    }
-  }  
-}
-
-.not-configured, .load-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.dashboard-layout {
   width: 100%;
-  margin-top: 80px;
-
-  span {
-    color: @text-secondary-color;
-    font-size: 20px;
-    margin-bottom: 32px;
-  }
-}
-
-.dashboard-page, .listing-page {
-  background: @bg-primary-color;
-  width: 100vw;
   height: 100%;
   min-height: 100vh;
+  background-color: @bg-primary-color;
 
   .header {
     position: sticky;
     top: 0;
     display: flex;
     justify-content: space-between;
+    background-color: @bg-primary-color;
     align-items: center;
     width: 100%;
     padding: 40px 16px 16px 16px;
+    z-index: 9999;
 
     a {
       cursor: pointer;
@@ -147,9 +23,10 @@
       height: 50px;
     }
 
-    .signout {
+    .header-menu {
       font-size: 14px;
       color: white;
+      margin-left: 16px;
     }
   }
 
@@ -161,68 +38,17 @@
     }
   }
 
-  .dashboard-container {
-    padding-top: 60px;
-    padding-bottom: 60px;
-
-    .container {
-      padding: 0 32px;
-    }
-
-    .note {
-      font-size: 20px;
+  .not-configured, .load-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 80px;
+  
+    span {
       color: @text-secondary-color;
-    }
-
-    .ant-tabs-top, .ant-tabs-bottom {
-      & .ant-tabs-nav::before {
-        border-bottom-width: 0;
-      }
-
-      & .ant-tabs-ink-bar {
-        height: 0;
-      }
-    }
-
-    .ant-tabs-nav {
-      flex-wrap: wrap;
-
-      .ant-tabs-nav-list {
-        background-color: #111827;
-        flex-wrap: wrap;
-      }
-  
-      .ant-tabs-tab + .ant-tabs-tab {
-        margin: 0;
-      }
-  
-      .ant-tabs-extra-content {
-        margin-top: 16px;
-
-        @media screen and (min-width: 832px) {
-          margin-top: 0;
-        }
-      }
-    }
-
-    .collection-card {
-      &:hover {
-        background: @bg-pink;
-      }
-
-      .card-caption {
-        text-align: left;
-
-        h6 {
-          color: @text-primary-color;
-          font-size: 16px;
-        }
-
-        span {
-          color: @text-secondary-color;
-          font-size: 14px;
-        }
-      }
+      font-size: 20px;
+      margin-bottom: 32px;
     }
   }
 }

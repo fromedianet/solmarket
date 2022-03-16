@@ -28,8 +28,8 @@ import { CollectionCreateView } from './views/collectionCreate';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
-import { DashboardView } from './views/dashboard';
 import { DashboardListingView } from './views/dashboard/listing';
+import { DashboardView } from './views/dashboard/dashboard';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';

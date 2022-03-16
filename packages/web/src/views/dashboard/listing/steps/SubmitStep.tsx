@@ -141,7 +141,10 @@ export const SubmitStep = ({
             <span>mint date:</span>
           </Col>
           <Col span={14} className="review-content">
-            {moment.utc(collection['launch_time']).local().format('YYYY-MM-DD HH:mm:ss')}
+            {moment
+              .utc(collection['launch_time'])
+              .local()
+              .format('YYYY-MM-DD HH:mm:ss')}
           </Col>
         </Row>
       </div>

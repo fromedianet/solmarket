@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Row, Col, Spin } from 'antd';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
-import { DashboardHeader } from '../header';
 import { EmptyView } from '../../../components/EmptyView';
 import { SideMenu } from './SideMenu';
 import { IntroStep } from './steps/IntroStep';
@@ -36,10 +35,7 @@ export const DashboardListingView = () => {
       if (res['data']) {
         setCollection(res['data']);
       } else {
-        notify({
-          message: res['message'],
-          type: 'error',
-        });
+        history.replace('/dashboard');
       }
       setLoading(false);
     });
@@ -186,7 +182,6 @@ export const DashboardListingView = () => {
 
   return (
     <div className="listing-page">
-      <DashboardHeader />
       {loading ? (
         <div className="load-container">
           <Spin size="large" />
