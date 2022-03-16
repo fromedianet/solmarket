@@ -34,7 +34,7 @@ export const DashboardAdminDetails = () => {
   }, [id]);
 
   const handleApprove = () => {
-    const status = type === 'submission' ? 'reviewed' : 'listed';
+    const status = type === 'submitted' ? 'reviewed' : 'listed';
     updateCollectionStatus({
       _id: id,
       status: status,
@@ -57,11 +57,11 @@ export const DashboardAdminDetails = () => {
       });
   };
 
-  const handleReject = (values) => {
+  const handleReject = values => {
     updateCollectionStatus({
       _id: id,
-      status: "rejected",
-      extra_info: values.reject_info
+      status: 'rejected',
+      extra_info: values.reject_info,
     }) // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
@@ -93,12 +93,12 @@ export const DashboardAdminDetails = () => {
         Object.keys(collection).length > 0 && (
           <div className="listing-container container">
             <div className="step-page" style={{ maxWidth: 1024 }}>
-              <h1>Review</h1>
-              <p className="label">
-                You are ready to submit your listing application. Please review
-                the details below and confirm it is correct. Click submit then
-                you are ready to submit.
-              </p>
+              {(type === 'submitted' || type === 'reviewed') && <h1>Review</h1>}
+              {type === 'rejected' && (
+                <p className="label" style={{ color: '#ffa600' }}>
+                  Rejection reason: rejected - ***
+                </p>
+              )}
               <div className="review-container">
                 <Row style={{ marginBottom: 24 }}>
                   <Col span={10} className="review-label">
@@ -221,14 +221,22 @@ export const DashboardAdminDetails = () => {
                   </Col>
                 </Row>
               </div>
-              {(type === 'submission' || type === 'reviewed') && (
+              {(type === 'submitted' || type === 'reviewed') && (
                 <div className="btn-container">
                   <Button className="approve-btn" onClick={handleApprove}>
-                    {type === 'submission' ? 'Approve' : 'List Now'}
+                    {type === 'submitted' ? 'Approve' : 'List Now'}
                   </Button>
-                  <Button className="reject-btn" onClick={() => setShowRejectModal(true)}>
+                  <Button
+                    className="reject-btn"
+                    onClick={() => setShowRejectModal(true)}
+                  >
                     Reject
                   </Button>
+                </div>
+              )}
+              {type === 'listed' && (
+                <div className="btn-container">
+                  <Button className="approve-btn">Explore collection</Button>
                 </div>
               )}
             </div>
@@ -245,7 +253,7 @@ export const DashboardAdminDetails = () => {
           <Form.Item
             label="Reject reason"
             name="reject_info"
-            rules={[{ required: true, message: "Reject reason is required" }]}
+            rules={[{ required: true, message: 'Reject reason is required' }]}
           >
             <Input.TextArea
               autoFocus
@@ -256,7 +264,12 @@ export const DashboardAdminDetails = () => {
           </Form.Item>
           <Form.Item style={{ marginBottom: '8px' }}>
             <Button
-              style={{ width: '100%', height: '40px', background: '#ff4d4f', border: 'none' }}
+              style={{
+                width: '100%',
+                height: '40px',
+                background: '#ff4d4f',
+                border: 'none',
+              }}
               htmlType="submit"
             >
               Reject

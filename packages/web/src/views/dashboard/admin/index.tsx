@@ -10,7 +10,7 @@ const { TabPane } = Tabs;
 export const DashboardAdmin = () => {
   const { getAllCollections } = useCollectionsAPI();
   const [lists, setLists] = useState({
-    submissions: [],
+    submitted: [],
     reviewed: [],
     listed: [],
     rejected: [],
@@ -21,7 +21,7 @@ export const DashboardAdmin = () => {
     getAllCollections().then((res: {}) => {
       if (res['data']) {
         setLists({
-          submissions: res['data'].filter(item => item.status === 'submitted'),
+          submitted: res['data'].filter(item => item.status === 'submitted'),
           reviewed: res['data'].filter(item => item.status === 'reviewed'),
           listed: res['data'].filter(item => item.status === 'listed'),
           rejected: res['data'].filter(item => item.status === 'rejected'),
@@ -41,9 +41,7 @@ export const DashboardAdmin = () => {
         <Tabs>
           <TabPane
             tab={
-              <BadgeText count={lists['submissions'].length}>
-                Submissions
-              </BadgeText>
+              <BadgeText count={lists['submitted'].length}>submitted</BadgeText>
             }
             key={1}
           >
@@ -51,11 +49,11 @@ export const DashboardAdmin = () => {
               These applications have been submitted for review.
             </span>
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
-              {lists['submissions'].map((item, index) => (
+              {lists['submitted'].map((item, index) => (
                 <Col key={index} span={24} md={12} lg={8} xl={6}>
                   <DashboardCollectionCard
                     item={item}
-                    link={`/dashboard/admin/${item['_id']}?type=submission`}
+                    link={`/dashboard/admin/${item['_id']}?type=submitted`}
                   />
                 </Col>
               ))}
