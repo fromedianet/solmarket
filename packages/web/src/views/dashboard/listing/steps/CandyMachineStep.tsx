@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, InputNumber, DatePicker, Button, Spin } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 export const CandyMachineStep = ({
@@ -103,7 +104,13 @@ export const CandyMachineStep = ({
         </Form.Item>
         <Form.Item>
           <Button className="step-btn" htmlType="submit">
-            {saving ? <Spin /> : <span>Review</span>}
+            {saving ? (
+              <Spin />
+            ) : (
+              <span>
+                Review <ArrowRightOutlined />
+              </span>
+            )}
           </Button>
         </Form.Item>
       </Form>
