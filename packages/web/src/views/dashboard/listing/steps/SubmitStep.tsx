@@ -136,6 +136,14 @@ export const SubmitStep = ({
             {collection['candymachine_ids'].toString()}
           </Col>
         </Row>
+        <Row>
+          <Col span={10} className="review-label">
+            <span>mint price:</span>
+          </Col>
+          <Col span={14} className="review-content">
+            {`${collection['mint_price']} SOL`}
+          </Col>
+        </Row>
         <Row style={{ marginBottom: 24 }}>
           <Col span={10} className="review-label">
             <span>mint date:</span>
