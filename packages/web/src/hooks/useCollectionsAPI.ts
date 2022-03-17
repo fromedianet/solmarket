@@ -178,7 +178,7 @@ export const useCollectionsAPI = () => {
   }
 
   /**
-   * Update collection step4 (candymachine id, launch time, mint supply)
+   * Update collection step4 (candymachine id, launch time, mint supply, mint price)
    *
    * @param props
    * @returns
@@ -187,6 +187,7 @@ export const useCollectionsAPI = () => {
     _id: string;
     candymachine_ids: string;
     mint_supply: number;
+    mint_price: number;
     launch_time: number;
   }) {
     return new Promise((resolve, reject) => {
@@ -276,7 +277,7 @@ export const useCollectionsAPI = () => {
   /**
    * Get all live new collections
    */
-   function newCollections() {
+  function newCollections() {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.newCollections;
 
@@ -296,9 +297,30 @@ export const useCollectionsAPI = () => {
   /**
    * Get all live collections
    */
-   function featuredCollectionsCarousel() {
+  function featuredCollectionsCarousel() {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.featuredCollectionsCarousel;
+
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
+  /**
+   * Get all collections for review (without draft)
+   *
+   */
+  function launchpadCollections() {
+    return new Promise((resolve, reject) => {
+      const url = APIS.base_url + APIS.launchpadCollections;
 
       fetch(url, {
         method: 'GET',
@@ -325,6 +347,7 @@ export const useCollectionsAPI = () => {
     getAllCollections,
     allCollections,
     newCollections,
-    featuredCollectionsCarousel
+    featuredCollectionsCarousel,
+    launchpadCollections,
   };
 };

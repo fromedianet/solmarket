@@ -1,6 +1,6 @@
-import { CountdownState } from "@oyster/common";
-import moment from "moment";
-import { useEffect, useState } from "react";
+import { CountdownState } from '@oyster/common';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 
 const ended = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 // date: utc date string
@@ -18,27 +18,26 @@ export const useCountdown = (date: string, showCountdown: boolean) => {
     } else {
       const calc = () => {
         const newState = timeToEnd(date);
-  
+
         setState(newState);
       };
-  
+
       const interval = setInterval(() => {
         calc();
       }, 1000);
-  
+
       calc();
       return () => clearInterval(interval);
     }
-    
   }, [date]);
 
-  return {isEnded, state};
-}
+  return { isEnded, state };
+};
 
 /**
- * 
+ *
  * @param string date - utc date string
- * @returns 
+ * @returns
  */
 function timeToEnd(date: string): CountdownState {
   const now = moment().unix();
@@ -65,7 +64,6 @@ function timeToEnd(date: string): CountdownState {
 function checkIsEnded(date: string): boolean {
   const now = moment().unix();
   const endAt = moment.utc(date).unix();
-  console.log(date, moment.utc(date));
 
   if (endAt - now > 0) {
     return false;

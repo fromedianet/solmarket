@@ -44,56 +44,58 @@ export const SalesListView = () => {
         <div className="section-header">
           <span className="section-title">Launchpad Drops</span>
         </div>
-        {isLoading ? (
-          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-        ) : featuredCollections['launchpad-collections'] && (
-          <HorizontalGrid
-            childrens={featuredCollections['launchpad-collections'].map((item, index) => (
-              <HomeCard
-                key={index}
-                item={item}
-                link={`/launchpad/${item['symbol']}`}
-                showCountdown={true}
+        {isLoading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : featuredCollections['launchpad-collections'] && (
+              <HorizontalGrid
+                childrens={featuredCollections['launchpad-collections'].map(
+                  (item, index) => (
+                    <HomeCard
+                      key={index}
+                      item={item}
+                      link={`/launchpad/${item['symbol']}`}
+                      showCountdown={true}
+                    />
+                  ),
+                )}
               />
-            ))}
-          />
-        )}
+            )}
       </div>
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Upcoming Collections</span>
         </div>
-        {isLoading ? (
-          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-        ) : featuredCollections['upcoming-collections'] && (
-          <HorizontalGrid
-            childrens={featuredCollections['upcoming-collections'].map((item, index) => (
-              <HomeCard
-                key={index}
-                item={item}
-                link={item['twitter']}
+        {isLoading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : featuredCollections['upcoming-collections'] && (
+              <HorizontalGrid
+                childrens={featuredCollections['upcoming-collections'].map(
+                  (item, index) => (
+                    <HomeCard key={index} item={item} link={item['twitter']} />
+                  ),
+                )}
               />
-            ))}
-          />
-        )}
+            )}
       </div>
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">New Collections</span>
         </div>
-        {isLoading ? (
-          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-        ) : featuredCollections['new-collections'] && (
-          <HorizontalGrid
-            childrens={featuredCollections['new-collections'].map((item, index) => (
-              <HomeCard
-                key={index}
-                item={item}
-                link={`/marketplace/${item['symbol']}`}
+        {isLoading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : featuredCollections['new-collections'] && (
+              <HorizontalGrid
+                childrens={featuredCollections['new-collections'].map(
+                  (item, index) => (
+                    <HomeCard
+                      key={index}
+                      item={item}
+                      link={`/marketplace/${item['symbol']}`}
+                    />
+                  ),
+                )}
               />
-            ))}
-          />
-        )}
+            )}
       </div>
       <div className="home-section">
         <div className="section-header">

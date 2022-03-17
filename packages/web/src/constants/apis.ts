@@ -11,5 +11,6 @@ export const APIS = {
 
   allCollections: 'all_collections',
   newCollections: 'new_collections',
-  featuredCollectionsCarousel: 'featured_collections_carousel'
+  featuredCollectionsCarousel: 'featured_collections_carousel',
+  launchpadCollections: 'launchpad_collections',
 };

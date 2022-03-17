@@ -33,6 +33,7 @@ export const CandyMachineStep = ({
       // Local time to UTC
       launch_time: values.datepicker.utc().format(),
       mint_supply: values.mint_supply,
+      mint_price: values.mint_price,
       candymachine_ids: values.candymachine_ids,
     };
     handleAction(params);
@@ -82,6 +83,18 @@ export const CandyMachineStep = ({
           <InputNumber
             placeholder="Total supply"
             className="step-input-number"
+            controls={false}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Mint Price (SOL)"
+          name="mint_price"
+          rules={[{ required: true, message: 'Mint Price is required!' }]}
+        >
+          <InputNumber
+            placeholder="Mint Price"
+            className="step-input-number"
+            precision={3}
             controls={false}
           />
         </Form.Item>

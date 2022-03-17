@@ -11,7 +11,7 @@ export const HomeCard = ({
 }: {
   item: {};
   link: string;
-  showCountdown?: boolean
+  showCountdown?: boolean;
 }) => {
   const { isEnded, state } = useCountdown(item['publishedAt'], showCountdown);
 
@@ -30,12 +30,14 @@ export const HomeCard = ({
         <div className="card-caption">
           <h6>{item['name']}</h6>
           <div className="note">
-            <span className='symbol'>{item['name']}</span>
+            <span className="symbol">{item['name']}</span>
             <img src="/icons/check-circle.svg" alt="check-circle" />
           </div>
           {showCountdown && (
-            <div className='countdown-container'>
-              {isEnded ? <span style={{ color: '#009999' }}>Live</span> : (
+            <div className="countdown-container">
+              {isEnded ? (
+                <span style={{ color: '#009999' }}>Live</span>
+              ) : (
                 <span>{`${state.days}d ${state.hours}h ${state.minutes}m`}</span>
               )}
             </div>
