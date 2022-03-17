@@ -1,7 +1,8 @@
-.collection-card {
+.home-card {
   width: 100%;
+  max-width: 220px;
   height: 100%;
-  background: @bg-card-color;
+  background: @bg-primary-color;
   border-radius: 16px;
   border: 1px solid @border-card;
   cursor: pointer;
@@ -10,7 +11,8 @@
   transition-duration: 0.3s;
   transition-property: opacity, transform, -webkit-transform;
   &:hover {
-    transform: translate(0, -5px);
+    transform: translate(0, -2px);
+    border-color: @border-card;
   }
 
   .ant-card-body {
@@ -21,7 +23,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      aspect-ratio: 1/1;
+      aspect-ratio: 4/3;
       border-radius: 16px;
       background: @bg-primary-color;
 
@@ -29,18 +31,23 @@
         width: 100%;
         object-fit: cover;
         border-radius: 6px;
+        display: flex;
+        align-items: center;
       }
     }
 
     .card-caption {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       min-height: 1px;
-      padding: 16px 24px;
+      padding: 12px 24px;
       text-align: center;
       max-height: 120px;
 
       h6 {
         color: @text-primary-color;
-        font-size: 16px;
+        font-size: 14px;
         margin-bottom: 0px;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -71,6 +78,16 @@
         overflow: hidden;
         color: @text-secondary-color;
         font-size: 14px;
+      }
+
+      .countdown-container {
+        background: #1c1326;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 16px;
+        color: @text-primary-color;
       }
     }
   }

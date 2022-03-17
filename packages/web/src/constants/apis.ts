@@ -8,4 +8,8 @@ export const APIS = {
 
   collections: 'collections',
   collectionCreate: 'collections/create',
+
+  allCollections: 'all_collections',
+  newCollections: 'new_collections',
+  featuredCollectionsCarousel: 'featured_collections_carousel'
 };

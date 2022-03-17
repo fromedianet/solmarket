@@ -29,7 +29,7 @@ export const Login = () => {
         body: JSON.stringify(body),
       });
       if (res.status === 200) {
-        history.push('/dashboard');
+        history.go(0);
       } else {
         throw new Error(await res.text());
       }
