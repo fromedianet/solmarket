@@ -253,6 +253,66 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  /**
+   * Get all live collections
+   */
+  function allCollections() {
+    return new Promise((resolve, reject) => {
+      const url = APIS.base_url + APIS.allCollections;
+
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
+  /**
+   * Get all live new collections
+   */
+   function newCollections() {
+    return new Promise((resolve, reject) => {
+      const url = APIS.base_url + APIS.newCollections;
+
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
+  /**
+   * Get all live collections
+   */
+   function featuredCollectionsCarousel() {
+    return new Promise((resolve, reject) => {
+      const url = APIS.base_url + APIS.featuredCollectionsCarousel;
+
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
   return {
     createCollection,
     getCollectionsByEmail,
@@ -263,5 +323,8 @@ export const useCollectionsAPI = () => {
     collectionStep4,
     updateCollectionStatus,
     getAllCollections,
+    allCollections,
+    newCollections,
+    featuredCollectionsCarousel
   };
 };
