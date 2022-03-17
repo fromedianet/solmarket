@@ -2,11 +2,12 @@ import React from 'react';
 import { Button, Spin } from 'antd';
 import { Login } from './login';
 import { useDashboard } from '../../contexts/dashboardProvider';
-import Router from 'next/router';
+import { useHistory } from 'react-router-dom';
 import { DashboardHeader } from './header';
 
 export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
   const { user, fetching, isConfigured } = useDashboard();
+  const history = useHistory();
 
   if (!isConfigured) {
     return (
@@ -15,8 +16,7 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
           <span>Magic Link publishableKey required</span>
           <Button
             onClick={() => {
-              Router.push('/');
-              Router.reload();
+              history.push('/');
             }}
           >
             Return

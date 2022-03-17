@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, Button, Row, Col } from 'antd';
 import { BadgeText } from '../../../components/BadgeText';
 import uuid from 'react-uuid';
-import Router from 'next/router';
+import { useHistory } from 'react-router-dom';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
 import { notify } from '@oyster/common';
 import { useDashboard } from '../../../contexts/dashboardProvider';
@@ -12,6 +12,7 @@ const { TabPane } = Tabs;
 
 export const DashboardView = () => {
   const { user } = useDashboard();
+  const history = useHistory();
   const { createCollection, getCollectionsByEmail } = useCollectionsAPI();
   const [lists, setLists] = useState({
     drafts: [],
@@ -57,8 +58,7 @@ export const DashboardView = () => {
           type: 'error',
         });
       } else {
-        Router.push(`/dashboard/listing/${_id}`);
-        Router.reload();
+        history.push(`/dashboard/listing/${_id}`);
       }
     });
   };

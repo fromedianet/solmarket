@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Router from 'next/router';
+import { useHistory } from 'react-router-dom';
 import useSWR from 'swr';
 
 const fetcher = url =>
@@ -12,6 +12,7 @@ const fetcher = url =>
 // @ts-ignore
 export function useUser({ redirectTo, redirectIfFound } = {}) {
   const { data, error } = useSWR('/api/user', fetcher);
+  const history = useHistory();
   const user = data?.user;
   const finished = Boolean(data);
   const hasUser = Boolean(user);
@@ -24,7 +25,7 @@ export function useUser({ redirectTo, redirectIfFound } = {}) {
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && hasUser)
     ) {
-      Router.push(redirectTo);
+      history.push(redirectTo);
     }
   }, [redirectTo, redirectIfFound, finished, hasUser]);
 

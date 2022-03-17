@@ -41,7 +41,18 @@ export const CandyMachineStep = ({
     <div className="step-page">
       <p className="step">Step 4 of 5</p>
       <h1>Candy Machine ID</h1>
-      <p className="label">Please input your candymachine Id for your NFTs.</p>
+      <p className="label">
+        Please input your candymachine Id for your NFTs. Refer{' '}
+        <a
+          href="https://docs.metaplex.com/candy-machine-v2/introduction"
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: '#009999' }}
+        >
+          this guide
+        </a>{' '}
+        to create the candy machine.
+      </p>
       <Form
         form={form}
         layout="vertical"

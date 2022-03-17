@@ -1,11 +1,12 @@
 import { Magic } from 'magic-sdk';
 import React, { useState } from 'react';
-import Router from 'next/router';
+import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Spin } from 'antd';
 
 export const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   async function handleSubmit(values) {
     if (errorMsg) setErrorMsg('');
@@ -28,7 +29,7 @@ export const Login = () => {
         body: JSON.stringify(body),
       });
       if (res.status === 200) {
-        Router.reload();
+        history.push('/dashboard');
       } else {
         throw new Error(await res.text());
       }
