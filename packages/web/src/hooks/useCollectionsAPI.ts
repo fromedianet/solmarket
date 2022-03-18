@@ -335,6 +335,23 @@ export const useCollectionsAPI = () => {
     });
   }
 
+  function launchpadCollectionBySymbol($symbol) {
+    return new Promise((resolve, reject) => {
+      const url = APIS.base_url + APIS.launchpad + $symbol;
+
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
   return {
     createCollection,
     getCollectionsByEmail,
@@ -349,5 +366,6 @@ export const useCollectionsAPI = () => {
     newCollections,
     featuredCollectionsCarousel,
     launchpadCollections,
+    launchpadCollectionBySymbol
   };
 };

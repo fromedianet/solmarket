@@ -10,12 +10,6 @@ const plugins = [
     {
       lessLoaderOptions: {
         lessOptions: {
-          modifyVars: {
-            '@primary-color': '#09080d',
-            '@text-color': '#8e8e8e',
-            '@text-color-secondary': '#9ca3af',
-            '@assetPrefix': assetPrefix || "''",
-          },
           javascriptEnabled: true,
         },
       },
@@ -50,5 +44,11 @@ module.exports = withPlugins(plugins, {
         destination: '/',
       },
     ];
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+    }
+    return config;
   },
 });
