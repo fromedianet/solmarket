@@ -366,6 +366,6 @@ export const useCollectionsAPI = () => {
     newCollections,
     featuredCollectionsCarousel,
     launchpadCollections,
-    launchpadCollectionBySymbol
+    launchpadCollectionBySymbol,
   };
 };

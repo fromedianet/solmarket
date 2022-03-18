@@ -1,4 +1,5 @@
 .launchpad-detail {
+  background: #09080d;
   .collection-container {
     display: flex;
     flex-direction: column;
@@ -38,6 +39,45 @@
       line-height: 24px;
     }
 
+    .sale-info {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid @border-primary-color;
+      border-radius: 12px;
+      gap: 24px;
+
+      &:hover {
+        background: @bg-primary-color;
+        cursor: help;
+      }
+
+      .sale-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .sale-type {
+          color: @text-primary-color;
+          font-size: 12px;
+          padding: 2px 8px;
+          background-color: @bg-table-odd;
+          border-radius: 9999px;
+          height: fit-content;
+        }
+      }
+
+      .sale-bottom {
+        display: flex;
+        color: @text-primary-color;
+        letter-spacing: 0.4px;
+        font-size: 14px;
+        line-height: 20px;
+        gap: 6px;
+      }
+    }
+
     .collection-image {
       width: 100%;
       aspect-ratio: 1/1;
@@ -57,7 +97,7 @@
       justify-content: center;
       margin-top: 24px;
       width: 100%;
-      background: @bg-secondary-color;
+      background: @bg-primary-color;
       border-radius: 8px;
       padding: 16px;
 
@@ -91,6 +131,36 @@
           font-size: 14px;
         }
       }
+    }
+  }
+}
+
+.launchpad-countdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: @text-pink;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  .countdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: @bg-table-odd;
+    border-radius: 4px;
+
+    span {
+      font-size: 14px;
+      line-height: 20px;
+      color: @text-primary-color;
+      font-weight: 700;
     }
   }
 }

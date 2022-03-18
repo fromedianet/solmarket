@@ -1,4 +1,4 @@
-import {Button, Spin} from 'antd';
+import { Button, Spin } from 'antd';
 import { CandyMachineAccount } from './candy-machine';
 import { GatewayStatus, useGateway } from '@civic/solana-gateway-react';
 import React, { useEffect, useState, useRef } from 'react';
@@ -50,10 +50,7 @@ export const MintButton = ({
 
   useEffect(() => {
     const mint = async () => {
-      await removeAccountChangeListener(
-        connection,
-        webSocketSubscriptionId,
-      );
+      await removeAccountChangeListener(connection, webSocketSubscriptionId);
       await onMint();
 
       setClicked(false);
@@ -62,13 +59,7 @@ export const MintButton = ({
     if (verified && clicked) {
       mint();
     }
-  }, [
-    verified,
-    clicked,
-    connection,
-    onMint,
-    webSocketSubscriptionId,
-  ]);
+  }, [verified, clicked, connection, onMint, webSocketSubscriptionId]);
 
   const previousGatewayStatus = usePrevious(gatewayStatus);
   useEffect(() => {
