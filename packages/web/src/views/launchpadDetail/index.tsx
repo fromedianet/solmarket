@@ -3,27 +3,37 @@ import * as anchor from '@project-serum/anchor';
 import { useParams } from 'react-router-dom';
 import { Row, Col, Spin, Button, Progress } from 'antd';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
-import { ConnectButton, notify, useConnection } from '@oyster/common';
+import {
+  ConnectButton,
+  notify,
+  toPublicKey,
+  useConnection,
+  useConnectionConfig,
+} from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import {
   awaitTransactionSignatureConfirmation,
   CandyMachineAccount,
+  CANDY_MACHINE_PROGRAM,
   getCandyMachineState,
   mintOneToken,
 } from './candy-machine';
 import { formatNumber, getAtaForMint, toDate } from './utils';
-import { Transaction } from '@solana/web3.js';
+import { PublicKey, Transaction } from '@solana/web3.js';
 import { GatewayProvider } from '@civic/solana-gateway-react';
 import { MintCountdown } from './MintCountdown';
+import { sendTransaction } from './connection';
+import { MintButton } from './MintButton';
 
 export const LaunchpadDetailView = () => {
   const { symbol } = useParams<{ symbol: string }>();
   const { launchpadCollectionBySymbol } = useCollectionsAPI();
   const wallet = useWallet();
   const connection = useConnection();
+  const { endpoint } = useConnectionConfig();
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState();
-  const [candyMachineId, setCandyMachineId] = useState(null);
+  const [candyMachineId, setCandyMachineId] = useState<PublicKey>();
   const [isUserMinting, setIsUserMinting] = useState(false);
   const [candyMachine, setCandyMachine] = useState<CandyMachineAccount>();
   const [isActive, setIsActive] = useState(false);
@@ -63,7 +73,7 @@ export const LaunchpadDetailView = () => {
           setCollection(res['data']);
           const candyMachineIds = res['data']['candymachine_ids'];
           if (candyMachineIds.length > 0) {
-            setCandyMachineId(candyMachineIds[0]);
+            setCandyMachineId(toPublicKey(candyMachineIds[0]));
           }
         } else {
           notify({
@@ -183,6 +193,8 @@ export const LaunchpadDetailView = () => {
         setIsActive((cndy.state.isActive = active));
         setIsPresale((cndy.state.isPresale = presale));
         setCandyMachine(cndy);
+
+        console.log('test buffer', cndy);
       } catch (e) {
         console.log('There was a problem fetching Candy Machine state');
         console.log(e);
@@ -465,8 +477,111 @@ export const LaunchpadDetailView = () => {
                           />
                         </div>
                       </Col>
-                      <Col span={24} xxl={10} className="btn-content">
-                        <Button className="my-btn">Mint</Button>
+                      <Col span={24} xxl={10}>
+                        <div className="btn-content">
+                          {candyMachine?.state.isActive &&
+                          candyMachine?.state.gatekeeper &&
+                          wallet.publicKey &&
+                          wallet.signTransaction ? (
+                            <GatewayProvider
+                              wallet={{
+                                publicKey:
+                                  wallet.publicKey ||
+                                  new PublicKey(CANDY_MACHINE_PROGRAM),
+                                //@ts-ignore
+                                signTransaction: wallet.signTransaction,
+                              }}
+                              gatekeeperNetwork={
+                                candyMachine?.state?.gatekeeper
+                                  ?.gatekeeperNetwork
+                              }
+                              clusterUrl={endpoint.url}
+                              handleTransaction={async (
+                                transaction: Transaction,
+                              ) => {
+                                setIsUserMinting(true);
+                                const userMustSign =
+                                  transaction.signatures.find(sig =>
+                                    sig.publicKey.equals(wallet.publicKey!),
+                                  );
+                                if (userMustSign) {
+                                  notify({
+                                    message:
+                                      'Please sign one-time Civic Pass issuance',
+                                    type: 'info',
+                                  });
+                                  try {
+                                    transaction = await wallet.signTransaction!(
+                                      transaction,
+                                    );
+                                  } catch (e) {
+                                    notify({
+                                      message: 'User cancelled signing',
+                                      type: 'error',
+                                    });
+                                    // setTimeout(() => window.location.reload(), 2000);
+                                    setIsUserMinting(false);
+                                    throw e;
+                                  }
+                                } else {
+                                  notify({
+                                    message: 'Refreshing Civic Pass',
+                                    type: 'info',
+                                  });
+                                }
+                                try {
+                                  await sendTransaction(
+                                    connection,
+                                    wallet,
+                                    transaction,
+                                    [],
+                                    true,
+                                    'confirmed',
+                                  );
+                                  notify({
+                                    message: 'Please sign minting',
+                                    type: 'info',
+                                  });
+                                } catch (e) {
+                                  notify({
+                                    message:
+                                      'Solana dropped the transaction, please try again',
+                                    type: 'warning',
+                                  });
+                                  console.error(e);
+                                  // setTimeout(() => window.location.reload(), 2000);
+                                  setIsUserMinting(false);
+                                  throw e;
+                                }
+                                await onMint();
+                              }}
+                              broadcastTransaction={false}
+                              options={{ autoShowModal: false }}
+                            >
+                              <MintButton
+                                candyMachine={candyMachine}
+                                isMinting={isUserMinting}
+                                setIsMinting={val => setIsUserMinting(val)}
+                                onMint={onMint}
+                                isActive={
+                                  isActive || (isPresale && isWhitelistUser)
+                                }
+                                rpcUrl={endpoint.url}
+                              />
+                            </GatewayProvider>
+                          ) : (
+                            <MintButton
+                              candyMachine={candyMachine}
+                              isMinting={isUserMinting}
+                              setIsMinting={val => setIsUserMinting(val)}
+                              onMint={onMint}
+                              isActive={
+                                isActive || (isPresale && isWhitelistUser)
+                              }
+                              rpcUrl={endpoint.url}
+                            />
+                          )}
+                        </div>
                       </Col>
                     </Row>
                   ))

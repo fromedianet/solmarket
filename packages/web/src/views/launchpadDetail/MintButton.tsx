@@ -79,6 +79,7 @@ export const MintButton = ({
 
   return (
     <Button
+      className="mint-btn"
       disabled={isMinting || !isActive}
       onClick={async () => {
         if (candyMachine?.state.isActive && candyMachine?.state.gatekeeper) {
