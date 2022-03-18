@@ -10,7 +10,6 @@ import { useLocation } from 'react-router-dom';
 import { ConfettiProvider } from './components/Confetti';
 import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
-import { CoingeckoProvider } from './contexts/coingecko';
 import { DashboardProvider } from './contexts/dashboardProvider';
 import SidebarProvider from './contexts/sidebar';
 import { SPLTokenListProvider } from './contexts/tokenList';
@@ -31,7 +30,6 @@ export const Providers: FC = ({ children }) => {
           <WalletProvider>
             <AccountsProvider>
               <SPLTokenListProvider>
-                <CoingeckoProvider>
                   <StoreProvider
                     ownerAddress={process.env.NEXT_PUBLIC_STORE_OWNER_ADDRESS}
                     storeAddress={process.env.NEXT_PUBLIC_STORE_ADDRESS}
@@ -46,7 +44,6 @@ export const Providers: FC = ({ children }) => {
                       </LoaderProvider>
                     </MetaProvider>
                   </StoreProvider>
-                </CoingeckoProvider>
               </SPLTokenListProvider>
             </AccountsProvider>
           </WalletProvider>

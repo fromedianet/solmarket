@@ -7,17 +7,14 @@ import { Button, Popover, Select } from 'antd';
 import {
   ENDPOINTS,
   formatNumber,
-  formatUSD,
   MetaplexModal,
   Settings,
   shortenAddress,
   useConnectionConfig,
   useNativeAccount,
   useQuerySearch,
-  WRAPPED_SOL_MINT,
 } from '@oyster/common';
-import { useMeta, useSolPrice } from '../../contexts';
-import { useTokenList } from '../../contexts/tokenList';
+import { useMeta } from '../../contexts';
 import { TokenCircle } from '../Custom';
 
 ('@solana/wallet-adapter-base');
@@ -197,13 +194,9 @@ export const CurrentUserBadge = (props: {
   const { endpoint } = useConnectionConfig();
   const routerSearchParams = useQuerySearch();
   const { account } = useNativeAccount();
-  const solPrice = useSolPrice();
   const [showAddFundsModal, setShowAddFundsModal] = useState<Boolean>(false);
   const [show, setShow] = useState(false);
-  const tokenList = useTokenList();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
-  const balanceInUSD = balance * solPrice;
-  const solMintInfo = tokenList.tokenMap.get(WRAPPED_SOL_MINT.toString());
 
   if (!wallet || !publicKey) {
     return null;
@@ -243,7 +236,8 @@ export const CurrentUserBadge = (props: {
                   }}
                 >
                   <TokenCircle
-                    iconFile={solMintInfo ? solMintInfo.logoURI : ''}
+                    iconSize={24}
+                    iconFile='sol.png'
                   />
                   &nbsp;
                   <span
@@ -253,14 +247,6 @@ export const CurrentUserBadge = (props: {
                     }}
                   >
                     {formatNumber.format(balance)} SOL
-                  </span>
-                  &nbsp;
-                  <span
-                    style={{
-                      color: 'rgba(255, 255, 255, 0.5)',
-                    }}
-                  >
-                    {formatUSD.format(balanceInUSD)}
                   </span>
                   &nbsp;
                 </div>

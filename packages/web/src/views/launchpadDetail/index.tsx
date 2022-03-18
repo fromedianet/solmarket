@@ -193,8 +193,6 @@ export const LaunchpadDetailView = () => {
         setIsActive((cndy.state.isActive = active));
         setIsPresale((cndy.state.isPresale = presale));
         setCandyMachine(cndy);
-
-        console.log('test buffer', cndy);
       } catch (e) {
         console.log('There was a problem fetching Candy Machine state');
         console.log(e);
