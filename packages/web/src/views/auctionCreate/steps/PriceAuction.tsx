@@ -1,4 +1,3 @@
-import { shortenAddress, WRAPPED_SOL_MINT } from '@oyster/common';
 import React from 'react';
 import { Row, Col, Input, Button } from 'antd';
 import { AuctionCategory, AuctionState } from '../index';
@@ -8,31 +7,11 @@ export const PriceAuction = (props: {
   setAttributes: (attr: AuctionState) => void;
   confirm: () => void;
 }) => {
-  const quoteMintName =
-    props.attributes?.quoteMintInfoExtended?.name || 'Custom Token';
-  const quoteMintExt =
-    props.attributes?.quoteMintInfoExtended?.symbol ||
-    shortenAddress(props.attributes.quoteMintAddress);
   return (
     <>
       <Row className="call-to-action">
         <h2>Price</h2>
-        <p>
-          Set the price for your auction.
-          {props.attributes.quoteMintAddress != WRAPPED_SOL_MINT.toBase58() &&
-            ` Warning! the auction quote mint is `}
-          {props.attributes.quoteMintAddress != WRAPPED_SOL_MINT.toBase58() && (
-            <a
-              href={`https://explorer.solana.com/address/${props.attributes?.quoteMintAddress}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {props.attributes?.quoteMintAddress !=
-                WRAPPED_SOL_MINT.toBase58() &&
-                `${quoteMintName} (${quoteMintExt})`}
-            </a>
-          )}
-        </p>
+        <p>Set the price for your auction.</p>
       </Row>
       <Row className="content-action">
         <Col className="section" xl={24}>
@@ -50,14 +29,6 @@ export const PriceAuction = (props: {
                 className="input"
                 placeholder="Fixed Price"
                 prefix="◎"
-                suffix={
-                  props.attributes.quoteMintInfoExtended
-                    ? props.attributes.quoteMintInfoExtended.symbol
-                    : props.attributes.quoteMintAddress ==
-                      WRAPPED_SOL_MINT.toBase58()
-                    ? 'SOL'
-                    : 'CUSTOM'
-                }
                 onChange={info =>
                   props.setAttributes({
                     ...props.attributes,
@@ -82,14 +53,6 @@ export const PriceAuction = (props: {
                 className="input"
                 placeholder="Price"
                 prefix="◎"
-                suffix={
-                  props.attributes.quoteMintInfoExtended
-                    ? props.attributes.quoteMintInfoExtended.symbol
-                    : props.attributes.quoteMintAddress ==
-                      WRAPPED_SOL_MINT.toBase58()
-                    ? 'SOL'
-                    : 'CUSTOM'
-                }
                 onChange={info =>
                   props.setAttributes({
                     ...props.attributes,
@@ -108,23 +71,8 @@ export const PriceAuction = (props: {
               type="number"
               min={0}
               className="input"
-              placeholder={`Tick size in ${
-                props.attributes.quoteMintInfoExtended
-                  ? props.attributes.quoteMintInfoExtended.symbol
-                  : props.attributes.quoteMintAddress ==
-                    WRAPPED_SOL_MINT.toBase58()
-                  ? 'SOL'
-                  : 'your custom currency'
-              }`}
+              placeholder="Tick size in SOL"
               prefix="◎"
-              suffix={
-                props.attributes.quoteMintInfoExtended
-                  ? props.attributes.quoteMintInfoExtended.symbol
-                  : props.attributes.quoteMintAddress ==
-                    WRAPPED_SOL_MINT.toBase58()
-                  ? 'SOL'
-                  : 'CUSTOM'
-              }
               onChange={info =>
                 props.setAttributes({
                   ...props.attributes,

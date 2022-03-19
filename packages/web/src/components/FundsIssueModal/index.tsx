@@ -25,7 +25,7 @@ export const FundsIssueModal = (props: {
         <AmountLabel
           containerStyle={{ flexDirection: 'row' }}
           title={'Your Balance'}
-          displaySymbol='SOL'
+          displaySymbol="SOL"
           amount={balance}
           iconSize={24}
         />
@@ -35,7 +35,7 @@ export const FundsIssueModal = (props: {
         <AmountLabel
           containerStyle={{ flexDirection: 'row' }}
           title={message}
-          displaySymbol='SOL'
+          displaySymbol="SOL"
           amount={minimumFunds}
           iconSize={24}
         />

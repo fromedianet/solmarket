@@ -25,13 +25,11 @@ import {
   useConnection,
   useMeta,
   useMint,
-  useStore,
   useUserAccounts,
   WinnerLimit,
   WinnerLimitType,
   WinningConfigType,
 } from '@oyster/common';
-import { useTokenList } from '../../contexts/tokenList';
 import {
   createAuctionManager,
   SafetyDepositDraft,
@@ -104,7 +102,6 @@ export const ArtView = () => {
   } = useMeta();
 
   const { accountByMint } = useUserAccounts();
-  const { tokenMap } = useTokenList();
   const m = metadata.filter(item => item.pubkey === id)[0];
   const balance = useUserBalance(auctionView?.auction.info.tokenMint);
   const myPayingAccount = balance.accounts[0];
@@ -147,8 +144,6 @@ export const ArtView = () => {
     quoteMintAddress: QUOTE_MINT.toBase58(),
     //@ts-ignore
     quoteMintInfo: useMint(QUOTE_MINT.toBase58()),
-    //@ts-ignore
-    quoteMintInfoExtended: tokenMap.get(QUOTE_MINT.toBase58()),
   });
 
   const createAuction = async () => {

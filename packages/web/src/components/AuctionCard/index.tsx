@@ -276,12 +276,7 @@ export const AuctionCard = ({
     (value * LAMPORTS_PER_SOL) % tickSize.toNumber() != 0
   );
 
-  const gapBidInvalid = useGapTickCheck(
-    value,
-    gapTick,
-    gapTime,
-    auctionView,
-  );
+  const gapBidInvalid = useGapTickCheck(value, gapTick, gapTime, auctionView);
 
   const isAuctionManagerAuthorityNotWalletOwner =
     auctionView.auctionManager.authority !== wallet?.publicKey?.toBase58();

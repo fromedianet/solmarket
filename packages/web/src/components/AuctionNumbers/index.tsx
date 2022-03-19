@@ -59,7 +59,7 @@ export const AuctionNumbers = (props: {
         <>
           {(isUpcoming || bids.length === 0 || auctionView.isInstantSale) && (
             <AmountLabel
-              displaySymbol='SOL'
+              displaySymbol="SOL"
               style={{ marginBottom: props.showAsRow ? 0 : 10 }}
               title={auctionView.isInstantSale ? 'Price' : 'Starting bid'}
               amount={fromLamports(
@@ -70,7 +70,7 @@ export const AuctionNumbers = (props: {
           )}
           {!auctionView.isInstantSale && isStarted && bids.length > 0 && (
             <AmountLabel
-              displaySymbol='SOL'
+              displaySymbol="SOL"
               style={{ marginBottom: props.showAsRow ? 0 : 10 }}
               containerStyle={{
                 flexDirection: props.showAsRow ? ' row' : 'column',

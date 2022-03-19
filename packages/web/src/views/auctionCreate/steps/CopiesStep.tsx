@@ -1,11 +1,7 @@
-import { Creator, useMint, WRAPPED_SOL_MINT } from '@oyster/common';
-import { PublicKey } from '@solana/web3.js';
-import React, { useState } from 'react';
+import { Creator } from '@oyster/common';
+import React from 'react';
 import { Row, Col, Input, Button } from 'antd';
 import { SafetyDepositDraft } from '../../../actions/createAuctionManager';
-import TokenDialog, { TokenButton } from '../../../components/TokenDialog';
-import { QUOTE_MINT } from '../../../constants';
-import { useTokenList } from '../../../contexts/tokenList';
 import { ArtSelector } from '../artSelector';
 import { AuctionCategory, AuctionState } from '../index';
 
@@ -14,26 +10,6 @@ export const CopiesStep = (props: {
   setAttributes: (attr: AuctionState) => void;
   confirm: () => void;
 }) => {
-  const [showTokenDialog, setShowTokenDialog] = useState(false);
-  const [mint, setMint] = useState<PublicKey>(WRAPPED_SOL_MINT);
-  const { hasOtherTokens, tokenMap } = useTokenList();
-
-  // give default value to mint
-  // const mintInfo = tokenMap.get((!mint? QUOTE_MINT.toString(): mint.toString()))
-
-  props.attributes.quoteMintAddress = mint
-    ? mint.toBase58()
-    : QUOTE_MINT.toBase58();
-
-  if (props.attributes.quoteMintAddress) {
-    props.attributes.quoteMintInfo = useMint(
-      props.attributes.quoteMintAddress,
-    )!;
-    props.attributes.quoteMintInfoExtended = tokenMap.get(
-      props.attributes.quoteMintAddress,
-    )!;
-  }
-
   const artistFilter = (i: SafetyDepositDraft) =>
     !(i.metadata.info.data.creators || []).find((c: Creator) => !c.verified);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,22 +51,6 @@ export const CopiesStep = (props: {
           </ArtSelector>
         </Col>
         <Col span={24} lg={12}>
-          {hasOtherTokens && (
-            <label className="action-field">
-              <span className="field-title">Auction mint</span>
-              <TokenButton
-                mint={mint}
-                onClick={() => setShowTokenDialog(true)}
-              />
-              <TokenDialog
-                setMint={setMint}
-                open={showTokenDialog}
-                onClose={() => {
-                  setShowTokenDialog(false);
-                }}
-              />
-            </label>
-          )}
           {props.attributes.category === AuctionCategory.Limited && (
             <label className="action-field">
               <span className="field-title">
