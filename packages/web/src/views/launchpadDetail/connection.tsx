@@ -182,7 +182,6 @@ export const sendTransactions = async (
   signedTxns = fullySignedTransactions.concat(signedTxns);
   const pendingTxns: Promise<{ txid: string; slot: number }>[] = [];
 
-  const breakEarlyObject = { breakEarly: false, i: 0 };
   console.log(
     'Signed txns length',
     signedTxns.length,
@@ -195,31 +194,20 @@ export const sendTransactions = async (
       signedTransaction: signedTxns[i],
     });
 
-    signedTxnPromise
-      .then(({ txid, slot }) => {
-        successCallback(txid, i);
-        return { txid, slot };
-      })
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch(reason => {
-        failCallback(signedTxns[i], i);
-        if (sequenceType === SequenceType.StopOnFailure) {
-          breakEarlyObject.breakEarly = true;
-          breakEarlyObject.i = i;
-        }
-      });
-
     if (sequenceType !== SequenceType.Parallel) {
       try {
-        await signedTxnPromise;
+        await signedTxnPromise.then(({ txid }) =>
+          successCallback(txid, i),
+        );
         pendingTxns.push(signedTxnPromise);
       } catch (e) {
-        console.log('Caught failure', e);
-        if (breakEarlyObject.breakEarly) {
-          console.log('Died on ', breakEarlyObject.i);
-          // Return the txn we failed on by index
+        console.log('Failed at txn index:', i);
+        console.log('Caught failure:', e);
+
+        failCallback(signedTxns[i], i);
+        if (sequenceType === SequenceType.StopOnFailure) {
           return {
-            number: breakEarlyObject.i,
+            number: i,
             txs: await Promise.all(pendingTxns),
           };
         }
