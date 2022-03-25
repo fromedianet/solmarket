@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { ConfettiProvider } from './components/Confetti';
 import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
-import { DashboardProvider } from './contexts/dashboardProvider';
+import { AuthProvider } from './contexts/authProvider';
 import SidebarProvider from './contexts/sidebar';
 import { DashboardLayout } from './views/dashboard';
 
@@ -21,9 +21,13 @@ export const Providers: FC = ({ children }) => {
   return (
     <>
       {isDashboard ? (
-        <DashboardProvider magicLinkKey={process.env.NEXT_PUBLIC_MAGICLINK_KEY}>
-          <DashboardLayout>{children}</DashboardLayout>
-        </DashboardProvider>
+        <ConnectionProvider>
+          <WalletProvider>
+            <AuthProvider>
+              <DashboardLayout>{children}</DashboardLayout>
+            </AuthProvider>
+          </WalletProvider>
+        </ConnectionProvider>
       ) : (
         <ConnectionProvider>
           <WalletProvider>

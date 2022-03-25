@@ -196,9 +196,7 @@ export const sendTransactions = async (
 
     if (sequenceType !== SequenceType.Parallel) {
       try {
-        await signedTxnPromise.then(({ txid }) =>
-          successCallback(txid, i),
-        );
+        await signedTxnPromise.then(({ txid }) => successCallback(txid, i));
         pendingTxns.push(signedTxnPromise);
       } catch (e) {
         console.log('Failed at txn index:', i);

@@ -9,7 +9,7 @@ export const useCollectionsAPI = () => {
    */
   function createCollection(props: { _id: string; email: string }) {
     return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collectionCreate;
+      const url = APIS.base_url + APIS.collections;
 
       fetch(url, {
         method: 'POST',

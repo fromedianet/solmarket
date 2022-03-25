@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Row, Col, Spin, Button, Progress } from 'antd';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import {
+  CANDY_MACHINE_PROGRAM_ID,
   ConnectButton,
   notify,
   toPublicKey,
@@ -14,8 +15,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import {
   awaitTransactionSignatureConfirmation,
   CandyMachineAccount,
-  CANDY_MACHINE_PROGRAM,
   getCandyMachineState,
+  loadMetadata,
   mintOneToken,
 } from './candy-machine';
 import { formatNumber, getAtaForMint, toDate } from './utils';
@@ -24,10 +25,12 @@ import { GatewayProvider } from '@civic/solana-gateway-react';
 import { MintCountdown } from './MintCountdown';
 import { sendTransaction } from './connection';
 import { MintButton } from './MintButton';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
   const { symbol } = useParams<{ symbol: string }>();
   const { launchpadCollectionBySymbol } = useCollectionsAPI();
+  const { createNFT } = useNFTsAPI();
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
@@ -44,7 +47,6 @@ export const LaunchpadDetailView = () => {
   const [isPresale, setIsPresale] = useState(false);
   const [discountPrice, setDiscountPrice] = useState<anchor.BN>();
   const [showMintInfo, setShowMintInfo] = useState(false);
-  const txTimeoutInMilliseconds = 30000;
   const one_day = (24 * 60) & 60;
 
   const anchorWallet = useMemo(() => {
@@ -192,6 +194,7 @@ export const LaunchpadDetailView = () => {
 
         setIsActive((cndy.state.isActive = active));
         setIsPresale((cndy.state.isPresale = presale));
+        console.log('candyMachine', cndy);
         setCandyMachine(cndy);
       } catch (e) {
         console.log('There was a problem fetching Candy Machine state');
@@ -208,35 +211,35 @@ export const LaunchpadDetailView = () => {
       setIsUserMinting(true);
       document.getElementById('#identity')?.click();
       if (wallet.connected && candyMachine?.program && wallet.publicKey) {
-        const mintOne = await mintOneToken(
+        const mintResult = await mintOneToken(
+          connection,
           candyMachine,
           wallet.publicKey,
           beforeTransactions,
           afterTransactions,
         );
 
-        const mintTxId = mintOne[0];
+        console.log('>>> mintResult', mintResult);
 
-        let status: any = { err: true };
-        if (mintTxId) {
-          status = await awaitTransactionSignatureConfirmation(
-            mintTxId,
-            txTimeoutInMilliseconds,
-            connection,
-            true,
-          );
-        }
-
-        if (status && !status.err) {
-          // manual update since the refresh might not detect
-          // the change immediately
-          setItemsRedeemed(candyMachine.state.itemsRedeemed);
-          setIsActive(
-            (candyMachine.state.isActive =
-              itemsLimit - candyMachine.state.itemsRedeemed > 0),
-          );
-          candyMachine.state.isSoldOut =
-            itemsLimit - candyMachine.state.itemsRedeemed === 0;
+        if (mintResult['status'] && !mintResult['status']['err']) {
+          // const metadataAddress = mintResult['metadataAddress'];
+          // const metadata = await loadMetadata(connection, toPublicKey(metadataAddress));
+          // console.log('>>> metadata', metadata);
+          // if (metadata) {
+          //   const data = {
+          //     mint: metadata.mint,
+          //     token_address: mintResult['tokenAddress'],
+          //     update_authority: metadata.updateAuthority,
+          //     collection_id: collection!['_id'],
+          //     external_url: metadata.data.uri,
+          //     is_mutable: metadata.isMutable,
+          //     primary_sale_happened: metadata.primarySaleHappened,
+          //     collection: metadata.collection,
+          //     creators: metadata.data.creators,
+          //     uses: metadata.uses
+          //   }
+          //   await createNFT(data);
+          // }
           notify({
             message: 'Congratulations! Mint succeeded!',
             type: 'success',
@@ -273,11 +276,11 @@ export const LaunchpadDetailView = () => {
         message,
         type: 'error',
       });
-      // updates the candy machine state to reflect the lastest
-      // information on chain
-      refreshCandyMachineState();
     } finally {
       setIsUserMinting(false);
+      setTimeout(() => {
+        refreshCandyMachineState();
+      }, 10000);
     }
   };
 
@@ -308,7 +311,7 @@ export const LaunchpadDetailView = () => {
     if (candyMachineId) {
       refreshCandyMachineState();
     }
-  }, [candyMachineId, anchorWallet, connection, refreshCandyMachineState]);
+  }, [candyMachineId, anchorWallet, connection]);
 
   const getCountdownDate = (
     candyMachine: CandyMachineAccount,
@@ -443,14 +446,14 @@ export const LaunchpadDetailView = () => {
                       </div>
                     </Col>
                     <Col span={24} xxl={10} className="btn-content">
-                      <Button className="my-btn">Visit Collection</Button>
+                      <Button className="mint-btn">Visit Collection</Button>
                     </Col>
                   </Row>
                 ) : (
                   showMintInfo &&
                   (!wallet.connected ? (
                     <div className="bottom-content">
-                      <ConnectButton className="my-btn" />
+                      <ConnectButton className="mint-btn" />
                     </div>
                   ) : (
                     <Row className="bottom-content">
@@ -485,7 +488,7 @@ export const LaunchpadDetailView = () => {
                               wallet={{
                                 publicKey:
                                   wallet.publicKey ||
-                                  new PublicKey(CANDY_MACHINE_PROGRAM),
+                                  CANDY_MACHINE_PROGRAM_ID,
                                 //@ts-ignore
                                 signTransaction: wallet.signTransaction,
                               }}

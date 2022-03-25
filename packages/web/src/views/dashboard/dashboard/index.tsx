@@ -5,13 +5,11 @@ import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
 import { notify } from '@oyster/common';
-import { useDashboard } from '../../../contexts/dashboardProvider';
 import { DashboardCollectionCard } from '../../../components/DashboardCollectionCard';
 
 const { TabPane } = Tabs;
 
 export const DashboardView = () => {
-  const { user } = useDashboard();
   const history = useHistory();
   const { createCollection, getCollectionsByEmail } = useCollectionsAPI();
   const [lists, setLists] = useState({

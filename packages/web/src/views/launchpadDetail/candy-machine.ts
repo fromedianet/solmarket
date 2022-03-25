@@ -1,3 +1,4 @@
+import { CANDY_MACHINE_PROGRAM_ID, decodeMetadata, METADATA_PROGRAM_ID, pubkeyToString } from '@oyster/common';
 import * as anchor from '@project-serum/anchor';
 
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
@@ -5,6 +6,8 @@ import {
   SystemProgram,
   Transaction,
   SYSVAR_SLOT_HASHES_PUBKEY,
+  Connection,
+  AccountInfo,
 } from '@solana/web3.js';
 import { sendTransactions, SequenceType } from './connection';
 
@@ -16,12 +19,8 @@ import {
   SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
 } from './utils';
 
-export const CANDY_MACHINE_PROGRAM = new anchor.web3.PublicKey(
-  'cndy3Z4yapfJBmL3ShUp5exZKqR3z33thTzeNMm2gRZ',
-);
-
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-  'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
+  METADATA_PROGRAM_ID
 );
 
 interface CandyMachineState {
@@ -170,9 +169,9 @@ export const getCandyMachineState = async (
     preflightCommitment: 'processed',
   });
 
-  const idl = await anchor.Program.fetchIdl(CANDY_MACHINE_PROGRAM, provider);
+  const idl = await anchor.Program.fetchIdl(CANDY_MACHINE_PROGRAM_ID, provider);
 
-  const program = new anchor.Program(idl!, CANDY_MACHINE_PROGRAM, provider);
+  const program = new anchor.Program(idl!, CANDY_MACHINE_PROGRAM_ID, provider);
 
   const state: any = await program.account.candyMachine.fetch(candyMachineId);
   const itemsAvailable = state.data.itemsAvailable.toNumber();
@@ -235,12 +234,32 @@ const getMetadata = async (
   )[0];
 };
 
+export const loadMetadata = async (
+  connection: Connection,
+  metadataAddress: anchor.web3.PublicKey
+) => {
+  console.log('>>> loadMetadata metadataAddress', metadataAddress.toBase58());
+  try {
+    const account = await connection.getAccountInfo(metadataAddress);
+    console.log('>>> loadMetadata', account);
+    if (account && isMetadataAccount(account)) {
+      return decodeMetadata(account.data);
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+const isMetadataAccount = (account: AccountInfo<Buffer>) =>
+  pubkeyToString(account.owner) === METADATA_PROGRAM_ID;
+
 export const getCandyMachineCreator = async (
   candyMachine: anchor.web3.PublicKey,
 ): Promise<[anchor.web3.PublicKey, number]> => {
   return await anchor.web3.PublicKey.findProgramAddress(
     [Buffer.from('candy_machine'), candyMachine.toBuffer()],
-    CANDY_MACHINE_PROGRAM,
+    CANDY_MACHINE_PROGRAM_ID,
   );
 };
 
@@ -249,7 +268,7 @@ export const getCollectionPDA = async (
 ): Promise<[anchor.web3.PublicKey, number]> => {
   return await anchor.web3.PublicKey.findProgramAddress(
     [Buffer.from('collection'), candyMachineAddress.toBuffer()],
-    CANDY_MACHINE_PROGRAM,
+    CANDY_MACHINE_PROGRAM_ID,
   );
 };
 
@@ -277,11 +296,12 @@ export const getCollectionAuthorityRecordPDA = async (
 };
 
 export const mintOneToken = async (
+  connection: Connection,
   candyMachine: CandyMachineAccount,
   payer: anchor.web3.PublicKey,
   beforeTransactions: Transaction[] = [],
   afterTransactions: Transaction[] = [],
-): Promise<(string | undefined)[]> => {
+): Promise<{}> => {
   const mint = anchor.web3.Keypair.generate();
 
   const userTokenAccountAddress = (
@@ -561,7 +581,7 @@ export const mintOneToken = async (
   }
 
   try {
-    return (
+    const txs = (
       await sendTransactions(
         candyMachine.program.provider.connection,
         candyMachine.program.provider.wallet,
@@ -576,11 +596,28 @@ export const mintOneToken = async (
         afterTransactions,
       )
     ).txs.map(t => t.txid);
+    let status: any = { err: true };
+    let metadata;
+    if (txs[0]) {
+      status = await awaitTransactionSignatureConfirmation(
+        txs[0],
+        30000,
+        connection,
+        true,
+      );
+      metadata = await loadMetadata(connection, metadataAddress);
+      console.log('>>> metadata', metadata);
+    }
+    return {
+      status,
+      metadata,
+      tokenAddress: userTokenAccountAddress.toBase58()
+    }
   } catch (e) {
     console.log(e);
   }
 
-  return [];
+  return {};
 };
 
 export const shortenAddress = (address: string, chars = 4): string => {

@@ -1,44 +1,75 @@
-import React from 'react';
-import { Button, Spin } from 'antd';
-import { Login } from './login';
-import { useDashboard } from '../../contexts/dashboardProvider';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Button } from 'antd';
+import bs58 from 'bs58';
 import { DashboardHeader } from './header';
+import { useAuthToken } from '../../contexts/authProvider';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { ConnectButton } from '@oyster/common';
+import { useAuthAPI } from '../../hooks/useAuthAPI';
 
 export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
-  const { user, fetching, isConfigured } = useDashboard();
-  const history = useHistory();
+  const wallet = useWallet();
+  const { authToken, setAuthToken, removeAuthToken } = useAuthToken();
+  const { fetchNonce, signin } = useAuthAPI();
 
-  if (!isConfigured) {
-    return (
-      <div className="dashboard-layout">
-        <div className="not-configured">
-          <span>Magic Link publishableKey required</span>
-          <Button
-            onClick={() => {
-              history.push('/');
-            }}
-          >
-            Return
-          </Button>
-        </div>
-      </div>
-    );
+  useEffect(() => {
+    if (!wallet.connected) {
+      removeAuthToken();
+    }
+  }, [wallet, authToken]);
+
+  const getNonce = async () => {
+    if (wallet.publicKey) {
+      try {
+        const nonce = await fetchNonce(wallet.publicKey.toBase58());
+        return nonce;
+      } catch (e) {
+        return null;
+      }
+    }
+  }
+
+  const login = async () => {
+    const nonce = await getNonce();
+    if (nonce) {
+      const message = 'Sign in with PaperCity.\n\n' + 
+        'No password needed.\n\n' +
+        'Click "Sign" or "Approve" only means you have proved this wallet is owned by you.\n\n' +
+        'This request will not trigger any blockchain transaction or cost any gas fee.\n\n' +
+        'Your authentication status will be reset in 24 hours.\n\n' +
+        `nonce: ${nonce}`;
+      const encodedMessage = new TextEncoder().encode(message);
+      // @ts-ignore
+      const signedMessage = await window.solana.signMessage(encodedMessage, "utf8");
+      console.log(signedMessage.publicKey.toBase58(), bs58.encode(signedMessage.signature));
+      const result = await signin(signedMessage.publicKey.toBase58(), bs58.encode(signedMessage.signature));
+      if (result) {
+        // @ts-ignore
+        setAuthToken(result["token"]);
+      } else {
+        removeAuthToken();
+      }
+    }
   }
 
   return (
     <div className="dashboard-layout">
-      {fetching ? (
-        <div className="load-container">
-          <Spin size="large" />
-        </div>
-      ) : user ? (
-        <>
-          <DashboardHeader />
-          {props.children}
-        </>
+      {wallet.connected ? (
+        authToken ? (
+          <>
+            <DashboardHeader />
+            {props.children}
+          </>
+        ) : (
+          <div className='not-configured'>
+            <Button type='primary' onClick={login}>Sign in</Button>
+          </div>
+        )
       ) : (
-        <Login />
+        <div className="not-configured">
+          <span className='description'>Connect wallet to show this page</span>
+          <ConnectButton />
+        </div>
       )}
     </div>
   );
