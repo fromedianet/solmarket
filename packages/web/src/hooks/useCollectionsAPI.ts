@@ -182,7 +182,7 @@ export const useCollectionsAPI = () => {
   async function processStep5(props: {
     _id: string;
     status: string;
-    extra_info: string | null;
+    extra_info?: string | null;
   }) {
     const result = await runAuthAPIs('post', '/collections/processStep5', JSON.stringify(props));
     return result;

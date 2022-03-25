@@ -92,12 +92,12 @@ export const DashboardListingView = () => {
     setSaving(false);
   };
 
-  const cProcessStep5 = async (extra_info: string) => {
+  const cProcessStep5 = async (params) => {
     setSaving(true);
     const result = await processStep5({
       _id: id,
       status: 'submitted',
-      extra_info: extra_info,
+      ...params,
     });
     // @ts-ignore
     if (result && result['data']) {

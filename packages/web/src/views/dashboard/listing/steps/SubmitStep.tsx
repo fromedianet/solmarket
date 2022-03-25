@@ -11,7 +11,7 @@ export const SubmitStep = ({
 }: {
   collection: {};
   saving: boolean;
-  handleAction: (extra_info) => void;
+  handleAction: (params: {}) => void;
 }) => {
   const [form] = Form.useForm();
 
@@ -22,7 +22,11 @@ export const SubmitStep = ({
   }, [collection]);
 
   const onFinish = values => {
-    handleAction(values.extra_info);
+    const params = {};
+    if (values.extra_info) {
+      params['extra_info'] = values.extra_info;
+    }
+    handleAction(params);
   };
 
   return (

@@ -38,7 +38,6 @@ export const DashboardAdminDetails = () => {
     processStep5({
       _id: id,
       status: status,
-      extra_info: null
     }) // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
