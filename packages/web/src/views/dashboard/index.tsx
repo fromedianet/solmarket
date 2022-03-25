@@ -45,7 +45,7 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
       const result = await signin(signedMessage.publicKey.toBase58(), bs58.encode(signedMessage.signature));
       if (result) {
         // @ts-ignore
-        setAuthToken(result["token"]);
+        setAuthToken(result["token"], result["isAdmin"]);
       } else {
         removeAuthToken();
       }
