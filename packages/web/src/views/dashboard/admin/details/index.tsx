@@ -14,7 +14,7 @@ export const DashboardAdminDetails = () => {
   const [collection, setCollection] = useState({});
   const [loading, setLoading] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
-  const { getCollectionById, updateCollectionStatus } = useCollectionsAPI();
+  const { getCollectionById, processStep5 } = useCollectionsAPI();
 
   useEffect(() => {
     setLoading(true);
@@ -35,9 +35,10 @@ export const DashboardAdminDetails = () => {
 
   const handleApprove = () => {
     const status = type === 'submitted' ? 'reviewed' : 'listed';
-    updateCollectionStatus({
+    processStep5({
       _id: id,
       status: status,
+      extra_info: null
     }) // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
@@ -58,7 +59,7 @@ export const DashboardAdminDetails = () => {
   };
 
   const handleReject = values => {
-    updateCollectionStatus({
+    processStep5({
       _id: id,
       status: 'rejected',
       extra_info: values.reject_info,
@@ -206,7 +207,7 @@ export const DashboardAdminDetails = () => {
                     <span>candymachine ids:</span>
                   </Col>
                   <Col span={14} className="review-content">
-                    {collection['candymachine_ids'].toString()}
+                    {collection['candymachine_id']}
                   </Col>
                 </Row>
                 <Row style={{ marginBottom: 24 }}>

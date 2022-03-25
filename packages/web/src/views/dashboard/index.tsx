@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from 'antd';
 import bs58 from 'bs58';
 import { DashboardHeader } from './header';
@@ -11,12 +11,6 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
   const wallet = useWallet();
   const { authToken, setAuthToken, removeAuthToken } = useAuthToken();
   const { fetchNonce, signin } = useAuthAPI();
-
-  useEffect(() => {
-    if (!wallet.connected) {
-      removeAuthToken();
-    }
-  }, [wallet, authToken]);
 
   const getNonce = async () => {
     if (wallet.publicKey) {

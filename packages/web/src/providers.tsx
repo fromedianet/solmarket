@@ -37,13 +37,15 @@ export const Providers: FC = ({ children }) => {
                 storeAddress={process.env.NEXT_PUBLIC_STORE_ADDRESS}
               >
                 <MetaProvider>
-                  <LoaderProvider>
-                    <ConfettiProvider>
-                      <SidebarProvider>
-                        <AppLayout>{children}</AppLayout>
-                      </SidebarProvider>
-                    </ConfettiProvider>
-                  </LoaderProvider>
+                  <AuthProvider>
+                    <LoaderProvider>
+                      <ConfettiProvider>
+                        <SidebarProvider>
+                          <AppLayout>{children}</AppLayout>
+                        </SidebarProvider>
+                      </ConfettiProvider>
+                    </LoaderProvider>
+                  </AuthProvider>
                 </MetaProvider>
               </StoreProvider>
             </AccountsProvider>

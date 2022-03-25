@@ -17,7 +17,7 @@ export const SubmitStep = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      extra_info: collection['extra_info'] || '',
+      extra_info: collection['extra_info'],
     });
   }, [collection]);
 
@@ -51,12 +51,20 @@ export const SubmitStep = ({
             {collection['name']}
           </Col>
         </Row>
-        <Row style={{ marginBottom: 24 }}>
+        <Row>
           <Col span={10} className="review-label">
             <span>symbol:</span>
           </Col>
           <Col span={14} className="review-content">
             {collection['symbol']}
+          </Col>
+        </Row>
+        <Row style={{ marginBottom: 24 }}>
+          <Col span={10} className="review-label">
+            <span>email:</span>
+          </Col>
+          <Col span={14} className="review-content">
+            {collection['email']}
           </Col>
         </Row>
         <Row>
@@ -133,7 +141,7 @@ export const SubmitStep = ({
             <span>candymachine ids:</span>
           </Col>
           <Col span={14} className="review-content">
-            {collection['candymachine_ids'].toString()}
+            {collection['candymachine_id']}
           </Col>
         </Row>
         <Row>

@@ -18,11 +18,11 @@ export const DashboardListingView = () => {
   const [step, setStep] = useState<number>(1);
   const {
     getCollectionById,
-    collectionStep1,
-    collectionStep2,
-    collectionStep3,
-    collectionStep4,
-    updateCollectionStatus,
+    processStep1,
+    processStep2,
+    processStep3,
+    processStep4,
+    processStep5,
   } = useCollectionsAPI();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -44,147 +44,72 @@ export const DashboardListingView = () => {
     });
   }, [id]);
 
-  const processStep1 = permission => {
+  const cProcessStep1 = async (permission) => {
     setSaving(true);
-    collectionStep1({ _id: id, permission: permission })
+    const result = await processStep1({ _id: id, permission: permission });
+    // @ts-ignore
+    if (result && result['data']) {
       // @ts-ignore
-      .then((res: {}) => {
-        if (res['data']) {
-          setCollection(res['data']);
-          setStep(2);
-        } else {
-          notify({
-            message: 'Step 1 has failed!',
-            description: res['message'],
-            type: 'error',
-          });
-        }
-        setSaving(false);
-      })
-      .catch(err => {
-        notify({
-          message: 'Step 1 has failed!',
-          description: err['message'],
-          type: 'error',
-        });
-        setSaving(false);
-      });
+      setCollection(result['data']);
+      setStep(2);
+    }
+    setSaving(false);
   };
 
-  const processStep2 = (params: { name: string; symbol: string }) => {
+  const cProcessStep2 = async (params: { name: string; symbol: string, email: string }) => {
     setSaving(true);
-    collectionStep2({ _id: id, ...params })
+    const result = await processStep2({ _id: id, ...params });
+    // @ts-ignore
+    if (result && result['data']) {
       // @ts-ignore
-      .then((res: {}) => {
-        if (res['data']) {
-          setCollection(res['data']);
-          setStep(3);
-        } else {
-          notify({
-            message: 'Step 2 has failed!',
-            description: res['message'],
-            type: 'error',
-          });
-        }
-        setSaving(false);
-      })
-      .catch(err => {
-        notify({
-          message: 'Step 2 has failed!',
-          description: err['message'],
-          type: 'error',
-        });
-        setSaving(false);
-      });
+      setCollection(result['data']);
+      setStep(3);
+    }
+    setSaving(false);
   };
 
-  const processStep3 = params => {
+  const cProcessStep3 = async (params) => {
     setSaving(true);
-    collectionStep3({ _id: id, ...params })
+    const result = await processStep3({ _id: id, ...params });
+    // @ts-ignore
+    if (result && result['data']) {
       // @ts-ignore
-      .then((res: {}) => {
-        if (res['data']) {
-          setCollection(res['data']);
-          setStep(4);
-        } else {
-          notify({
-            message: 'Step 3 has failed!',
-            description: res['message'],
-            type: 'error',
-          });
-        }
-        setSaving(false);
-      })
-      .catch(err => {
-        notify({
-          message: 'Step 3 has failed!',
-          description: err['message'],
-          type: 'error',
-        });
-        setSaving(false);
-      });
+      setCollection(result['data']);
+      setStep(4);
+    }
+    setSaving(false);
   };
 
-  const processStep4 = params => {
+  const cProcessStep4 = async (params) => {
     setSaving(true);
-    collectionStep4({ _id: id, ...params })
+    const result = await processStep4({ _id: id, ...params });
+    // @ts-ignore
+    if (result && result['data']) {
       // @ts-ignore
-      .then((res: {}) => {
-        if (res['data']) {
-          setCollection(res['data']);
-          setStep(5);
-        } else {
-          notify({
-            message: 'Step 4 has failed!',
-            description: res['message'],
-            type: 'error',
-          });
-        }
-        setSaving(false);
-      })
-      .catch(err => {
-        notify({
-          message: 'Step 4 has failed!',
-          description: err['message'],
-          type: 'error',
-        });
-        setSaving(false);
-      });
+      setCollection(result['data']);
+        setStep(5);
+    }
+    setSaving(false);
   };
 
-  const processStep5 = extra_info => {
+  const cProcessStep5 = async (extra_info: string) => {
     setSaving(true);
-    updateCollectionStatus({
+    const result = await processStep5({
       _id: id,
       status: 'submitted',
       extra_info: extra_info,
-    })
+    });
+    // @ts-ignore
+    if (result && result['data']) {
       // @ts-ignore
-      .then((res: {}) => {
-        if (res['data']) {
-          setCollection(res['data']);
-          notify({
-            message: 'Submit has successed!',
-            type: 'success',
-          });
-          history.goBack();
-        } else {
-          notify({
-            message: 'Submit has failed!',
-            description: res['message'],
-            type: 'error',
-          });
-        }
-        setSaving(false);
-      })
-      .catch(err => {
-        notify({
-          message: 'Submit has failed!',
-          description: err['message'],
-          type: 'error',
-        });
-        setSaving(false);
+      setCollection(result['data']);
+      notify({
+        message: 'Submit has successed!',
+        type: 'success',
       });
+      history.goBack();
+    }
+    setSaving(false);
   };
 
   return (
@@ -205,21 +130,21 @@ export const DashboardListingView = () => {
               {step === 1 && (
                 <IntroStep
                   collection={collection}
-                  handleAction={processStep1}
+                  handleAction={cProcessStep1}
                   saving={saving}
                 />
               )}
               {step === 2 && (
                 <CollectionStep
                   collection={collection}
-                  handleAction={processStep2}
+                  handleAction={cProcessStep2}
                   saving={saving}
                 />
               )}
               {step === 3 && (
                 <DetailsStep
                   collection={collection}
-                  handleAction={processStep3}
+                  handleAction={cProcessStep3}
                   saving={saving}
                 />
               )}
@@ -227,14 +152,14 @@ export const DashboardListingView = () => {
                 <CandyMachineStep
                   collection={collection}
                   saving={saving}
-                  handleAction={processStep4}
+                  handleAction={cProcessStep4}
                 />
               )}
               {step === 5 && (
                 <SubmitStep
                   collection={collection}
                   saving={saving}
-                  handleAction={processStep5}
+                  handleAction={cProcessStep5}
                 />
               )}
             </Col>

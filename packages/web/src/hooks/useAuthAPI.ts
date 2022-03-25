@@ -61,7 +61,6 @@ export const useAuthAPI = () => {
         }
       })
       .catch(err => {
-        console.log(err.response);
         let errMessage = err.message;
         if (err.response && err.response.data.error.message) {
           errMessage = err.response.data.error.message;

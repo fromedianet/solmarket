@@ -73,9 +73,9 @@ export const LaunchpadDetailView = () => {
       .then((res: {}) => {
         if (res['data']) {
           setCollection(res['data']);
-          const candyMachineIds = res['data']['candymachine_ids'];
-          if (candyMachineIds.length > 0) {
-            setCandyMachineId(toPublicKey(candyMachineIds[0]));
+          const candyMachineId = res['data']['candymachine_id'];
+          if (candyMachineId) {
+            setCandyMachineId(toPublicKey(candyMachineId));
           }
         } else {
           notify({
