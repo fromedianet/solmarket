@@ -86,7 +86,7 @@ export const ORACLE_ID = new PublicKey(
 );
 
 export const CANDY_MACHINE_PROGRAM_ID = new PublicKey(
-  'cndy3Z4yapfJBmL3ShUp5exZKqR3z33thTzeNMm2gRZ'
-)
+  'cndy3Z4yapfJBmL3ShUp5exZKqR3z33thTzeNMm2gRZ',
+);
 
 export const SYSTEM = new PublicKey('11111111111111111111111111111111');
