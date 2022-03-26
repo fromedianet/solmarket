@@ -44,7 +44,7 @@ export const DashboardListingView = () => {
     });
   }, [id]);
 
-  const cProcessStep1 = async (permission) => {
+  const cProcessStep1 = async permission => {
     setSaving(true);
     const result = await processStep1({ _id: id, permission: permission });
     // @ts-ignore
@@ -56,7 +56,11 @@ export const DashboardListingView = () => {
     setSaving(false);
   };
 
-  const cProcessStep2 = async (params: { name: string; symbol: string, email: string }) => {
+  const cProcessStep2 = async (params: {
+    name: string;
+    symbol: string;
+    email: string;
+  }) => {
     setSaving(true);
     const result = await processStep2({ _id: id, ...params });
     // @ts-ignore
@@ -68,7 +72,7 @@ export const DashboardListingView = () => {
     setSaving(false);
   };
 
-  const cProcessStep3 = async (params) => {
+  const cProcessStep3 = async params => {
     setSaving(true);
     const result = await processStep3({ _id: id, ...params });
     // @ts-ignore
@@ -80,19 +84,19 @@ export const DashboardListingView = () => {
     setSaving(false);
   };
 
-  const cProcessStep4 = async (params) => {
+  const cProcessStep4 = async params => {
     setSaving(true);
     const result = await processStep4({ _id: id, ...params });
     // @ts-ignore
     if (result && result['data']) {
       // @ts-ignore
       setCollection(result['data']);
-        setStep(5);
+      setStep(5);
     }
     setSaving(false);
   };
 
-  const cProcessStep5 = async (params) => {
+  const cProcessStep5 = async params => {
     setSaving(true);
     const result = await processStep5({
       _id: id,

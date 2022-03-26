@@ -1,4 +1,9 @@
-import { CANDY_MACHINE_PROGRAM_ID, decodeMetadata, METADATA_PROGRAM_ID, pubkeyToString } from '@oyster/common';
+import {
+  CANDY_MACHINE_PROGRAM_ID,
+  decodeMetadata,
+  METADATA_PROGRAM_ID,
+  pubkeyToString,
+} from '@oyster/common';
 import * as anchor from '@project-serum/anchor';
 
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
@@ -20,7 +25,7 @@ import {
 } from './utils';
 
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
-  METADATA_PROGRAM_ID
+  METADATA_PROGRAM_ID,
 );
 
 interface CandyMachineState {
@@ -236,7 +241,7 @@ const getMetadata = async (
 
 export const loadMetadata = async (
   connection: Connection,
-  metadataAddress: anchor.web3.PublicKey
+  metadataAddress: anchor.web3.PublicKey,
 ) => {
   console.log('>>> loadMetadata metadataAddress', metadataAddress.toBase58());
   try {
@@ -611,8 +616,8 @@ export const mintOneToken = async (
     return {
       status,
       metadata,
-      tokenAddress: userTokenAccountAddress.toBase58()
-    }
+      tokenAddress: userTokenAccountAddress.toBase58(),
+    };
   } catch (e) {
     console.log(e);
   }

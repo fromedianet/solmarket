@@ -21,12 +21,13 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
         return null;
       }
     }
-  }
+  };
 
   const login = async () => {
     const nonce = await getNonce();
     if (nonce) {
-      const message = 'Sign in with PaperCity.\n\n' + 
+      const message =
+        'Sign in with PaperCity.\n\n' +
         'No password needed.\n\n' +
         'Click "Sign" or "Approve" only means you have proved this wallet is owned by you.\n\n' +
         'This request will not trigger any blockchain transaction or cost any gas fee.\n\n' +
@@ -34,17 +35,26 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
         `nonce: ${nonce}`;
       const encodedMessage = new TextEncoder().encode(message);
       // @ts-ignore
-      const signedMessage = await window.solana.signMessage(encodedMessage, "utf8");
-      console.log(signedMessage.publicKey.toBase58(), bs58.encode(signedMessage.signature));
-      const result = await signin(signedMessage.publicKey.toBase58(), bs58.encode(signedMessage.signature));
+      const signedMessage = await window.solana.signMessage(
+        encodedMessage,
+        'utf8',
+      );
+      console.log(
+        signedMessage.publicKey.toBase58(),
+        bs58.encode(signedMessage.signature),
+      );
+      const result = await signin(
+        signedMessage.publicKey.toBase58(),
+        bs58.encode(signedMessage.signature),
+      );
       if (result) {
         // @ts-ignore
-        setAuthToken(result["token"], result["isAdmin"]);
+        setAuthToken(result['token'], result['isAdmin']);
       } else {
         removeAuthToken();
       }
     }
-  }
+  };
 
   return (
     <div className="dashboard-layout">
@@ -55,13 +65,15 @@ export const DashboardLayout = React.memo(function AppLayoutImpl(props: any) {
             {props.children}
           </>
         ) : (
-          <div className='not-configured'>
-            <Button type='primary' onClick={login}>Sign in</Button>
+          <div className="not-configured">
+            <Button type="primary" onClick={login}>
+              Sign in
+            </Button>
           </div>
         )
       ) : (
         <div className="not-configured">
-          <span className='description'>Connect wallet to show this page</span>
+          <span className="description">Connect wallet to show this page</span>
           <ConnectButton />
         </div>
       )}

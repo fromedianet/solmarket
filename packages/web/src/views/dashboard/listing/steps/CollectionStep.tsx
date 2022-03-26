@@ -17,7 +17,7 @@ export const CollectionStep = ({
     form.setFieldsValue({
       name: collection['name'] || '',
       symbol: collection['symbol'] || '',
-      email: collection['email'] || ''
+      email: collection['email'] || '',
     });
   }, [collection]);
 
@@ -65,7 +65,13 @@ export const CollectionStep = ({
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, type: 'email', message: 'The input is not valid E-mail!' }]}
+          rules={[
+            {
+              required: true,
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            },
+          ]}
         >
           <Input
             autoFocus

@@ -1,4 +1,3 @@
-import { notify } from '@oyster/common';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Tabs } from 'antd';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
@@ -8,7 +7,7 @@ import { DashboardCollectionCard } from '../../../components/DashboardCollection
 const { TabPane } = Tabs;
 
 export const DashboardAdmin = () => {
-  const { getAllCollections } = useCollectionsAPI();
+  const { getCollectionsWithoutDraft } = useCollectionsAPI();
   const [lists, setLists] = useState({
     submitted: [],
     reviewed: [],
@@ -18,18 +17,13 @@ export const DashboardAdmin = () => {
 
   useEffect(() => {
     // @ts-ignore
-    getAllCollections().then((res: {}) => {
+    getCollectionsWithoutDraft().then((res: {}) => {
       if (res['data']) {
         setLists({
           submitted: res['data'].filter(item => item.status === 'submitted'),
           reviewed: res['data'].filter(item => item.status === 'reviewed'),
           listed: res['data'].filter(item => item.status === 'listed'),
           rejected: res['data'].filter(item => item.status === 'rejected'),
-        });
-      } else {
-        notify({
-          message: res['message'],
-          type: 'error',
         });
       }
     });

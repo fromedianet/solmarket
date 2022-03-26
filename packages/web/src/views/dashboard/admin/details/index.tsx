@@ -23,10 +23,6 @@ export const DashboardAdminDetails = () => {
       if (res['data']) {
         setCollection(res['data']);
       } else {
-        notify({
-          message: res['message'],
-          type: 'error',
-        });
         history.goBack();
       }
       setLoading(false);

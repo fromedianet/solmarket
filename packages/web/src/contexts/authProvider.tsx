@@ -1,5 +1,11 @@
 import { useLocalStorage } from '@oyster/common';
-import React, { createContext, FC, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  FC,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 interface AuthConfig {
   authToken: string;
@@ -45,12 +51,14 @@ export const AuthProvider: FC = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{
-      authToken: token,
-      isAdmin: admin,
-      setAuthToken,
-      removeAuthToken,
-    }}>
+    <AuthContext.Provider
+      value={{
+        authToken: token,
+        isAdmin: admin,
+        setAuthToken,
+        removeAuthToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

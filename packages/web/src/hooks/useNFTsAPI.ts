@@ -1,7 +1,6 @@
 import { APIS } from '../constants';
 
 export const useNFTsAPI = () => {
-
   function createNFT(data: {}) {
     return new Promise((resolve, reject) => {
       const url = APIS.base_url + APIS.nfts;
@@ -21,6 +20,6 @@ export const useNFTsAPI = () => {
   }
 
   return {
-    createNFT
+    createNFT,
   };
 };

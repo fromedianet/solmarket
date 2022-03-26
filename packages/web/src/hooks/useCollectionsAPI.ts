@@ -14,40 +14,45 @@ export const useCollectionsAPI = () => {
   function runAuthAPIs(method: Method, url: string, data?: string | FormData) {
     return new Promise((resolve, reject) => {
       axiosInstance.defaults.headers.common['x-access-token'] = authToken;
-      axiosInstance.request({
-        method: method,
-        url: url,
-        data: data,
-      }).then(res => {
-        if (res.status === 200) {
-          resolve(res.data);
-        } else {
-          if (res.status === 401) {
+      axiosInstance
+        .request({
+          method: method,
+          url: url,
+          data: data,
+        })
+        .then(res => {
+          if (res.status === 200) {
+            resolve(res.data);
+          } else {
+            if (res.status === 401) {
+              removeAuthToken();
+            }
+            notify({
+              message: res.data.error.message,
+              type: 'error',
+            });
+            reject();
+          }
+        })
+        .catch(err => {
+          if (err.response && err.response.status === 401) {
             removeAuthToken();
           }
+          let errMessage = err.message;
+          if (err.response && err.response.data) {
+            errMessage = err.response.data.error
+              ? err.response.data.error.message
+              : err.response.data.details;
+          }
           notify({
-            message: res.data.error.message,
+            message: errMessage,
             type: 'error',
           });
           reject();
-        }
-      }).catch(err => {
-        if (err.response && err.response.status === 401) {
-          removeAuthToken();
-        }
-        let errMessage = err.message;
-        if (err.response && err.response.data) {
-          errMessage = err.response.data.error ? err.response.data.error.message : err.response.data.details;
-        } 
-        notify({
-          message: errMessage,
-          type: 'error',
         });
-        reject();
-      });
     });
   }
-  
+
   /**
    * Craete new collection with uuid and email
    *
@@ -55,7 +60,11 @@ export const useCollectionsAPI = () => {
    * @returns
    */
   async function createCollection(props: { _id: string }) {
-    const result = await runAuthAPIs('post', '/collections/create', JSON.stringify(props));
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/create',
+      JSON.stringify(props),
+    );
     return result;
   }
 
@@ -76,7 +85,11 @@ export const useCollectionsAPI = () => {
    * @returns
    */
   async function getCollectionById(id: string) {
-    const result = await runAuthAPIs('post', '/collections/getCollectionById', JSON.stringify({_id: id}));
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/getCollectionById',
+      JSON.stringify({ _id: id }),
+    );
     return result;
   }
 
@@ -87,7 +100,11 @@ export const useCollectionsAPI = () => {
    * @returns
    */
   async function processStep1(props: { _id: string; permission: string }) {
-    const result = await runAuthAPIs('post', '/collections/processStep1', JSON.stringify(props));
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/processStep1',
+      JSON.stringify(props),
+    );
     return result;
   }
 
@@ -103,7 +120,11 @@ export const useCollectionsAPI = () => {
     symbol: string;
     email: string;
   }) {
-    const result = await runAuthAPIs('post', '/collections/processStep2', JSON.stringify(props));
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/processStep2',
+      JSON.stringify(props),
+    );
     return result;
   }
 
@@ -150,9 +171,15 @@ export const useCollectionsAPI = () => {
     formData.append('twitter', props.twitter);
     formData.append('discord', props.discord);
     if (props.website) formData.append('website', props.website);
-    
-    axiosInstance.defaults.headers.common['Content-Type'] = `multipart/formdata; boundary=${Date.now()}`;
-    const result = await runAuthAPIs('post', '/collections/processStep3', formData);
+
+    axiosInstance.defaults.headers.common[
+      'Content-Type'
+    ] = `multipart/formdata; boundary=${Date.now()}`;
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/processStep3',
+      formData,
+    );
     return result;
   }
 
@@ -169,7 +196,11 @@ export const useCollectionsAPI = () => {
     mint_price: number;
     launch_time: number;
   }) {
-    const result = await runAuthAPIs('post', '/collections/processStep4', JSON.stringify(props));
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/processStep4',
+      JSON.stringify(props),
+    );
     return result;
   }
 
@@ -184,7 +215,11 @@ export const useCollectionsAPI = () => {
     status: string;
     extra_info?: string | null;
   }) {
-    const result = await runAuthAPIs('post', '/collections/processStep5', JSON.stringify(props));
+    const result = await runAuthAPIs(
+      'post',
+      '/collections/processStep5',
+      JSON.stringify(props),
+    );
     return result;
   }
 
@@ -192,21 +227,12 @@ export const useCollectionsAPI = () => {
    * Get all collections for review (without draft)
    *
    */
-  function getAllCollections() {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/all';
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function getCollectionsWithoutDraft() {
+    const result = await runAuthAPIs(
+      'get',
+      '/collections/getCollectionsWithoutDraft',
+    );
+    return result;
   }
 
   /**
@@ -316,7 +342,7 @@ export const useCollectionsAPI = () => {
     processStep3,
     processStep4,
     processStep5,
-    getAllCollections,
+    getCollectionsWithoutDraft,
     allCollections,
     newCollections,
     featuredCollectionsCarousel,

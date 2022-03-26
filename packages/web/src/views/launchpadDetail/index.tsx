@@ -487,8 +487,7 @@ export const LaunchpadDetailView = () => {
                             <GatewayProvider
                               wallet={{
                                 publicKey:
-                                  wallet.publicKey ||
-                                  CANDY_MACHINE_PROGRAM_ID,
+                                  wallet.publicKey || CANDY_MACHINE_PROGRAM_ID,
                                 //@ts-ignore
                                 signTransaction: wallet.signTransaction,
                               }}

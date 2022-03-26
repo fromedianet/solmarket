@@ -38,7 +38,7 @@ export const DashboardView = () => {
     const _id = uuid();
 
     try {
-      await createCollection({_id});
+      await createCollection({ _id });
       history.push(`/dashboard/listing/${_id}`);
     } catch (e) {
       console.error(e);
