@@ -214,6 +214,7 @@ export const useCollectionsAPI = () => {
     _id: string;
     status: string;
     extra_info?: string | null;
+    reject_info?: string | null;
   }) {
     const result = await runAuthAPIs(
       'post',

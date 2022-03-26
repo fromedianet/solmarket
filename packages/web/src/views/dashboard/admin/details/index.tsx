@@ -57,7 +57,7 @@ export const DashboardAdminDetails = () => {
     processStep5({
       _id: id,
       status: 'rejected',
-      extra_info: values.reject_info,
+      reject_info: values.reject_info,
     }) // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
@@ -92,7 +92,7 @@ export const DashboardAdminDetails = () => {
               {(type === 'submitted' || type === 'reviewed') && <h1>Review</h1>}
               {type === 'rejected' && (
                 <p className="label" style={{ color: '#ffa600' }}>
-                  Rejection reason: rejected - ***
+                  {`Rejection reason: ${collection['reject_info']}`}
                 </p>
               )}
               <div className="review-container">
@@ -112,12 +112,20 @@ export const DashboardAdminDetails = () => {
                     {collection['name']}
                   </Col>
                 </Row>
-                <Row style={{ marginBottom: 24 }}>
+                <Row>
                   <Col span={10} className="review-label">
                     <span>symbol:</span>
                   </Col>
                   <Col span={14} className="review-content">
                     {collection['symbol']}
+                  </Col>
+                </Row>
+                <Row style={{ marginBottom: 24 }}>
+                  <Col span={10} className="review-label">
+                    <span>email:</span>
+                  </Col>
+                  <Col span={14} className="review-content">
+                    {collection['email']}
                   </Col>
                 </Row>
                 <Row>

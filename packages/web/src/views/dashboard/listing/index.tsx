@@ -126,6 +126,11 @@ export const DashboardListingView = () => {
         <EmptyView />
       ) : (
         <div className="listing-container container">
+          {collection['status'] === 'rejected' && (
+            <p className="label" style={{ color: '#ffa600' }}>
+              {`Rejection reason: ${collection['reject_info']}`}
+            </p>
+          )}
           <Row>
             <Col span={24} md={6} lg={4}>
               <SideMenu step={step} setStep={setStep} collection={collection} />

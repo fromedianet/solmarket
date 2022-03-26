@@ -17,6 +17,7 @@ export const CandyMachineStep = ({
   useEffect(() => {
     form.setFieldsValue({
       mint_supply: collection['mint_supply'] && collection['mint_supply'],
+      mint_price: collection['mint_price'] && collection['mint_price'],
       candymachine_id:
         collection['candymachine_id'] && collection['candymachine_id'],
       // UTC to Local time
