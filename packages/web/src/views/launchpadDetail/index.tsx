@@ -13,10 +13,8 @@ import {
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import {
-  awaitTransactionSignatureConfirmation,
   CandyMachineAccount,
   getCandyMachineState,
-  loadMetadata,
   mintOneToken,
 } from './candy-machine';
 import { formatNumber, getAtaForMint, toDate } from './utils';
@@ -25,12 +23,10 @@ import { GatewayProvider } from '@civic/solana-gateway-react';
 import { MintCountdown } from './MintCountdown';
 import { sendTransaction } from './connection';
 import { MintButton } from './MintButton';
-import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
   const { symbol } = useParams<{ symbol: string }>();
-  const { launchpadCollectionBySymbol } = useCollectionsAPI();
-  const { createNFT } = useNFTsAPI();
+  const { getCollectionBySymbol } = useCollectionsAPI();
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
@@ -68,7 +64,7 @@ export const LaunchpadDetailView = () => {
 
   useEffect(() => {
     setLoading(true);
-    launchpadCollectionBySymbol(symbol)
+    getCollectionBySymbol(symbol)
       // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
@@ -77,18 +73,7 @@ export const LaunchpadDetailView = () => {
           if (candyMachineId) {
             setCandyMachineId(toPublicKey(candyMachineId));
           }
-        } else {
-          notify({
-            message: res['message'],
-            type: 'error',
-          });
         }
-      })
-      .catch(err => {
-        notify({
-          message: err.message,
-          type: 'error',
-        });
       })
       .finally(() => {
         setLoading(false);

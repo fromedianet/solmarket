@@ -30,30 +30,37 @@ export const DashboardListingView = () => {
 
   useEffect(() => {
     setLoading(true);
-    // @ts-ignore
-    getCollectionById(id).then((res: {}) => {
-      if (res['data']) {
-        setCollection(res['data']);
-      } else {
-        notify({
-          message: res['message'],
-          type: 'error',
-        });
-      }
-      setLoading(false);
-    });
+    getCollectionById(id)
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollection(res['data']);
+        } else {
+          notify({
+            message: res['message'],
+            type: 'error',
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [id]);
 
   const cProcessStep1 = async permission => {
     setSaving(true);
-    const result = await processStep1({ _id: id, permission: permission });
-    // @ts-ignore
-    if (result && result['data']) {
-      // @ts-ignore
-      setCollection(result['data']);
-      setStep(2);
-    }
-    setSaving(false);
+    processStep1({ _id: id, permission: permission })
+      .then(result => {
+        // @ts-ignore
+        if (result['data']) {
+          // @ts-ignore
+          setCollection(result['data']);
+          setStep(2);
+        }
+      })
+      .finally(() => {
+        setSaving(false);
+      });
   };
 
   const cProcessStep2 = async (params: {
@@ -62,58 +69,74 @@ export const DashboardListingView = () => {
     email: string;
   }) => {
     setSaving(true);
-    const result = await processStep2({ _id: id, ...params });
-    // @ts-ignore
-    if (result && result['data']) {
-      // @ts-ignore
-      setCollection(result['data']);
-      setStep(3);
-    }
-    setSaving(false);
+    processStep2({ _id: id, ...params })
+      .then(result => {
+        // @ts-ignore
+        if (result['data']) {
+          // @ts-ignore
+          setCollection(result['data']);
+          setStep(3);
+        }
+      })
+      .finally(() => {
+        setSaving(false);
+      });
   };
 
   const cProcessStep3 = async params => {
     setSaving(true);
-    const result = await processStep3({ _id: id, ...params });
-    // @ts-ignore
-    if (result && result['data']) {
-      // @ts-ignore
-      setCollection(result['data']);
-      setStep(4);
-    }
-    setSaving(false);
+    processStep3({ _id: id, ...params })
+      .then(result => {
+        // @ts-ignore
+        if (result['data']) {
+          // @ts-ignore
+          setCollection(result['data']);
+          setStep(4);
+        }
+      })
+      .finally(() => {
+        setSaving(false);
+      });
   };
 
   const cProcessStep4 = async params => {
     setSaving(true);
-    const result = await processStep4({ _id: id, ...params });
-    // @ts-ignore
-    if (result && result['data']) {
-      // @ts-ignore
-      setCollection(result['data']);
-      setStep(5);
-    }
-    setSaving(false);
+    processStep4({ _id: id, ...params })
+      .then(result => {
+        // @ts-ignore
+        if (result['data']) {
+          // @ts-ignore
+          setCollection(result['data']);
+          setStep(5);
+        }
+      })
+      .finally(() => {
+        setSaving(false);
+      });
   };
 
   const cProcessStep5 = async params => {
     setSaving(true);
-    const result = await processStep5({
+    processStep5({
       _id: id,
       status: 'submitted',
       ...params,
-    });
-    // @ts-ignore
-    if (result && result['data']) {
-      // @ts-ignore
-      setCollection(result['data']);
-      notify({
-        message: 'Submit has successed!',
-        type: 'success',
+    })
+      .then(result => {
+        // @ts-ignore
+        if (result['data']) {
+          // @ts-ignore
+          setCollection(result['data']);
+          notify({
+            message: 'Submit has successed!',
+            type: 'success',
+          });
+          history.goBack();
+        }
+      })
+      .finally(() => {
+        setSaving(false);
       });
-      history.goBack();
-    }
-    setSaving(false);
   };
 
   return (
