@@ -27,7 +27,6 @@ export const MintCountdown: React.FC<MintCountdownProps> = ({
     seconds,
     completed,
   }: MintCountdownRender) => {
-    hours += days * 24;
     if (completed) {
       return status ? (
         <span className="launchpad-countdown">{status}</span>
@@ -36,6 +35,11 @@ export const MintCountdown: React.FC<MintCountdownProps> = ({
       return (
         <div className="launchpad-countdown">
           <span>STARTS IN</span>
+          {days > 0 && (
+            <div className="countdown-item">
+              <span>{days}</span>
+            </div>
+          )}
           <div className="countdown-item">
             <span>{hours < 10 ? `0${hours}` : hours}</span>
           </div>
