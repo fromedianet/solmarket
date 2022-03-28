@@ -11,18 +11,22 @@ export const SubmitStep = ({
 }: {
   collection: {};
   saving: boolean;
-  handleAction: (extra_info) => void;
+  handleAction: (params: {}) => void;
 }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
     form.setFieldsValue({
-      extra_info: collection['extra_info'] || '',
+      extra_info: collection['extra_info'],
     });
   }, [collection]);
 
   const onFinish = values => {
-    handleAction(values.extra_info);
+    const params = {};
+    if (values.extra_info) {
+      params['extra_info'] = values.extra_info;
+    }
+    handleAction(params);
   };
 
   return (
@@ -51,12 +55,20 @@ export const SubmitStep = ({
             {collection['name']}
           </Col>
         </Row>
-        <Row style={{ marginBottom: 24 }}>
+        <Row>
           <Col span={10} className="review-label">
             <span>symbol:</span>
           </Col>
           <Col span={14} className="review-content">
             {collection['symbol']}
+          </Col>
+        </Row>
+        <Row style={{ marginBottom: 24 }}>
+          <Col span={10} className="review-label">
+            <span>email:</span>
+          </Col>
+          <Col span={14} className="review-content">
+            {collection['email']}
           </Col>
         </Row>
         <Row>
@@ -133,7 +145,7 @@ export const SubmitStep = ({
             <span>candymachine ids:</span>
           </Col>
           <Col span={14} className="review-content">
-            {collection['candymachine_ids'].toString()}
+            {collection['candymachine_id']}
           </Col>
         </Row>
         <Row>

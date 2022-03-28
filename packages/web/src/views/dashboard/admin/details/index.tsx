@@ -14,7 +14,7 @@ export const DashboardAdminDetails = () => {
   const [collection, setCollection] = useState({});
   const [loading, setLoading] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
-  const { getCollectionById, updateCollectionStatus } = useCollectionsAPI();
+  const { getCollectionById, processStep5 } = useCollectionsAPI();
 
   useEffect(() => {
     setLoading(true);
@@ -23,10 +23,6 @@ export const DashboardAdminDetails = () => {
       if (res['data']) {
         setCollection(res['data']);
       } else {
-        notify({
-          message: res['message'],
-          type: 'error',
-        });
         history.goBack();
       }
       setLoading(false);
@@ -35,7 +31,7 @@ export const DashboardAdminDetails = () => {
 
   const handleApprove = () => {
     const status = type === 'submitted' ? 'reviewed' : 'listed';
-    updateCollectionStatus({
+    processStep5({
       _id: id,
       status: status,
     }) // @ts-ignore
@@ -58,10 +54,10 @@ export const DashboardAdminDetails = () => {
   };
 
   const handleReject = values => {
-    updateCollectionStatus({
+    processStep5({
       _id: id,
       status: 'rejected',
-      extra_info: values.reject_info,
+      reject_info: values.reject_info,
     }) // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
@@ -96,7 +92,7 @@ export const DashboardAdminDetails = () => {
               {(type === 'submitted' || type === 'reviewed') && <h1>Review</h1>}
               {type === 'rejected' && (
                 <p className="label" style={{ color: '#ffa600' }}>
-                  Rejection reason: rejected - ***
+                  {`Rejection reason: ${collection['reject_info']}`}
                 </p>
               )}
               <div className="review-container">
@@ -116,12 +112,20 @@ export const DashboardAdminDetails = () => {
                     {collection['name']}
                   </Col>
                 </Row>
-                <Row style={{ marginBottom: 24 }}>
+                <Row>
                   <Col span={10} className="review-label">
                     <span>symbol:</span>
                   </Col>
                   <Col span={14} className="review-content">
                     {collection['symbol']}
+                  </Col>
+                </Row>
+                <Row style={{ marginBottom: 24 }}>
+                  <Col span={10} className="review-label">
+                    <span>email:</span>
+                  </Col>
+                  <Col span={14} className="review-content">
+                    {collection['email']}
                   </Col>
                 </Row>
                 <Row>
@@ -206,7 +210,7 @@ export const DashboardAdminDetails = () => {
                     <span>candymachine ids:</span>
                   </Col>
                   <Col span={14} className="review-content">
-                    {collection['candymachine_ids'].toString()}
+                    {collection['candymachine_id']}
                   </Col>
                 </Row>
                 <Row style={{ marginBottom: 24 }}>

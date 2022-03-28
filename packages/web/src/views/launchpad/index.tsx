@@ -1,4 +1,3 @@
-import { notify } from '@oyster/common';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
@@ -8,7 +7,7 @@ import { LaunchpadCard } from '../../components/LaunchpadCard';
 
 export const LaunchPadView = () => {
   const [loading, setLoading] = useState(false);
-  const { launchpadCollections } = useCollectionsAPI();
+  const { getLaunchpadCollections } = useCollectionsAPI();
   const [collections, setCollections] = useState({
     live: [],
     upcoming: [],
@@ -17,23 +16,12 @@ export const LaunchPadView = () => {
 
   useEffect(() => {
     setLoading(true);
-    launchpadCollections()
+    getLaunchpadCollections()
       // @ts-ignore
       .then((res: {}) => {
         if (res['data']) {
           parseData(res['data']);
-        } else {
-          notify({
-            message: res['message'],
-            type: 'error',
-          });
         }
-      })
-      .catch(err => {
-        notify({
-          message: err.message,
-          type: 'error',
-        });
       })
       .finally(() => setLoading(false));
   }, []);

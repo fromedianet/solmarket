@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { getTokenListContainerPromise } from '../utils';
-import { TokenInfo, ENV as ChainId } from '@solana/spl-token-registry';
+import React, { useContext, useEffect, useRef } from 'react';
+import { ENV as ChainId } from '@solana/spl-token-registry';
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import {
   Keypair,
@@ -67,13 +66,13 @@ const DEFAULT_ENDPOINT = ENDPOINTS[0];
 interface ConnectionConfig {
   connection: Connection;
   endpoint: Endpoint;
-  tokens: Map<string, TokenInfo>;
+  // tokens: Map<string, TokenInfo>;
 }
 
 const ConnectionContext = React.createContext<ConnectionConfig>({
   connection: new Connection(DEFAULT_ENDPOINT.url, 'recent'),
   endpoint: DEFAULT_ENDPOINT,
-  tokens: new Map(),
+  // tokens: new Map(),
 });
 
 export function ConnectionProvider({ children }: { children: any }) {
@@ -102,24 +101,6 @@ export function ConnectionProvider({ children }: { children: any }) {
   const endpoint = maybeEndpoint || DEFAULT_ENDPOINT;
 
   const { current: connection } = useRef(new Connection(endpoint.url));
-
-  const [tokens, setTokens] = useState<Map<string, TokenInfo>>(new Map());
-
-  useEffect(() => {
-    function fetchTokens() {
-      return getTokenListContainerPromise().then(container => {
-        const list = container
-          .excludeByTag('nft')
-          .filterByChainId(endpoint.chainId)
-          .getList();
-
-        const map = new Map(list.map(item => [item.address, item]));
-        setTokens(map);
-      });
-    }
-
-    fetchTokens();
-  }, []);
 
   useEffect(() => {
     function updateNetworkInLocalStorageIfNeeded() {
@@ -156,9 +137,8 @@ export function ConnectionProvider({ children }: { children: any }) {
     return {
       endpoint,
       connection,
-      tokens,
     };
-  }, [tokens]);
+  }, []);
 
   return (
     <ConnectionContext.Provider value={contextValue}>
@@ -173,10 +153,9 @@ export function useConnection() {
 }
 
 export function useConnectionConfig() {
-  const { endpoint, tokens } = useContext(ConnectionContext);
+  const { endpoint } = useContext(ConnectionContext);
   return {
     endpoint,
-    tokens,
   };
 }
 

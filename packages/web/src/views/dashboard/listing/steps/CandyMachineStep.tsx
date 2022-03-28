@@ -17,10 +17,9 @@ export const CandyMachineStep = ({
   useEffect(() => {
     form.setFieldsValue({
       mint_supply: collection['mint_supply'] && collection['mint_supply'],
-      candymachine_ids:
-        collection['candymachine_ids'].length > 0
-          ? collection['candymachine_ids'][0]
-          : '',
+      mint_price: collection['mint_price'] && collection['mint_price'],
+      candymachine_id:
+        collection['candymachine_id'] && collection['candymachine_id'],
       // UTC to Local time
       datepicker:
         collection['launch_time'] &&
@@ -31,10 +30,10 @@ export const CandyMachineStep = ({
   const onFinish = values => {
     const params = {
       // Local time to UTC
-      launch_time: values.datepicker.utc().format(),
+      launch_time: values.datepicker,
       mint_supply: values.mint_supply,
       mint_price: values.mint_price,
-      candymachine_ids: values.candymachine_ids,
+      candymachine_id: values.candymachine_id,
     };
     handleAction(params);
   };
@@ -100,11 +99,11 @@ export const CandyMachineStep = ({
         </Form.Item>
         <Form.Item
           label="Candy Machine ID"
-          name="candymachine_ids"
+          name="candymachine_id"
           rules={[
             { required: true, message: 'Candy machine id is required!' },
             {
-              pattern: new RegExp('^[a-zA-Z0-9]{44}$'),
+              pattern: new RegExp('^[a-zA-Z0-9]{32,44}$'),
               message: 'Format is wrong',
             },
           ]}
@@ -112,6 +111,7 @@ export const CandyMachineStep = ({
           <Input
             placeholder="Candy machine id"
             className="step-input"
+            minLength={32}
             maxLength={44}
           />
         </Form.Item>

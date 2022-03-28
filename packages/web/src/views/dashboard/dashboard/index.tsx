@@ -4,16 +4,13 @@ import { BadgeText } from '../../../components/BadgeText';
 import uuid from 'react-uuid';
 import { useHistory } from 'react-router-dom';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
-import { notify } from '@oyster/common';
-import { useDashboard } from '../../../contexts/dashboardProvider';
 import { DashboardCollectionCard } from '../../../components/DashboardCollectionCard';
 
 const { TabPane } = Tabs;
 
 export const DashboardView = () => {
-  const { user } = useDashboard();
   const history = useHistory();
-  const { createCollection, getCollectionsByEmail } = useCollectionsAPI();
+  const { createCollection, getMyCollections } = useCollectionsAPI();
   const [lists, setLists] = useState({
     drafts: [],
     submissions: [],
@@ -24,19 +21,14 @@ export const DashboardView = () => {
 
   useEffect(() => {
     // @ts-ignore
-    getCollectionsByEmail(user.email).then((res: {}) => {
-      if (res['data']) {
+    getMyCollections().then((res: {}) => {
+      if (res) {
         setLists({
           drafts: res['data'].filter(item => item.status === 'draft'),
           submissions: res['data'].filter(item => item.status === 'submitted'),
           reviewed: res['data'].filter(item => item.status === 'reviewed'),
           listed: res['data'].filter(item => item.status === 'listed'),
           rejected: res['data'].filter(item => item.status === 'rejected'),
-        });
-      } else {
-        notify({
-          message: res['message'],
-          type: 'error',
         });
       }
     });
@@ -45,22 +37,12 @@ export const DashboardView = () => {
   const handleCreate = async () => {
     const _id = uuid();
 
-    createCollection({
-      _id: _id,
-      // @ts-ignore
-      email: user.email,
-      // @ts-ignore
-    }).then((res: {}) => {
-      if (res['message']) {
-        notify({
-          message: 'Create collection has failed!',
-          description: res['message'],
-          type: 'error',
-        });
-      } else {
-        history.push(`/dashboard/listing/${_id}`);
-      }
-    });
+    try {
+      await createCollection({ _id });
+      history.push(`/dashboard/listing/${_id}`);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

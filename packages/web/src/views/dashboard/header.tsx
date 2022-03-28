@@ -1,6 +1,8 @@
 import React from 'react';
+import { useAuthToken } from '../../contexts/authProvider';
 
 export const DashboardHeader = () => {
+  const { isAdmin, removeAuthToken } = useAuthToken();
   return (
     <nav className="header container">
       <a href="/" className="logo">
@@ -10,8 +12,13 @@ export const DashboardHeader = () => {
         <a href="/dashboard" className="header-menu">
           Dashboard
         </a>
-        <a href="/dashboard/admin" className="header-menu">
-          Admin
+        {isAdmin && (
+          <a href="/dashboard/admin" className="header-menu">
+            Admin
+          </a>
+        )}
+        <a className="header-menu" onClick={removeAuthToken}>
+          Log out
         </a>
       </div>
       {/* <a href="/api/logout" className="signout">

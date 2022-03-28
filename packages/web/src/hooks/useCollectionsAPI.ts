@@ -1,74 +1,106 @@
 import { APIS } from '../constants';
+import axios, { Method } from 'axios';
+import { useAuthToken } from '../contexts/authProvider';
+import { notify } from '@oyster/common';
 
 export const useCollectionsAPI = () => {
+  const { authToken, removeAuthToken } = useAuthToken();
+  const axiosInstance = axios.create({
+    baseURL: APIS.base_api_url,
+    timeout: 10000,
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  function runAPI(
+    isAuth: boolean,
+    method: Method,
+    url: string,
+    data?: string | FormData,
+  ) {
+    return new Promise((resolve, reject) => {
+      if (isAuth) {
+        axiosInstance.defaults.headers.common['x-access-token'] = authToken;
+      }
+
+      axiosInstance
+        .request({
+          method: method,
+          url: url,
+          data: data,
+        })
+        .then(res => {
+          if (res.status === 200) {
+            resolve(res.data);
+          } else {
+            if (res.status === 401) {
+              removeAuthToken();
+            }
+            notify({
+              message: res.data.error.message,
+              type: 'error',
+            });
+            reject();
+          }
+        })
+        .catch(err => {
+          if (err.response && err.response.status === 401) {
+            removeAuthToken();
+          }
+          let errMessage = err.message;
+          if (err.response && err.response.data) {
+            errMessage = err.response.data.error
+              ? err.response.data.error.message
+              : err.response.data.details;
+          }
+          notify({
+            message: errMessage,
+            type: 'error',
+          });
+          reject();
+        });
+    });
+  }
+
   /**
    * Craete new collection with uuid and email
    *
    * @param props
    * @returns
    */
-  function createCollection(props: { _id: string; email: string }) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collectionCreate;
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(props),
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function createCollection(props: { _id: string }) {
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/create',
+      JSON.stringify(props),
+    );
+    return result;
   }
 
   /**
-   * Get collections by email
+   * Get my collections
    *
-   * @param email
    * @returns
    */
-  function getCollectionsByEmail(email: string) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/email/' + email;
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function getMyCollections() {
+    const result = await runAPI(true, 'get', '/collections/getMyCollections');
+    return result;
   }
 
   /**
    * Get collection by id
    *
-   *
    * @param _id
    * @returns
    */
-  function getCollectionById(_id: string) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/id/' + _id;
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function getCollectionById(id: string) {
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/getCollectionById',
+      JSON.stringify({ _id: id }),
+    );
+    return result;
   }
 
   /**
@@ -77,21 +109,14 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  function collectionStep1(props: { _id: string; permission: string }) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/step1';
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(props),
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function processStep1(props: { _id: string; permission: string }) {
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/processStep1',
+      JSON.stringify(props),
+    );
+    return result;
   }
 
   /**
@@ -100,25 +125,19 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  function collectionStep2(props: {
+  async function processStep2(props: {
     _id: string;
     name: string;
     symbol: string;
+    email: string;
   }) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/step2';
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(props),
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/processStep2',
+      JSON.stringify(props),
+    );
+    return result;
   }
 
   /**
@@ -127,7 +146,7 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  function collectionStep3(props: {
+  async function processStep3(props: {
     _id: string;
     description: string | null;
     image: File | null;
@@ -141,40 +160,40 @@ export const useCollectionsAPI = () => {
     discord: string;
     website: string | null;
   }) {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append('_id', props._id);
-      if (props.description) formData.append('description', props.description);
-      if (props.image) formData.append('image', props.image);
-      if (props.banner) formData.append('banner', props.banner);
-      formData.append('is_derivative', props.is_derivative.toString());
-      if (props.derivative_original_link)
-        formData.append(
-          'original_derivative_link',
-          props.derivative_original_link,
-        );
-      if (props.derivative_original_name)
-        formData.append(
-          'original_derivative_name',
-          props.derivative_original_name,
-        );
-      if (props.primary_category)
-        formData.append('primary_category', props.primary_category);
-      if (props.secondary_category)
-        formData.append('secondary_category', props.secondary_category);
-      formData.append('twitter', props.twitter);
-      formData.append('discord', props.discord);
-      if (props.website) formData.append('website', props.website);
+    const formData = new FormData();
+    formData.append('_id', props._id);
+    if (props.description) formData.append('description', props.description);
+    if (props.image) formData.append('image', props.image);
+    if (props.banner) formData.append('banner', props.banner);
+    formData.append('is_derivative', props.is_derivative.toString());
+    if (props.derivative_original_link)
+      formData.append(
+        'original_derivative_link',
+        props.derivative_original_link,
+      );
+    if (props.derivative_original_name)
+      formData.append(
+        'original_derivative_name',
+        props.derivative_original_name,
+      );
+    if (props.primary_category)
+      formData.append('primary_category', props.primary_category);
+    if (props.secondary_category)
+      formData.append('secondary_category', props.secondary_category);
+    formData.append('twitter', props.twitter);
+    formData.append('discord', props.discord);
+    if (props.website) formData.append('website', props.website);
 
-      const url = APIS.base_url + APIS.collections + '/step3';
-      fetch(url, {
-        method: 'POST',
-        body: formData,
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+    axiosInstance.defaults.headers.common[
+      'Content-Type'
+    ] = `multipart/formdata; boundary=${Date.now()}`;
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/processStep3',
+      formData,
+    );
+    return result;
   }
 
   /**
@@ -183,27 +202,20 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  function collectionStep4(props: {
+  async function processStep4(props: {
     _id: string;
-    candymachine_ids: string;
+    candymachine_id: string;
     mint_supply: number;
     mint_price: number;
     launch_time: number;
   }) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/step4';
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(props),
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/processStep4',
+      JSON.stringify(props),
+    );
+    return result;
   }
 
   /**
@@ -212,142 +224,107 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  function updateCollectionStatus(props: {
+  async function processStep5(props: {
     _id: string;
     status: string;
     extra_info?: string | null;
+    reject_info?: string | null;
   }) {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/updateStatus';
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(props),
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/processStep5',
+      JSON.stringify(props),
+    );
+    return result;
   }
 
   /**
    * Get all collections for review (without draft)
    *
    */
-  function getAllCollections() {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.collections + '/all';
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function getCollectionsWithoutDraft() {
+    const result = await runAPI(
+      true,
+      'get',
+      '/collections/getCollectionsWithoutDraft',
+    );
+    return result;
   }
 
   /**
    * Get all live collections
    */
-  function allCollections() {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.allCollections;
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function getAllCollections() {
+    const result = await runAPI(false, 'get', '/collections/getAllCollections');
+    return result;
   }
 
   /**
    * Get all live new collections
    */
-  function newCollections() {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.newCollections;
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  async function getNewCollections() {
+    const result = await runAPI(false, 'get', '/collections/getNewCollections');
+    return result;
   }
 
   /**
-   * Get all live collections
-   */
-  function featuredCollectionsCarousel() {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.featuredCollectionsCarousel;
-
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
-  }
-
-  /**
-   * Get all collections for review (without draft)
+   * Get featured collections
    *
+   * Type
+   * - launchpad-collections : launch_time is less than 1 day and mint_ended is false
+   * - upcoming-collections : launch_time is greater than 1 day
+   * - new-collecitons : mint_ended is true and updatedAt is less than 7 days
+   * - collections : mint_ended is tru and updatedAt is greater than 7 days
    */
-  function launchpadCollections() {
-    return new Promise((resolve, reject) => {
-      const url = APIS.base_url + APIS.launchpadCollections;
+  async function featuredCollectionsCarousel() {
+    const result = await runAPI(
+      false,
+      'get',
+      '/collections/featuredCollectionsCarousel',
+    );
+    return result;
+  }
 
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(data => resolve(data))
-        .catch(err => reject(err));
-    });
+  /**
+   * Get launchpad collections
+   */
+  async function getLaunchpadCollections() {
+    const result = await runAPI(
+      false,
+      'get',
+      '/collections/getLaunchpadCollections',
+    );
+    return result;
+  }
+
+  /**
+   * Get collection by symbol
+   */
+  async function getCollectionBySymbol(symbol: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/collections/getCollectionBySymbol',
+      JSON.stringify({ symbol }),
+    );
+    return result;
   }
 
   return {
     createCollection,
-    getCollectionsByEmail,
+    getMyCollections,
     getCollectionById,
-    collectionStep1,
-    collectionStep2,
-    collectionStep3,
-    collectionStep4,
-    updateCollectionStatus,
+    processStep1,
+    processStep2,
+    processStep3,
+    processStep4,
+    processStep5,
+    getCollectionsWithoutDraft,
     getAllCollections,
-    allCollections,
-    newCollections,
+    getNewCollections,
     featuredCollectionsCarousel,
-    launchpadCollections,
+    getLaunchpadCollections,
+    getCollectionBySymbol,
   };
 };

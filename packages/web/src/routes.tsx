@@ -32,6 +32,7 @@ import { DashboardListingView } from './views/dashboard/listing';
 import { DashboardView } from './views/dashboard/dashboard';
 import { DashboardAdmin } from './views/dashboard/admin';
 import { DashboardAdminDetails } from './views/dashboard/admin/details';
+import { LaunchpadDetailView } from './views/launchpadDetail';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -119,6 +120,11 @@ export function Routes() {
               exact
               path="/launchpad"
               component={() => <LaunchPadView />}
+            />
+            <Route
+              exact
+              path="/launchpad/:symbol"
+              component={() => <LaunchpadDetailView />}
             />
             <Route exact path="/stats" component={() => <StatsView />} />
             <Route exact path="/faq" component={() => <FAQView />} />

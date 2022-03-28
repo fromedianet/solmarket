@@ -8,7 +8,7 @@ export const CollectionStep = ({
   saving,
 }: {
   collection: {};
-  handleAction: ({ name, symbol }) => void;
+  handleAction: ({ name, symbol, email }) => void;
   saving: boolean;
 }) => {
   const [form] = Form.useForm();
@@ -17,6 +17,7 @@ export const CollectionStep = ({
     form.setFieldsValue({
       name: collection['name'] || '',
       symbol: collection['symbol'] || '',
+      email: collection['email'] || '',
     });
   }, [collection]);
 
@@ -58,6 +59,24 @@ export const CollectionStep = ({
           <Input
             placeholder="super_nft_collection"
             maxLength={20}
+            className="step-input"
+          />
+        </Form.Item>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              type: 'email',
+              message: 'The input is not valid E-mail!',
+            },
+          ]}
+        >
+          <Input
+            autoFocus
+            placeholder="Email"
+            maxLength={50}
             className="step-input"
           />
         </Form.Item>

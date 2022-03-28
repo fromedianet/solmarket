@@ -1,4 +1,3 @@
-import { WRAPPED_SOL_MINT } from '@oyster/common';
 import React from 'react';
 import { Row, Col, Input, Button } from 'antd';
 import { SafetyDepositDraft } from '../../../actions/createAuctionManager';
@@ -55,14 +54,6 @@ export const ParticipationStep = (props: {
               className="input"
               placeholder="Fixed Price"
               prefix="◎"
-              suffix={
-                props.attributes.quoteMintInfoExtended
-                  ? props.attributes.quoteMintInfoExtended.symbol
-                  : props.attributes.quoteMintAddress ==
-                    WRAPPED_SOL_MINT.toBase58()
-                  ? 'SOL'
-                  : 'CUSTOM'
-              }
               onChange={info =>
                 props.setAttributes({
                   ...props.attributes,

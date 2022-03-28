@@ -23,7 +23,6 @@ import {
   useWalletModal,
   VaultState,
   BidStateType,
-  WRAPPED_SOL_MINT,
   Bid,
   BidderPot,
   shortenAddress,
@@ -62,7 +61,6 @@ import {
 import { useActionButtonContent } from './hooks/useActionButtonContent';
 import { endSale } from './utils/endSale';
 import { useInstantSaleState } from './hooks/useInstantSaleState';
-import { useTokenList } from '../../contexts/tokenList';
 import CongratulationsModal from '../Modals/CongratulationsModal';
 
 async function calculateTotalCostOfRedeemingOtherPeoplesBids(
@@ -129,7 +127,6 @@ function useGapTickCheck(
   gapTick: number | null,
   gapTime: number,
   auctionView: AuctionView,
-  LAMPORTS_PER_MINT: number,
 ): boolean {
   return !!useMemo(() => {
     if (gapTick && value && gapTime && !auctionView.auction.info.ended()) {
@@ -139,7 +136,7 @@ function useGapTickCheck(
       if (endedAt) {
         const ended = endedAt.toNumber();
         if (now > ended) {
-          const toLamportVal = value * LAMPORTS_PER_MINT;
+          const toLamportVal = value * LAMPORTS_PER_SOL;
           // Ok, we are in gap time, since now is greater than ended and we're not actually an ended auction yt.
           // Check that the bid is at least gapTick % bigger than the next biggest one in the stack.
           for (
@@ -237,22 +234,10 @@ export const AuctionCard = ({
   const [printingCost, setPrintingCost] = useState<number>();
 
   const { accountByMint } = useUserAccounts();
-  const tokenList = useTokenList();
 
   const mintKey = auctionView.auction.info.tokenMint;
   const balance = useUserBalance(mintKey);
-  const tokenInfo = tokenList.subscribedTokens.filter(
-    m => m.address == mintKey,
-  )[0];
-  const symbol = tokenInfo
-    ? tokenInfo.symbol
-    : mintKey == WRAPPED_SOL_MINT.toBase58()
-    ? 'SOL'
-    : 'CUSTOM';
-
-  const LAMPORTS_PER_MINT = tokenInfo
-    ? Math.ceil(10 ** tokenInfo.decimals)
-    : LAMPORTS_PER_SOL;
+  const symbol = 'SOL';
 
   //console.log("[--P]AuctionCard", tokenInfo, mintKey)
   const myPayingAccount = balance.accounts[0];
@@ -288,16 +273,10 @@ export const AuctionCard = ({
   const tickSizeInvalid = !!(
     tickSize &&
     value &&
-    (value * LAMPORTS_PER_MINT) % tickSize.toNumber() != 0
+    (value * LAMPORTS_PER_SOL) % tickSize.toNumber() != 0
   );
 
-  const gapBidInvalid = useGapTickCheck(
-    value,
-    gapTick,
-    gapTime,
-    auctionView,
-    LAMPORTS_PER_MINT,
-  );
+  const gapBidInvalid = useGapTickCheck(value, gapTick, gapTime, auctionView);
 
   const isAuctionManagerAuthorityNotWalletOwner =
     auctionView.auctionManager.authority !== wallet?.publicKey?.toBase58();
@@ -322,14 +301,14 @@ export const AuctionCard = ({
       : isStarted && bids.length > 0
       ? parseFloat(formatTokenAmount(bids[0].info.lastBid, mintInfo))
       : 9999999) +
-      tickSize.toNumber() / LAMPORTS_PER_MINT;
+      tickSize.toNumber() / LAMPORTS_PER_SOL;
 
   const invalidBid =
     tickSizeInvalid ||
     gapBidInvalid ||
     !myPayingAccount ||
     value === undefined ||
-    value * LAMPORTS_PER_MINT < priceFloor ||
+    value * LAMPORTS_PER_SOL < priceFloor ||
     (minBid && value < minBid) ||
     loading ||
     !accountByMint.get(QUOTE_MINT.toBase58());
@@ -615,10 +594,9 @@ export const AuctionCard = ({
             <div className="show-place-bid">
               <AmountLabel
                 title="in your wallet"
-                displaySymbol={tokenInfo?.symbol || 'CUSTOM'}
+                displaySymbol={symbol}
                 style={{ marginBottom: 0 }}
                 amount={balance.balance}
-                tokenInfo={tokenInfo}
                 customPrefix={
                   <Identicon
                     address={wallet?.publicKey?.toBase58()}
@@ -834,7 +812,7 @@ export const AuctionCard = ({
         )}
         {tickSizeInvalid && tickSize && (
           <span style={{ color: 'red' }}>
-            Tick size is ◎{tickSize.toNumber() / LAMPORTS_PER_MINT}.
+            Tick size is ◎{tickSize.toNumber() / LAMPORTS_PER_SOL}.
           </span>
         )}
         {gapBidInvalid && (
@@ -945,7 +923,7 @@ export const AuctionCard = ({
           required by the auction for printing bidders&apos; limited or open
           edition NFTs. If you wish to withdraw them, you are agreeing to foot
           the cost of up to an estimated ◎
-          <b>{(printingCost || 0) / LAMPORTS_PER_MINT}</b> plus transaction fees
+          <b>{(printingCost || 0) / LAMPORTS_PER_SOL}</b> plus transaction fees
           to redeem their bids for them right now.
         </h3>
       </MetaplexModal>

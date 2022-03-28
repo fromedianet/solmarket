@@ -32,7 +32,7 @@ export const DashboardCollectionCard = ({
         <div className="card-caption">
           <h6>{item['name'] || 'Untitled'}</h6>
           <span>{`Edited: ${timeAgo.format(
-            Date.parse(item['updated_at']),
+            Date.parse(item['updatedAt']),
           )}`}</span>
         </div>
       </Link>
