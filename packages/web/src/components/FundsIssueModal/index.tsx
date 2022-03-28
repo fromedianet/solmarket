@@ -1,7 +1,6 @@
 import React from 'react';
-import { MetaplexModal, WRAPPED_SOL_MINT } from '@oyster/common';
+import { MetaplexModal } from '@oyster/common';
 import { AmountLabel } from '../AmountLabel';
-import { useTokenList } from '../../contexts/tokenList';
 import { Button } from 'antd';
 
 export const FundsIssueModal = (props: {
@@ -12,9 +11,6 @@ export const FundsIssueModal = (props: {
   onClose: () => void;
 }) => {
   const { currentFunds: balance, minimumFunds, message } = props;
-  const tokenInfo = useTokenList().subscribedTokens.filter(
-    m => m.address == WRAPPED_SOL_MINT.toBase58(),
-  )[0];
   return (
     <MetaplexModal
       title={'Transaction Alert'}
@@ -29,10 +25,9 @@ export const FundsIssueModal = (props: {
         <AmountLabel
           containerStyle={{ flexDirection: 'row' }}
           title={'Your Balance'}
-          displaySymbol={'SOL'}
+          displaySymbol="SOL"
           amount={balance}
           iconSize={24}
-          tokenInfo={tokenInfo}
         />
       </div>
       <hr />
@@ -40,10 +35,9 @@ export const FundsIssueModal = (props: {
         <AmountLabel
           containerStyle={{ flexDirection: 'row' }}
           title={message}
-          displaySymbol={'SOL'}
+          displaySymbol="SOL"
           amount={minimumFunds}
           iconSize={24}
-          tokenInfo={tokenInfo}
         />
       </div>
       <hr />

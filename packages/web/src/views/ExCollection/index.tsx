@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Tabs } from 'antd';
+import { Layout, Tabs, Spin } from 'antd';
 import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { CollectionInfo } from './components/CollectionInfo';
@@ -41,6 +41,7 @@ export const ExCollectionView = () => {
     skip,
     cursor,
     hasMore,
+    loading,
   } = useExCollection(id, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
@@ -111,7 +112,7 @@ export const ExCollectionView = () => {
       <div className="collection-info">
         <CollectionInfo collection={collection} stats={collectionStats} />
       </div>
-      <Tabs defaultActiveKey="items" centered>
+      <Tabs defaultActiveKey="items" centered style={{ overflow: 'unset' }}>
         <TabPane
           key="items"
           tab={
@@ -132,11 +133,13 @@ export const ExCollectionView = () => {
               attributes={attributes}
             />
             <Content className="collection-container">
+              {loading && <Spin />}
               <Items
                 list={list}
                 sort={sort}
                 market={market}
                 id={id}
+                collection={collection}
                 searchKey={searchKey}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}

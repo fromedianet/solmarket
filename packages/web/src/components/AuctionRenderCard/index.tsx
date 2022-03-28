@@ -9,7 +9,6 @@ import {
 } from '../../hooks';
 
 import { useAuctionStatus } from './hooks/useAuctionStatus';
-import { useTokenList } from '../../contexts/tokenList';
 import { Link } from 'react-router-dom';
 import { CountdownState, formatAmount, shortenAddress } from '@oyster/common';
 import { TokenCircle } from '../Custom';
@@ -34,9 +33,6 @@ export const AuctionRenderCard = (props: AuctionCard) => {
   const creators = useCreators(auctionView);
   const name = art?.title || ' ';
 
-  const tokenInfo = useTokenList().subscribedTokens.filter(
-    m => m.address == auctionView.auction.info.tokenMint,
-  )[0];
   const { amount, status } = useAuctionStatus(auctionView);
 
   const _amount = typeof amount === 'string' ? parseFloat(amount) : amount;
@@ -89,14 +85,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
               className="bid-statistic"
               title={status}
               value={`${formattedAmount} SOL`}
-              prefix={
-                <TokenCircle
-                  iconSize={20}
-                  iconFile={
-                    tokenInfo?.logoURI == '' ? undefined : tokenInfo?.logoURI
-                  }
-                />
-              }
+              prefix={<TokenCircle iconSize={20} iconFile="sol.png" />}
             />
             {!auctionView.isInstantSale && (
               <Statistic

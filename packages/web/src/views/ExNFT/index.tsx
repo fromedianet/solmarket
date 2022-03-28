@@ -56,6 +56,7 @@ export const ExNFTView = () => {
                 mintAddress={id}
                 market={market}
                 collection={collection}
+                collectionName={nft.collectionTitle || collection}
               />
             </>
           ) : (

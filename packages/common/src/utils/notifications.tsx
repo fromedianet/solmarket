@@ -51,15 +51,17 @@ export function notify({
     description = <></>;
   }
   const content = (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <span>{message}</span>
-      <span style={{ opacity: 0.7 }}>{description}</span>
+    <div
+      style={{ display: 'inline-flex', flexDirection: 'column', width: '100%' }}
+    >
+      <span style={{ color: 'white' }}>{message}</span>
+      <span style={{ color: 'white', opacity: 0.7 }}>{description}</span>
     </div>
   );
   toast(content, {
     position: 'top-center',
     theme: 'dark',
-    autoClose: 6000,
+    autoClose: 5000,
     hideProgressBar: false,
     pauseOnFocusLoss: false,
     type: type,

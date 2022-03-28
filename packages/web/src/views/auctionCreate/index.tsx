@@ -109,7 +109,7 @@ export interface AuctionState {
 
   quoteMintAddress: string;
   quoteMintInfo: MintInfo;
-  quoteMintInfoExtended: TokenInfo;
+  quoteMintInfoExtended?: TokenInfo;
 }
 
 export const AuctionCreateView = () => {

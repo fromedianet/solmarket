@@ -70,8 +70,12 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         title="Creators"
         icon={<CopyrightOutlined style={{ fontSize: 20 }} />}
       >
-        <Menu.Item key="apply:1">Apply for listing</Menu.Item>
-        <Menu.Item key="apply:2">Apply for Launchpad</Menu.Item>
+        <Menu.Item key="dashboard">
+          <Link to="/dashboard" target="_blank" rel="noopener noreferrer">
+            Apply for listing
+          </Link>
+        </Menu.Item>
+        {/* <Menu.Item key="apply:2">Apply for Launchpad</Menu.Item> */}
       </SubMenu>
       <SubMenu
         key="community"

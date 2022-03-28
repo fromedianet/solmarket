@@ -443,6 +443,11 @@ h2 {
   background-color: @bg-text-color;
   .ant-select-item {
     color: @text-primary-color;
+
+    &.ant-select-item-option-disabled {
+      color: rgba(255, 255, 255, 0.3);
+      background: transparent;
+    }
   }
 }
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {

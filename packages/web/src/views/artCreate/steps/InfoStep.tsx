@@ -137,6 +137,7 @@ export const InfoStep = (props: {
                       });
                     }
                   };
+                  // @ts-ignore
                   fileReader.readAsText(file);
                 }}
               >

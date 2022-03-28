@@ -3,10 +3,8 @@ import {
   StringPublicKey,
   useMint,
   useUserAccounts,
-  WRAPPED_SOL_MINT,
 } from '@oyster/common';
-import { useEffect, useMemo, useState } from 'react';
-import { useSolPrice, useAllSplPrices } from '../contexts';
+import { useMemo } from 'react';
 
 export function useUserBalance(
   mintAddress?: StringPublicKey,
@@ -17,21 +15,6 @@ export function useUserBalance(
     [mintAddress],
   );
   const { userAccounts } = useUserAccounts();
-  const [balanceInUSD, setBalanceInUSD] = useState(0);
-  // TODO: add option to register for different token prices without having to set them in env
-  /*  console.log(
-    '[--P]MINTADDRESS',
-    mintAddress,
-    useAllSplPrices(),
-    useSolPrice(),
-  ); */
-
-  const solPrice = useSolPrice();
-  const altSplPrice = useAllSplPrices().filter(
-    a => a.tokenMint == mintAddress,
-  )[0]?.tokenPrice;
-  const tokenPrice =
-    mintAddress == WRAPPED_SOL_MINT.toBase58() ? solPrice : altSplPrice;
 
   const mintInfo = useMint(mint);
   const accounts = useMemo(() => {
@@ -58,14 +41,9 @@ export function useUserBalance(
     [mintInfo, balanceLamports],
   );
 
-  useEffect(() => {
-    setBalanceInUSD(balance * tokenPrice);
-  }, [balance, tokenPrice, mint, setBalanceInUSD]);
-
   return {
     balance,
     balanceLamports,
-    balanceInUSD,
     accounts,
     hasBalance: accounts.length > 0 && balance > 0,
   };

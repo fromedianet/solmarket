@@ -1,13 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Row, Col, Input, Select, Button } from 'antd';
 import { AuctionState, InstantSaleType } from '../index';
-import { PublicKey } from '@solana/web3.js';
-import { Creator, useMint, WRAPPED_SOL_MINT } from '@oyster/common';
-import { useTokenList } from '../../../contexts/tokenList';
-import { QUOTE_MINT } from '../../../constants';
+import { Creator } from '@oyster/common';
 import { SafetyDepositDraft } from '../../../actions/createAuctionManager';
 import { ArtSelector } from '../artSelector';
-import TokenDialog, { TokenButton } from '../../../components/TokenDialog';
 
 const { Option } = Select;
 export const InstantSaleStep = ({
@@ -19,26 +15,6 @@ export const InstantSaleStep = ({
   setAttributes: (attr: AuctionState) => void;
   confirm: () => void;
 }) => {
-  const [showTokenDialog, setShowTokenDialog] = useState(false);
-  const [mint, setMint] = useState<PublicKey>(WRAPPED_SOL_MINT);
-  // give default value to mint
-
-  const { hasOtherTokens, tokenMap } = useTokenList();
-
-  // give default value to mint
-  const mintInfo = tokenMap.get(
-    !mint ? QUOTE_MINT.toString() : mint.toString(),
-  );
-
-  attributes.quoteMintAddress = mint ? mint.toBase58() : QUOTE_MINT.toBase58();
-
-  if (attributes.quoteMintAddress) {
-    attributes.quoteMintInfo = useMint(attributes.quoteMintAddress)!;
-    attributes.quoteMintInfoExtended = tokenMap.get(
-      attributes.quoteMintAddress,
-    )!;
-  }
-
   //console.log("OBJ MINT", mint.toBase58())
   const isMasterEdition = !!attributes?.items?.[0]?.masterEdition;
 
@@ -125,22 +101,6 @@ export const InstantSaleStep = ({
               )}
             </label>
           )}
-          {hasOtherTokens && (
-            <label className="action-field">
-              <span className="field-title">Auction mint</span>
-              <TokenButton
-                mint={mint}
-                onClick={() => setShowTokenDialog(true)}
-              />
-              <TokenDialog
-                setMint={setMint}
-                open={showTokenDialog}
-                onClose={() => {
-                  setShowTokenDialog(false);
-                }}
-              />
-            </label>
-          )}
           <label className="action-field">
             <span className="field-title">Price</span>
             <span className="field-info">
@@ -153,7 +113,6 @@ export const InstantSaleStep = ({
               className="input"
               placeholder="Price"
               prefix="◎"
-              suffix={mintInfo?.symbol || 'CUSTOM'}
               onChange={info =>
                 setAttributes({
                   ...attributes,

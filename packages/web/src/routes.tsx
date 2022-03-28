@@ -28,6 +28,11 @@ import { CollectionCreateView } from './views/collectionCreate';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
+import { DashboardListingView } from './views/dashboard/listing';
+import { DashboardView } from './views/dashboard/dashboard';
+import { DashboardAdmin } from './views/dashboard/admin';
+import { DashboardAdminDetails } from './views/dashboard/admin/details';
+import { LaunchpadDetailView } from './views/launchpadDetail';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -116,10 +121,35 @@ export function Routes() {
               path="/launchpad"
               component={() => <LaunchPadView />}
             />
+            <Route
+              exact
+              path="/launchpad/:symbol"
+              component={() => <LaunchpadDetailView />}
+            />
             <Route exact path="/stats" component={() => <StatsView />} />
             <Route exact path="/faq" component={() => <FAQView />} />
             <Route exact path="/profile" component={() => <ProfileView />} />
             <Route path="/about" component={() => <StaticPageView />} />
+            <Route
+              exact
+              path="/dashboard"
+              component={() => <DashboardView />}
+            />
+            <Route
+              exact
+              path="/dashboard/listing/:id"
+              component={() => <DashboardListingView />}
+            />
+            <Route
+              exact
+              path="/dashboard/admin"
+              component={() => <DashboardAdmin />}
+            />
+            <Route
+              exact
+              path="/dashboard/admin/:id"
+              component={() => <DashboardAdminDetails />}
+            />
             <Route path="/" component={() => <HomeView />} />
           </Switch>
         </Providers>

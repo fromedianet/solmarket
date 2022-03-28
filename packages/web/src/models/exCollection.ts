@@ -2,14 +2,14 @@ import { Attribute, Creator } from '@oyster/common';
 
 export interface ExCollection {
   name: string;
-  description: string | undefined;
+  description: string | null;
   symbol: string;
-  banner?: string | undefined;
+  banner?: string | null;
   thumbnail: string;
-  discord?: string | undefined;
-  twitter?: string | undefined;
-  website?: string | undefined;
-  createdAt?: string | number | undefined;
+  discord?: string | null;
+  twitter?: string | null;
+  website?: string | null;
+  createdAt?: number | null;
   market: string;
 }
 
@@ -20,14 +20,14 @@ export type ExAttribute = {
 
 export type ExAttrValue = {
   value: string;
-  amount?: number | undefined;
-  floor?: number | undefined;
+  amount?: number | null;
+  floor?: number | null;
 };
 
 export type ExCollectionStats = {
-  floorPrice?: number | undefined;
-  volume?: number | undefined;
-  listedCount?: number | undefined;
+  floorPrice?: number;
+  totalVolume?: number;
+  listedCount?: number;
 };
 
 export type ExNFT = {
@@ -35,7 +35,7 @@ export type ExNFT = {
   pk?: string;
   name: string;
   image: string;
-  collection: string;
+  collection?: string;
   price?: number;
 };
 

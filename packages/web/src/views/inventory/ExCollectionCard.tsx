@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 
 export const ExCollectionCard = (props: { item: ExCollection }) => {
   return (
-    <Link
-      to={`/excollection/${encodeURIComponent(props.item.symbol)}?market=${
-        props.item.market
-      }`}
-    >
-      <Card className={`collection-card`} hoverable={true} bordered={false}>
+    <Card className={`collection-card`} hoverable={true} bordered={false}>
+      <Link
+        to={`/excollection/${encodeURIComponent(props.item.symbol)}?market=${
+          props.item.market
+        }`}
+      >
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"
@@ -24,7 +24,7 @@ export const ExCollectionCard = (props: { item: ExCollection }) => {
         <div className="card-caption">
           <h6>{props.item.name}</h6>
         </div>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 };
