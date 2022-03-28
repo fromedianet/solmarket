@@ -1,6 +1,6 @@
 export const APIS = {
-  base_url: 'http://localhost:8000/api/',
-  base_api_url: 'http://localhost:5000/api',
+  base_url: 'http://ec2-44-202-28-166.compute-1.amazonaws.com/api/',
+  base_api_url: 'http://ec2-44-202-28-166.compute-1.amazonaws.com:3000/api',
 
   exCollections: 'excollections/',
   listedNFTs: 'excollections/list',
