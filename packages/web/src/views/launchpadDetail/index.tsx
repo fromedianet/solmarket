@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as anchor from '@project-serum/anchor';
 import { useParams } from 'react-router-dom';
 import { Row, Col, Spin, Button, Progress } from 'antd';
@@ -23,6 +23,7 @@ import { GatewayProvider } from '@civic/solana-gateway-react';
 import { MintCountdown } from './MintCountdown';
 import { sendTransaction } from './connection';
 import { MintButton } from './MintButton';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
   const { symbol } = useParams<{ symbol: string }>();
@@ -31,7 +32,7 @@ export const LaunchpadDetailView = () => {
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const [loading, setLoading] = useState(false);
-  const [collection, setCollection] = useState();
+  const [collection, setCollection] = useState({});
   const [candyMachineId, setCandyMachineId] = useState<PublicKey>();
   const [isUserMinting, setIsUserMinting] = useState(false);
   const [candyMachine, setCandyMachine] = useState<CandyMachineAccount>();
@@ -43,6 +44,7 @@ export const LaunchpadDetailView = () => {
   const [isPresale, setIsPresale] = useState(false);
   const [discountPrice, setDiscountPrice] = useState<anchor.BN>();
   const [showMintInfo, setShowMintInfo] = useState(false);
+  const { createNft } = useNFTsAPI();
   const one_day = (24 * 60) & 60;
 
   const anchorWallet = useMemo(() => {
@@ -80,7 +82,7 @@ export const LaunchpadDetailView = () => {
       });
   }, [symbol]);
 
-  const refreshCandyMachineState = useCallback(async () => {
+  const refreshCandyMachineState = async () => {
     if (!anchorWallet) {
       return;
     }
@@ -186,7 +188,7 @@ export const LaunchpadDetailView = () => {
         console.log(e);
       }
     }
-  }, [anchorWallet, candyMachineId, connection]);
+  };
 
   const onMint = async (
     beforeTransactions: Transaction[] = [],
@@ -207,24 +209,16 @@ export const LaunchpadDetailView = () => {
         console.log('>>> mintResult', mintResult);
 
         if (mintResult['status'] && !mintResult['status']['err']) {
-          // const metadataAddress = mintResult['metadataAddress'];
-          // const metadata = await loadMetadata(connection, toPublicKey(metadataAddress));
-          // console.log('>>> metadata', metadata);
-          // if (metadata) {
-          //   const data = {
-          //     mint: metadata.mint,
-          //     token_address: mintResult['tokenAddress'],
-          //     update_authority: metadata.updateAuthority,
-          //     collection_id: collection!['_id'],
-          //     external_url: metadata.data.uri,
-          //     is_mutable: metadata.isMutable,
-          //     primary_sale_happened: metadata.primarySaleHappened,
-          //     collection: metadata.collection,
-          //     creators: metadata.data.creators,
-          //     uses: metadata.uses
-          //   }
-          //   await createNFT(data);
-          // }
+          const data = {
+            mint: mintResult['mint'],
+            owner: mintResult['owner'],
+            tokenAddress: mintResult['tokenAddress'],
+            metadataAddress: mintResult['metadataAddress'],
+            symbol: collection['symbol'],
+          };
+          createNft(data)
+            .then(res => console.log('>>> createNFT', res))
+            .catch(err => console.error('>>> createNFT error', err));
           notify({
             message: 'Congratulations! Mint succeeded!',
             type: 'success',
@@ -263,9 +257,6 @@ export const LaunchpadDetailView = () => {
       });
     } finally {
       setIsUserMinting(false);
-      setTimeout(() => {
-        refreshCandyMachineState();
-      }, 10000);
     }
   };
 
@@ -291,6 +282,13 @@ export const LaunchpadDetailView = () => {
 
     setIsActive((candyMachine!.state.isActive = active));
   };
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await refreshCandyMachineState();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (candyMachineId) {
