@@ -1,6 +1,6 @@
 export const APIS = {
-  base_url: 'http://ec2-44-202-28-166.compute-1.amazonaws.com/api/',
-  base_api_url: 'http://ec2-44-202-28-166.compute-1.amazonaws.com:3000/api',
+  base_url: 'https://staging.othersapi.papercity.com/api/',
+  base_api_url: 'http://staging.api.papercity.com/api',
 
   exCollections: 'excollections/',
   listedNFTs: 'excollections/list',
