@@ -1,6 +1,6 @@
 export const APIS = {
-  base_url: 'https://staging.othersapi.papercity.com/api/',
-  base_api_url: 'http://staging.api.papercity.com/api',
+  base_url: 'https://staging.othersapi.papercity.io/api/',
+  base_api_url: 'https://staging.api.papercity.io/api',
 
   exCollections: 'excollections/',
   listedNFTs: 'excollections/list',
