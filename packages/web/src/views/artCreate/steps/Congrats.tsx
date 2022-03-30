@@ -51,16 +51,10 @@ export const Congrats = (props: {
         <Button
           style={{ marginBottom: 16 }}
           onClick={() =>
-            (window.location.href = `/art/${props.nft?.metadataAccount.toString()}`)
+            (window.location.href = 'collections')
           }
         >
-          <span>See it in your collection &gt;</span>
-        </Button>
-        <Button
-          style={{ marginBottom: 16 }}
-          onClick={() => (window.location.href = '/auction/create')}
-        >
-          <span>Sell it via auction &gt;</span>
+          <span>Go to collection page &gt;</span>
         </Button>
       </div>
       <Confetti />
