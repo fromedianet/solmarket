@@ -29,7 +29,7 @@ export const CollectionsView = () => {
         });
     }
   }, [type]);
-  
+
   return (
     <div className="main-area">
       <div className="collections-page">

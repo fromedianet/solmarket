@@ -5,18 +5,13 @@ import { ArtContent } from '../ArtContent';
 import { Collection } from '../../models/collection';
 
 export interface CollectionCardProps extends CardProps {
-  collection: Collection
+  collection: Collection;
   itemId?: string;
   className?: string;
 }
 
 export const CollectionCard = (props: CollectionCardProps) => {
-  const {
-    name,
-    symbol,
-    description,
-    image,
-  } = props.collection;
+  const { name, symbol, description, image } = props.collection;
 
   return (
     <Card
@@ -35,7 +30,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
           />
         </div>
         <div className="card-caption">
-          <span className='name'>{name}</span>
+          <span className="name">{name}</span>
           {description && <span className="description">{description}</span>}
         </div>
       </Link>

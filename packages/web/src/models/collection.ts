@@ -8,11 +8,11 @@ export type Collection = {
   discord: string;
   twitter: string;
   website: string;
-  categories: [],
+  categories: [];
   is_derivative: boolean;
   derivative: {
-    original_link: string | null,
-    original_name: string | null,
+    original_link: string | null;
+    original_name: string | null;
   };
   candymachine_id: string;
   mint: string;
