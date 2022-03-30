@@ -51,7 +51,9 @@ const RoyaltiesSplitter = (props: {
             <Col span={24} key={idx}>
               <Row align="middle" gutter={[16, 16]}>
                 <Col span={7} lg={3}>
-                  <span style={{ color: 'white', fontSize: 14 }}>{creator.label}</span>
+                  <span style={{ color: 'white', fontSize: 14 }}>
+                    {creator.label}
+                  </span>
                 </Col>
                 <Col span={7} lg={4}>
                   <InputNumber<number>

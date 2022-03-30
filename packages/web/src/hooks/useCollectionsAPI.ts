@@ -93,7 +93,11 @@ export const useCollectionsAPI = () => {
    * @returns
    */
   async function getMyListedCollections() {
-    const result = await runAPI(true, 'get', '/collections/getMyListedCollections');
+    const result = await runAPI(
+      true,
+      'get',
+      '/collections/getMyListedCollections',
+    );
     return result;
   }
 
@@ -329,7 +333,7 @@ export const useCollectionsAPI = () => {
     mint_ended: boolean;
   }) {
     const result = await runAPI(
-      false,
+      true,
       'post',
       '/collections/updateCollectionMintStatus',
       JSON.stringify(props),

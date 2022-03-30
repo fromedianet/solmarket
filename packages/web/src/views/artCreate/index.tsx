@@ -22,6 +22,7 @@ import { Congrats } from './steps/Congrats';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 const { Step } = Steps;
 
@@ -33,6 +34,7 @@ export const ArtCreateView = () => {
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
   const { getMyListedCollections } = useCollectionsAPI();
+  const { createNft } = useNFTsAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
   const history = useHistory();
   const { width } = useWindowDimensions();
@@ -78,13 +80,13 @@ export const ArtCreateView = () => {
   useEffect(() => {
     if (authToken) {
       getMyListedCollections()
-      // @ts-ignore
-      .then((res: {}) => {
-        setCollections(res['data'] || []);
-      })
-      .catch(() => {
-        setCollections([]);
-      });
+        // @ts-ignore
+        .then((res: {}) => {
+          setCollections(res['data'] || []);
+        })
+        .catch(() => {
+          setCollections([]);
+        });
     }
   }, [authToken]);
 
@@ -120,7 +122,10 @@ export const ArtCreateView = () => {
         attributes.properties?.maxSupply,
       );
 
-      if (_nft) setNft(_nft);
+      if (_nft) {
+        setNft(_nft);
+        await createNft(_nft.metadataAccount);
+      }
       setAlertMessage('');
     } catch (e: any) {
       setAlertMessage(e.message);
@@ -131,17 +136,15 @@ export const ArtCreateView = () => {
 
   if (!wallet.connected) {
     return (
-      <div className='auth-page'>
-        <span className='text'>Connect wallet to see this page</span>
+      <div className="auth-page">
+        <span className="text">Connect wallet to see this page</span>
       </div>
     );
   } else if (!authToken) {
     return (
-      <div className='auth-page'>
-        <span className='text'>Sign in to see this page</span>
-        <Button onClick={async () => await authentication()}>
-          Sign in
-        </Button>
+      <div className="auth-page">
+        <span className="text">Sign in to see this page</span>
+        <Button onClick={async () => await authentication()}>Sign in</Button>
       </div>
     );
   }

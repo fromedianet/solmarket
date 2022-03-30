@@ -67,7 +67,7 @@ export const useNFTsAPI = () => {
    */
   async function createNft(metadataAddress: string) {
     const result = await runAPI(
-      false,
+      true,
       'post',
       '/nfts/create',
       JSON.stringify({ metadataAddress }),

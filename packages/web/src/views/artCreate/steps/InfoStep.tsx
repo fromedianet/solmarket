@@ -22,7 +22,7 @@ import { ArtContent } from '../../../components/ArtContent';
 const { Dragger } = Upload;
 
 export const InfoStep = (props: {
-  collections: any[],
+  collections: any[];
   attributes: IMetadataExtension;
   files: File[];
   setAttributes: (attr: IMetadataExtension) => void;
@@ -50,7 +50,7 @@ export const InfoStep = (props: {
     form.setFieldsValue({
       symbol: selected.symbol,
     });
-  }
+  };
 
   const onFinish = values => {
     const collection = props.collections[values.collection];
@@ -72,7 +72,7 @@ export const InfoStep = (props: {
       properties: {
         ...props.attributes.properties,
         maxSupply: values.max_supply,
-      }
+      },
     });
 
     props.confirm();
@@ -153,16 +153,13 @@ export const InfoStep = (props: {
           </Col>
           <Col span={24} lg={12}>
             <Form.Item
-              label='Collection'
-              name='collection'
+              label="Collection"
+              name="collection"
               rules={[{ required: true, message: 'Collection is required' }]}
             >
               <Select onChange={onChange} bordered={false}>
                 {props.collections.map((item, index) => (
-                  <Select.Option
-                    key={index}
-                    value={index}
-                  >
+                  <Select.Option key={index} value={index}>
                     <img
                       src={item.image}
                       className="creator-icon"
@@ -232,7 +229,10 @@ export const InfoStep = (props: {
                         >
                           <Input placeholder="value" />
                         </Form.Item>
-                        <MinusCircleOutlined style={{ color: '#ff4d4f' }} onClick={() => remove(name)} />
+                        <MinusCircleOutlined
+                          style={{ color: '#ff4d4f' }}
+                          onClick={() => remove(name)}
+                        />
                       </Space>
                     ))}
                     <Form.Item>
