@@ -44,6 +44,7 @@ export const LaunchpadDetailView = () => {
   const [isPresale, setIsPresale] = useState(false);
   const [discountPrice, setDiscountPrice] = useState<anchor.BN>();
   const [showMintInfo, setShowMintInfo] = useState(false);
+  const [count, setCount] = useState(0);
   const { createNft } = useNFTsAPI();
   const one_day = (24 * 60) & 60;
 
@@ -86,7 +87,6 @@ export const LaunchpadDetailView = () => {
     if (!anchorWallet) {
       return;
     }
-
     if (candyMachineId) {
       try {
         const cndy = await getCandyMachineState(
@@ -94,7 +94,6 @@ export const LaunchpadDetailView = () => {
           candyMachineId,
           connection,
         );
-        console.log('>>> refresCandyMachineState');
         let active =
           cndy?.state.goLiveDate?.toNumber() < new Date().getTime() / 1000;
 
@@ -291,8 +290,8 @@ export const LaunchpadDetailView = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      await refreshCandyMachineState();
+    const interval = setInterval(() => {
+      setCount(Date.now());
     }, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -301,7 +300,7 @@ export const LaunchpadDetailView = () => {
     if (candyMachineId) {
       refreshCandyMachineState();
     }
-  }, [candyMachineId, anchorWallet, connection]);
+  }, [candyMachineId, anchorWallet, connection, count]);
 
   const getCountdownDate = (
     candyMachine: CandyMachineAccount,
