@@ -19,6 +19,8 @@ import { RoyaltiesStep } from './steps/RoyaltiesStep';
 import { LaunchStep } from './steps/LaunchStep';
 import { WaitingStep } from './steps/WaitingStep';
 import { Congrats } from './steps/Congrats';
+import { useAuthToken } from '../../contexts/authProvider';
+import { useAuthAPI } from '../../hooks/useAuthAPI';
 
 const { Step } = Steps;
 
@@ -26,6 +28,8 @@ export const ArtCreateView = () => {
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const wallet = useWallet();
+  const { authToken } = useAuthToken();
+  const { authentication } = useAuthAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
   const { step_param }: { step_param: string } = useParams();
   const history = useHistory();
@@ -109,6 +113,23 @@ export const ArtCreateView = () => {
       setMinting(false);
     }
   };
+
+  if (!wallet.connected) {
+    return (
+      <div className='auth-page'>
+        <span className='text'>Connect wallet to see this page</span>
+      </div>
+    );
+  } else if (!authToken) {
+    return (
+      <div className='auth-page'>
+        <span className='text'>Sign in to see this page</span>
+        <Button onClick={async () => await authentication()}>
+          Sign in
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="main-area">
