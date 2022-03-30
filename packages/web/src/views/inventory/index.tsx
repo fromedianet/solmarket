@@ -5,9 +5,9 @@ import { Col, Input } from 'antd';
 import { TITLE } from './constants';
 import { useExCollections } from '../../hooks/useExCollections';
 import { ExCollection } from '../../models/exCollection';
-import { ExCollectionCard } from './ExCollectionCard';
 import { CardLoader } from '../../components/MyLoader';
 import { EmptyView } from '../../components/EmptyView';
+import { CollectionCard } from '../../components/CollectionCard';
 
 const { Search } = Input;
 
@@ -83,7 +83,7 @@ export const InventoryView = () => {
                 xxl={4}
                 style={{ padding: 8 }}
               >
-                <ExCollectionCard item={item} />
+                <CollectionCard item={item} link={`/excollection/${encodeURIComponent(item.symbol)}?market=${item.market}`} />
               </Col>
             ))}
           </InfiniteScroll>

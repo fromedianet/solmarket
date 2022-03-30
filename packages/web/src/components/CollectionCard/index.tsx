@@ -2,28 +2,29 @@ import React from 'react';
 import { Card, CardProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { ArtContent } from '../ArtContent';
-import { Collection } from '../../models/collection';
+import { ExCollection } from '../../models/exCollection';
 
 export interface CollectionCardProps extends CardProps {
-  collection: Collection;
+  item: ExCollection;
   itemId?: string;
   className?: string;
+  link: string;
 }
 
 export const CollectionCard = (props: CollectionCardProps) => {
-  const { name, symbol, description, image } = props.collection;
+  const { name, description, thumbnail } = props.item;
 
   return (
     <Card
-      className={`collection-card ${props.className && props.className}`}
+      className='collection-card'
       hoverable={true}
       bordered={false}
     >
-      <Link to={`/marketplace/${symbol}`}>
+      <Link to={props.link}>
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"
-            uri={image}
+            uri={thumbnail}
             preview={false}
             artview={true}
             allowMeshRender={false}

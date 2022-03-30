@@ -6,6 +6,7 @@ import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { CardLoader } from '../../components/MyLoader';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../components/EmptyView';
+import { ExCollection } from '../../models/exCollection';
 
 const { Search } = Input;
 
@@ -13,11 +14,11 @@ export const CollectionsView = () => {
   const searchParams = useQuerySearch();
   const type = searchParams.get('type');
   const { getAllCollections, getNewCollections } = useCollectionsAPI();
-  const [collections, setCollections] = useState<any[]>([]);
+  const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [filters, setFilters] = useState<any[]>([]);
-  const [items, setItems] = useState<any[]>([]);
+  const [filters, setFilters] = useState<ExCollection[]>([]);
+  const [items, setItems] = useState<ExCollection[]>([]);
   const PER_PAGE = 20;
 
   useEffect(() => {
@@ -102,7 +103,7 @@ export const CollectionsView = () => {
                 xxl={4}
                 style={{ padding: 8 }}
               >
-                <CollectionCard collection={item} />
+                <CollectionCard item={item} link={`/symbol/${item.symbol}`} />
               </Col>
             ))}
           </InfiniteScroll>

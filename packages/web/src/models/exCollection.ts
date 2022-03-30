@@ -9,8 +9,8 @@ export interface ExCollection {
   discord?: string | null;
   twitter?: string | null;
   website?: string | null;
-  createdAt?: number | null;
-  market: string;
+  market?: string;
+  itemId?: string;
 }
 
 export type ExAttribute = {
