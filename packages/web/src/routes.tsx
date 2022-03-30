@@ -24,7 +24,6 @@ import { CollectionsView } from './views/collections';
 import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
 import { CollectionView } from './views/collection';
-import { CollectionCreateView } from './views/collectionCreate';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
@@ -89,11 +88,6 @@ export function Routes() {
               exact
               path="/auction/:id/billing"
               component={() => <BillingView />}
-            />
-            <Route
-              exact
-              path="/collection/create/:step_param?"
-              component={() => <CollectionCreateView />}
             />
             <Route
               exact
