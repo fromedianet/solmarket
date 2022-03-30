@@ -27,7 +27,7 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
   const { symbol } = useParams<{ symbol: string }>();
-  const { getCollectionBySymbol } = useCollectionsAPI();
+  const { getCollectionBySymbol, updateCollectionMintStatus } = useCollectionsAPI();
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
@@ -94,6 +94,7 @@ export const LaunchpadDetailView = () => {
           candyMachineId,
           connection,
         );
+        console.log('>>> refresCandyMachineState');
         let active =
           cndy?.state.goLiveDate?.toNumber() < new Date().getTime() / 1000;
 
@@ -177,6 +178,12 @@ export const LaunchpadDetailView = () => {
 
         if (cndy.state.isSoldOut) {
           active = false;
+          if (!collection['mint_ended']) {
+            updateCollectionMintStatus({
+              symbol: symbol,
+              mint_ended: true,
+            }).then(res => console.log('>>> updateCollectionMintStatus', res));
+          }
         }
 
         setIsActive((cndy.state.isActive = active));
