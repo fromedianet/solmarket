@@ -27,7 +27,8 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
   const { symbol } = useParams<{ symbol: string }>();
-  const { getCollectionBySymbol, updateCollectionMintStatus } = useCollectionsAPI();
+  const { getCollectionBySymbol, updateCollectionMintStatus } =
+    useCollectionsAPI();
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
