@@ -1,27 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
-import { useCollection } from '../../hooks/useCollection';
 import { CollectionCard } from '../../components/CollectionCard';
 import { useQuerySearch } from '@oyster/common';
+import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 
 export const CollectionsView = () => {
   const searchParams = useQuerySearch();
   const type = searchParams.get('type');
-  const collections = useCollection();
-  let caption = 'All Collections';
-  if (type === 'popular') {
-    caption = 'Popular Collections';
-  } else if (type === 'new') {
-    caption = 'New Collections';
-  }
+  const { getAllCollections, getNewCollections } = useCollectionsAPI();
+  const [collections, setCollections] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (type === 'new') {
+      getNewCollections()
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            setCollections(res['data']);
+          }
+        });
+    } else {
+      getAllCollections()
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            setCollections(res['data']);
+          }
+        });
+    }
+  }, [type]);
+  
   return (
     <div className="main-area">
       <div className="collections-page">
-        <h1>{caption}</h1>
+        <h1>{type === 'new' ? 'New Collections' : 'All Collections'}</h1>
         <Row gutter={[16, 16]}>
           {collections.map((item, index) => (
-            <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <CollectionCard pubkey={item.pubkey} preview={false} />
+            <Col key={index} span={24} md={12} lg={8} xl={6}>
+              <CollectionCard collection={item} />
             </Col>
           ))}
         </Row>
