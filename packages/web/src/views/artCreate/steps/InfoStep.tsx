@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Row,
   Button,
@@ -6,10 +6,11 @@ import {
   Input,
   InputNumber,
   Form,
+  Select,
   Space,
   Upload,
 } from 'antd';
-import { IMetadataExtension, Metadata, ParsedAccount } from '@oyster/common';
+import { IMetadataExtension } from '@oyster/common';
 import {
   MinusCircleOutlined,
   PlusOutlined,
@@ -17,20 +18,16 @@ import {
 } from '@ant-design/icons';
 import { useArtworkFiles } from '../../../hooks/useArtworkFiles';
 import { ArtContent } from '../../../components/ArtContent';
-import { CollectionSelector } from '../collectionSelector';
 
 const { Dragger } = Upload;
 
 export const InfoStep = (props: {
+  collections: any[],
   attributes: IMetadataExtension;
   files: File[];
   setAttributes: (attr: IMetadataExtension) => void;
   confirm: () => void;
 }) => {
-  const [selectedCollection, setSelectedCollection] =
-    useState<ParsedAccount<Metadata>>();
-  const [showCollectionError, setShowCollectionError] = useState(false);
-
   const { image, animation_url } = useArtworkFiles(
     props.files,
     props.attributes,
@@ -47,13 +44,16 @@ export const InfoStep = (props: {
     });
   }, []);
 
-  useEffect(() => {
-    if (selectedCollection) {
-      setShowCollectionError(false);
-    }
-  }, [selectedCollection]);
+  const onChange = value => {
+    const selected = props.collections[value];
+    console.log(selected);
+    form.setFieldsValue({
+      symbol: selected.symbol,
+    });
+  }
 
   const onFinish = values => {
+    const collection = props.collections[values.collection];
     const nftAttributes = values.attributes;
     // value is number if possible
     for (const nftAttribute of nftAttributes || []) {
@@ -64,18 +64,18 @@ export const InfoStep = (props: {
     }
     props.setAttributes({
       ...props.attributes,
+      collection: collection.mint,
+      name: values.title,
+      description: values.description,
+      symbol: values.symbol,
       attributes: nftAttributes,
+      properties: {
+        ...props.attributes.properties,
+        maxSupply: values.max_supply,
+      }
     });
 
-    if (selectedCollection) {
-      props.setAttributes({
-        ...props.attributes,
-        collection: selectedCollection.pubkey,
-      });
-      props.confirm();
-    } else {
-      setShowCollectionError(true);
-    }
+    props.confirm();
   };
 
   return (
@@ -125,13 +125,8 @@ export const InfoStep = (props: {
                     const content = e.target?.result;
                     if (typeof content === 'string') {
                       const intern = JSON.parse(content);
-                      props.setAttributes({
-                        ...props.attributes,
-                        ...intern,
-                      });
                       form.setFieldsValue({
                         title: intern.name,
-                        symbol: intern.symbol,
                         description: intern.description,
                         attributes: intern.attributes,
                       });
@@ -158,6 +153,27 @@ export const InfoStep = (props: {
           </Col>
           <Col span={24} lg={12}>
             <Form.Item
+              label='Collection'
+              name='collection'
+              rules={[{ required: true, message: 'Collection is required' }]}
+            >
+              <Select onChange={onChange} bordered={false}>
+                {props.collections.map((item, index) => (
+                  <Select.Option
+                    key={index}
+                    value={index}
+                  >
+                    <img
+                      src={item.image}
+                      className="creator-icon"
+                      alt={item.name}
+                    />
+                    <span>{item.name}</span>
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
               label="Title"
               name="title"
               rules={[{ required: true, message: 'Title is required.' }]}
@@ -168,12 +184,6 @@ export const InfoStep = (props: {
                 placeholder="Max 50 characters"
                 maxLength={50}
                 allowClear
-                onChange={info =>
-                  props.setAttributes({
-                    ...props.attributes,
-                    name: info.target.value,
-                  })
-                }
               />
             </Form.Item>
             <Form.Item
@@ -184,14 +194,8 @@ export const InfoStep = (props: {
               <Input
                 className="input"
                 placeholder="Max 10 characters"
-                maxLength={10}
-                allowClear
-                onChange={info =>
-                  props.setAttributes({
-                    ...props.attributes,
-                    symbol: info.target.value,
-                  })
-                }
+                maxLength={20}
+                disabled
               />
             </Form.Item>
             <Form.Item label="Description" name="description">
@@ -199,47 +203,18 @@ export const InfoStep = (props: {
                 className="input textarea"
                 placeholder="Max 500 characters"
                 maxLength={500}
-                onChange={info =>
-                  props.setAttributes({
-                    ...props.attributes,
-                    description: info.target.value,
-                  })
-                }
                 allowClear
               />
             </Form.Item>
-            <Form.Item label="Minimum Supply" name="min_supply">
+            <Form.Item label="Max Supply" name="max_supply">
               <InputNumber
                 placeholder="Quantity"
                 controls={false}
                 defaultValue={1}
-                onChange={(val: number) => {
-                  props.setAttributes({
-                    ...props.attributes,
-                    properties: {
-                      ...props.attributes.properties,
-                      maxSupply: val,
-                    },
-                  });
-                }}
                 className="input"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <label className="action-field">
-              <div className="field-title form-field">
-                <span className="required-mark">*</span>Collection
-              </div>
-              <CollectionSelector
-                selected={selectedCollection}
-                setSelected={setSelectedCollection}
-              />
-              {showCollectionError && (
-                <span style={{ color: '#ff4d4f' }}>
-                  Collection is required.
-                </span>
-              )}
-            </label>
             <label className="action-field">
               <span className="field-title form-field">Attributes</span>
               <Form.List name="attributes">
@@ -257,7 +232,7 @@ export const InfoStep = (props: {
                         >
                           <Input placeholder="value" />
                         </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
+                        <MinusCircleOutlined style={{ color: '#ff4d4f' }} onClick={() => remove(name)} />
                       </Space>
                     ))}
                     <Form.Item>

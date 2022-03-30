@@ -21,21 +21,23 @@ import { WaitingStep } from './steps/WaitingStep';
 import { Congrats } from './steps/Congrats';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
+import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 
 const { Step } = Steps;
 
 export const ArtCreateView = () => {
+  const { step_param }: { step_param: string } = useParams();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const wallet = useWallet();
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
+  const { getMyListedCollections } = useCollectionsAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
-  const { step_param }: { step_param: string } = useParams();
   const history = useHistory();
   const { width } = useWindowDimensions();
   const [nftCreateProgress, setNFTcreateProgress] = useState<number>(0);
-
+  const [collections, setCollections] = useState<any[]>([]);
   const [step, setStep] = useState<number>(0);
   const [stepsVisible, setStepsVisible] = useState<boolean>(true);
   const [isMinting, setMinting] = useState<boolean>(false);
@@ -72,6 +74,19 @@ export const ArtCreateView = () => {
     if (step_param) setStep(parseInt(step_param));
     else gotoStep(0);
   }, [step_param, gotoStep]);
+
+  useEffect(() => {
+    if (authToken) {
+      getMyListedCollections()
+      // @ts-ignore
+      .then((res: {}) => {
+        setCollections(res['data'] || []);
+      })
+      .catch(() => {
+        setCollections([]);
+      });
+    }
+  }, [authToken]);
 
   // store files
   const mint = async () => {
@@ -188,6 +203,7 @@ export const ArtCreateView = () => {
 
             {step === 2 && (
               <InfoStep
+                collections={collections}
                 attributes={attributes}
                 files={files}
                 setAttributes={setAttributes}

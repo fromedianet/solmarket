@@ -88,6 +88,16 @@ export const useCollectionsAPI = () => {
   }
 
   /**
+   * Get my listed collections
+   *
+   * @returns
+   */
+  async function getMyListedCollections() {
+    const result = await runAPI(true, 'get', '/collections/getMyListedCollections');
+    return result;
+  }
+
+  /**
    * Get collection by id
    *
    * @param _id
@@ -330,6 +340,7 @@ export const useCollectionsAPI = () => {
   return {
     createCollection,
     getMyCollections,
+    getMyListedCollections,
     getCollectionById,
     processStep1,
     processStep2,
