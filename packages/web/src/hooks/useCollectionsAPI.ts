@@ -311,6 +311,22 @@ export const useCollectionsAPI = () => {
     return result;
   }
 
+  /**
+   * Update collection mint_ended status
+   */
+  async function updateCollectionMintStatus(props: {
+    symbol: string,
+    mint_ended: boolean,
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/collections/updateCollectionMintStatus',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
   return {
     createCollection,
     getMyCollections,
@@ -326,5 +342,6 @@ export const useCollectionsAPI = () => {
     featuredCollectionsCarousel,
     getLaunchpadCollections,
     getCollectionBySymbol,
+    updateCollectionMintStatus
   };
 };
