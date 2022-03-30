@@ -22,7 +22,10 @@ export const ExCollectionCard = (props: { item: ExCollection }) => {
           />
         </div>
         <div className="card-caption">
-          <h6>{props.item.name}</h6>
+          <span className='name'>{props.item.name}</span>
+          {props.item.description && (
+            <span className='description'>{props.item.description}</span>
+          )}
         </div>
       </Link>
     </Card>

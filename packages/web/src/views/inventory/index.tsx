@@ -17,7 +17,7 @@ export const InventoryView = () => {
   const [hasMore, setHasMore] = useState(true);
   const [filters, setFilters] = useState<ExCollection[]>([]);
   const [items, setItems] = useState<ExCollection[]>([]);
-  const PER_COUNT = 20;
+  const PER_PAGE = 20;
 
   useEffect(() => {
     if (!loading) {
@@ -27,7 +27,7 @@ export const InventoryView = () => {
 
   useEffect(() => {
     setHasMore(true);
-    setItems(filters.slice(0, PER_COUNT));
+    setItems(filters.slice(0, PER_PAGE));
   }, [filters]);
 
   const fetchMoreData = () => {
@@ -38,7 +38,7 @@ export const InventoryView = () => {
 
     setTimeout(() => {
       setItems(prev =>
-        prev.concat(filters.slice(prev.length, prev.length + PER_COUNT)),
+        prev.concat(filters.slice(prev.length, prev.length + PER_PAGE)),
       );
     }, 500);
   };
@@ -58,7 +58,7 @@ export const InventoryView = () => {
         <h1>{TITLE[id]}</h1>
         <Search
           placeholder="Search collections by name"
-          className="search-control"
+          className="collection-search"
           onChange={onChange}
           allowClear
         />
