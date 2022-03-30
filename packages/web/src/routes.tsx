@@ -4,8 +4,6 @@ import { Providers } from './providers';
 import {
   AnalyticsView,
   ArtCreateView,
-  ArtistsView,
-  ArtistView,
   ArtView,
   ArtworksView,
   AuctionCreateView,
@@ -71,8 +69,6 @@ export function Routes() {
               component={() => <ArtworksView />}
             />
             <Route exact path="/art/:id" component={() => <ArtView />} />
-            <Route exact path="/artists/:id" component={() => <ArtistView />} />
-            <Route exact path="/artists" component={() => <ArtistsView />} />
             <Route exact path="/auctions" component={() => <AuctionsView />} />
             <Route
               exact

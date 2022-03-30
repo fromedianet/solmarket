@@ -1,9 +1,20 @@
 export type Collection = {
-  id: number;
   _id: string;
-  _email: string;
-  permission?: string | null;
-  version?: number;
-  name?: string | null;
-  description?: string | null;
+  name: string;
+  symbol: string;
+  description: string | null;
+  image: string;
+  banner: string | null;
+  discord: string;
+  twitter: string;
+  website: string;
+  categories: [];
+  is_derivative: boolean;
+  derivative: {
+    original_link: string | null;
+    original_name: string | null;
+  };
+  candymachine_id: string;
+  mint: string;
+  owner: string;
 };
