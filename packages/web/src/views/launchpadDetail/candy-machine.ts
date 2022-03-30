@@ -612,10 +612,7 @@ export const mintOneToken = async (
     }
     return {
       status,
-      mint: mint.publicKey.toBase58(),
-      owner: payer.toBase58(),
       metadataAddress: metadataAddress.toBase58(),
-      tokenAddress: userTokenAccountAddress.toBase58(),
     };
   } catch (e) {
     console.log(e);
