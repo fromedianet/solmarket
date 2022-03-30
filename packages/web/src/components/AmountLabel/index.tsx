@@ -45,7 +45,7 @@ export const AmountLabel = (props: IAmountLabel) => {
           value={`${formattedAmount} ${displaySymbol || ''}`}
           prefix={
             customPrefix || (
-              <TokenCircle iconSize={iconSize} iconFile="sol.png" />
+              <TokenCircle iconSize={iconSize} iconFile="/icons/sol.png" />
             )
           }
         />

@@ -85,7 +85,7 @@ export const AuctionRenderCard = (props: AuctionCard) => {
               className="bid-statistic"
               title={status}
               value={`${formattedAmount} SOL`}
-              prefix={<TokenCircle iconSize={20} iconFile="sol.png" />}
+              prefix={<TokenCircle iconSize={20} iconFile="/icons/sol.png" />}
             />
             {!auctionView.isInstantSale && (
               <Statistic

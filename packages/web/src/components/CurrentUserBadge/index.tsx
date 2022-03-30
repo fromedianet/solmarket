@@ -114,7 +114,7 @@ export const CurrentUserBadge = (props: {
                     marginBottom: 10,
                   }}
                 >
-                  <TokenCircle iconSize={24} iconFile="sol.png" />
+                  <TokenCircle iconSize={24} iconFile="/icons/sol.png" />
                   &nbsp;
                   <span
                     style={{
