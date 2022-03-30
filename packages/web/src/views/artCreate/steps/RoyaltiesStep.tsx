@@ -49,9 +49,11 @@ const RoyaltiesSplitter = (props: {
 
           return (
             <Col span={24} key={idx}>
-              <Row align="middle" gutter={[0, 16]}>
-                <Col span={7} lg={4}>
-                  {creator.label}
+              <Row align="middle" gutter={[16, 16]}>
+                <Col span={7} lg={3}>
+                  <span style={{ color: 'white', fontSize: 14 }}>
+                    {creator.label}
+                  </span>
                 </Col>
                 <Col span={7} lg={4}>
                   <InputNumber<number>
@@ -65,7 +67,7 @@ const RoyaltiesSplitter = (props: {
                     className="royalties-input"
                   />
                 </Col>
-                <Col span={7} lg={4}>
+                <Col span={7} lg={6}>
                   <Slider value={amt} onChange={handleChangeShare} />
                 </Col>
                 {props.isShowErrors && amt === 0 && (

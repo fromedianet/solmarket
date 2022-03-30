@@ -216,14 +216,7 @@ export const LaunchpadDetailView = () => {
         console.log('>>> mintResult', mintResult);
 
         if (mintResult['status'] && !mintResult['status']['err']) {
-          const data = {
-            mint: mintResult['mint'],
-            owner: mintResult['owner'],
-            tokenAddress: mintResult['tokenAddress'],
-            metadataAddress: mintResult['metadataAddress'],
-            symbol: collection['symbol'],
-          };
-          createNft(data)
+          createNft(mintResult['metadataAddress'])
             .then(res => console.log('>>> createNFT', res))
             .catch(err => console.error('>>> createNFT error', err));
           notify({

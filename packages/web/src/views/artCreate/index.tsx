@@ -19,19 +19,27 @@ import { RoyaltiesStep } from './steps/RoyaltiesStep';
 import { LaunchStep } from './steps/LaunchStep';
 import { WaitingStep } from './steps/WaitingStep';
 import { Congrats } from './steps/Congrats';
+import { useAuthToken } from '../../contexts/authProvider';
+import { useAuthAPI } from '../../hooks/useAuthAPI';
+import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 const { Step } = Steps;
 
 export const ArtCreateView = () => {
+  const { step_param }: { step_param: string } = useParams();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const wallet = useWallet();
+  const { authToken } = useAuthToken();
+  const { authentication } = useAuthAPI();
+  const { getMyListedCollections } = useCollectionsAPI();
+  const { createNft } = useNFTsAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
-  const { step_param }: { step_param: string } = useParams();
   const history = useHistory();
   const { width } = useWindowDimensions();
   const [nftCreateProgress, setNFTcreateProgress] = useState<number>(0);
-
+  const [collections, setCollections] = useState<any[]>([]);
   const [step, setStep] = useState<number>(0);
   const [stepsVisible, setStepsVisible] = useState<boolean>(true);
   const [isMinting, setMinting] = useState<boolean>(false);
@@ -69,6 +77,19 @@ export const ArtCreateView = () => {
     else gotoStep(0);
   }, [step_param, gotoStep]);
 
+  useEffect(() => {
+    if (authToken) {
+      getMyListedCollections()
+        // @ts-ignore
+        .then((res: {}) => {
+          setCollections(res['data'] || []);
+        })
+        .catch(() => {
+          setCollections([]);
+        });
+    }
+  }, [authToken]);
+
   // store files
   const mint = async () => {
     const metadata = {
@@ -101,7 +122,10 @@ export const ArtCreateView = () => {
         attributes.properties?.maxSupply,
       );
 
-      if (_nft) setNft(_nft);
+      if (_nft) {
+        setNft(_nft);
+        await createNft(_nft.metadataAccount);
+      }
       setAlertMessage('');
     } catch (e: any) {
       setAlertMessage(e.message);
@@ -109,6 +133,21 @@ export const ArtCreateView = () => {
       setMinting(false);
     }
   };
+
+  if (!wallet.connected) {
+    return (
+      <div className="auth-page">
+        <span className="text">Connect wallet to see this page</span>
+      </div>
+    );
+  } else if (!authToken) {
+    return (
+      <div className="auth-page">
+        <span className="text">Sign in to see this page</span>
+        <Button onClick={async () => await authentication()}>Sign in</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="main-area">
@@ -167,6 +206,7 @@ export const ArtCreateView = () => {
 
             {step === 2 && (
               <InfoStep
+                collections={collections}
                 attributes={attributes}
                 files={files}
                 setAttributes={setAttributes}
