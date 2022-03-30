@@ -401,7 +401,7 @@ export const LaunchpadDetailView = () => {
             <Col span={24} md={12}>
               <div className="collection-container image-container">
                 <img
-                  src={collection['image']}
+                  src={collection['thumbnail']}
                   alt="image"
                   className="collection-image"
                 />
