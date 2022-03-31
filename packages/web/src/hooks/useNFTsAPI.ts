@@ -75,12 +75,12 @@ export const useNFTsAPI = () => {
     return result;
   }
 
-  async function getListedNftsByQuery(props: { symbol: string }) {
+  async function getListedNftsByQuery(props) {
     const result = await runAPI(
       false,
       'post',
       '/nfts/getListedNftsByQuery',
-      JSON.stringify({ symbol: props.symbol }),
+      JSON.stringify(props),
     );
     return result;
   }

@@ -1,3 +1,4 @@
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
 import {
   ExAttribute,
@@ -55,7 +56,7 @@ export const useCollection = (symbol: string) => {
             listedTotalValue,
             totalVolume,
           } = res['data'];
-          setAttributes(parseAttributes(availableAttributes));
+          setAttributes(_parseAttributes(availableAttributes));
           setCollectionStats({
             floorPrice: parseInt(floorPrice),
             listedCount: parseInt(listedCount),
@@ -70,7 +71,9 @@ export const useCollection = (symbol: string) => {
     if (loading) return;
     setLoading(true);
 
-    getListedNftsByQuery(param)
+    const query = _getQueryPrameter(param);
+
+    getListedNftsByQuery(query)
       // @ts-ignore
       .then((res: {}) => {
         const data = res['data'];
@@ -88,7 +91,7 @@ export const useCollection = (symbol: string) => {
       .finally(() => setLoading(false));
   };
 
-  function parseAttributes(data: any[] | null): ExAttribute[] {
+  function _parseAttributes(data: any[] | null): ExAttribute[] {
     const attrs: ExAttribute[] = [];
     try {
       if (data) {
@@ -116,8 +119,59 @@ export const useCollection = (symbol: string) => {
     } catch (e) {
       console.error(e);
     }
-    console.log('parseAttributes', attrs);
     return attrs;
+  }
+
+  function _getQueryPrameter(param: QUERIES) {
+    const queries = {
+      skip: param.skip ? param.skip : 0,
+      limit: PER_PAGE,
+    };
+    const match = { symbol: param.symbol };
+    if (param.searchKey) {
+      match['search'] = param.searchKey;
+    }
+    if (param.min || param.max) {
+      const price = {};
+      if (param.min) {
+        price['gte'] = param.min * LAMPORTS_PER_SOL;
+      }
+      if (param.max) {
+        price['lte'] = param.max * LAMPORTS_PER_SOL;
+      }
+      match['price'] = price;
+    }
+
+    if (param.attributes && Object.keys(param.attributes).length > 0) {
+      const attrs: any[] = [];
+      Object.keys(param.attributes).forEach(key => {
+        // @ts-ignore
+        const subAttrs = param.attributes[key].map(val => ({
+          trait_type: key,
+          value: val,
+        }));
+        attrs.push(subAttrs);
+      });
+      match['attributes'] = attrs;
+    }
+
+    queries['match'] = match;
+
+    const sortQuery = {};
+    if (param.sort === 2) {
+      sortQuery['price'] = 1;
+    } else if (param.sort === 3) {
+      sortQuery['price'] = -1;
+    }
+    sortQuery['updatedAt'] = -1;
+
+    queries['sort'] = sortQuery;
+
+    const result = {
+      query: JSON.stringify(queries)
+    };
+
+    return result;
   }
 
   return {
