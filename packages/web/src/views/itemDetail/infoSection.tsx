@@ -1,10 +1,9 @@
 import React from 'react';
-import { Row, Col, Collapse, Skeleton, Button, Statistic } from 'antd';
+import { Row, Col, Collapse, Skeleton, Statistic } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { ArtContent } from '../../components/ArtContent';
 import { Link } from 'react-router-dom';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { ConnectButton, CopySpan, shortenAddress } from '@oyster/common';
+import { CopySpan, shortenAddress } from '@oyster/common';
 import {
   LineChart,
   Line,
@@ -14,6 +13,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { ItemAction } from './itemAction';
 
 const { Panel } = Collapse;
 
@@ -23,8 +23,6 @@ export const InfoSection = (props: {
   onRefresh: () => void;
   onBuy: () => void;
 }) => {
-  const wallet = useWallet();
-  const alreadyListed = props.nft.price || 0 > 0;
   return (
     <Row gutter={24}>
       <Col span={24} lg={12}>
@@ -100,32 +98,7 @@ export const InfoSection = (props: {
             <img width={20} src={'/icons/refresh.svg'} />
           </div>
         </div>
-        <div className="action-view">
-          {alreadyListed && <span className="label">Current Price</span>}
-          <div className="price-container">
-            <img
-              src="/icons/price.svg"
-              width={24}
-              alt="price"
-              style={{ marginRight: '8px' }}
-            />
-            {alreadyListed && (
-              <span className="value">{props.nft.price} SOL</span>
-            )}
-          </div>
-          {!alreadyListed && <span className="value">Not listed</span>}
-          {alreadyListed && (
-            <div className="btn-container">
-              {!wallet.connected ? (
-                <ConnectButton className="button" />
-              ) : (
-                <Button className="button" onClick={props.onBuy} disabled>
-                  Buy now
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
+        <ItemAction nft={props.nft} onBuy={props.onBuy} />
         <Collapse
           expandIconPosition="right"
           className="art-info"
