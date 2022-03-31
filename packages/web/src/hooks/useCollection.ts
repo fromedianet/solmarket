@@ -65,6 +65,8 @@ export const useCollection = (symbol: string) => {
           });
         }
       });
+
+    getListedNFTs({ symbol: symbol, sort: 1 });
   }, [symbol]);
 
   const getListedNFTs = (param: QUERIES) => {

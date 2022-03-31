@@ -75,6 +75,11 @@ export const useNFTsAPI = () => {
     return result;
   }
 
+  /**
+   * Get listed nfts by query
+   * @param props
+   * @returns
+   */
   async function getListedNftsByQuery(props) {
     const result = await runAPI(
       false,
@@ -85,8 +90,19 @@ export const useNFTsAPI = () => {
     return result;
   }
 
+  async function getNftByMint(mint: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/nfts/getNftByMint',
+      JSON.stringify({ mint }),
+    );
+    return result;
+  }
+
   return {
     createNft,
     getListedNftsByQuery,
+    getNftByMint,
   };
 };

@@ -40,6 +40,22 @@ export type ExNFT = {
   price?: number;
 };
 
+export type NFT = {
+  mint: string;
+  updateAuthority: string;
+  metadataAddress: string;
+  name: string;
+  symbol: string;
+  description: string | null;
+  image: string;
+  animationURL: string | null;
+  seller_fee_basis_points: number;
+  attributes: Attribute[];
+  creators: Creator[];
+  price: number;
+  collectionName: string;
+};
+
 export type NFTData = {
   title: string;
   content: string;

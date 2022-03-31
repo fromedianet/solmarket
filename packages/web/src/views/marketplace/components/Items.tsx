@@ -199,15 +199,16 @@ export const NFTCard = (props: {
   item: any;
   collection: string;
   itemId?: string;
+  className?: string;
 }) => {
   return (
     <Card
       hoverable={true}
-      className="art-card"
+      className={`art-card ${props.className}`}
       style={{ maxWidth: 250 }}
       bordered={false}
     >
-      <Link to={`/art/${props.item.mint}`}>
+      <Link to={`/item-details/${props.item.mint}`}>
         <div className="image-over art-image-container">
           <ArtContent
             className="art-image no-event"
