@@ -28,6 +28,7 @@ export type ExCollectionStats = {
   floorPrice?: number;
   totalVolume?: number;
   listedCount?: number;
+  listedTotalValue?: number;
 };
 
 export type ExNFT = {

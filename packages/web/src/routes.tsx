@@ -21,7 +21,7 @@ import { LaunchPadView } from './views/launchpad';
 import { CollectionsView } from './views/collections';
 import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
-import { CollectionView } from './views/collection';
+import { MarketplaceView } from './views/marketplace';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
@@ -92,8 +92,8 @@ export function Routes() {
             />
             <Route
               exact
-              path="/collection/:id"
-              component={() => <CollectionView />}
+              path="/marketplace/:symbol"
+              component={() => <MarketplaceView />}
             />
             <Route
               exact

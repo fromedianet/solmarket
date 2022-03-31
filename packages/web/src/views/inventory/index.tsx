@@ -83,7 +83,12 @@ export const InventoryView = () => {
                 xxl={4}
                 style={{ padding: 8 }}
               >
-                <CollectionCard item={item} link={`/excollection/${encodeURIComponent(item.symbol)}?market=${item.market}`} />
+                <CollectionCard
+                  item={item}
+                  link={`/excollection/${encodeURIComponent(
+                    item.symbol,
+                  )}?market=${item.market}`}
+                />
               </Col>
             ))}
           </InfiniteScroll>
