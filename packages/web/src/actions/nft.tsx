@@ -192,7 +192,7 @@ export const mintNFT = async (
       collection: metadata.collection
         ? new Collection({
             key: new PublicKey(metadata.collection).toBase58(),
-            verified: true,
+            verified: false,
           })
         : null,
       uses: metadata.uses || null,

@@ -92,34 +92,25 @@ export const useCollection = (symbol: string) => {
     const attrs: ExAttribute[] = [];
     try {
       if (data) {
-        let prevKey = '';
-        const attr: ExAttribute = {
-          key: '',
-          numbers: [],
-        };
-
-        data.forEach((item, index) => {
+        const obj = {};
+        data.forEach(item => {
+          const key = item['attribute']['trait_type'];
           const temp: ExAttrValue = {
             value: item['attribute']['value'],
             amount: item['count'],
           };
-
-          if (prevKey !== item['attribute']['trait_type']) {
-            if (index > 0) {
-              attrs.push(attr);
-            }
-
-            attr.key = item['attribute']['trait_type'];
-            attr.numbers = [temp];
-
-            prevKey = item['attribute']['trait_type'];
+          if (obj[key]) {
+            obj[key].push(temp);
           } else {
-            attr.numbers.push(temp);
+            obj[key] = [temp];
           }
+        });
 
-          if (index === data.length - 1) {
-            attrs.push(attr);
-          }
+        Object.keys(obj).forEach(key => {
+          attrs.push({
+            key: key,
+            numbers: obj[key],
+          });
         });
       }
     } catch (e) {

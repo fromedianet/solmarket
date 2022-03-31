@@ -50,7 +50,7 @@ export const Congrats = (props: {
         </Button>
         <Button
           style={{ marginBottom: 16 }}
-          onClick={() => (window.location.href = 'collections')}
+          onClick={() => history.push('/collections')}
         >
           <span>Go to collection page &gt;</span>
         </Button>
