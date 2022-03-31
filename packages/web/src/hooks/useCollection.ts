@@ -163,7 +163,7 @@ export const useCollection = (symbol: string) => {
     } else if (param.sort === 3) {
       sortQuery['price'] = -1;
     }
-    sortQuery['updatedAt'] = -1;
+    sortQuery['createdAt'] = -1;
 
     queries['sort'] = sortQuery;
 
