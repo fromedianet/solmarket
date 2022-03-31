@@ -4,9 +4,6 @@ import { Providers } from './providers';
 import {
   AnalyticsView,
   ArtCreateView,
-  ArtistsView,
-  ArtistView,
-  ArtView,
   ArtworksView,
   AuctionCreateView,
   AuctionView,
@@ -23,8 +20,7 @@ import { LaunchPadView } from './views/launchpad';
 import { CollectionsView } from './views/collections';
 import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
-import { CollectionView } from './views/collection';
-import { CollectionCreateView } from './views/collectionCreate';
+import { MarketplaceView } from './views/marketplace';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
@@ -33,6 +29,7 @@ import { DashboardView } from './views/dashboard/dashboard';
 import { DashboardAdmin } from './views/dashboard/admin';
 import { DashboardAdminDetails } from './views/dashboard/admin/details';
 import { LaunchpadDetailView } from './views/launchpadDetail';
+import { ItemDetailView } from './views/itemDetail';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -71,9 +68,11 @@ export function Routes() {
               path="/artworks/:id?"
               component={() => <ArtworksView />}
             />
-            <Route exact path="/art/:id" component={() => <ArtView />} />
-            <Route exact path="/artists/:id" component={() => <ArtistView />} />
-            <Route exact path="/artists" component={() => <ArtistsView />} />
+            <Route
+              exact
+              path="/item-details/:mint"
+              component={() => <ItemDetailView />}
+            />
             <Route exact path="/auctions" component={() => <AuctionsView />} />
             <Route
               exact
@@ -92,18 +91,13 @@ export function Routes() {
             />
             <Route
               exact
-              path="/collection/create/:step_param?"
-              component={() => <CollectionCreateView />}
-            />
-            <Route
-              exact
               path="/collections"
               component={() => <CollectionsView />}
             />
             <Route
               exact
-              path="/collection/:id"
-              component={() => <CollectionView />}
+              path="/marketplace/:symbol"
+              component={() => <MarketplaceView />}
             />
             <Route
               exact

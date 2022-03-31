@@ -133,7 +133,7 @@ export const FilterSidebar = (props: {
                         controls={false}
                       />
                     </Form.Item>
-                    <span>to</span>
+                    <span style={{ color: 'white' }}>to</span>
                     <Form.Item name="max">
                       <InputNumber
                         placeholder="Max"

@@ -1,101 +1,36 @@
 import React from 'react';
 import { Card, CardProps } from 'antd';
 import { Link } from 'react-router-dom';
-import { MetadataCategory, StringPublicKey } from '@oyster/common';
-import { useArt } from '../../hooks';
 import { ArtContent } from '../ArtContent';
+import { ExCollection } from '../../models/exCollection';
 
 export interface CollectionCardProps extends CardProps {
-  pubkey?: StringPublicKey;
-  image?: string;
-  animationURL?: string;
-  category?: MetadataCategory;
-  name?: string;
-  symbol?: string | undefined;
-  description?: string;
-  preview?: boolean;
-  onClose?: () => void;
-  onClick?: () => void;
-  noEvent?: boolean;
-  height?: number;
-  width?: number;
-  className?: string;
+  item: ExCollection;
   itemId?: string;
+  className?: string;
+  link: string;
 }
 
 export const CollectionCard = (props: CollectionCardProps) => {
-  const {
-    pubkey,
-    image,
-    animationURL,
-    category,
-    name,
-    symbol,
-    description,
-    preview,
-    height,
-    width,
-    noEvent,
-    onClose,
-    onClick,
-    className,
-  } = props;
-  const collection = useArt(pubkey);
+  const { name, description, thumbnail } = props.item;
 
-  const cName = collection.title || name;
-
-  const CardContent = () => {
-    return (
-      <>
+  return (
+    <Card className="collection-card" hoverable={true} bordered={false}>
+      <Link to={props.link}>
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"
-            pubkey={pubkey}
-            uri={image}
-            animationURL={animationURL}
-            category={category}
-            preview={preview}
+            uri={thumbnail}
+            preview={false}
             artview={true}
             allowMeshRender={false}
-            width={width}
-            height={height}
           />
         </div>
         <div className="card-caption">
-          <h6>{cName}</h6>
-          {symbol && <span className="symbol">{symbol}</span>}
+          <span className="name">{name}</span>
           {description && <span className="description">{description}</span>}
         </div>
-      </>
-    );
-  };
-
-  return (
-    <Card
-      className={`collection-card ${className && className}`}
-      hoverable={true}
-      bordered={false}
-      onClick={onClick}
-    >
-      {onClose && (
-        <button
-          className="card-close-button"
-          onClick={e => {
-            e.stopPropagation();
-            e.preventDefault();
-            onClose && onClose();
-          }}
-        >
-          X
-        </button>
-      )}
-      {noEvent ? (
-        <CardContent />
-      ) : (
-        <Link to={`/collection/${pubkey}`}>
-          <CardContent />
-        </Link>
-      )}
+      </Link>
     </Card>
   );
 };

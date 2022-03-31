@@ -602,7 +602,6 @@ export const mintOneToken = async (
       )
     ).txs.map(t => t.txid);
     let status: any = { err: true };
-    let metadata;
     if (txs[0]) {
       status = await awaitTransactionSignatureConfirmation(
         txs[0],
@@ -610,13 +609,10 @@ export const mintOneToken = async (
         connection,
         true,
       );
-      metadata = await loadMetadata(connection, metadataAddress);
-      console.log('>>> metadata', metadata);
     }
     return {
       status,
-      metadata,
-      tokenAddress: userTokenAccountAddress.toBase58(),
+      metadataAddress: metadataAddress.toBase58(),
     };
   } catch (e) {
     console.log(e);

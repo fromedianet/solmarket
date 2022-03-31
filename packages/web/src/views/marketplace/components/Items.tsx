@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, Col, Select, Tag, Input } from 'antd';
-import { ArtCard } from '../../../components/ArtCard';
+import { Row, Col, Select, Tag, Input, Card } from 'antd';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../../components/EmptyView';
-import { Attribute } from '@oyster/common';
+import { Link } from 'react-router-dom';
+import { ArtContent } from '../../../components/ArtContent';
+import { ExCollection } from '../../../models/exCollection';
 
 const { Search } = Input;
 const DELIMITER = '|&=&|';
 
 export const Items = (props: {
+  collection: ExCollection | undefined;
   list: any[];
+  sort: number;
+  searchKey: string;
+  hasMore: boolean;
   filter: {
     price: {
       symbol: string | undefined;
@@ -17,7 +23,10 @@ export const Items = (props: {
     };
     attributes: {};
   };
+  onSearch: (a: string) => void;
+  onSortChange: (a: number) => void;
   updateFilters: (p, a) => void;
+  fetchMore: () => void;
 }) => {
   const searchRef = useRef(null);
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
@@ -25,12 +34,6 @@ export const Items = (props: {
     props.filter.attributes,
   );
   const [priceTag, setPriceTag] = useState<string | undefined>();
-  const [filterList, setFilterList] = useState(props.list);
-  const [searchKey, setSearchKey] = useState('');
-
-  useEffect(() => {
-    setFilterList(props.list);
-  }, [props.list]);
 
   useEffect(() => {
     if (props.filter.price !== priceFilter) {
@@ -39,8 +42,7 @@ export const Items = (props: {
     if (props.filter.attributes !== attributeFilter) {
       setAttributeFilter(props.filter.attributes);
     }
-    searchList();
-  }, [props.filter, searchKey]);
+  }, [props.filter]);
 
   useEffect(() => {
     let newPriceTag: string | undefined;
@@ -62,50 +64,6 @@ export const Items = (props: {
   const onRefresh = () => {
     console.log('refresh');
   };
-
-  function searchList() {
-    const searchResult = searchByName(props.list, searchKey);
-    const result = searchByAttrs(searchResult);
-
-    setFilterList(result);
-  }
-
-  function searchByName(list, searchKey) {
-    const filters = list.filter(
-      item => item.name.toLowerCase().indexOf(searchKey.toLowerCase()) > -1,
-    );
-    return filters;
-  }
-
-  function searchByAttrs(list) {
-    const attrs: Attribute[] = [];
-    const tratis = Object.keys(props.filter.attributes);
-    tratis.forEach(trait => {
-      props.filter.attributes[trait].forEach(val => {
-        attrs.push({
-          trait_type: trait,
-          value: val,
-        });
-      });
-    });
-
-    const BreakException = {};
-    const filters = list.filter(item => {
-      const attrsStr = JSON.stringify(item.attributes);
-      try {
-        attrs.forEach(attr => {
-          if (attrsStr.indexOf(JSON.stringify(attr)) < 0) {
-            throw BreakException;
-          }
-        });
-      } catch (e) {
-        return false;
-      }
-      return true;
-    });
-
-    return filters;
-  }
 
   const onClosePriceTag = () => {
     props.updateFilters(
@@ -154,7 +112,8 @@ export const Items = (props: {
             ref={searchRef}
             placeholder="Search"
             className="search-control"
-            onSearch={val => setSearchKey(val)}
+            value={props.searchKey}
+            onChange={event => props.onSearch(event.target.value)}
             allowClear
           />
         </Col>
@@ -162,10 +121,14 @@ export const Items = (props: {
           <div className="filter-btn" onClick={onRefresh}>
             <img src="/icons/filter.svg" alt="filter" />
           </div>
-          <Select className="select-container" defaultValue="recently">
-            <Select.Option value="recently">Recently Listed</Select.Option>
-            <Select.Option value="low-high">Price: Low to high</Select.Option>
-            <Select.Option value="high-low">Price: High to low</Select.Option>
+          <Select
+            className="select-container"
+            value={props.sort}
+            onSelect={val => props.onSortChange(val)}
+          >
+            <Select.Option value={1}>Recently Listed</Select.Option>
+            <Select.Option value={2}>Price: Low to high</Select.Option>
+            <Select.Option value={3}>Price: High to low</Select.Option>
           </Select>
         </Col>
       </Row>
@@ -198,17 +161,72 @@ export const Items = (props: {
           </div>
         )}
       </div>
-      <Row gutter={[16, 16]} style={{ padding: '8px 16px' }}>
-        {filterList.length > 0 ? (
-          filterList.map((item: any, index) => (
-            <Col key={index} span={12} md={8} lg={8} xl={6} xxl={4}>
-              <ArtCard pubkey={item.pubkey} preview={false} artview={true} />
-            </Col>
-          ))
-        ) : (
-          <EmptyView />
-        )}
-      </Row>
+      {
+        // @ts-ignore
+        <InfiniteScroll
+          dataLength={props.list.length}
+          className="ant-row"
+          next={props.fetchMore}
+          hasMore={props.hasMore}
+        >
+          {props.list.length > 0 ? (
+            props.list.map((item, index) => (
+              <Col
+                key={index}
+                span={12}
+                md={8}
+                lg={8}
+                xl={6}
+                xxl={4}
+                style={{ padding: 8 }}
+              >
+                <NFTCard
+                  item={item}
+                  collection={props.collection?.name || item.symbol}
+                />
+              </Col>
+            ))
+          ) : (
+            <EmptyView />
+          )}
+        </InfiniteScroll>
+      }
     </div>
+  );
+};
+
+export const NFTCard = (props: {
+  item: any;
+  collection: string;
+  itemId?: string;
+  className?: string;
+}) => {
+  return (
+    <Card
+      hoverable={true}
+      className={`art-card ${props.className}`}
+      style={{ maxWidth: 250 }}
+      bordered={false}
+    >
+      <Link to={`/item-details/${props.item.mint}`}>
+        <div className="image-over art-image-container">
+          <ArtContent
+            className="art-image no-event"
+            uri={props.item.image}
+            preview={false}
+            artview={true}
+            allowMeshRender={false}
+          />
+        </div>
+        <div className="card-caption">
+          <h6>{props.item.name}</h6>
+          <div className="card-collection-name">
+            <span>{props.collection}</span>
+            <img src="/icons/check.svg" alt="check" />
+          </div>
+          {props.item.price > 0 && <h6>{`${props.item.price} SOL`}</h6>}
+        </div>
+      </Link>
+    </Card>
   );
 };

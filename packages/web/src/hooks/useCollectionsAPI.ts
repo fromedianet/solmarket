@@ -88,6 +88,20 @@ export const useCollectionsAPI = () => {
   }
 
   /**
+   * Get my listed collections
+   *
+   * @returns
+   */
+  async function getMyListedCollections() {
+    const result = await runAPI(
+      true,
+      'get',
+      '/collections/getMyListedCollections',
+    );
+    return result;
+  }
+
+  /**
    * Get collection by id
    *
    * @param _id
@@ -311,9 +325,36 @@ export const useCollectionsAPI = () => {
     return result;
   }
 
+  /**
+   * Update collection mint_ended status
+   */
+  async function updateCollectionMintStatus(props: {
+    symbol: string;
+    mint_ended: boolean;
+  }) {
+    const result = await runAPI(
+      true,
+      'post',
+      '/collections/updateCollectionMintStatus',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  async function getCollectionStatsBySymbol(symbol: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/collections/getCollectionStatsBySymbol',
+      JSON.stringify({ symbol }),
+    );
+    return result;
+  }
+
   return {
     createCollection,
     getMyCollections,
+    getMyListedCollections,
     getCollectionById,
     processStep1,
     processStep2,
@@ -326,5 +367,7 @@ export const useCollectionsAPI = () => {
     featuredCollectionsCarousel,
     getLaunchpadCollections,
     getCollectionBySymbol,
+    getCollectionStatsBySymbol,
+    updateCollectionMintStatus,
   };
 };

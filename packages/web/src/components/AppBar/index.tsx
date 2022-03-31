@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Select } from 'antd';
-import { ConnectButton, shortenAddress, useMeta } from '@oyster/common';
+import { ConnectButton, shortenAddress } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
+import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { ExCollection } from '../../models/exCollection';
 
 const { Option } = Select;
 
@@ -46,13 +48,21 @@ export const AppBar = () => {
   const history = useHistory();
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
-  const { whitelistedCreatorsByCreator } = useMeta();
-  const creators = Object.values(whitelistedCreatorsByCreator).filter(
-    item => item.info.activated,
-  );
+  const { getAllCollections } = useCollectionsAPI();
+  const [collections, setCollections] = useState<ExCollection[]>([]);
+
+  useEffect(() => {
+    getAllCollections()
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setCollections(res['data']);
+        }
+      });
+  }, []);
 
   const onChange = value => {
-    history.push(`/artists/${value}`);
+    history.push(`/marketplace/${value}`);
   };
 
   return (
@@ -76,14 +86,14 @@ export const AppBar = () => {
               suffixIcon={<SearchOutlined />}
               value={null}
             >
-              {creators.map((item, index) => (
-                <Option key={index} value={item.info.address}>
+              {collections.map((item, index) => (
+                <Option key={index} value={item.symbol}>
                   <img
-                    src={`https://avatars.dicebear.com/api/jdenticon/${item.info.address}.svg`}
+                    src={item.thumbnail}
                     className="creator-icon"
-                    alt={item.info.address}
+                    alt={item.name}
                   />
-                  <span>{shortenAddress(item.info.address)}</span>
+                  <span>{shortenAddress(item.name)}</span>
                 </Option>
               ))}
             </Select>

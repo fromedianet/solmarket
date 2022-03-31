@@ -40,6 +40,7 @@ export const ArtCard = (props: ArtCardProps) => {
     image,
     animationURL,
     name,
+    symbol,
     preview,
     // creators,
     // description,
@@ -99,7 +100,7 @@ export const ArtCard = (props: ArtCardProps) => {
         <div className="card-caption">
           <h6>{artName}</h6>
           <div className="card-collection-name">
-            <span>{collectionName}</span>
+            <span>{collectionName || symbol}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
           {!noEvent && instantSalePrice > 0 && (
@@ -132,7 +133,7 @@ export const ArtCard = (props: ArtCardProps) => {
       {noEvent ? (
         <CardContent />
       ) : (
-        <Link to={`/art/${pubkey}`}>
+        <Link to={`/item-details/${pubkey}`}>
           <CardContent />
         </Link>
       )}

@@ -7,6 +7,7 @@ import {
   Transaction,
 } from '../models/exCollection';
 import { APIS } from '../constants';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 const PER_PAGE = 20;
 
@@ -218,10 +219,10 @@ function getParamsForMagicEden(param: QUERIES) {
   if (param.min || param.max) {
     const takerAmount = {};
     if (param.min) {
-      takerAmount['$gte'] = param.min * 1000000000;
+      takerAmount['$gte'] = param.min * LAMPORTS_PER_SOL;
     }
     if (param.max) {
-      takerAmount['$lte'] = param.max * 1000000000;
+      takerAmount['$lte'] = param.max * LAMPORTS_PER_SOL;
     }
     match['takerAmount'] = takerAmount;
   }

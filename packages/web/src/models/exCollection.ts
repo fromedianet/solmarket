@@ -9,8 +9,8 @@ export interface ExCollection {
   discord?: string | null;
   twitter?: string | null;
   website?: string | null;
-  createdAt?: number | null;
-  market: string;
+  market?: string;
+  itemId?: string;
 }
 
 export type ExAttribute = {
@@ -28,6 +28,7 @@ export type ExCollectionStats = {
   floorPrice?: number;
   totalVolume?: number;
   listedCount?: number;
+  listedTotalValue?: number;
 };
 
 export type ExNFT = {
@@ -37,6 +38,22 @@ export type ExNFT = {
   image: string;
   collection?: string;
   price?: number;
+};
+
+export type NFT = {
+  mint: string;
+  updateAuthority: string;
+  metadataAddress: string;
+  name: string;
+  symbol: string;
+  description: string | null;
+  image: string;
+  animationURL: string | null;
+  seller_fee_basis_points: number;
+  attributes: Attribute[];
+  creators: Creator[];
+  price: number;
+  collectionName: string;
 };
 
 export type NFTData = {
