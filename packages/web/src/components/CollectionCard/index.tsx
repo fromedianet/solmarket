@@ -15,11 +15,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
   const { name, description, thumbnail } = props.item;
 
   return (
-    <Card
-      className='collection-card'
-      hoverable={true}
-      bordered={false}
-    >
+    <Card className="collection-card" hoverable={true} bordered={false}>
       <Link to={props.link}>
         <div className="image-over image-container">
           <ArtContent

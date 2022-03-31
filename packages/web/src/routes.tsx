@@ -92,7 +92,7 @@ export function Routes() {
             />
             <Route
               exact
-              path="/collection/:id"
+              path="/marketplace/:symbol"
               component={() => <CollectionView />}
             />
             <Route

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'antd';
+import { Layout, Tabs, Spin } from 'antd';
 import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { CollectionInfo } from './components/CollectionInfo';
@@ -7,18 +7,15 @@ import { FilterSidebar } from './components/FilterSidebar';
 import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useParams } from 'react-router-dom';
-import { useExtendedArt } from '../../hooks';
-import { useAttributesByCollection } from '../../hooks/useAttributes';
+import { useCollection } from '../../hooks/useCollection';
 
 const { Content } = Layout;
+const { TabPane } = Tabs;
 
 export const CollectionView = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data } = useExtendedArt(id);
-  const [isItems, setIsItems] = useState(true);
+  const { symbol } = useParams<{ symbol: string }>();
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
-  const [attributes, setAttributes] = useState({});
   const [list, setList] = useState<any[]>([]);
   const [filter, setFilter] = useState({
     price: {
@@ -28,13 +25,19 @@ export const CollectionView = () => {
     },
     attributes: {},
   });
+  const [searchKey, setSearchKey] = useState('');
+  const [sort, setSort] = useState(1);
 
-  const { attrs, newList } = useAttributesByCollection(id);
-
-  useEffect(() => {
-    setAttributes(attrs);
-    setList(newList);
-  }, [id, attrs, newList]);
+  const {
+    collection,
+    attributes,
+    collectionStats,
+    nfts,
+    skip,
+    hasMore,
+    loading,
+    getListedNFTs,
+  } = useCollection(symbol);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -56,55 +59,102 @@ export const CollectionView = () => {
     }
   });
 
+  useEffect(() => {
+    if (skip > 0) {
+      setList(prev => prev.concat(nfts));
+    } else {
+      setList(nfts);
+    }
+  }, [nfts]);
+
+  useEffect(() => {
+    getListedNFTs({
+      symbol: symbol,
+      sort: sort,
+      searchKey: searchKey,
+      attributes: filter.attributes,
+      min: filter.price.min,
+      max: filter.price.max,
+    });
+  }, [searchKey, sort, filter]);
+
   const onUpdateFilters = (priceFilter, attributeFilter) => {
     setFilter({ price: priceFilter, attributes: attributeFilter });
   };
 
+  const fetchMore = () => {
+    if (hasMore) {
+      getListedNFTs({
+        symbol: symbol,
+        sort: sort,
+        searchKey: searchKey,
+        attributes: filter.attributes,
+        min: filter.price.min,
+        max: filter.price.max,
+        skip: skip,
+      });
+    }
+  };
+
   return (
     <div className="collection-page">
+      {collection && collection.banner && (
+        <img src={collection.banner} className="collection-background" />
+      )}
       <div className="collection-info">
-        <CollectionInfo data={data} />
+        <CollectionInfo collection={collection} stats={collectionStats} />
       </div>
-      <div className="collection-tabs">
-        <div
-          className={`my-tab ${isItems && 'my-tab-active'}`}
-          onClick={() => setIsItems(true)}
+      <Tabs defaultActiveKey="items" centered style={{ overflow: 'unset' }}>
+        <TabPane
+          key="items"
+          tab={
+            <span>
+              <img
+                src="/icons/list.svg"
+                style={{ width: '24px', marginRight: '8px' }}
+              />
+              Items
+            </span>
+          }
         >
-          <img
-            src="/icons/list.svg"
-            style={{ width: '24px', marginRight: '8px' }}
-          />
-          Items
-        </div>
-        <div
-          className={`my-tab ${!isItems && 'my-tab-active'}`}
-          onClick={() => setIsItems(false)}
-        >
-          <img
-            src="/icons/activity.svg"
-            style={{ width: '24px', marginRight: '8px' }}
-          />
-          Activities
-        </div>
-      </div>
-      <Layout hasSider>
-        <FilterSidebar
-          updateFilters={onUpdateFilters}
-          filter={filter}
-          attributes={attributes}
-        />
-        <Content className="collection-container">
-          {isItems ? (
-            <Items
-              list={list}
+          <Layout hasSider>
+            <FilterSidebar
               updateFilters={onUpdateFilters}
               filter={filter}
+              attributes={attributes}
             />
-          ) : (
-            <Activities />
-          )}
-        </Content>
-      </Layout>
+            <Content className="collection-container">
+              {loading && <Spin />}
+              <Items
+                collection={collection}
+                list={list}
+                sort={sort}
+                searchKey={searchKey}
+                updateFilters={onUpdateFilters}
+                onSearch={val => setSearchKey(val)}
+                onSortChange={val => setSort(val)}
+                filter={filter}
+                hasMore={hasMore}
+                fetchMore={fetchMore}
+              />
+            </Content>
+          </Layout>
+        </TabPane>
+        <TabPane
+          key="activities"
+          tab={
+            <span>
+              <img
+                src="/icons/activity.svg"
+                style={{ width: '24px', marginRight: '8px' }}
+              />
+              Activities
+            </span>
+          }
+        >
+          <Activities />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };

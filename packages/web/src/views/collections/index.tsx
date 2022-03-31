@@ -62,7 +62,7 @@ export const CollectionsView = () => {
         prev.concat(filters.slice(prev.length, prev.length + PER_PAGE)),
       );
     }, 500);
-  }
+  };
 
   const onChange = event => {
     const key = event.target.value;
@@ -103,7 +103,10 @@ export const CollectionsView = () => {
                 xxl={4}
                 style={{ padding: 8 }}
               >
-                <CollectionCard item={item} link={`/symbol/${item.symbol}`} />
+                <CollectionCard
+                  item={item}
+                  link={`/marketplace/${item.symbol}`}
+                />
               </Col>
             ))}
           </InfiniteScroll>
