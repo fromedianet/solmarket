@@ -17,7 +17,7 @@ export const Congrats = (props: {
       text: "I've created a new NFT artwork on PaperCity, check it out!",
       url: `${
         window.location.origin
-      }/art/${props.nft?.metadataAccount.toString()}`,
+      }/item-details/${props.nft?.metadataAccount.toString()}`,
       hashtags: 'NFT,Crypto,PaperCity',
       related: 'PaperCity,Solana',
     };

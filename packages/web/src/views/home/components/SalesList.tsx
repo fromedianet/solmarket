@@ -71,7 +71,11 @@ export const SalesListView = () => {
               <HorizontalGrid
                 childrens={featuredCollections['upcoming-collections'].map(
                   (item, index) => (
-                    <HomeCard key={index} item={item} link={`/launchpad/${item['symbol']}`} />
+                    <HomeCard
+                      key={index}
+                      item={item}
+                      link={`/launchpad/${item['symbol']}`}
+                    />
                   ),
                 )}
               />

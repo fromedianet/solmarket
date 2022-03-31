@@ -4,7 +4,6 @@ import { Providers } from './providers';
 import {
   AnalyticsView,
   ArtCreateView,
-  ArtView,
   ArtworksView,
   AuctionCreateView,
   AuctionView,
@@ -30,6 +29,7 @@ import { DashboardView } from './views/dashboard/dashboard';
 import { DashboardAdmin } from './views/dashboard/admin';
 import { DashboardAdminDetails } from './views/dashboard/admin/details';
 import { LaunchpadDetailView } from './views/launchpadDetail';
+import { ItemDetailView } from './views/itemDetail';
 
 export function Routes() {
   const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
@@ -68,7 +68,11 @@ export function Routes() {
               path="/artworks/:id?"
               component={() => <ArtworksView />}
             />
-            <Route exact path="/art/:id" component={() => <ArtView />} />
+            <Route
+              exact
+              path="/item-details/:mint"
+              component={() => <ItemDetailView />}
+            />
             <Route exact path="/auctions" component={() => <AuctionsView />} />
             <Route
               exact

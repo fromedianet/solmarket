@@ -133,7 +133,7 @@ export const ArtCard = (props: ArtCardProps) => {
       {noEvent ? (
         <CardContent />
       ) : (
-        <Link to={`/art/${pubkey}`}>
+        <Link to={`/item-details/${pubkey}`}>
           <CardContent />
         </Link>
       )}
