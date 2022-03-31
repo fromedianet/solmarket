@@ -341,6 +341,16 @@ export const useCollectionsAPI = () => {
     return result;
   }
 
+  async function getCollectionStatsBySymbol(symbol: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/collections/getCollectionStatsBySymbol',
+      JSON.stringify({ symbol }),
+    );
+    return result;
+  }
+
   return {
     createCollection,
     getMyCollections,
@@ -357,6 +367,7 @@ export const useCollectionsAPI = () => {
     featuredCollectionsCarousel,
     getLaunchpadCollections,
     getCollectionBySymbol,
+    getCollectionStatsBySymbol,
     updateCollectionMintStatus,
   };
 };

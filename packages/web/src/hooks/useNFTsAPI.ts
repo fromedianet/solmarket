@@ -62,8 +62,8 @@ export const useNFTsAPI = () => {
   }
 
   /**
-   *
-   * @param props Create new NFT when mint in the LaunchPad
+   * Create new NFT when mint in the LaunchPad
+   * @param props
    */
   async function createNft(metadataAddress: string) {
     const result = await runAPI(
@@ -75,7 +75,18 @@ export const useNFTsAPI = () => {
     return result;
   }
 
+  async function getListedNftsByQuery(props: { symbol: string }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/nfts/getListedNftsByQuery',
+      JSON.stringify({ symbol: props.symbol }),
+    );
+    return result;
+  }
+
   return {
     createNft,
+    getListedNftsByQuery,
   };
 };
