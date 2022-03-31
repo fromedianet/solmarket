@@ -168,7 +168,7 @@ export const useCollection = (symbol: string) => {
     queries['sort'] = sortQuery;
 
     const result = {
-      query: JSON.stringify(queries)
+      query: JSON.stringify(queries),
     };
 
     return result;

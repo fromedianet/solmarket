@@ -98,7 +98,7 @@ export const CollectionInfo = (props: {
         <Col key="count" span={12} lg={8}>
           <Statistic
             title="Total Listed Count"
-            value={props.stats.listedCount || '--'}
+            value={props.stats.listedCount}
             className="info-attribute"
           />
         </Col>
