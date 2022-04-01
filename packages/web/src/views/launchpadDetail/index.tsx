@@ -549,7 +549,6 @@ export const LaunchpadDetailView = () => {
                                 isActive={
                                   isActive || (isPresale && isWhitelistUser)
                                 }
-                                rpcUrl={endpoint.url}
                               />
                             </GatewayProvider>
                           ) : (
@@ -561,7 +560,6 @@ export const LaunchpadDetailView = () => {
                               isActive={
                                 isActive || (isPresale && isWhitelistUser)
                               }
-                              rpcUrl={endpoint.url}
                             />
                           )}
                         </div>
