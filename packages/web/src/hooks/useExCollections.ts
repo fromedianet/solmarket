@@ -7,11 +7,12 @@ import {
   Transaction,
 } from '../models/exCollection';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { runOthersAPI } from '../utils/apiUtils';
+import { ApiUtils } from '../utils/apiUtils';
 
 const PER_PAGE = 20;
 
 export const useExCollections = (market: string) => {
+  const { runOthersAPI } = ApiUtils();
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState<ExCollection[]>([]);
 
@@ -32,6 +33,7 @@ export const useExCollections = (market: string) => {
 };
 
 export const useExCollection = (symbol: string, market: string) => {
+  const { runOthersAPI } = ApiUtils();
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
   const [collectionStats, setCollectionStats] = useState<ExCollectionStats>({});

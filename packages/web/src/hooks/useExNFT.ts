@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { NFTData, Transaction } from '../models/exCollection';
-import { runOthersAPI } from '../utils/apiUtils';
+import { ApiUtils } from '../utils/apiUtils';
 
 export const useExNFT = (
   mintAddress: string,
   market: string,
   price?: number,
 ) => {
+  const { runOthersAPI } = ApiUtils();
   const [nft, setNFT] = useState<NFTData>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
