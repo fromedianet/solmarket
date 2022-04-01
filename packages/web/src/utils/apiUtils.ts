@@ -9,19 +9,16 @@ export const ApiUtils = () => {
     timeout: 30000,
     headers: { 'Content-Type': 'application/json' },
   });
-  
-  function runOthersAPI(
-    method: Method,
-    url: string,
-    data?: string | FormData,
-  ) {
+
+  function runOthersAPI(method: Method, url: string, data?: string | FormData) {
     axiosInstance.defaults.baseURL = APIS.base_others_api_url;
     return new Promise((resolve, reject) => {
-      axiosInstance.request({
-        method: method,
-        url: url,
-        data: data,
-      })
+      axiosInstance
+        .request({
+          method: method,
+          url: url,
+          data: data,
+        })
         .then(res => {
           if (res.status === 200) {
             resolve(res.data);
@@ -42,7 +39,7 @@ export const ApiUtils = () => {
         });
     });
   }
-  
+
   function runAPI(
     isAuth: boolean,
     method: Method,
@@ -61,7 +58,7 @@ export const ApiUtils = () => {
           ] = `multipart/formdata; boundary=${Date.now()}`;
         }
       }
-  
+
       axiosInstance
         .request({
           method: method,
