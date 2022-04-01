@@ -40,10 +40,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
   );
 };
 
-export const ItemAction = (props: {
-  nft: NFT;
-  onBuy: () => void;
-}) => {
+export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
   const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
@@ -66,9 +63,7 @@ export const ItemAction = (props: {
           alt="price"
           style={{ marginRight: '8px' }}
         />
-        {alreadyListed && (
-          <span className="value">{props.nft.price} SOL</span>
-        )}
+        {alreadyListed && <span className="value">{props.nft.price} SOL</span>}
       </div>
       {!alreadyListed && <span className="value">Not listed</span>}
       <div className="btn-container">
@@ -84,9 +79,7 @@ export const ItemAction = (props: {
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
-                    <PriceInput
-                      value={{ number: props.nft.price }}
-                    />
+                    <PriceInput value={{ number: props.nft.price }} />
                   </Form.Item>
                 </Col>
                 <Col span={12}>

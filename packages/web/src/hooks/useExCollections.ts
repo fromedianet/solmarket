@@ -6,34 +6,34 @@ import {
   ExNFT,
   Transaction,
 } from '../models/exCollection';
-import { APIS } from '../constants';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { ApiUtils } from '../utils/apiUtils';
 
 const PER_PAGE = 20;
 
-export const useExCollections = (id: string) => {
+export const useExCollections = (market: string) => {
+  const { runOthersAPI } = ApiUtils();
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState<ExCollection[]>([]);
 
   useEffect(() => {
     if (!loading) {
       setLoading(true);
-      // Get collections in selected marketplace.
-
-      const uri = APIS.base_url + APIS.exCollections + id;
-      fetch(uri)
-        .then(res => res.json())
-        .then(result => {
+      runOthersAPI('get', `/excollections/${market}`)
+        // @ts-ignore
+        .then((result: {}) => {
           setCollections(result['data']);
           setLoading(false);
-        });
+        })
+        .finally(() => setLoading(false));
     }
-  }, [id]);
+  }, [market]);
 
   return { loading, collections };
 };
 
 export const useExCollection = (symbol: string, market: string) => {
+  const { runOthersAPI } = ApiUtils();
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
   const [collectionStats, setCollectionStats] = useState<ExCollectionStats>({});
@@ -45,11 +45,9 @@ export const useExCollection = (symbol: string, market: string) => {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    const collectionUri =
-      APIS.base_url + APIS.exCollections + market + '/' + encodeURI(symbol);
-    fetch(collectionUri)
-      .then(res => res.json())
-      .then(result => {
+    runOthersAPI('get', `/excollections/${market}/${encodeURI(symbol)}`)
+      // @ts-ignore
+      .then((result: {}) => {
         if (result['collection']) {
           setCollection(result['collection']);
         }
@@ -83,7 +81,7 @@ export const useExCollection = (symbol: string, market: string) => {
   const getListedNFTsByCollection = (param: QUERIES) => {
     if (loading) return;
     setLoading(true);
-    const uri = APIS.base_url + APIS.listedNFTs;
+
     let queryBody = {};
     if (param.market === 'magiceden') {
       queryBody = getParamsForMagicEden(param);
@@ -95,13 +93,9 @@ export const useExCollection = (symbol: string, market: string) => {
       queryBody = getParamsForAlphaArt(param);
     }
 
-    fetch(uri, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(queryBody),
-    })
-      .then(res => res.json())
-      .then(result => {
+    runOthersAPI('post', '/excollections/list', JSON.stringify(queryBody))
+      // @ts-ignore
+      .then((result: {}) => {
         setNFTs(result['data']);
 
         if (param.market === 'magiceden') {
@@ -144,13 +138,11 @@ export const useExCollection = (symbol: string, market: string) => {
             }));
           }
         }
-
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const getTransactions = (param: QUERIES) => {
-    const uri = APIS.base_url + APIS.transactionsByCollection;
     const queryBody = { market: param.market };
     if (param.market === 'magiceden') {
       const query = {
@@ -167,13 +159,13 @@ export const useExCollection = (symbol: string, market: string) => {
       );
     }
 
-    fetch(uri, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(queryBody),
-    })
-      .then(res => res.json())
-      .then(result => {
+    runOthersAPI(
+      'post',
+      '/excollections/transactions',
+      JSON.stringify(queryBody),
+    )
+      // @ts-ignore
+      .then((result: {}) => {
         setTransactions(result['data']);
       });
   };
