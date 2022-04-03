@@ -1,8 +1,9 @@
-import { ConnectButton } from '@oyster/common';
+import { ConnectButton, useConnection } from '@oyster/common';
 import React, { useState } from 'react';
 import { Button, InputNumber, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { sendListing } from '../../actions/auctionHouse';
 
 interface PriceValue {
   number?: number;
@@ -43,6 +44,7 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
 export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
+  const connection = useConnection();
   const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
   const checkPrice = (_: any, value: { number: number }) => {
@@ -52,6 +54,13 @@ export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
     return Promise.reject(new Error('Price must be greater than zero!'));
   };
   const [loading, setLoading] = useState(false);
+
+  const listNow = async (values) => {
+    setLoading(true);
+    const price = values.price.number;
+    await sendListing(connection, wallet, price, props.nft.mint);
+    setLoading(false);
+  }
 
   return (
     <div className="action-view">
@@ -75,7 +84,7 @@ export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
               {loading ? <Spin /> : 'Cancel Listing'}
             </Button>
           ) : (
-            <Form form={form} name="price-control" layout="inline">
+            <Form form={form} name="price-control" layout="inline" onFinish={listNow}>
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
@@ -84,7 +93,7 @@ export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
                 </Col>
                 <Col span={12}>
                   <Form.Item>
-                    <Button className="button" htmlType="submit" disabled>
+                    <Button className="button" htmlType="submit">
                       {loading ? <Spin /> : 'List Now'}
                     </Button>
                   </Form.Item>
