@@ -4,7 +4,7 @@ import { Button, InputNumber, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
-import { sendList, sendCancelList } from '../../actions/auctionHouse';
+import { sendList, sendCancelList, sendSell } from '../../actions/auctionHouse';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
@@ -44,11 +44,12 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
   );
 };
 
-export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
+export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
   const connection = useConnection();
-  const { callList, callCancelList } = useTransactionsAPI();
+  const { callList, callCancelList, callSell, callPlaceBid, callCancelBid } =
+    useTransactionsAPI();
   const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
   const checkPrice = (_: any, value: { number: number }) => {
@@ -59,13 +60,18 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
   };
   const [loading, setLoading] = useState(false);
 
-  const onListNow = async (values) => {
+  const onListNow = async values => {
     const price = values.price.number * LAMPORTS_PER_SOL;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendList(connection, wallet, price, props.nft.mint);
+        const result = await sendList(
+          connection,
+          wallet,
+          price,
+          props.nft.mint,
+        );
         if (result['status'] && !result['status']['err']) {
           const txId = result['txid'];
           if (txId) {
@@ -74,7 +80,7 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
               seller: wallet.publicKey!.toBase58(),
               mint: props.nft.mint,
               symbol: props.nft.symbol,
-              price: price
+              price: price,
             });
           }
           resolve('');
@@ -87,7 +93,7 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
         setLoading(false);
       }
     });
-    
+
     toast.promise(
       resolveWithData,
       {
@@ -111,7 +117,12 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendCancelList(connection, wallet, price, props.nft.mint);
+        const result = await sendCancelList(
+          connection,
+          wallet,
+          price,
+          props.nft.mint,
+        );
         if (result['status'] && !result['status']['err']) {
           const txId = result['txid'];
           if (txId) {
@@ -132,7 +143,7 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
         setLoading(false);
       }
     });
-    
+
     toast.promise(
       resolveWithData,
       {
@@ -148,7 +159,62 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
         pauseOnFocusLoss: false,
       },
     );
-  }
+  };
+
+  const onBuyNow = async () => {
+    const price = props.nft.price * LAMPORTS_PER_SOL;
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      setLoading(true);
+      try {
+        const result = await sendSell(
+          connection,
+          props.nft.updateAuthority,
+          wallet,
+          price,
+          props.nft.mint,
+        );
+        if (result['status'] && !result['status']['err']) {
+          const txId = result['txid'];
+          if (txId) {
+            await callSell({
+              transaction: txId,
+              seller: props.nft.updateAuthority,
+              buyer: wallet.publicKey!.toBase58(),
+              mint: props.nft.mint,
+              symbol: props.nft.symbol,
+              price: price,
+            });
+          }
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Listing now...',
+        error: 'Listing rejected.',
+        success: 'Listing successed.',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onMakeOffer = async () => {};
 
   return (
     <div className="action-view">
@@ -168,11 +234,20 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
           <ConnectButton className="button" />
         ) : isOwner ? (
           alreadyListed ? (
-            <Button className="button" onClick={onCancelList} disabled={loading}>
+            <Button
+              className="button"
+              onClick={onCancelList}
+              disabled={loading}
+            >
               {loading ? <Spin /> : 'Cancel Listing'}
             </Button>
           ) : (
-            <Form form={form} name="price-control" layout="inline" onFinish={onListNow}>
+            <Form
+              form={form}
+              name="price-control"
+              layout="inline"
+              onFinish={onListNow}
+            >
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
@@ -181,7 +256,11 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
                 </Col>
                 <Col span={12}>
                   <Form.Item>
-                    <Button className="button" htmlType="submit" disabled={loading}>
+                    <Button
+                      className="button"
+                      htmlType="submit"
+                      disabled={loading}
+                    >
                       {loading ? <Spin /> : 'List Now'}
                     </Button>
                   </Form.Item>
@@ -193,13 +272,21 @@ export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
           alreadyListed && (
             <Row gutter={16}>
               <Col span={10}>
-                <Button className="button" disabled>
-                  Buy now
+                <Button
+                  className="button"
+                  onClick={onBuyNow}
+                  disabled={loading}
+                >
+                  Buy Now
                 </Button>
               </Col>
               <Col span={14}>
-                <Button className="button" disabled>
-                  Make an offer
+                <Button
+                  className="button"
+                  onClick={onMakeOffer}
+                  disabled={loading}
+                >
+                  Make an Offer
                 </Button>
               </Col>
             </Row>

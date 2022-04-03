@@ -9,39 +9,54 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
-export async function sendList(
+export async function sendSell(
   connection: Connection,
+  seller: string,
   wallet: WalletSigner,
   buyerPrice: number,
   mint: string,
 ) {
-  const { createSellInstruction } = AuctionHouseProgram.instructions;
+  const { createExecuteSaleInstruction } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
 
   try {
+    const buyerKey = wallet.publicKey!;
+    const sellerKey = new PublicKey(seller);
     const metadata = await getMetadata(mint);
-    const tokenAccount = (
-      await getAtaForMint(toPublicKey(mint), wallet.publicKey!)
-    )[0];
+    const tokenAccount = (await getAtaForMint(toPublicKey(mint), sellerKey))[0];
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
     );
     const mintKey = new PublicKey(mint);
-    const [tradeState, tradeStateBump] =
+    const buyerTradeState = (
       await AuctionHouseProgram.findTradeStateAddress(
-        wallet.publicKey!,
+        buyerKey,
         AUCTION_HOUSE_ID,
         tokenAccount,
         auctionHouseObj.treasuryMint,
         mintKey,
         buyerPrice,
         1,
-      );
+      )
+    )[0];
+
+    const sellerTradeState = (
+      await AuctionHouseProgram.findTradeStateAddress(
+        sellerKey,
+        AUCTION_HOUSE_ID,
+        tokenAccount,
+        auctionHouseObj.treasuryMint,
+        mintKey,
+        buyerPrice,
+        1,
+      )
+    )[0];
+
     const [freeTradeState, freeTradeStateBump] =
       await AuctionHouseProgram.findTradeStateAddress(
-        wallet.publicKey!,
+        sellerKey,
         AUCTION_HOUSE_ID,
         tokenAccount,
         auctionHouseObj.treasuryMint,
@@ -49,23 +64,38 @@ export async function sendList(
         0,
         1,
       );
+
+    const [escrowPaymentAccount, escrowPaymentBump] =
+      await AuctionHouseProgram.findEscrowPaymentAccountAddress(
+        AUCTION_HOUSE_ID,
+        buyerKey,
+      );
+
     const [programAsSigner, programAsSignerBump] =
       await AuctionHouseProgram.findAuctionHouseProgramAsSignerAddress();
 
-    const instruction = createSellInstruction(
+    const instruction = createExecuteSaleInstruction(
       {
-        wallet: wallet.publicKey!,
-        tokenAccount,
+        buyer: buyerKey,
+        seller: sellerKey,
+        tokenAccount: tokenAccount,
+        tokenMint: mintKey,
         metadata: new PublicKey(metadata),
+        treasuryMint: auctionHouseObj.treasuryMint,
+        escrowPaymentAccount: escrowPaymentAccount,
+        sellerPaymentReceiptAccount: sellerKey,
+        buyerReceiptTokenAccount: (await getAtaForMint(mintKey, buyerKey))[0],
         authority: auctionHouseObj.authority,
         auctionHouse: AUCTION_HOUSE_ID,
         auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
-        sellerTradeState: tradeState,
-        freeSellerTradeState: freeTradeState,
-        programAsSigner,
+        auctionHouseTreasury: auctionHouseObj.auctionHouseTreasury,
+        sellerTradeState: sellerTradeState,
+        buyerTradeState: buyerTradeState,
+        freeTradeState: freeTradeState,
+        programAsSigner: programAsSigner,
       },
       {
-        tradeStateBump,
+        escrowPaymentBump,
         freeTradeStateBump,
         programAsSignerBump,
         buyerPrice,
@@ -74,7 +104,7 @@ export async function sendList(
     );
 
     instruction.keys
-      .filter(k => k.pubkey.equals(wallet.publicKey!))
+      .filter(k => k.pubkey.equals(buyerKey))
       .map(k => (k.isSigner = true));
 
     const { txid } = await sendTransactionWithRetry(

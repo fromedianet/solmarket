@@ -5,15 +5,15 @@ export const useTransactionsAPI = () => {
 
   /**
    * List NFT
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function callList(params: {
-    transaction: string,
-    seller: string,
-    mint: string,
-    symbol: string,
-    price: number
+    transaction: string;
+    seller: string;
+    mint: string;
+    symbol: string;
+    price: number;
   }) {
     const result = await runAPI(
       false,
@@ -26,14 +26,14 @@ export const useTransactionsAPI = () => {
 
   /**
    * Cancel list NFT
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function callCancelList(params: {
-    transaction: string,
-    seller: string,
-    mint: string,
-    symbol: string,
+    transaction: string;
+    seller: string;
+    mint: string;
+    symbol: string;
   }) {
     const result = await runAPI(
       false,
@@ -46,15 +46,15 @@ export const useTransactionsAPI = () => {
 
   /**
    * Place bid
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function callPlaceBid(params: {
-    transaction: string,
-    buyer: string,
-    mint: string,
-    symbol: string,
-    price: number
+    transaction: string;
+    buyer: string;
+    mint: string;
+    symbol: string;
+    price: number;
   }) {
     const result = await runAPI(
       false,
@@ -67,14 +67,14 @@ export const useTransactionsAPI = () => {
 
   /**
    * Cancel bid
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function callCancelBid(params: {
-    transaction: string,
-    buyer: string,
-    mint: string,
-    symbol: string,
+    transaction: string;
+    buyer: string;
+    mint: string;
+    symbol: string;
   }) {
     const result = await runAPI(
       false,
@@ -87,16 +87,16 @@ export const useTransactionsAPI = () => {
 
   /**
    * Sell NFT
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function callSell(params: {
-    transaction: string,
-    seller: string,
-    buyer: string,
-    mint: string,
-    symbol: string,
-    price: number
+    transaction: string;
+    seller: string;
+    buyer: string;
+    mint: string;
+    symbol: string;
+    price: number;
   }) {
     const result = await runAPI(
       false,
@@ -109,8 +109,8 @@ export const useTransactionsAPI = () => {
 
   /**
    * Get transactions by symbol
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function getTransactionsBySymbol(symbol: string) {
     const result = await runAPI(
@@ -124,8 +124,8 @@ export const useTransactionsAPI = () => {
 
   /**
    * Get transactions by mint
-   * @param params 
-   * @returns 
+   * @param params
+   * @returns
    */
   async function getTransactionsByMint(mint: string) {
     const result = await runAPI(
