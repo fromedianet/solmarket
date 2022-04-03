@@ -4,11 +4,11 @@ export const useTransactionsAPI = () => {
   const { runAPI } = ApiUtils();
 
   /**
-   * Listing NFT
+   * List NFT
    * @param params 
    * @returns 
    */
-  async function listing(params: {
+  async function callList(params: {
     transaction: string,
     seller: string,
     mint: string,
@@ -18,18 +18,18 @@ export const useTransactionsAPI = () => {
     const result = await runAPI(
       false,
       'post',
-      '/transactions/listing',
+      '/transactions/list',
       JSON.stringify(params),
     );
     return result;
   }
 
   /**
-   * Cancel listing NFT
+   * Cancel list NFT
    * @param params 
    * @returns 
    */
-  async function cancelListing(params: {
+  async function callCancelList(params: {
     transaction: string,
     seller: string,
     mint: string,
@@ -38,7 +38,7 @@ export const useTransactionsAPI = () => {
     const result = await runAPI(
       false,
       'post',
-      '/transactions/cancelListing',
+      '/transactions/cancelList',
       JSON.stringify(params),
     );
     return result;
@@ -49,7 +49,7 @@ export const useTransactionsAPI = () => {
    * @param params 
    * @returns 
    */
-  async function placeBid(params: {
+  async function callPlaceBid(params: {
     transaction: string,
     buyer: string,
     mint: string,
@@ -70,7 +70,7 @@ export const useTransactionsAPI = () => {
    * @param params 
    * @returns 
    */
-  async function cancelBid(params: {
+  async function callCancelBid(params: {
     transaction: string,
     buyer: string,
     mint: string,
@@ -90,7 +90,7 @@ export const useTransactionsAPI = () => {
    * @param params 
    * @returns 
    */
-  async function sell(params: {
+  async function callSell(params: {
     transaction: string,
     seller: string,
     buyer: string,
@@ -138,11 +138,11 @@ export const useTransactionsAPI = () => {
   }
 
   return {
-    listing,
-    cancelListing,
-    placeBid,
-    cancelBid,
-    sell,
+    callList,
+    callCancelList,
+    callPlaceBid,
+    callCancelBid,
+    callSell,
     getTransactionsBySymbol,
     getTransactionsByMint,
   };

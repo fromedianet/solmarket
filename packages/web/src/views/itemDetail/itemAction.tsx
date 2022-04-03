@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { Button, InputNumber, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { sendListing } from '../../actions/auctionHouse';
+import { toast } from 'react-toastify';
+import { sendList, sendCancelList } from '../../actions/auctionHouse';
+import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 interface PriceValue {
   number?: number;
@@ -41,10 +44,11 @@ const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
   );
 };
 
-export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
+export const ItemAction = (props: { nft: NFT, onRefresh: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
   const connection = useConnection();
+  const { callList, callCancelList } = useTransactionsAPI();
   const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
   const checkPrice = (_: any, value: { number: number }) => {
@@ -55,11 +59,95 @@ export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
   };
   const [loading, setLoading] = useState(false);
 
-  const listNow = async (values) => {
-    setLoading(true);
-    const price = values.price.number;
-    await sendListing(connection, wallet, price, props.nft.mint);
-    setLoading(false);
+  const onListNow = async (values) => {
+    const price = values.price.number * LAMPORTS_PER_SOL;
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      setLoading(true);
+      try {
+        const result = await sendList(connection, wallet, price, props.nft.mint);
+        if (result['status'] && !result['status']['err']) {
+          const txId = result['txid'];
+          if (txId) {
+            await callList({
+              transaction: txId,
+              seller: wallet.publicKey!.toBase58(),
+              mint: props.nft.mint,
+              symbol: props.nft.symbol,
+              price: price
+            });
+          }
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      } finally {
+        setLoading(false);
+      }
+    });
+    
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Listing now...',
+        error: 'Listing rejected.',
+        success: 'Listing successed.',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onCancelList = async () => {
+    const price = props.nft.price * LAMPORTS_PER_SOL;
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      setLoading(true);
+      try {
+        const result = await sendCancelList(connection, wallet, price, props.nft.mint);
+        if (result['status'] && !result['status']['err']) {
+          const txId = result['txid'];
+          if (txId) {
+            await callCancelList({
+              transaction: txId,
+              seller: wallet.publicKey!.toBase58(),
+              mint: props.nft.mint,
+              symbol: props.nft.symbol,
+            });
+          }
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      } finally {
+        setLoading(false);
+      }
+    });
+    
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Cancel listing now...',
+        error: 'Cancel listing rejected.',
+        success: 'Cancel listing successed.',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
   }
 
   return (
@@ -80,11 +168,11 @@ export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
           <ConnectButton className="button" />
         ) : isOwner ? (
           alreadyListed ? (
-            <Button className="button" disabled>
+            <Button className="button" onClick={onCancelList} disabled={loading}>
               {loading ? <Spin /> : 'Cancel Listing'}
             </Button>
           ) : (
-            <Form form={form} name="price-control" layout="inline" onFinish={listNow}>
+            <Form form={form} name="price-control" layout="inline" onFinish={onListNow}>
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
@@ -93,7 +181,7 @@ export const ItemAction = (props: { nft: NFT; onBuy: () => void }) => {
                 </Col>
                 <Col span={12}>
                   <Form.Item>
-                    <Button className="button" htmlType="submit">
+                    <Button className="button" htmlType="submit" disabled={loading}>
                       {loading ? <Spin /> : 'List Now'}
                     </Button>
                   </Form.Item>

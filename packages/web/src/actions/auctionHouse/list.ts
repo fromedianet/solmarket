@@ -1,12 +1,12 @@
 import { AUCTION_HOUSE_ID, getMetadata, sendTransactionWithRetry, toPublicKey, WalletSigner } from "@oyster/common";
-import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@solana/web3.js";
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from "../../views/launchpadDetail/utils";
 
-export async function sendListing(
+export async function sendList(
   connection: Connection,
   wallet: WalletSigner,
-  price: number,
+  buyerPrice: number,
   mint: string,
 ) {
   const { createSellInstruction } = AuctionHouseProgram.instructions;
@@ -17,7 +17,6 @@ export async function sendListing(
     const metadata = await getMetadata(mint);
     const tokenAccount = (await getAtaForMint(toPublicKey(mint), wallet.publicKey!))[0];
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(connection, AUCTION_HOUSE_ID);
-    const buyerPrice = price * LAMPORTS_PER_SOL;
     const mintKey = new PublicKey(mint);
     const [tradeState, tradeStateBump] = await AuctionHouseProgram.findTradeStateAddress(
       wallet.publicKey!,
