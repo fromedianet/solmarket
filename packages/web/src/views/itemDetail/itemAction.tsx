@@ -4,7 +4,7 @@ import { Button, InputNumber, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
-import { sendList, sendCancelList, sendSell } from '../../actions/auctionHouse';
+import { sendList, sendCancelList, sendSell, sendPlaceBid } from '../../actions/auctionHouse';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
@@ -66,12 +66,12 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendList(
+        const result = await sendList({
           connection,
           wallet,
-          price,
-          props.nft.mint,
-        );
+          buyerPrice: price,
+          mint: props.nft.mint,
+        });
         if (result['status'] && !result['status']['err']) {
           const txId = result['txid'];
           if (txId) {
@@ -84,6 +84,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             });
           }
           resolve('');
+          setTimeout(() => {
+            props.onRefresh();
+          }, 5000);
         } else {
           reject();
         }
@@ -117,12 +120,12 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendCancelList(
+        const result = await sendCancelList({
           connection,
           wallet,
-          price,
-          props.nft.mint,
-        );
+          buyerPrice: price,
+          mint: props.nft.mint,
+        });
         if (result['status'] && !result['status']['err']) {
           const txId = result['txid'];
           if (txId) {
@@ -134,6 +137,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             });
           }
           resolve('');
+          setTimeout(() => {
+            props.onRefresh();
+          }, 5000);
         } else {
           reject();
         }
@@ -167,13 +173,13 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendSell(
+        const result = await sendSell({
           connection,
-          props.nft.updateAuthority,
+          seller: props.nft.updateAuthority,
           wallet,
-          price,
-          props.nft.mint,
-        );
+          buyerPrice: price,
+          mint: props.nft.mint,
+        });
         if (result['status'] && !result['status']['err']) {
           const txId = result['txid'];
           if (txId) {
@@ -187,6 +193,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             });
           }
           resolve('');
+          setTimeout(() => {
+            props.onRefresh();
+          }, 5000);
         } else {
           reject();
         }
@@ -214,7 +223,60 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     );
   };
 
-  const onMakeOffer = async () => {};
+  const onMakeOffer = async () => {
+    const price = 0.8 * LAMPORTS_PER_SOL;
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      setLoading(true);
+      try {
+        const result = await sendPlaceBid({
+          connection,
+          wallet,
+          buyerPrice: price,
+          mint: props.nft.mint,
+        });
+        if (result['status'] && !result['status']['err']) {
+          const txId = result['txid'];
+          if (txId) {
+            await callPlaceBid({
+              transaction: txId,
+              buyer: wallet.publicKey!.toBase58(),
+              mint: props.nft.mint,
+              symbol: props.nft.symbol,
+              price: price,
+            });
+          }
+          resolve('');
+          setTimeout(() => {
+            props.onRefresh();
+          }, 5000);
+          props.onRefresh();
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Listing now...',
+        error: 'Listing rejected.',
+        success: 'Listing successed.',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
 
   return (
     <div className="action-view">

@@ -8,12 +8,13 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
-export async function sendCancelList(
+export async function sendCancelList(params: {
   connection: Connection,
   wallet: WalletSigner,
   buyerPrice: number,
   mint: string,
-) {
+}) {
+  const { connection, wallet, buyerPrice, mint } = params;
   const { createCancelInstruction } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };

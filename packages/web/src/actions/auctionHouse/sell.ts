@@ -9,13 +9,14 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
-export async function sendSell(
+export async function sendSell(params: {
   connection: Connection,
   seller: string,
   wallet: WalletSigner,
   buyerPrice: number,
   mint: string,
-) {
+}) {
+  const { connection, seller, wallet, buyerPrice, mint } = params;
   const { createExecuteSaleInstruction } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
