@@ -8,10 +8,10 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 
 export async function sendPlaceBid(params: {
-  connection: Connection,
-  wallet: WalletSigner,
-  buyerPrice: number,
-  mint: string,
+  connection: Connection;
+  wallet: WalletSigner;
+  buyerPrice: number;
+  mint: string;
 }) {
   const { connection, wallet, buyerPrice, mint } = params;
   const { createBuyInstruction } = AuctionHouseProgram.instructions;
@@ -22,13 +22,13 @@ export async function sendPlaceBid(params: {
     const buyerKey = wallet.publicKey!;
     const metadata = await getMetadata(mint);
     const mintKey = new PublicKey(mint);
-    const results = await connection.getTokenLargestAccounts(mintKey)
+    const results = await connection.getTokenLargestAccounts(mintKey);
     const tokenAccount = results.value[0].address;
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
     );
-    
+
     const [buyerTradeState, tradeStateBump] =
       await AuctionHouseProgram.findTradeStateAddress(
         buyerKey,

@@ -1,10 +1,20 @@
-import { ConnectButton, useConnection } from '@oyster/common';
+import {
+  ConnectButton,
+  MetaplexModal,
+  useConnection,
+  useNativeAccount,
+} from '@oyster/common';
 import React, { useState } from 'react';
 import { Button, InputNumber, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
-import { sendList, sendCancelList, sendSell, sendPlaceBid } from '../../actions/auctionHouse';
+import {
+  sendList,
+  sendCancelList,
+  sendSell,
+  sendPlaceBid,
+} from '../../actions/auctionHouse';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
@@ -48,8 +58,12 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
   const connection = useConnection();
-  const { callList, callCancelList, callSell, callPlaceBid, callCancelBid } =
+  const { account } = useNativeAccount();
+  const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
+  const { callList, callCancelList, callSell, callPlaceBid } =
     useTransactionsAPI();
+  const [showOfferModal, setShowOfferModal] = useState(false);
+  const [offerPrice, setOfferPrice] = useState(0);
   const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
   const checkPrice = (_: any, value: { number: number }) => {
@@ -59,6 +73,25 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     return Promise.reject(new Error('Price must be greater than zero!'));
   };
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [balanceError, setBalanceError] = useState('');
+
+  const onChangeOffer = (value: number) => {
+    let err = '';
+    if (value < props.nft.price / 2) {
+      err = 'Price must be higher than 50% of the listing price';
+    } else if (value >= props.nft.price) {
+      err = 'Price must be lower than listing price';
+    }
+
+    if (value > balance) {
+      setBalanceError('Not enough balance in the wallet');
+    } else {
+      setBalanceError('');
+    }
+    setError(err);
+    setOfferPrice(value);
+  };
 
   const onListNow = async values => {
     const price = values.price.number * LAMPORTS_PER_SOL;
@@ -86,7 +119,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           resolve('');
           setTimeout(() => {
             props.onRefresh();
-          }, 5000);
+          }, 6000);
         } else {
           reject();
         }
@@ -139,7 +172,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           resolve('');
           setTimeout(() => {
             props.onRefresh();
-          }, 5000);
+          }, 6000);
         } else {
           reject();
         }
@@ -195,7 +228,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           resolve('');
           setTimeout(() => {
             props.onRefresh();
-          }, 5000);
+          }, 6000);
         } else {
           reject();
         }
@@ -224,7 +257,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onMakeOffer = async () => {
-    const price = 0.8 * LAMPORTS_PER_SOL;
+    const price = offerPrice * LAMPORTS_PER_SOL;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -249,7 +282,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           resolve('');
           setTimeout(() => {
             props.onRefresh();
-          }, 5000);
+          }, 6000);
           props.onRefresh();
         } else {
           reject();
@@ -345,7 +378,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
               <Col span={14}>
                 <Button
                   className="button"
-                  onClick={onMakeOffer}
+                  onClick={() => {
+                    setShowOfferModal(true);
+                    onChangeOffer(offerPrice);
+                  }}
                   disabled={loading}
                 >
                   Make an Offer
@@ -355,6 +391,40 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           )
         )}
       </div>
+      <MetaplexModal
+        title="Make an Offer"
+        visible={showOfferModal}
+        closable
+        onCancel={() => setShowOfferModal(false)}
+        centered={true}
+      >
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginBottom: 16,
+            }}
+          >
+            <PriceInput
+              value={{ number: offerPrice }}
+              onChange={value => onChangeOffer(value.number!)}
+            />
+            {error && <span className="warning">{error}</span>}
+            {balanceError && <span className="warning">{balanceError}</span>}
+          </div>
+          <Button
+            className="button"
+            onClick={() => {
+              setShowOfferModal(false);
+              onMakeOffer();
+            }}
+            disabled={error !== '' || balanceError !== ''}
+          >
+            Make offer
+          </Button>
+        </div>
+      </MetaplexModal>
     </div>
   );
 };

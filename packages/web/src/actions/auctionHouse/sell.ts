@@ -10,11 +10,11 @@ import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
 export async function sendSell(params: {
-  connection: Connection,
-  seller: string,
-  wallet: WalletSigner,
-  buyerPrice: number,
-  mint: string,
+  connection: Connection;
+  seller: string;
+  wallet: WalletSigner;
+  buyerPrice: number;
+  mint: string;
 }) {
   const { connection, seller, wallet, buyerPrice, mint } = params;
   const { createExecuteSaleInstruction } = AuctionHouseProgram.instructions;
