@@ -80,7 +80,7 @@ export const AppBar = () => {
           <div className={`search-container ${!showSearchBar && 'tw-hidden'}`}>
             <Select
               className="search-control"
-              placeholder="Search Creators"
+              placeholder="Search Collections"
               optionFilterProp="children"
               onChange={onChange}
               suffixIcon={<SearchOutlined />}
