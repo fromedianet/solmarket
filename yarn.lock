@@ -2235,6 +2235,51 @@
     color "^0.11.3"
     mersenne-twister "^1.1.0"
 
+"@metaplex-foundation/beet-solana@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/beet-solana/-/beet-solana-0.0.6.tgz#64dc7bb5a0f5938f25da11bb2a44729ee806a0d9"
+  integrity sha512-MMwqCd51q+dZFtpjuUkGN/jX/gO5fiRuf+uyZ2fVAUcnZCmVWwSEeeSISffvR0mmhc/JSWkJ7Pi0s+FkYVB7dA==
+  dependencies:
+    "@metaplex-foundation/beet" ">0.0.5"
+    "@solana/web3.js" "^1.31.0"
+
+"@metaplex-foundation/beet@>0.0.5":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/beet/-/beet-0.1.0.tgz#65bcd05a47bb99230fdfc2e3cfc0693c62b9a285"
+  integrity sha512-6SKV0Tp1+onU1vjBA26wvgPIKpxhnYINNpnpxvBpK9Cl8dNfz5+sfdx6opaKcljpCSaRpQqHfdtEn6qlYVCO8A==
+  dependencies:
+    ansicolors "^0.3.2"
+    bn.js "^5.2.0"
+    debug "^4.3.3"
+
+"@metaplex-foundation/beet@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/beet/-/beet-0.0.8.tgz#c0d6cfc4e9804ec863efc2e05302cc5d89d144cd"
+  integrity sha512-OI4V/ASqqR802GivPLBLrihDj99xX2yceTvZt20gn2A3tlPg0ygV8brTHE5LZey/ud3Guh8t54GRwD6XcqStZg==
+  dependencies:
+    ansicolors "^0.3.2"
+    bn.js "^5.2.0"
+    debug "^4.3.3"
+
+"@metaplex-foundation/mpl-auction-house@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/mpl-auction-house/-/mpl-auction-house-1.1.1.tgz#9c4ef47d13ff766bf9606868099dc1489477f77c"
+  integrity sha512-47dGB74A+VB0cmzfzfrIUTn7cScKkbHzPioUR+YSC+4jkNW+d5OjNJWaE5lIP8JrzZUfPRfuzCxOyvwNtNM1Tg==
+  dependencies:
+    "@metaplex-foundation/beet" "^0.0.8"
+    "@metaplex-foundation/beet-solana" "^0.0.6"
+    "@metaplex-foundation/mpl-core" "0.0.4"
+    "@solana/web3.js" "^1.35.1"
+    bn.js "^5.2.0"
+
+"@metaplex-foundation/mpl-core@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/mpl-core/-/mpl-core-0.0.4.tgz#af7c518b1283f91fa98e8c38ab97fd3f7d18984f"
+  integrity sha512-lrWdbufDgPw+GmSJpd6PP4QaThoHTkWKD9309vQ9Wkq2cABzv1g6VA83zIIkn/kwDRLcDaEjiiAKIfIck/09GQ==
+  dependencies:
+    "@solana/web3.js" "^1.33.0"
+    bs58 "^4.0.1"
+
 "@metaplex-foundation/mpl-core@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@metaplex-foundation/mpl-core/-/mpl-core-0.0.2.tgz#17ee2cc216e17629d6df1dbba75964625ebbd603"
@@ -2695,7 +2740,7 @@
     "@solana/wallet-adapter-solong" "^0.4.1"
     "@solana/wallet-adapter-torus" "^0.5.0"
 
-"@solana/web3.js@^1.12.0", "@solana/web3.js@^1.17.0", "@solana/web3.js@^1.21.0", "@solana/web3.js@^1.22.0", "@solana/web3.js@^1.31.0", "@solana/web3.js@^1.33.0":
+"@solana/web3.js@^1.12.0", "@solana/web3.js@^1.17.0", "@solana/web3.js@^1.21.0", "@solana/web3.js@^1.22.0", "@solana/web3.js@^1.31.0", "@solana/web3.js@^1.33.0", "@solana/web3.js@^1.35.1":
   version "1.36.0"
   resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-1.36.0.tgz#79d7d5217b49b80139f4de68953adc5b9a9a264f"
   integrity sha512-RNT1451iRR7TyW7EJKMCrH/0OXawIe4zVm0DWQASwXlR/u1jmW6FrmH0lujIh7cGTlfOVbH+2ZU9AVUPLBFzwA==
@@ -3577,6 +3622,11 @@ ansi-styles@^5.0.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
+
+ansicolors@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/ansicolors/-/ansicolors-0.3.2.tgz#665597de86a9ffe3aa9bfbe6cae5c6ea426b4979"
+  integrity sha1-ZlWX3oap/+Oqm/vmyuXG6kJrSXk=
 
 antd@^4.18.4:
   version "4.19.1"
@@ -5744,6 +5794,13 @@ debug@^3.1.0, debug@^3.1.1, debug@^3.2.5, debug@^3.2.6, debug@^3.2.7:
   integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
   dependencies:
     ms "^2.1.1"
+
+debug@^4.3.3:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+  dependencies:
+    ms "2.1.2"
 
 debuglog@^1.0.1:
   version "1.0.1"
