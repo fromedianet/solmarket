@@ -19,11 +19,7 @@ import { MetaContextState, MetaState } from './types';
 import { useConnection } from '../connection';
 import { useStore } from '../store';
 import { AuctionData, BidderMetadata, BidderPot } from '../../actions';
-import {
-  pullAuctionSubaccounts,
-  pullPage,
-  pullStoreMetadata,
-} from '.';
+import { pullAuctionSubaccounts, pullPage, pullStoreMetadata } from '.';
 import { StringPublicKey, TokenAccount, useUserAccounts } from '../..';
 
 const MetaContext = React.createContext<MetaContextState>({
@@ -152,12 +148,12 @@ export function MetaProvider({
     }
     console.log('------->Query started');
 
-    const nextState = await loadAccounts(connection);
+    // const nextState = await loadAccounts(connection);
 
-    console.log('------->Query finished');
+    // console.log('------->Query finished');
 
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
+    // setState(nextState);
+    // await updateMints(nextState.metadataByMint);
     return;
   }
 
@@ -175,49 +171,45 @@ export function MetaProvider({
       setIsLoading(true);
     }
 
-    let nextState = await pullPage(
-      connection,
-      page,
-      state,
-    );
+    let nextState = await pullPage(connection, page, state);
     console.log('-----> Query started');
 
     if (nextState.storeIndexer.length) {
       if (USE_SPEED_RUN) {
-        nextState = await limitedLoadAccounts(connection);
+        // nextState = await limitedLoadAccounts(connection);
 
-        console.log('------->Query finished');
+        // console.log('------->Query finished');
 
-        setState(nextState);
+        // setState(nextState);
 
         //@ts-ignore
         window.loadingData = false;
         setIsLoading(false);
       } else {
-        console.log('------->Pagination detected, pulling page', page);
+        // console.log('------->Pagination detected, pulling page', page);
 
-        const auction = window.location.href.match(/#\/auction\/(\w+)/);
-        if (auction && page == 0) {
-          console.log(
-            '---------->Loading auction page on initial load, pulling sub accounts',
-          );
+        // const auction = window.location.href.match(/#\/auction\/(\w+)/);
+        // if (auction && page == 0) {
+        //   console.log(
+        //     '---------->Loading auction page on initial load, pulling sub accounts',
+        //   );
 
-          nextState = await pullAuctionSubaccounts(
-            connection,
-            auction[1],
-            nextState,
-          );
-        }
+        //   nextState = await pullAuctionSubaccounts(
+        //     connection,
+        //     auction[1],
+        //     nextState,
+        //   );
+        // }
 
-        let currLastLength;
-        setLastLength(last => {
-          currLastLength = last;
-          return last;
-        });
-        if (nextState.storeIndexer.length != currLastLength) {
-          setPage(page => page + 1);
-        }
-        setLastLength(nextState.storeIndexer.length);
+        // let currLastLength;
+        // setLastLength(last => {
+        //   currLastLength = last;
+        //   return last;
+        // });
+        // if (nextState.storeIndexer.length != currLastLength) {
+        //   setPage(page => page + 1);
+        // }
+        // setLastLength(nextState.storeIndexer.length);
 
         //@ts-ignore
         window.loadingData = false;
@@ -225,14 +217,14 @@ export function MetaProvider({
         setState(nextState);
       }
     } else {
-      console.log('------->No pagination detected');
-      nextState = !USE_SPEED_RUN
-        ? await loadAccounts(connection)
-        : await limitedLoadAccounts(connection);
+      // console.log('------->No pagination detected');
+      // nextState = !USE_SPEED_RUN
+      //   ? await loadAccounts(connection)
+      //   : await limitedLoadAccounts(connection);
 
-      console.log('------->Query finished');
+      // console.log('------->Query finished');
 
-      setState(nextState);
+      // setState(nextState);
 
       //@ts-ignore
       window.loadingData = false;
@@ -241,21 +233,21 @@ export function MetaProvider({
 
     console.log('------->set finished');
 
-    if (auctionAddress && bidderAddress) {
-      nextState = await pullAuctionSubaccounts(
-        connection,
-        auctionAddress,
-        nextState,
-      );
-      setState(nextState);
+    // if (auctionAddress && bidderAddress) {
+    //   nextState = await pullAuctionSubaccounts(
+    //     connection,
+    //     auctionAddress,
+    //     nextState,
+    //   );
+    //   setState(nextState);
 
-      const auctionBidderKey = auctionAddress + '-' + bidderAddress;
-      return [
-        nextState.auctions[auctionAddress],
-        nextState.bidderPotsByAuctionAndBidder[auctionBidderKey],
-        nextState.bidderMetadataByAuctionAndBidder[auctionBidderKey],
-      ];
-    }
+    //   const auctionBidderKey = auctionAddress + '-' + bidderAddress;
+    //   return [
+    //     nextState.auctions[auctionAddress],
+    //     nextState.bidderPotsByAuctionAndBidder[auctionBidderKey],
+    //     nextState.bidderMetadataByAuctionAndBidder[auctionBidderKey],
+    //   ];
+    // }
   }
 
   useEffect(() => {

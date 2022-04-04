@@ -71,20 +71,20 @@ export const pullStoreMetadata = async (
   connection: Connection,
   tempCache: MetaState,
 ) => {
-  const updateTemp = makeSetter(tempCache);
+  // const updateTemp = makeSetter(tempCache);
 
-  const loadMetadata = () =>
-    pullMetadataByCreators(connection, tempCache, updateTemp);
-  const loadEditions = () =>
-    pullEditions(connection, updateTemp, tempCache, tempCache.metadata);
+  // const loadMetadata = () =>
+  //   pullMetadataByCreators(connection, tempCache, updateTemp);
+  // const loadEditions = () =>
+  //   pullEditions(connection, updateTemp, tempCache, tempCache.metadata);
 
-  console.log('-------->Loading all metadata for store.');
+  // console.log('-------->Loading all metadata for store.');
 
-  await loadMetadata();
-  await loadEditions();
+  // await loadMetadata();
+  // await loadEditions();
 
-  await postProcessMetadata(tempCache);
-  console.log('-------->Metadata processing complete.');
+  // await postProcessMetadata(tempCache);
+  // console.log('-------->Metadata processing complete.');
   return tempCache;
 };
 
@@ -448,7 +448,7 @@ export const pullPages = async (
 export const pullPage = async (
   connection: Connection,
   page: number,
-  tempCache: MetaState
+  tempCache: MetaState,
 ) => {
   const updateTemp = makeSetter(tempCache);
   const forEach =
