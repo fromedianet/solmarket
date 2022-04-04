@@ -30,7 +30,8 @@ export const DashboardAdminDetails = () => {
   }, [id]);
 
   const handleApprove = () => {
-    const status = type === 'submitted' ? 'reviewed' : 'listed';
+    const status = 'listed';
+    // const status = type === 'submitted' ? 'reviewed' : 'listed';
     processStep5({
       _id: id,
       status: status,
