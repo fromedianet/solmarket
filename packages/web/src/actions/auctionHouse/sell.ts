@@ -5,7 +5,11 @@ import {
   toPublicKey,
   WalletSigner,
 } from '@oyster/common';
-import { Connection, PublicKey } from '@solana/web3.js';
+import {
+  Connection,
+  PublicKey,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
+} from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
@@ -17,7 +21,10 @@ export async function sendSell(params: {
   mint: string;
 }) {
   const { connection, seller, wallet, buyerPrice, mint } = params;
-  const { createExecuteSaleInstruction } = AuctionHouseProgram.instructions;
+  const {
+    createExecuteSaleInstruction,
+    createPrintPurchaseReceiptInstruction,
+  } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
 
@@ -104,20 +111,38 @@ export async function sendSell(params: {
       },
     );
 
-    instruction.keys
-      .filter(k => k.pubkey.equals(buyerKey))
-      .map(k => (k.isSigner = true));
+    const [purchaseReceipt, purchaseReceiptBump] =
+      await AuctionHouseProgram.findPurchaseReceiptAddress(
+        sellerTradeState,
+        buyerTradeState,
+      );
+    const [listingReceipt] =
+      await AuctionHouseProgram.findListingReceiptAddress(sellerTradeState);
+    const [bidReceipt] = await AuctionHouseProgram.findBidReceiptAddress(
+      buyerTradeState,
+    );
+    const purchaseReceiptInstruction = createPrintPurchaseReceiptInstruction(
+      {
+        purchaseReceipt: purchaseReceipt,
+        listingReceipt: listingReceipt,
+        bidReceipt: bidReceipt,
+        bookkeeper: buyerKey,
+        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+      },
+      {
+        purchaseReceiptBump,
+      },
+    );
 
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [instruction],
+      [instruction, purchaseReceiptInstruction],
       [],
-      'max',
     );
 
     if (txid) {
-      status = await connection.confirmTransaction(txid, 'max');
+      status = await connection.confirmTransaction(txid, 'confirmed');
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
