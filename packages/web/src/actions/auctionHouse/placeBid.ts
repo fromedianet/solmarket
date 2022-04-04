@@ -4,7 +4,11 @@ import {
   sendTransactionWithRetry,
   WalletSigner,
 } from '@oyster/common';
-import { Connection, PublicKey } from '@solana/web3.js';
+import {
+  Connection,
+  PublicKey,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
+} from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 
 export async function sendPlaceBid(params: {
@@ -14,7 +18,11 @@ export async function sendPlaceBid(params: {
   mint: string;
 }) {
   const { connection, wallet, buyerPrice, mint } = params;
-  const { createBuyInstruction } = AuctionHouseProgram.instructions;
+  const {
+    createDepositInstruction,
+    createPublicBuyInstruction,
+    createPrintBidReceiptInstruction,
+  } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
 
@@ -46,7 +54,24 @@ export async function sendPlaceBid(params: {
         buyerKey,
       );
 
-    const instruction = createBuyInstruction(
+    const depositInstruction = createDepositInstruction(
+      {
+        wallet: buyerKey,
+        paymentAccount: buyerKey,
+        transferAuthority: buyerKey,
+        treasuryMint: auctionHouseObj.treasuryMint,
+        escrowPaymentAccount: escrowPaymentAccount,
+        authority: auctionHouseObj.authority,
+        auctionHouse: AUCTION_HOUSE_ID,
+        auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
+      },
+      {
+        escrowPaymentBump,
+        amount: buyerPrice,
+      },
+    );
+
+    const publicBuyInstruction = createPublicBuyInstruction(
       {
         wallet: buyerKey,
         paymentAccount: buyerKey,
@@ -68,20 +93,28 @@ export async function sendPlaceBid(params: {
       },
     );
 
-    instruction.keys
-      .filter(k => k.pubkey.equals(buyerKey))
-      .map(k => (k.isSigner = true));
+    const [receipt, receiptBump] =
+      await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
+    const printBidReceiptInstruction = await createPrintBidReceiptInstruction(
+      {
+        receipt,
+        bookkeeper: buyerKey,
+        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+      },
+      {
+        receiptBump,
+      },
+    );
 
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [instruction],
+      [depositInstruction, publicBuyInstruction, printBidReceiptInstruction],
       [],
-      'max',
     );
 
     if (txid) {
-      status = await connection.confirmTransaction(txid, 'max');
+      status = await connection.confirmTransaction(txid, 'confirmed');
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }

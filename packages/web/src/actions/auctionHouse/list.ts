@@ -5,7 +5,11 @@ import {
   toPublicKey,
   WalletSigner,
 } from '@oyster/common';
-import { Connection, PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY } from '@solana/web3.js';
+import {
+  Connection,
+  PublicKey,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
+} from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
@@ -16,16 +20,15 @@ export async function sendList(params: {
   mint: string;
 }) {
   const { connection, wallet, buyerPrice, mint } = params;
-  const { createSellInstruction, createPrintListingReceiptInstruction } = AuctionHouseProgram.instructions;
+  const { createSellInstruction, createPrintListingReceiptInstruction } =
+    AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
 
   try {
     const sellerKey = wallet.publicKey!;
     const metadata = await getMetadata(mint);
-    const tokenAccount = (
-      await getAtaForMint(toPublicKey(mint), sellerKey)
-    )[0];
+    const tokenAccount = (await getAtaForMint(toPublicKey(mint), sellerKey))[0];
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
@@ -75,11 +78,8 @@ export async function sendList(params: {
       },
     );
 
-    instruction.keys
-      .filter(k => k.pubkey.equals(sellerKey))
-      .map(k => (k.isSigner = true));
-
-    const [receipt, receiptBump] = await AuctionHouseProgram.findListingReceiptAddress(tradeState);
+    const [receipt, receiptBump] =
+      await AuctionHouseProgram.findListingReceiptAddress(tradeState);
     const printInstruction = createPrintListingReceiptInstruction(
       {
         receipt: receipt,
@@ -87,8 +87,8 @@ export async function sendList(params: {
         instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
       },
       {
-        receiptBump: receiptBump
-      }
+        receiptBump: receiptBump,
+      },
     );
 
     const { txid } = await sendTransactionWithRetry(
@@ -96,11 +96,10 @@ export async function sendList(params: {
       wallet,
       [instruction, printInstruction],
       [],
-      'max',
     );
 
     if (txid) {
-      status = await connection.confirmTransaction(txid, 'max');
+      status = await connection.confirmTransaction(txid, 'confirmed');
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
