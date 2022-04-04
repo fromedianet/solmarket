@@ -5,15 +5,18 @@ import {
   ExAttrValue,
   ExCollection,
   ExCollectionStats,
+  Transaction,
 } from '../models/exCollection';
 import { useCollectionsAPI } from './useCollectionsAPI';
 import { useNFTsAPI } from './useNFTsAPI';
+import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
 type QUERIES = {
   symbol: string;
   sort: number;
+  status: boolean;
   searchKey?: string;
   attributes?: {};
   min?: number;
@@ -28,13 +31,14 @@ export const useCollection = (symbol: string) => {
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
   const [collectionStats, setCollectionStats] = useState<ExCollectionStats>({});
   const [nfts, setNFTs] = useState<any[]>([]);
-  // const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
   const { getCollectionBySymbol, getCollectionStatsBySymbol } =
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
+  const { getTransactionsBySymbol } = useTransactionsAPI();
 
   useEffect(() => {
     getCollectionBySymbol(symbol)
@@ -66,7 +70,15 @@ export const useCollection = (symbol: string) => {
         }
       });
 
-    getListedNFTs({ symbol: symbol, sort: 1 });
+    getListedNFTs({ symbol: symbol, sort: 1, status: false });
+
+    getTransactionsBySymbol(symbol)
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setTransactions(res['data']);
+        }
+      });
   }, [symbol]);
 
   const getListedNFTs = (param: QUERIES) => {
@@ -133,6 +145,8 @@ export const useCollection = (symbol: string) => {
     if (param.searchKey) {
       match['search'] = param.searchKey;
     }
+    match['status'] = param.status;
+
     if (param.min || param.max) {
       const price = {};
       if (param.min) {
@@ -180,6 +194,7 @@ export const useCollection = (symbol: string) => {
     collection,
     attributes,
     collectionStats,
+    transactions,
     nfts,
     loading,
     getListedNFTs,

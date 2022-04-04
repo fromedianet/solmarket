@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { NFTData, Transaction } from '../models/exCollection';
-import { APIS } from '../constants';
+import { ApiUtils } from '../utils/apiUtils';
 
 export const useExNFT = (
   mintAddress: string,
   market: string,
   price?: number,
 ) => {
+  const { runOthersAPI } = ApiUtils();
   const [nft, setNFT] = useState<NFTData>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,22 +20,20 @@ export const useExNFT = (
 
   function getNFTByMintAddress(mint: string, price?: number) {
     setLoading(true);
-    const uri = APIS.base_url + APIS.getNFTByMintAddress + mint;
-    fetch(uri)
-      .then(res => res.json())
-      .then(result => {
+    runOthersAPI('get', `/exnft/${mint}`)
+      // @ts-ignore
+      .then((result: {}) => {
         if (result['data']) {
           if (price && result['data']['price'] === 0) {
             result['data']['price'] = price;
           }
           setNFT(result['data']);
         }
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   function getTransactions(mint: string, market: string) {
-    const uri = APIS.base_url + APIS.transactionsByMint;
     const queryBody = { market: market };
     if (market === 'magiceden') {
       const query = {
@@ -53,13 +52,9 @@ export const useExNFT = (
       ] = `${mint}?trading_types=2%2C1%2C3&no_foreign_listing=true`;
     }
 
-    fetch(uri, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(queryBody),
-    })
-      .then(res => res.json())
-      .then(result => {
+    runOthersAPI('post', '/exnft/transactions', JSON.stringify(queryBody))
+      // @ts-ignore
+      .then((result: {}) => {
         setTransactions(result['data']);
       });
   }

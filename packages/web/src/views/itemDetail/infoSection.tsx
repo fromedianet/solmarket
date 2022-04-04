@@ -21,7 +21,6 @@ export const InfoSection = (props: {
   nft: NFT;
   priceData: any[];
   onRefresh: () => void;
-  onBuy: () => void;
 }) => {
   return (
     <Row gutter={24}>
@@ -98,7 +97,7 @@ export const InfoSection = (props: {
             <img width={20} src={'/icons/refresh.svg'} />
           </div>
         </div>
-        <ItemAction nft={props.nft} onBuy={props.onBuy} />
+        <ItemAction nft={props.nft} onRefresh={props.onRefresh} />
         <Collapse
           expandIconPosition="right"
           className="art-info"

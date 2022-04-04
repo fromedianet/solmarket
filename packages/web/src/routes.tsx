@@ -4,23 +4,21 @@ import { Providers } from './providers';
 import {
   AnalyticsView,
   ArtCreateView,
-  ArtworksView,
   AuctionCreateView,
   AuctionView,
   HomeView,
   StaticPageView,
 } from './views';
-import { AdminView } from './views/admin';
-import PackView from './views/pack';
-import { PackCreateView } from './views/packCreate';
-import { BillingView } from './views/auction/billing/billing';
+// import { AdminView } from './views/admin';
 import { AuctionsView } from './views/auctions';
 import { ProfileView } from './views/profile';
 import { LaunchPadView } from './views/launchpad';
-import { CollectionsView } from './views/collections';
+import { LaunchpadDetailView } from './views/launchpadDetail';
 import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
+import { CollectionsView } from './views/collections';
 import { MarketplaceView } from './views/marketplace';
+import { ItemDetailView } from './views/itemDetail';
 import { InventoryView } from './views/inventory';
 import { ExCollectionView } from './views/ExCollection';
 import { ExNFTView } from './views/ExNFT';
@@ -28,31 +26,14 @@ import { DashboardListingView } from './views/dashboard/listing';
 import { DashboardView } from './views/dashboard/dashboard';
 import { DashboardAdmin } from './views/dashboard/admin';
 import { DashboardAdminDetails } from './views/dashboard/admin/details';
-import { LaunchpadDetailView } from './views/launchpadDetail';
-import { ItemDetailView } from './views/itemDetail';
 
 export function Routes() {
-  const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
   return (
     <>
       <BrowserRouter basename={'/'}>
         <Providers>
           <Switch>
-            {shouldEnableNftPacks && (
-              <Route
-                exact
-                path="/admin/pack/create/:stepParam?"
-                component={() => <PackCreateView />}
-              />
-            )}
-            {shouldEnableNftPacks && (
-              <Route
-                exact
-                path="/pack/:packKey"
-                component={() => <PackView />}
-              />
-            )}
-            <Route exact path="/admin" component={() => <AdminView />} />
+            {/* <Route exact path="/admin" component={() => <AdminView />} /> */}
             <Route
               exact
               path="/analytics"
@@ -62,11 +43,6 @@ export function Routes() {
               exact
               path="/art/create/:step_param?"
               component={() => <ArtCreateView />}
-            />
-            <Route
-              exact
-              path="/artworks/:id?"
-              component={() => <ArtworksView />}
             />
             <Route
               exact
@@ -83,11 +59,6 @@ export function Routes() {
               exact
               path="/auction/:id"
               component={() => <AuctionView />}
-            />
-            <Route
-              exact
-              path="/auction/:id/billing"
-              component={() => <BillingView />}
             />
             <Route
               exact

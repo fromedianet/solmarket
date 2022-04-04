@@ -5,21 +5,50 @@ import {
   shortenAddress,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Row, Col, Statistic, Tabs, Form, Input, message } from 'antd';
-import { useCreator, useCreatorArts } from '../../hooks';
-import { ArtCard } from '../../components/ArtCard';
+import { useCreator } from '../../hooks';
+import { useAuthToken } from '../../contexts/authProvider';
+import { useAuthAPI } from '../../hooks/useAuthAPI';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
+import { NFTCard } from '../marketplace/components/Items';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export const ProfileView = () => {
-  const [visible, setVisible] = useState(false);
   const wallet = useWallet();
-  const { arts, listedArts } = useCreatorArts(wallet.publicKey?.toBase58());
-
+  const { authToken } = useAuthToken();
+  const { authentication } = useAuthAPI();
+  const { getNFTsByWallet } = useNFTsAPI();
+  const [visible, setVisible] = useState(false);
+  const [myItems, setMyItems] = useState<any[]>([]);
+  const [listedItems, setListedItems] = useState<any[]>([]);
+  const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (wallet.publicKey) {
+      getNFTsByWallet(wallet.publicKey.toBase58())
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            const result = res['data'];
+            setMyItems(result.filter(item => item.price === 0));
+            setListedItems(result.filter(item => item.price > 0));
+          }
+        });
+    }
+  }, [wallet.publicKey]);
+
+  useEffect(() => {
+    let total = 0;
+    listedItems.forEach(item => {
+      total += item.price;
+    });
+    setTotalFloorPrice(total);
+  }, [listedItems]);
 
   const onSubmit = values => {
     console.log(values);
@@ -39,57 +68,39 @@ export const ProfileView = () => {
     );
   };
 
+  if (!wallet.connected) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <p style={{ color: 'white' }}>
+          Connect wallet to see your profile page
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="main-area">
       <div className="profile-page">
         <div className="container">
           <div className="profile-info">
-            {creator && creator.info ? (
-              creator.info.image ? (
-                <img
-                  src={creator.info.image}
-                  alt="profile"
-                  className="profile-image"
-                />
-              ) : (
-                <img
-                  src={`https://avatars.dicebear.com/api/jdenticon/${creator.info.address}.svg`}
-                  className="profile-image"
-                />
-              )
+            {wallet.publicKey ? (
+              <img
+                src={`https://avatars.dicebear.com/api/jdenticon/${wallet.publicKey.toBase58()}.svg`}
+                className="profile-image"
+              />
             ) : (
               <img
                 src={`https://avatars.dicebear.com/api/jdenticon/unknown.svg`}
                 className="profile-image"
               />
             )}
-            {creator && creator.info ? (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                {creator.info.name && <h1>{creator.info.name}</h1>}
-                <CopySpan
-                  value={shortenAddress(creator.info.address, 8)}
-                  copyText={creator.info.address}
-                  className="wallet-address"
-                />
-                {creator.info.description && (
-                  <span className="description">
-                    {creator.info.description}
-                  </span>
-                )}
-                <Button
-                  className="profile-button"
-                  onClick={() => setVisible(true)}
-                >
-                  Edit Profile
-                </Button>
-              </div>
-            ) : wallet.publicKey ? (
+            {wallet.publicKey && (
               <div
                 style={{
                   display: 'flex',
@@ -99,36 +110,46 @@ export const ProfileView = () => {
               >
                 <CopySpan
                   value={shortenAddress(wallet.publicKey.toBase58(), 8)}
-                  copyText={wallet.publicKey.toBase58()}
+                  copyText={wallet.publicKey!.toBase58()}
                   className="wallet-address"
                 />
+              </div>
+            )}
+            {wallet.connected ? (
+              authToken ? (
                 <Button
                   className="profile-button"
                   onClick={() => setVisible(true)}
                 >
                   Edit Profile
                 </Button>
-              </div>
+              ) : (
+                <Button
+                  className="profile-button"
+                  onClick={async () => await authentication()}
+                >
+                  Sign in
+                </Button>
+              )
             ) : (
               <ConnectButton className="profile-button" />
             )}
           </div>
           <Row className="profile-details">
             <Col span={12} md={8} lg={6} className="details-container">
-              <Statistic title="TOTAL FLOOR VALUE" value="--SOL" />
+              <Statistic
+                title="TOTAL FLOOR VALUE"
+                value={`${totalFloorPrice > 0 ? totalFloorPrice : '---'} SOL`}
+              />
             </Col>
           </Row>
           <Tabs defaultActiveKey="1" className="profile-tabs">
             <TabPane tab="My items" key="1">
-              {arts && arts.length > 0 ? (
+              {myItems.length > 0 ? (
                 <Row gutter={[16, 16]}>
-                  {arts.map((item, index) => (
+                  {myItems.map((item, index) => (
                     <Col key={index} span={12} md={8} lg={6} xl={4}>
-                      <ArtCard
-                        pubkey={item.pubkey}
-                        preview={false}
-                        artview={true}
-                      />
+                      <NFTCard item={item} collection={item.collectionName} />
                     </Col>
                   ))}
                 </Row>
@@ -137,15 +158,11 @@ export const ProfileView = () => {
               )}
             </TabPane>
             <TabPane tab="Listed items" key="2">
-              {listedArts && listedArts.length > 0 ? (
+              {listedItems.length > 0 ? (
                 <Row gutter={[16, 16]}>
-                  {listedArts.map((item, index) => (
+                  {listedItems.map((item, index) => (
                     <Col key={index} span={12} md={8} lg={6} xl={4}>
-                      <ArtCard
-                        pubkey={item.pubkey}
-                        preview={false}
-                        artview={true}
-                      />
+                      <NFTCard item={item} collection={item.collectionName} />
                     </Col>
                   ))}
                 </Row>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Collapse, Table } from 'antd';
-import { CopySpan, shortenAddress } from '@oyster/common';
+import { CopySpan, shortenAddress, useConnectionConfig } from '@oyster/common';
 import { NFT, Transaction } from '../../models/exCollection';
 import TimeAgo from 'javascript-time-ago';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
@@ -19,8 +19,10 @@ export const BottomSection = (props: {
   transactions: Transaction[];
   nft: NFT;
 }) => {
+  const endpoint = useConnectionConfig();
   const [nftList, setNFTList] = useState<NFT[]>([]);
   const { nfts } = useCollection(props.nft.symbol);
+  const network = endpoint.endpoint.name;
 
   useEffect(() => {
     const filters = nfts.filter(item => item.mint !== props.nft.mint);
@@ -59,7 +61,9 @@ export const BottomSection = (props: {
       key: 'transaction',
       render: txId => (
         <a
-          href={`https://explorer.solana.com/tx/${txId}`}
+          href={`https://explorer.solana.com/tx/${txId}${
+            network === 'mainnet-beta' ? '' : `?cluster=${network}`
+          }`}
           target="_blank"
           rel="noreferrer"
           style={{ cursor: 'pointer' }}
@@ -91,22 +95,14 @@ export const BottomSection = (props: {
       dataIndex: 'buyer',
       key: 'buyer',
       render: text =>
-        text ? (
-          <CopySpan value={shortenAddress(text)} copyText={text} />
-        ) : (
-          '...'
-        ),
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
     },
     {
       title: 'SELLER',
       dataIndex: 'seller',
       key: 'seller',
       render: text =>
-        text ? (
-          <CopySpan value={shortenAddress(text)} copyText={text} />
-        ) : (
-          '...'
-        ),
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
     },
   ];
 

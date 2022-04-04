@@ -10,7 +10,7 @@ export const DashboardAdmin = () => {
   const { getCollectionsWithoutDraft } = useCollectionsAPI();
   const [lists, setLists] = useState({
     submitted: [],
-    reviewed: [],
+    // reviewed: [],
     listed: [],
     rejected: [],
   });
@@ -21,7 +21,7 @@ export const DashboardAdmin = () => {
       if (res['data']) {
         setLists({
           submitted: res['data'].filter(item => item.status === 'submitted'),
-          reviewed: res['data'].filter(item => item.status === 'reviewed'),
+          // reviewed: res['data'].filter(item => item.status === 'reviewed'),
           listed: res['data'].filter(item => item.status === 'listed'),
           rejected: res['data'].filter(item => item.status === 'rejected'),
         });
@@ -53,7 +53,7 @@ export const DashboardAdmin = () => {
               ))}
             </Row>
           </TabPane>
-          <TabPane
+          {/* <TabPane
             tab={
               <BadgeText count={lists['reviewed'].length}>Reviewed</BadgeText>
             }
@@ -73,7 +73,7 @@ export const DashboardAdmin = () => {
                 </Col>
               ))}
             </Row>
-          </TabPane>
+          </TabPane> */}
           <TabPane
             tab={<BadgeText count={lists['listed'].length}>Listed</BadgeText>}
             key={3}

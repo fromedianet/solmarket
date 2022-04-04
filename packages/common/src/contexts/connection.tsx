@@ -66,13 +66,11 @@ const DEFAULT_ENDPOINT = ENDPOINTS[0];
 interface ConnectionConfig {
   connection: Connection;
   endpoint: Endpoint;
-  // tokens: Map<string, TokenInfo>;
 }
 
 const ConnectionContext = React.createContext<ConnectionConfig>({
   connection: new Connection(DEFAULT_ENDPOINT.url, 'recent'),
   endpoint: DEFAULT_ENDPOINT,
-  // tokens: new Map(),
 });
 
 export function ConnectionProvider({ children }: { children: any }) {
@@ -599,7 +597,7 @@ export const sendTransactionWithRetry = async (
   let transaction = new Transaction();
   instructions.forEach(instruction => transaction.add(instruction));
   transaction.recentBlockhash = (
-    block || (await connection.getRecentBlockhash(commitment))
+    block || (await connection.getLatestBlockhash(commitment))
   ).blockhash;
 
   if (includesFeePayer) {

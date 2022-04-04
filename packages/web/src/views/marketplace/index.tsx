@@ -24,6 +24,7 @@ export const MarketplaceView = () => {
       max: undefined,
     },
     attributes: {},
+    status: false,
   });
   const [searchKey, setSearchKey] = useState('');
   const [sort, setSort] = useState(1);
@@ -33,6 +34,7 @@ export const MarketplaceView = () => {
     attributes,
     collectionStats,
     nfts,
+    transactions,
     skip,
     hasMore,
     loading,
@@ -75,11 +77,16 @@ export const MarketplaceView = () => {
       attributes: filter.attributes,
       min: filter.price.min,
       max: filter.price.max,
+      status: filter.status,
     });
   }, [searchKey, sort, filter]);
 
-  const onUpdateFilters = (priceFilter, attributeFilter) => {
-    setFilter({ price: priceFilter, attributes: attributeFilter });
+  const onUpdateFilters = (priceFilter, attributeFilter, status) => {
+    setFilter({
+      price: priceFilter,
+      attributes: attributeFilter,
+      status: status,
+    });
   };
 
   const fetchMore = () => {
@@ -91,6 +98,7 @@ export const MarketplaceView = () => {
         attributes: filter.attributes,
         min: filter.price.min,
         max: filter.price.max,
+        status: filter.status,
         skip: skip,
       });
     }
@@ -152,7 +160,7 @@ export const MarketplaceView = () => {
             </span>
           }
         >
-          <Activities />
+          <Activities transactions={transactions} />
         </TabPane>
       </Tabs>
     </div>
