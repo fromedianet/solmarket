@@ -430,9 +430,12 @@ export const LaunchpadDetailView = () => {
                       </div>
                     </Col>
                     <Col span={24} xxl={10} className="btn-content">
-                      <Button className="mint-btn" onClick={() => {
-                        history.push(`/marketplace/${symbol}`)
-                      }}>
+                      <Button
+                        className="mint-btn"
+                        onClick={() => {
+                          history.push(`/marketplace/${symbol}`);
+                        }}
+                      >
                         Visit Collection
                       </Button>
                     </Col>
