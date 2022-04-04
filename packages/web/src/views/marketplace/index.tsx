@@ -33,6 +33,7 @@ export const MarketplaceView = () => {
     attributes,
     collectionStats,
     nfts,
+    transactions,
     skip,
     hasMore,
     loading,
@@ -152,7 +153,7 @@ export const MarketplaceView = () => {
             </span>
           }
         >
-          <Activities />
+          <Activities transactions={transactions} />
         </TabPane>
       </Tabs>
     </div>

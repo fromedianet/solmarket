@@ -5,9 +5,11 @@ import {
   ExAttrValue,
   ExCollection,
   ExCollectionStats,
+  Transaction,
 } from '../models/exCollection';
 import { useCollectionsAPI } from './useCollectionsAPI';
 import { useNFTsAPI } from './useNFTsAPI';
+import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
@@ -28,13 +30,14 @@ export const useCollection = (symbol: string) => {
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
   const [collectionStats, setCollectionStats] = useState<ExCollectionStats>({});
   const [nfts, setNFTs] = useState<any[]>([]);
-  // const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
   const { getCollectionBySymbol, getCollectionStatsBySymbol } =
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
+  const { getTransactionsBySymbol } = useTransactionsAPI();
 
   useEffect(() => {
     getCollectionBySymbol(symbol)
@@ -67,6 +70,14 @@ export const useCollection = (symbol: string) => {
       });
 
     getListedNFTs({ symbol: symbol, sort: 1 });
+
+    getTransactionsBySymbol(symbol)
+      // @ts-ignore
+      .then((res: {}) => {
+        if (res['data']) {
+          setTransactions(res['data']);
+        }
+      });
   }, [symbol]);
 
   const getListedNFTs = (param: QUERIES) => {
@@ -180,6 +191,7 @@ export const useCollection = (symbol: string) => {
     collection,
     attributes,
     collectionStats,
+    transactions,
     nfts,
     loading,
     getListedNFTs,
