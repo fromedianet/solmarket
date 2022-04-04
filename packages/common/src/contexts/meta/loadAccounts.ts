@@ -24,7 +24,6 @@ import {
   decodeStoreIndexer,
   getAuctionCache,
   getStoreIndexer,
-  MAX_PAYOUT_TICKET_SIZE,
   StoreIndexer,
   WhitelistedCreator,
 } from '../../models/metaplex';
@@ -47,17 +46,6 @@ import { getMultipleAccounts } from '../accounts/getMultipleAccounts';
 import { getProgramAccounts } from './web3';
 import { createPipelineExecutor } from '../../utils/createPipelineExecutor';
 import { programIds } from '../..';
-import {
-  getPackSetByPubkey,
-  getPackSets,
-} from '../../models/packs/accounts/PackSet';
-import { processPackSets } from './processPackSets';
-import { getVouchersByPackSet } from '../../models/packs/accounts/PackVoucher';
-import { processPackVouchers } from './processPackVouchers';
-import { getCardsByPackSet } from '../../models/packs/accounts/PackCard';
-import { processPackCards } from './processPackCards';
-import { getProvingProcessByPackSetAndWallet } from '../../models/packs/accounts/ProvingProcess';
-import { processProvingProcess } from './processProvingProcess';
 import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
 
 const MULTIPLE_ACCOUNT_BATCH_SIZE = 100;
@@ -253,146 +241,6 @@ export const pullYourMetadata = async (
   }
 
   return await pullMintsMetadata(connection, mintList, tempCache, 'User');
-};
-
-export const pullPayoutTickets = async (
-  connection: Connection,
-  tempCache: MetaState,
-) => {
-  const updateTemp = makeSetter(tempCache);
-
-  const forEach =
-    (fn: ProcessAccountsFunc) => async (accounts: AccountAndPubkey[]) => {
-      for (const account of accounts) {
-        await fn(account, updateTemp);
-      }
-    };
-  getProgramAccounts(connection, METAPLEX_ID, {
-    filters: [
-      {
-        dataSize: MAX_PAYOUT_TICKET_SIZE,
-      },
-    ],
-  }).then(forEach(processMetaplexAccounts));
-
-  return tempCache;
-};
-
-export const pullPacks = async (
-  connection: Connection,
-  state: MetaState,
-  walletKey?: PublicKey | null,
-): Promise<MetaState> => {
-  const updateTemp = makeSetter(state);
-  const forEach =
-    (fn: ProcessAccountsFunc) => async (accounts: AccountAndPubkey[]) => {
-      for (const account of accounts.flat()) {
-        await fn(account, updateTemp);
-      }
-    };
-
-  const store = programIds().store;
-  if (store) {
-    await getPackSets({ connection, storeId: store }).then(
-      forEach(processPackSets),
-    );
-  }
-
-  // Fetch packs' cards
-  const fetchCardsPromises = Object.keys(state.packs).map(packSetKey =>
-    getCardsByPackSet({ connection, packSetKey }),
-  );
-  await Promise.all(fetchCardsPromises).then(cards =>
-    cards.forEach(forEach(processPackCards)),
-  );
-
-  const packKeys = Object.keys(state.packs);
-  // Fetch vouchers
-  const fetchVouchersPromises = packKeys.map(packSetKey =>
-    getVouchersByPackSet({
-      connection,
-      packSetKey,
-    }),
-  );
-  await Promise.all(fetchVouchersPromises).then(vouchers =>
-    vouchers.forEach(forEach(processPackVouchers)),
-  );
-
-  // Fetch proving process if user connected wallet
-  if (walletKey) {
-    const fetchProvingProcessPromises = packKeys.map(packSetKey =>
-      getProvingProcessByPackSetAndWallet({
-        connection,
-        packSetKey,
-        walletKey,
-      }),
-    );
-    await Promise.all(fetchProvingProcessPromises).then(provingProcess =>
-      provingProcess.forEach(forEach(processProvingProcess)),
-    );
-  }
-
-  const metadataKeys = Object.values(state.packCards).map(
-    ({ info }) => info.metadata,
-  );
-  const newState = await pullMetadataByKeys(connection, state, metadataKeys);
-
-  await pullEditions(
-    connection,
-    updateTemp,
-    newState,
-    metadataKeys.map(m => newState.metadataByMetadata[m]),
-  );
-
-  return newState;
-};
-
-export const pullPack = async ({
-  connection,
-  state,
-  packSetKey,
-  walletKey,
-}: {
-  connection: Connection;
-  state: MetaState;
-  packSetKey: StringPublicKey;
-  walletKey: PublicKey | null;
-}): Promise<MetaState> => {
-  const updateTemp = makeSetter(state);
-
-  const packSet = await getPackSetByPubkey(connection, packSetKey);
-  processPackSets(packSet, updateTemp);
-
-  const packCards = await getCardsByPackSet({
-    connection,
-    packSetKey,
-  });
-  packCards.forEach(card => processPackCards(card, updateTemp));
-
-  if (walletKey) {
-    const provingProcess = await getProvingProcessByPackSetAndWallet({
-      connection,
-      packSetKey,
-      walletKey,
-    });
-    provingProcess.forEach(process =>
-      processProvingProcess(process, updateTemp),
-    );
-  }
-
-  const metadataKeys = Object.values(
-    state.packCardsByPackSet[packSetKey] || {},
-  ).map(({ info }) => info.metadata);
-  const newState = await pullMetadataByKeys(connection, state, metadataKeys);
-
-  await pullEditions(
-    connection,
-    updateTemp,
-    newState,
-    metadataKeys.map(m => newState.metadataByMetadata[m]),
-  );
-
-  return newState;
 };
 
 const forEach =
@@ -600,9 +448,7 @@ export const pullPages = async (
 export const pullPage = async (
   connection: Connection,
   page: number,
-  tempCache: MetaState,
-  walletKey?: PublicKey | null,
-  shouldFetchNftPacks?: boolean,
+  tempCache: MetaState
 ) => {
   const updateTemp = makeSetter(tempCache);
   const forEach =
@@ -765,10 +611,6 @@ export const pullPage = async (
         tempCache.metadataByCollection[collection] =
           tempCache.metadataByMint[collection];
       }
-    }
-
-    if (shouldFetchNftPacks) {
-      await pullPacks(connection, tempCache, walletKey);
     }
 
     if (page == 0) {
@@ -1245,17 +1087,6 @@ export const makeSetter =
       state.storeIndexer = state.storeIndexer.sort((a, b) =>
         a.info.page.sub(b.info.page).toNumber(),
       );
-    } else if (prop === 'packCardsByPackSet') {
-      if (!state.packCardsByPackSet[key]) {
-        state.packCardsByPackSet[key] = [];
-      }
-
-      const alreadyHasInState = state.packCardsByPackSet[key].some(
-        ({ pubkey }) => pubkey === value.pubkey,
-      );
-      if (!alreadyHasInState) {
-        state.packCardsByPackSet[key].push(value);
-      }
     } else {
       state[prop][key] = value;
     }
