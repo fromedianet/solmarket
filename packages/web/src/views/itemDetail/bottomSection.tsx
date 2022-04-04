@@ -61,7 +61,9 @@ export const BottomSection = (props: {
       key: 'transaction',
       render: txId => (
         <a
-          href={`https://explorer.solana.com/tx/${txId}${network === 'mainnet-beta' ? '' : `?cluster=${network}`}`}
+          href={`https://explorer.solana.com/tx/${txId}${
+            network === 'mainnet-beta' ? '' : `?cluster=${network}`
+          }`}
           target="_blank"
           rel="noreferrer"
           style={{ cursor: 'pointer' }}
@@ -93,22 +95,14 @@ export const BottomSection = (props: {
       dataIndex: 'buyer',
       key: 'buyer',
       render: text =>
-        text ? (
-          <CopySpan value={shortenAddress(text)} copyText={text} />
-        ) : (
-          ''
-        ),
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
     },
     {
       title: 'SELLER',
       dataIndex: 'seller',
       key: 'seller',
       render: text =>
-        text ? (
-          <CopySpan value={shortenAddress(text)} copyText={text} />
-        ) : (
-          ''
-        ),
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
     },
   ];
 
