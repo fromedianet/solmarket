@@ -16,6 +16,7 @@ const PER_PAGE = 20;
 type QUERIES = {
   symbol: string;
   sort: number;
+  status: boolean;
   searchKey?: string;
   attributes?: {};
   min?: number;
@@ -69,7 +70,7 @@ export const useCollection = (symbol: string) => {
         }
       });
 
-    getListedNFTs({ symbol: symbol, sort: 1 });
+    getListedNFTs({ symbol: symbol, sort: 1, status: false });
 
     getTransactionsBySymbol(symbol)
       // @ts-ignore
@@ -144,6 +145,8 @@ export const useCollection = (symbol: string) => {
     if (param.searchKey) {
       match['search'] = param.searchKey;
     }
+    match['status'] = param.status;
+
     if (param.min || param.max) {
       const price = {};
       if (param.min) {

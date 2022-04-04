@@ -7,6 +7,7 @@ import {
   Space,
   Select,
   Button,
+  Checkbox,
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -29,27 +30,39 @@ export const FilterSidebar = (props: {
       max: number | undefined;
     };
     attributes: {};
+    status: boolean;
   };
-  updateFilters: (p, a) => void;
+  updateFilters: (p, a, s) => void;
 }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [attributeFilter, setAttributeFilter] = useState(
     props.filter.attributes,
   );
+  const [status, setStatus] = useState(props.filter.status);
   const [form] = Form.useForm();
 
   useEffect(() => {
     onFillForm(props.filter.price);
     setAttributeFilter(props.filter.attributes);
+    setStatus(props.filter.status);
   }, [props.filter]);
+
+  const onStatusChange = e => {
+    setStatus(e.target.checked);
+    props.updateFilters(
+      form.getFieldsValue(),
+      attributeFilter,
+      e.target.checked,
+    );
+  };
 
   const onFinish = values => {
     if (values.min && values.max) {
       if (values.max >= values.min) {
-        props.updateFilters(values, attributeFilter);
+        props.updateFilters(values, attributeFilter, status);
       }
     } else {
-      props.updateFilters(values, attributeFilter);
+      props.updateFilters(values, attributeFilter, status);
     }
   };
 
@@ -67,7 +80,7 @@ export const FilterSidebar = (props: {
     } else {
       delete newAttributeFilter[trait];
     }
-    props.updateFilters(form.getFieldsValue(), newAttributeFilter);
+    props.updateFilters(form.getFieldsValue(), newAttributeFilter, status);
   };
 
   return (
@@ -103,6 +116,17 @@ export const FilterSidebar = (props: {
               )
             }
           >
+            <Panel
+              key="status"
+              header="Status"
+              extra={<UnorderedListOutlined className="filter-icon" />}
+            >
+              <div className="status-container">
+                <Checkbox onChange={onStatusChange} checked={status}>
+                  All items
+                </Checkbox>
+              </div>
+            </Panel>
             <Panel
               key="price"
               header="Price filter"

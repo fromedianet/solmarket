@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Select, Tag, Input, Card } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../../components/EmptyView';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { ArtContent } from '../../../components/ArtContent';
 import { ExCollection } from '../../../models/exCollection';
 
@@ -22,17 +22,20 @@ export const Items = (props: {
       max: number | undefined;
     };
     attributes: {};
+    status: boolean;
   };
   onSearch: (a: string) => void;
   onSortChange: (a: number) => void;
-  updateFilters: (p, a) => void;
+  updateFilters: (p, a, s) => void;
   fetchMore: () => void;
 }) => {
   const searchRef = useRef(null);
+  const history = useHistory();
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
   const [attributeFilter, setAttributeFilter] = useState(
     props.filter.attributes,
   );
+  const [status, setStatus] = useState(props.filter.status);
   const [priceTag, setPriceTag] = useState<string | undefined>();
 
   useEffect(() => {
@@ -41,6 +44,9 @@ export const Items = (props: {
     }
     if (props.filter.attributes !== attributeFilter) {
       setAttributeFilter(props.filter.attributes);
+    }
+    if (props.filter.status !== status) {
+      setStatus(props.filter.status);
     }
   }, [props.filter]);
 
@@ -62,10 +68,15 @@ export const Items = (props: {
   };
 
   const onRefresh = () => {
-    console.log('refresh');
+    history.go(0);
+  };
+
+  const onCloseStatusTag = () => {
+    props.updateFilters(priceFilter, attributeFilter, false);
   };
 
   const onClosePriceTag = () => {
+    setStatus(false);
     props.updateFilters(
       {
         symbol: 'SOL',
@@ -73,6 +84,7 @@ export const Items = (props: {
         max: undefined,
       },
       attributeFilter,
+      status,
     );
   };
 
@@ -87,7 +99,7 @@ export const Items = (props: {
       delete newAttributeFilter[splitKey[0]];
     }
 
-    props.updateFilters(priceFilter, newAttributeFilter);
+    props.updateFilters(priceFilter, newAttributeFilter, status);
   };
 
   const onClearAll = () => {
@@ -98,6 +110,7 @@ export const Items = (props: {
         max: undefined,
       },
       {},
+      false,
     );
   };
 
@@ -133,6 +146,11 @@ export const Items = (props: {
         </Col>
       </Row>
       <div className="tag-container">
+        {status && (
+          <Tag key="status-tag" closable onClose={onCloseStatusTag}>
+            All items
+          </Tag>
+        )}
         {priceTag && (
           <Tag key="price-tag" closable onClose={onClosePriceTag}>
             {priceTag}
