@@ -10,12 +10,7 @@ export const useAuthAPI = () => {
 
   function fetchNonce(wallet: string) {
     return new Promise((resolve, reject) => {
-      runAPI(
-        false,
-        'post',
-        '/nonce/fetch',
-        JSON.stringify({ wallet })
-      ) // @ts-ignore
+      runAPI(false, 'post', '/nonce/fetch', JSON.stringify({ wallet })) // @ts-ignore
         .then((res: {}) => {
           if (res['data']['nonce']) {
             resolve(res['data']['nonce']);
@@ -35,7 +30,7 @@ export const useAuthAPI = () => {
         false,
         'post',
         '/user/login',
-        JSON.stringify({ publicKey, signature })
+        JSON.stringify({ publicKey, signature }),
       ) // @ts-ignore
         .then((res: {}) => {
           if (res['data']) {

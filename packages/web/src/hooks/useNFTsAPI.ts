@@ -33,8 +33,8 @@ export const useNFTsAPI = () => {
 
   /**
    * Get NFT by mint address
-   * @param mint 
-   * @returns 
+   * @param mint
+   * @returns
    */
   async function getNftByMint(mint: string) {
     const result = await runAPI(
@@ -55,7 +55,7 @@ export const useNFTsAPI = () => {
       false,
       'post',
       '/nfts/getNFTsByWallet',
-      JSON.stringify({ wallet })
+      JSON.stringify({ wallet }),
     );
     return result;
   }

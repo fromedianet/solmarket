@@ -38,7 +38,7 @@ export const ProfileView = () => {
             setMyItems(result.filter(item => item.price === 0));
             setListedItems(result.filter(item => item.price > 0));
           }
-        })
+        });
     }
   }, [wallet.publicKey]);
 
@@ -46,7 +46,7 @@ export const ProfileView = () => {
     let total = 0;
     listedItems.forEach(item => {
       total += item.price;
-    })
+    });
     setTotalFloorPrice(total);
   }, [listedItems]);
 
@@ -70,10 +70,18 @@ export const ProfileView = () => {
 
   if (!wallet.connected) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ color: 'white' }}>Connect wallet to see your profile page</p>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <p style={{ color: 'white' }}>
+          Connect wallet to see your profile page
+        </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -116,7 +124,10 @@ export const ProfileView = () => {
                   Edit Profile
                 </Button>
               ) : (
-                <Button className='profile-button' onClick={async () => await authentication()}>
+                <Button
+                  className="profile-button"
+                  onClick={async () => await authentication()}
+                >
                   Sign in
                 </Button>
               )
@@ -126,7 +137,10 @@ export const ProfileView = () => {
           </div>
           <Row className="profile-details">
             <Col span={12} md={8} lg={6} className="details-container">
-              <Statistic title="TOTAL FLOOR VALUE" value={`${totalFloorPrice > 0 ? totalFloorPrice : '---'} SOL`} />
+              <Statistic
+                title="TOTAL FLOOR VALUE"
+                value={`${totalFloorPrice > 0 ? totalFloorPrice : '---'} SOL`}
+              />
             </Col>
           </Row>
           <Tabs defaultActiveKey="1" className="profile-tabs">
@@ -135,10 +149,7 @@ export const ProfileView = () => {
                 <Row gutter={[16, 16]}>
                   {myItems.map((item, index) => (
                     <Col key={index} span={12} md={8} lg={6} xl={4}>
-                      <NFTCard
-                        item={item}
-                        collection={item.collectionName}
-                      />
+                      <NFTCard item={item} collection={item.collectionName} />
                     </Col>
                   ))}
                 </Row>
@@ -151,10 +162,7 @@ export const ProfileView = () => {
                 <Row gutter={[16, 16]}>
                   {listedItems.map((item, index) => (
                     <Col key={index} span={12} md={8} lg={6} xl={4}>
-                      <NFTCard
-                        item={item}
-                        collection={item.collectionName}
-                      />
+                      <NFTCard item={item} collection={item.collectionName} />
                     </Col>
                   ))}
                 </Row>
