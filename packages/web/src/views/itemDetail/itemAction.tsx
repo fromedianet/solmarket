@@ -106,20 +106,20 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
-          const txId = result['txid'];
-          if (txId) {
-            await callList({
-              transaction: txId,
-              seller: wallet.publicKey!.toBase58(),
-              mint: props.nft.mint,
-              symbol: props.nft.symbol,
-              price: price,
-            });
-          }
+          // const txId = result['txid'];
+          // if (txId) {
+          //   await callList({
+          //     transaction: txId,
+          //     seller: wallet.publicKey!.toBase58(),
+          //     mint: props.nft.mint,
+          //     symbol: props.nft.symbol,
+          //     price: price,
+          //   });
+          // }
           resolve('');
-          setTimeout(() => {
-            props.onRefresh();
-          }, 6000);
+          // setTimeout(() => {
+          //   props.onRefresh();
+          // }, 6000);
         } else {
           reject();
         }
