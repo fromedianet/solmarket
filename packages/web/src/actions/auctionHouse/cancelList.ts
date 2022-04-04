@@ -4,7 +4,11 @@ import {
   toPublicKey,
   WalletSigner,
 } from '@oyster/common';
-import { Connection, PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY } from '@solana/web3.js';
+import {
+  Connection,
+  PublicKey,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
+} from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import { getAtaForMint } from '../../views/launchpadDetail/utils';
 
@@ -15,7 +19,8 @@ export async function sendCancelList(params: {
   mint: string;
 }) {
   const { connection, wallet, buyerPrice, mint } = params;
-  const { createCancelInstruction, createCancelListingReceiptInstruction } = AuctionHouseProgram.instructions;
+  const { createCancelInstruction, createCancelListingReceiptInstruction } =
+    AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
 
@@ -54,14 +59,14 @@ export async function sendCancelList(params: {
       },
     );
 
-    const [receipt] = await AuctionHouseProgram.findListingReceiptAddress(tradeState);
-    const cancelReceiptInstruction = createCancelListingReceiptInstruction(
-      {
-        receipt: receipt,
-        instruction: SYSVAR_INSTRUCTIONS_PUBKEY
-      }
+    const [receipt] = await AuctionHouseProgram.findListingReceiptAddress(
+      tradeState,
     );
-    
+    const cancelReceiptInstruction = createCancelListingReceiptInstruction({
+      receipt: receipt,
+      instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+    });
+
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
