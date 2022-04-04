@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
 
 import { queryExtendedMetadata } from './queryExtendedMetadata';
 import { getEmptyMetaState } from './getEmptyMetaState';
@@ -20,14 +19,7 @@ import { MetaContextState, MetaState } from './types';
 import { useConnection } from '../connection';
 import { useStore } from '../store';
 import { AuctionData, BidderMetadata, BidderPot } from '../../actions';
-import {
-  pullAuctionSubaccounts,
-  pullPage,
-  pullPayoutTickets,
-  pullStoreMetadata,
-  pullPacks,
-  pullPack,
-} from '.';
+import { pullAuctionSubaccounts, pullPage, pullStoreMetadata } from '.';
 import { StringPublicKey, TokenAccount, useUserAccounts } from '../..';
 
 const MetaContext = React.createContext<MetaContextState>({
@@ -45,7 +37,6 @@ export function MetaProvider({
 }) {
   const connection = useConnection();
   const { isReady, storeAddress } = useStore();
-  const wallet = useWallet();
 
   const [state, setState] = useState<MetaState>(getEmptyMetaState());
   const [page, setPage] = useState(0);
@@ -100,30 +91,6 @@ export function MetaProvider({
     return [];
   }
 
-  async function pullBillingPage(auctionAddress: StringPublicKey) {
-    if (isLoading) return false;
-    if (!storeAddress) {
-      if (isReady) {
-        setIsLoading(false);
-      }
-      return;
-    } else if (!state.store) {
-      setIsLoading(true);
-    }
-    const nextState = await pullAuctionSubaccounts(
-      connection,
-      auctionAddress,
-      state,
-    );
-
-    console.log('-----> Pulling all payout tickets');
-    await pullPayoutTickets(connection, nextState);
-
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
-    return [];
-  }
-
   async function pullAuctionListData(auctionAddress: StringPublicKey) {
     const nextState = await pullAuctionData(connection, auctionAddress, state);
     setState(nextState);
@@ -149,39 +116,6 @@ export function MetaProvider({
     setState(nextState);
     await updateMints(nextState.metadataByMint);
     return nextState;
-  }
-
-  async function pullItemsPage(
-    userTokenAccounts: TokenAccount[],
-  ): Promise<void> {
-    if (isFetching) {
-      return;
-    }
-
-    const shouldEnableNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
-    const packsState = shouldEnableNftPacks
-      ? await pullPacks(connection, state, wallet?.publicKey)
-      : state;
-
-    await pullUserMetadata(userTokenAccounts, packsState);
-  }
-
-  async function pullPackPage(
-    userTokenAccounts: TokenAccount[],
-    packSetKey: StringPublicKey,
-  ): Promise<void> {
-    if (isFetching) {
-      return;
-    }
-
-    const packState = await pullPack({
-      connection,
-      state,
-      packSetKey,
-      walletKey: wallet?.publicKey,
-    });
-
-    await pullUserMetadata(userTokenAccounts, packState);
   }
 
   async function pullUserMetadata(
@@ -214,12 +148,12 @@ export function MetaProvider({
     }
     console.log('------->Query started');
 
-    const nextState = await loadAccounts(connection);
+    // const nextState = await loadAccounts(connection);
 
-    console.log('------->Query finished');
+    // console.log('------->Query finished');
 
-    setState(nextState);
-    await updateMints(nextState.metadataByMint);
+    // setState(nextState);
+    // await updateMints(nextState.metadataByMint);
     return;
   }
 
@@ -237,60 +171,45 @@ export function MetaProvider({
       setIsLoading(true);
     }
 
-    const shouldFetchNftPacks = process.env.NEXT_ENABLE_NFT_PACKS === 'true';
-    let nextState = await pullPage(
-      connection,
-      page,
-      state,
-      wallet?.publicKey,
-      shouldFetchNftPacks,
-    );
+    let nextState = await pullPage(connection, page, state);
     console.log('-----> Query started');
 
     if (nextState.storeIndexer.length) {
       if (USE_SPEED_RUN) {
-        nextState = await limitedLoadAccounts(connection);
+        // nextState = await limitedLoadAccounts(connection);
 
-        console.log('------->Query finished');
+        // console.log('------->Query finished');
 
-        setState(nextState);
+        // setState(nextState);
 
         //@ts-ignore
         window.loadingData = false;
         setIsLoading(false);
       } else {
-        console.log('------->Pagination detected, pulling page', page);
+        // console.log('------->Pagination detected, pulling page', page);
 
-        const auction = window.location.href.match(/#\/auction\/(\w+)/);
-        const billing = window.location.href.match(
-          /#\/auction\/(\w+)\/billing/,
-        );
-        if (auction && page == 0) {
-          console.log(
-            '---------->Loading auction page on initial load, pulling sub accounts',
-          );
+        // const auction = window.location.href.match(/#\/auction\/(\w+)/);
+        // if (auction && page == 0) {
+        //   console.log(
+        //     '---------->Loading auction page on initial load, pulling sub accounts',
+        //   );
 
-          nextState = await pullAuctionSubaccounts(
-            connection,
-            auction[1],
-            nextState,
-          );
+        //   nextState = await pullAuctionSubaccounts(
+        //     connection,
+        //     auction[1],
+        //     nextState,
+        //   );
+        // }
 
-          if (billing) {
-            console.log('-----> Pulling all payout tickets');
-            await pullPayoutTickets(connection, nextState);
-          }
-        }
-
-        let currLastLength;
-        setLastLength(last => {
-          currLastLength = last;
-          return last;
-        });
-        if (nextState.storeIndexer.length != currLastLength) {
-          setPage(page => page + 1);
-        }
-        setLastLength(nextState.storeIndexer.length);
+        // let currLastLength;
+        // setLastLength(last => {
+        //   currLastLength = last;
+        //   return last;
+        // });
+        // if (nextState.storeIndexer.length != currLastLength) {
+        //   setPage(page => page + 1);
+        // }
+        // setLastLength(nextState.storeIndexer.length);
 
         //@ts-ignore
         window.loadingData = false;
@@ -298,14 +217,14 @@ export function MetaProvider({
         setState(nextState);
       }
     } else {
-      console.log('------->No pagination detected');
-      nextState = !USE_SPEED_RUN
-        ? await loadAccounts(connection)
-        : await limitedLoadAccounts(connection);
+      // console.log('------->No pagination detected');
+      // nextState = !USE_SPEED_RUN
+      //   ? await loadAccounts(connection)
+      //   : await limitedLoadAccounts(connection);
 
-      console.log('------->Query finished');
+      // console.log('------->Query finished');
 
-      setState(nextState);
+      // setState(nextState);
 
       //@ts-ignore
       window.loadingData = false;
@@ -314,21 +233,21 @@ export function MetaProvider({
 
     console.log('------->set finished');
 
-    if (auctionAddress && bidderAddress) {
-      nextState = await pullAuctionSubaccounts(
-        connection,
-        auctionAddress,
-        nextState,
-      );
-      setState(nextState);
+    // if (auctionAddress && bidderAddress) {
+    //   nextState = await pullAuctionSubaccounts(
+    //     connection,
+    //     auctionAddress,
+    //     nextState,
+    //   );
+    //   setState(nextState);
 
-      const auctionBidderKey = auctionAddress + '-' + bidderAddress;
-      return [
-        nextState.auctions[auctionAddress],
-        nextState.bidderPotsByAuctionAndBidder[auctionBidderKey],
-        nextState.bidderMetadataByAuctionAndBidder[auctionBidderKey],
-      ];
-    }
+    //   const auctionBidderKey = auctionAddress + '-' + bidderAddress;
+    //   return [
+    //     nextState.auctions[auctionAddress],
+    //     nextState.bidderPotsByAuctionAndBidder[auctionBidderKey],
+    //     nextState.bidderMetadataByAuctionAndBidder[auctionBidderKey],
+    //   ];
+    // }
   }
 
   useEffect(() => {
@@ -381,11 +300,8 @@ export function MetaProvider({
         update,
         pullAuctionPage,
         pullAllMetadata,
-        pullBillingPage,
         // @ts-ignore
         pullAllSiteData,
-        pullItemsPage,
-        pullPackPage,
         pullUserMetadata,
         pullAuctionListData,
         isLoading,

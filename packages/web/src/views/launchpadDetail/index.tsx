@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import * as anchor from '@project-serum/anchor';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Row, Col, Spin, Button, Progress } from 'antd';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import {
@@ -32,6 +32,7 @@ export const LaunchpadDetailView = () => {
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState({});
   const [candyMachineId, setCandyMachineId] = useState<PublicKey>();
@@ -429,7 +430,11 @@ export const LaunchpadDetailView = () => {
                       </div>
                     </Col>
                     <Col span={24} xxl={10} className="btn-content">
-                      <Button className="mint-btn">Visit Collection</Button>
+                      <Button className="mint-btn" onClick={() => {
+                        history.push(`/marketplace/${symbol}`)
+                      }}>
+                        Visit Collection
+                      </Button>
                     </Col>
                   </Row>
                 ) : (

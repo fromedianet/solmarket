@@ -2,9 +2,9 @@ import React from 'react';
 import { Menu, Layout } from 'antd';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 import {
-  BarChartOutlined,
+  // BarChartOutlined,
   BarsOutlined,
-  BellOutlined,
+  // BellOutlined,
   CopyrightOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
@@ -53,18 +53,18 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
       >
         <Link to="/launchpad">Launchpad</Link>
       </Menu.Item>
-      <Menu.Item
+      {/* <Menu.Item
         key="auctions"
         icon={<BellOutlined style={{ fontSize: 20 }} />}
       >
         <Link to="/auctions">Auctions</Link>
-      </Menu.Item>
-      <Menu.Item
+      </Menu.Item> */}
+      {/* <Menu.Item
         key="stats"
         icon={<BarChartOutlined style={{ fontSize: 20 }} />}
       >
         <Link to="/stats">Stats</Link>
-      </Menu.Item>
+      </Menu.Item> */}
       <SubMenu
         key="creators"
         title="Creators"
