@@ -43,7 +43,7 @@ const UserActions = (props: { onClick?: any }) => {
               Create NFT
             </Button>
           </Link>
-          <Link to={`/auction/create/0`}>
+          <Link to={`/profile`}>
             <Button
               onClick={() => {
                 props.onClick ? props.onClick() : null;
