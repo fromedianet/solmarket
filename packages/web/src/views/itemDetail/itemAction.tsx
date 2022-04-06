@@ -103,6 +103,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -144,6 +147,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -187,6 +193,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -228,8 +237,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
-          props.onRefresh();
         } else {
           reject();
         }

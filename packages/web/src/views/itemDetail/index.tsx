@@ -18,7 +18,7 @@ export const ItemDetailView = () => {
     const filters = transactions.filter(item => item.txType === 'SALE');
     const data = filters.map(item => ({
       date: getDateStringFromUnixTimestamp(item.blockTime),
-      price: (item.price || 0),
+      price: item.price || 0,
     }));
     if (data.length > 0) {
       setPriceData(data);

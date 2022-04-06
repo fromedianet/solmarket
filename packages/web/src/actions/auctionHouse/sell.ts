@@ -21,7 +21,7 @@ export async function sendSell(params: {
   wallet: WalletSigner;
   buyerPrice: number;
   mint: string;
-  nft: NFT,
+  nft: NFT;
 }) {
   const { connection, seller, wallet, buyerPrice, mint, nft } = params;
   const {
@@ -159,7 +159,7 @@ export async function sendSell(params: {
     const executeSaleInstructionEx = new TransactionInstruction({
       programId: AuctionHouseProgram.PUBKEY,
       data: executeSaleInstruction.data,
-      keys: executeSaleInstruction.keys.concat(creatorKeys)
+      keys: executeSaleInstruction.keys.concat(creatorKeys),
     });
 
     const [purchaseReceipt, purchaseReceiptBump] =
@@ -169,7 +169,7 @@ export async function sendSell(params: {
       );
     const [listingReceipt] =
       await AuctionHouseProgram.findListingReceiptAddress(sellerTradeState);
-      
+
     const purchaseReceiptInstruction = createPrintPurchaseReceiptInstruction(
       {
         purchaseReceipt: purchaseReceipt,
