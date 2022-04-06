@@ -15,7 +15,6 @@ import {
   sendSell,
   sendPlaceBid,
 } from '../../actions/auctionHouse';
-import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 interface PriceValue {
@@ -60,8 +59,6 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const connection = useConnection();
   const { account } = useNativeAccount();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
-  const { callList, callCancelList, callSell, callPlaceBid } =
-    useTransactionsAPI();
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
   const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
@@ -106,20 +103,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
-          const txId = result['txid'];
-          if (txId) {
-            await callList({
-              transaction: txId,
-              seller: wallet.publicKey!.toBase58(),
-              mint: props.nft.mint,
-              symbol: props.nft.symbol,
-              price: price,
-            });
-          }
           resolve('');
-          setTimeout(() => {
-            props.onRefresh();
-          }, 6000);
         } else {
           reject();
         }
@@ -135,7 +119,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       {
         pending: 'Listing now...',
         error: 'Listing rejected.',
-        success: 'Listing successed.',
+        success: 'Listing successed. NFT data maybe updated in a minute',
       },
       {
         position: 'top-center',
@@ -160,19 +144,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
-          const txId = result['txid'];
-          if (txId) {
-            await callCancelList({
-              transaction: txId,
-              seller: wallet.publicKey!.toBase58(),
-              mint: props.nft.mint,
-              symbol: props.nft.symbol,
-            });
-          }
           resolve('');
-          setTimeout(() => {
-            props.onRefresh();
-          }, 6000);
         } else {
           reject();
         }
@@ -188,7 +160,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       {
         pending: 'Cancel listing now...',
         error: 'Cancel listing rejected.',
-        success: 'Cancel listing successed.',
+        success: 'Cancel listing successed. NFT data maybe updated in a minute',
       },
       {
         position: 'top-center',
@@ -214,21 +186,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
-          const txId = result['txid'];
-          if (txId) {
-            await callSell({
-              transaction: txId,
-              seller: props.nft.updateAuthority,
-              buyer: wallet.publicKey!.toBase58(),
-              mint: props.nft.mint,
-              symbol: props.nft.symbol,
-              price: price,
-            });
-          }
           resolve('');
-          setTimeout(() => {
-            props.onRefresh();
-          }, 6000);
         } else {
           reject();
         }
@@ -244,7 +202,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       {
         pending: 'Listing now...',
         error: 'Listing rejected.',
-        success: 'Listing successed.',
+        success: 'Listing successed. NFT data maybe updated in a minute',
       },
       {
         position: 'top-center',
@@ -269,20 +227,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
-          const txId = result['txid'];
-          if (txId) {
-            await callPlaceBid({
-              transaction: txId,
-              buyer: wallet.publicKey!.toBase58(),
-              mint: props.nft.mint,
-              symbol: props.nft.symbol,
-              price: price,
-            });
-          }
           resolve('');
-          setTimeout(() => {
-            props.onRefresh();
-          }, 6000);
           props.onRefresh();
         } else {
           reject();
@@ -299,7 +244,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       {
         pending: 'Listing now...',
         error: 'Listing rejected.',
-        success: 'Listing successed.',
+        success: 'Listing successed. NFT data maybe updated in a minute',
       },
       {
         position: 'top-center',
