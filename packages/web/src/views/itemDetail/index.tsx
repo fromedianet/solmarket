@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { BottomSection } from './bottomSection';
 import { InfoSection } from './infoSection';
 import { EmptyView } from '../../components/EmptyView';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 import { useNFT } from '../../hooks/useNFT';
 
@@ -19,7 +18,7 @@ export const ItemDetailView = () => {
     const filters = transactions.filter(item => item.txType === 'SALE');
     const data = filters.map(item => ({
       date: getDateStringFromUnixTimestamp(item.blockTime),
-      price: (item.price || 0) / LAMPORTS_PER_SOL,
+      price: (item.price || 0),
     }));
     if (data.length > 0) {
       setPriceData(data);
