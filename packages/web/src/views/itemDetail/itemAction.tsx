@@ -103,6 +103,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -144,6 +147,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -184,8 +190,12 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           wallet,
           buyerPrice: price,
           mint: props.nft.mint,
+          nft: props.nft,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -200,9 +210,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Listing now...',
-        error: 'Listing rejected.',
-        success: 'Listing successed. NFT data maybe updated in a minute',
+        pending: 'Purchase now...',
+        error: 'Purchase rejected.',
+        success: 'Purchase successed. NFT data maybe updated in a minute',
       },
       {
         position: 'top-center',
@@ -227,8 +237,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (result['status'] && !result['status']['err']) {
+          setTimeout(() => {
+            props.onRefresh();
+          }, 7000);
           resolve('');
-          props.onRefresh();
         } else {
           reject();
         }
@@ -242,9 +254,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Listing now...',
-        error: 'Listing rejected.',
-        success: 'Listing successed. NFT data maybe updated in a minute',
+        pending: 'Place bid now...',
+        error: 'Bid rejected.',
+        success: 'Bid successed. NFT data maybe updated in a minute',
       },
       {
         position: 'top-center',
