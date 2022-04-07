@@ -10,7 +10,7 @@ export const useNFT = (mint: string) => {
   const [nft, setNFT] = useState<NFT>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
-  const { getNftByMint } = useNFTsAPI();
+  const { getNftByMint, updateInfo } = useNFTsAPI();
   const { getTransactionsByMint } = useTransactionsAPI();
 
   useEffect(() => {
@@ -28,6 +28,12 @@ export const useNFT = (mint: string) => {
                 ...data,
                 ...res,
               });
+              if (!data.tokenAddress) {
+                updateInfo({
+                  ...res,
+                  mint,
+                });
+              }
             }
           });
         }
