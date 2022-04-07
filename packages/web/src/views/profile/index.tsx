@@ -3,13 +3,12 @@ import {
   CopySpan,
   MetaplexModal,
   shortenAddress,
+  useConnection,
   useConnectionConfig,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useEffect, useState } from 'react';
 import { Button, Row, Col, Statistic, Tabs, Form, Input, Table } from 'antd';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
 import { useCreator } from '../../hooks';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
@@ -17,11 +16,9 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { NFTCard } from '../marketplace/components/Items';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { Transaction } from '../../models/exCollection';
-
-TimeAgo.setDefaultLocale(en.locale);
-TimeAgo.addLocale(en);
-// Create formatter (English).
-const timeAgo = new TimeAgo('en-US');
+import { ActivityColumns, OffersMadeColumns } from './tableColumns';
+import { PriceInput } from '../../components/PriceInput';
+import { showEscrow } from '../../actions/auctionHouse/showEscrow';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -35,95 +32,31 @@ export const ProfileView = () => {
   const [myItems, setMyItems] = useState<any[]>([]);
   const [listedItems, setListedItems] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [offersMade, setOffersMade] = useState<any[]>([]);
+  const [offersReceived, setOffersReceived] = useState<any[]>([]);
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [withdrawValue, setWithdrawValue] = useState(0);
+  const [depositValue, setDepositValue] = useState(0);
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
+  const connection = useConnection();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
-  const { getTransactionsByWallet } = useTransactionsAPI();
+  const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
+    useTransactionsAPI();
 
-  const getColor = txType => {
-    if (txType === 'SALE') {
-      return '#2fc27d';
-    } else if (txType === 'PLACE BID') {
-      return '#6d79c9';
-    } else if (txType === 'LISTING') {
-      return '#f8f7f8';
-    } else {
-      return '#9c93a5';
-    }
-  };
-
-  const columns = [
-    {
-      title: '',
-      dataIndex: 'image',
-      key: 'image',
-      render: uri => <img src={uri} width={40} alt="image" />,
-    },
-    {
-      title: 'NAME',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => (
-        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
-          {record.name}
-        </a>
-      ),
-    },
-    {
-      title: 'TRANSACTION ID',
-      dataIndex: 'transaction',
-      key: 'transaction',
-      render: txId => (
-        <a
-          href={`https://explorer.solana.com/tx/${txId}${
-            network === 'mainnet-beta' ? '' : `?cluster=${network}`
-          }`}
-          target="_blank"
-          rel="noreferrer"
-          style={{ cursor: 'pointer' }}
-        >
-          {shortenAddress(txId)}
-        </a>
-      ),
-    },
-    {
-      title: 'TRANSACTION TYPE',
-      dataIndex: 'txType',
-      key: 'txType',
-      render: type => <span style={{ color: getColor(type) }}>{type}</span>,
-    },
-    {
-      title: 'TIME',
-      dataIndex: 'blockTime',
-      key: 'blockTime',
-      render: timestamp => timeAgo.format(timestamp * 1000),
-    },
-    {
-      title: 'TOTAL AMOUNT',
-      dataIndex: 'price',
-      key: 'price',
-      render: price => price > 0 && `${price} SOL`,
-    },
-    {
-      title: 'BUYER',
-      dataIndex: 'buyer',
-      key: 'buyer',
-      render: text =>
-        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
-    },
-    {
-      title: 'SELLER',
-      dataIndex: 'seller',
-      key: 'seller',
-      render: text =>
-        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
-    },
-  ];
+  const activityColumns = ActivityColumns(network);
+  const offersMadeColumns = OffersMadeColumns({
+    balance: balance,
+    onCancel: () => {},
+    onDeposit: () => {},
+  });
 
   useEffect(() => {
     if (wallet.publicKey) {
+      showEscrow(connection, wallet.publicKey).then(val => setBalance(val));
+
       getNFTsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
@@ -139,6 +72,22 @@ export const ProfileView = () => {
         .then((res: {}) => {
           if (res['data']) {
             setTransactions(res['data']);
+          }
+        });
+
+      getOffersMade(wallet.publicKey.toBase58())
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            setOffersMade(res['data']);
+          }
+        });
+
+      getOffersReceived(wallet.publicKey.toBase58())
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            setOffersReceived(res['data']);
           }
         });
     }
@@ -270,14 +219,19 @@ export const ProfileView = () => {
               )}
             </TabPane>
             <TabPane tab="Offers made" key="3">
-              Offers made - Comming soom
+              <Table
+                columns={offersMadeColumns}
+                dataSource={offersMade}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
             </TabPane>
             <TabPane tab="Offers received" key="4">
               Offers received - Comming soon
             </TabPane>
             <TabPane tab="Activites" key="5">
               <Table
-                columns={columns}
+                columns={activityColumns}
                 dataSource={transactions}
                 style={{ overflowX: 'auto' }}
                 pagination={{ position: ['bottomLeft'], pageSize: 10 }}
@@ -324,6 +278,61 @@ export const ProfileView = () => {
           </Form>
         </div>
       </MetaplexModal>
+      <div className="balance-container">
+        <Row>
+          <Col
+            span={24}
+            md={12}
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <span className="label">
+              Account balance:{' '}
+              <span style={{ color: '#eb2f96' }}>{`${balance} SOL`}</span>
+            </span>
+          </Col>
+          <Col span={24} md={12}>
+            <div className="right-container">
+              <div>
+                <span className="balance-label">Deposit</span>
+                <div className="button-container">
+                  <PriceInput
+                    placeholder="Price"
+                    addonAfter="SOL"
+                    className="balance-input"
+                    value={{ number: depositValue }}
+                    onChange={val => setDepositValue(val.number || 0)}
+                  />
+                  <span
+                    className={`balance-btn ${depositValue <= 0 && 'disabled'}`}
+                  >
+                    Deposit
+                  </span>
+                </div>
+              </div>
+              <div>
+                <span className="balance-label">Withdraw</span>
+                <div className="button-container">
+                  <PriceInput
+                    placeholder="Price"
+                    addonAfter="SOL"
+                    className="balance-input"
+                    value={{ number: withdrawValue }}
+                    onChange={val => setWithdrawValue(val.number || 0)}
+                  />
+                  <span
+                    className={`balance-btn ${
+                      (withdrawValue <= 0 || withdrawValue > balance) &&
+                      'disabled'
+                    }`}
+                  >
+                    Withdraw
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
