@@ -20,7 +20,7 @@ export async function sendPlaceBid(params: {
   const { connection, wallet, buyerPrice, mint } = params;
   const {
     createDepositInstruction,
-    createPublicBuyInstruction,
+    createBuyInstruction,
     createPrintBidReceiptInstruction,
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
@@ -71,7 +71,7 @@ export async function sendPlaceBid(params: {
       },
     );
 
-    const publicBuyInstruction = createPublicBuyInstruction(
+    const buyInstruction = createBuyInstruction(
       {
         wallet: buyerKey,
         paymentAccount: buyerKey,
@@ -109,7 +109,7 @@ export async function sendPlaceBid(params: {
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [depositInstruction, publicBuyInstruction, printBidReceiptInstruction],
+      [depositInstruction, buyInstruction, printBidReceiptInstruction],
       [],
     );
 
