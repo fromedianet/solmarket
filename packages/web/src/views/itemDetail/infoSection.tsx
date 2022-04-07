@@ -3,7 +3,7 @@ import { Row, Col, Collapse, Skeleton, Statistic } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { ArtContent } from '../../components/ArtContent';
 import { Link } from 'react-router-dom';
-import { CopySpan, shortenAddress } from '@oyster/common';
+import { CopySpan, shortenAddress, useConnectionConfig } from '@oyster/common';
 import {
   LineChart,
   Line,
@@ -22,6 +22,9 @@ export const InfoSection = (props: {
   priceData: any[];
   onRefresh: () => void;
 }) => {
+  const endpoint = useConnectionConfig();
+  const network = endpoint.endpoint.name;
+
   return (
     <Row gutter={24}>
       <Col span={24} lg={12}>
@@ -140,6 +143,34 @@ export const InfoSection = (props: {
               <div className="sub-container">
                 <span className="details-key">Mint Address</span>
                 <div className="details-value">
+                  <a
+                    href={`https://solscan.io/token/${props.nft.mint}${
+                      network === 'mainnet-beta' ? '' : `?cluster=${network}`
+                    }`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src="/icons/solscan.png"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <a
+                    href={`https://explorer.solana.com/address/${
+                      props.nft.mint
+                    }${
+                      network === 'mainnet-beta' ? '' : `?cluster=${network}`
+                    }`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
+                  >
+                    <img
+                      src="/icons/sol.svg"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
                   <CopySpan
                     value={shortenAddress(props.nft.mint)}
                     copyText={props.nft.mint}
@@ -147,11 +178,78 @@ export const InfoSection = (props: {
                 </div>
               </div>
               <div className="sub-container">
+                <span className="details-key">Token Address</span>
+                <div className="details-value">
+                  <a
+                    href={`https://solscan.io/address/${
+                      props.nft.tokenAddress
+                    }${
+                      network === 'mainnet-beta' ? '' : `?cluster=${network}`
+                    }`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src="/icons/solscan.png"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <a
+                    href={`https://explorer.solana.com/address/${
+                      props.nft.tokenAddress
+                    }${
+                      network === 'mainnet-beta' ? '' : `?cluster=${network}`
+                    }`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
+                  >
+                    <img
+                      src="/icons/sol.svg"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <CopySpan
+                    value={shortenAddress(props.nft.tokenAddress)}
+                    copyText={props.nft.tokenAddress}
+                  />
+                </div>
+              </div>
+              <div className="sub-container">
                 <span className="details-key">Owner</span>
                 <div className="details-value">
+                  <a
+                    href={`https://solscan.io/address/${props.nft.owner}${
+                      network === 'mainnet-beta' ? '' : `?cluster=${network}`
+                    }`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src="/icons/solscan.png"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <a
+                    href={`https://explorer.solana.com/address/${
+                      props.nft.owner
+                    }${
+                      network === 'mainnet-beta' ? '' : `?cluster=${network}`
+                    }`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
+                  >
+                    <img
+                      src="/icons/sol.svg"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
                   <CopySpan
-                    value={shortenAddress(props.nft.updateAuthority || '')}
-                    copyText={props.nft.updateAuthority || ''}
+                    value={shortenAddress(props.nft.owner)}
+                    copyText={props.nft.owner}
                   />
                 </div>
               </div>
@@ -160,6 +258,14 @@ export const InfoSection = (props: {
                 <div className="details-value">
                   {((props.nft.seller_fee_basis_points || 0) / 100).toFixed(2)}%
                 </div>
+              </div>
+              <div className="sub-container">
+                <span className="details-key">Transaction Fee</span>
+                <div className="details-value">2%</div>
+              </div>
+              <div className="sub-container">
+                <span className="details-key">List/Bid/Cancel</span>
+                <div className="details-value">Free</div>
               </div>
             </div>
           </Panel>

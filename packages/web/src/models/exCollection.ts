@@ -42,7 +42,8 @@ export type ExNFT = {
 
 export type NFT = {
   mint: string;
-  updateAuthority: string;
+  owner: string;
+  tokenAddress: string;
   metadataAddress: string;
   name: string;
   symbol: string;

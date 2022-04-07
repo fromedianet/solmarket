@@ -60,10 +60,25 @@ export const useNFTsAPI = () => {
     return result;
   }
 
+  async function updateInfo(params: {
+    mint: string,
+    tokenAddress: string,
+    owner: string,
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/nfts/updateInfo',
+      JSON.stringify(params),
+    );
+    return result;
+  }
+
   return {
     createNft,
     getListedNftsByQuery,
     getNftByMint,
     getNFTsByWallet,
+    updateInfo,
   };
 };

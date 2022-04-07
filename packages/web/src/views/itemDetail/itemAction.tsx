@@ -61,7 +61,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
-  const isOwner = props.nft.updateAuthority === wallet.publicKey?.toBase58();
+  const isOwner = props.nft.owner === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
   const checkPrice = (_: any, value: { number: number }) => {
     if (value && value.number > 0) {
@@ -186,7 +186,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       try {
         const result = await sendSell({
           connection,
-          seller: props.nft.updateAuthority,
+          seller: props.nft.owner,
           wallet,
           buyerPrice: price,
           mint: props.nft.mint,
