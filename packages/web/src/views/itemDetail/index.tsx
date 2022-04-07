@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { BottomSection } from './bottomSection';
 import { InfoSection } from './infoSection';
 import { EmptyView } from '../../components/EmptyView';
@@ -14,9 +14,9 @@ export const ItemDetailView = () => {
   const { mint } = useParams<{ mint: string }>();
   const [priceData, setPriceData] = useState<any[]>([]);
   const [nftList, setNFTList] = useState<NFT[]>([]);
-  const history = useHistory();
+  const [refresh, setRefresh] = useState(0);
   const { getListedNftsByQuery } = useNFTsAPI();
-  const { nft, loading, transactions } = useNFT(mint);
+  const { nft, loading, transactions } = useNFT(mint, refresh);
 
   useEffect(() => {
     const filters = transactions.filter(item => item.txType === 'SALE');
@@ -57,7 +57,7 @@ export const ItemDetailView = () => {
               <InfoSection
                 nft={nft}
                 priceData={priceData}
-                onRefresh={() => history.go(0)}
+                onRefresh={() => setRefresh(Date.now())}
               />
               <BottomSection
                 transactions={transactions}

@@ -5,7 +5,7 @@ import { NFT, Transaction } from '../models/exCollection';
 import { useNFTsAPI } from './useNFTsAPI';
 import { useTransactionsAPI } from './useTransactionsAPI';
 
-export const useNFT = (mint: string) => {
+export const useNFT = (mint: string, refresh?: number) => {
   const connection = useConnection();
   const [nft, setNFT] = useState<NFT>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -47,7 +47,7 @@ export const useNFT = (mint: string) => {
           setTransactions(res['data']);
         }
       });
-  }, [mint]);
+  }, [mint, refresh]);
 
   async function getTokenAccount(mint: string) {
     try {
