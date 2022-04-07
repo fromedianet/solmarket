@@ -33,8 +33,24 @@ export const useTransactionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get transactions by mint
+   * @param params
+   * @returns
+   */
+  async function getTransactionsByWallet(wallet: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/transactions/getTransactionsByWallet',
+      JSON.stringify({ wallet }),
+    );
+    return result;
+  }
+
   return {
     getTransactionsBySymbol,
     getTransactionsByMint,
+    getTransactionsByWallet,
   };
 };
