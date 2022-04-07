@@ -28,6 +28,7 @@ export const Items = (props: {
   onSearch: (a: string) => void;
   onSortChange: (a: number) => void;
   updateFilters: (p, a) => void;
+  onRefresh: () => void;
   fetchMore: () => void;
 }) => {
   const searchRef = useRef(null);
@@ -61,10 +62,6 @@ export const Items = (props: {
   const existsAttributes = () => {
     const values = Object.values(attributeFilter);
     return values.length > 0;
-  };
-
-  const onRefresh = () => {
-    console.log('refresh');
   };
 
   const onClosePriceTag = () => {
@@ -107,7 +104,7 @@ export const Items = (props: {
     <div className="items-container">
       <Row>
         <Col span={24} md={12} className="control-container">
-          <div className="refresh-btn" onClick={onRefresh}>
+          <div className="refresh-btn" onClick={props.onRefresh}>
             <img src="/icons/refresh.svg" alt="refresh" />
           </div>
           <Search
@@ -123,9 +120,6 @@ export const Items = (props: {
           />
         </Col>
         <Col span={24} md={12} className="control-container">
-          <div className="filter-btn" onClick={onRefresh}>
-            <img src="/icons/filter.svg" alt="filter" />
-          </div>
           <Select
             className="select-container"
             value={props.sort}

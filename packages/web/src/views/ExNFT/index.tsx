@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { BottomSection } from './BottomSection';
 import { MetaplexModal, useQuerySearch } from '@oyster/common';
 import { useExNFT } from '../../hooks/useExNFT';
@@ -12,6 +12,7 @@ import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 export const ExNFTView = () => {
   const { id } = useParams<{ id: string }>();
   const searchParams = useQuerySearch();
+  const history = useHistory();
   const market = searchParams.get('market') || '';
   const price = searchParams.get('price') || '0';
   const collection = searchParams.get('collection') || '';
@@ -49,7 +50,7 @@ export const ExNFTView = () => {
                 collection={collection}
                 priceData={priceData}
                 onBuy={() => {}}
-                onRefresh={() => {}}
+                onRefresh={() => history.go(0)}
               />
               <BottomSection
                 transactions={transactions}
