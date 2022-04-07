@@ -5,7 +5,7 @@ import {
   useNativeAccount,
 } from '@oyster/common';
 import React, { useState } from 'react';
-import { Button, InputNumber, Row, Col, Form, Spin } from 'antd';
+import { Button, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
@@ -16,42 +16,7 @@ import {
   sendPlaceBid,
 } from '../../actions/auctionHouse';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
-
-interface PriceValue {
-  number?: number;
-}
-interface PriceInputProps {
-  value?: PriceValue;
-  onChange?: (value: PriceValue) => void;
-}
-
-const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
-  const [number, setNumber] = useState(0);
-  const triggerChange = (changedValue: { number?: number }) => {
-    onChange?.({ number, ...value, ...changedValue });
-  };
-  const onNumberChange = (info?: number) => {
-    const newNumber = parseFloat(info?.toString() || '0');
-    if (Number.isNaN(number)) {
-      return;
-    }
-    setNumber(newNumber);
-    triggerChange({ number: newNumber });
-  };
-
-  return (
-    <InputNumber
-      autoFocus
-      className="price-input"
-      placeholder="Price"
-      controls={false}
-      addonAfter="SOL"
-      bordered={false}
-      value={value.number || number}
-      onChange={onNumberChange}
-    />
-  );
-};
+import { PriceInput } from '../../components/PriceInput';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
@@ -303,7 +268,11 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
               <Row style={{ width: '100%' }}>
                 <Col span={12}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
-                    <PriceInput value={{ number: props.nft.price }} />
+                    <PriceInput
+                      value={{ number: props.nft.price }}
+                      placeholder="Price"
+                      addonAfter="SOL"
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -365,6 +334,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           >
             <PriceInput
               value={{ number: offerPrice }}
+              placeholder="Price"
+              addonAfter="SOL"
               onChange={value => onChangeOffer(value.number!)}
             />
             {error && <span className="warning">{error}</span>}
