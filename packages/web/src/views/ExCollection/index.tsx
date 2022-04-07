@@ -43,6 +43,7 @@ export const ExCollectionView = () => {
     hasMore,
     loading,
   } = useExCollection(id, market);
+  const [refresh, setRefresh] = useState(true);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -65,14 +66,23 @@ export const ExCollectionView = () => {
   });
 
   useEffect(() => {
-    if (skip > 0 || cursor) {
-      setList(prev => prev.concat(nfts));
-    } else {
+    if (refresh) {
       setList(nfts);
+    } else {
+      setList(prev => prev.concat(nfts));
     }
   }, [nfts]);
 
   useEffect(() => {
+    onRefresh();
+  }, [searchKey, sort, filter]);
+
+  const onUpdateFilters = (priceFilter, attributeFilter) => {
+    setFilter({ price: priceFilter, attributes: attributeFilter });
+  };
+
+  const onRefresh = () => {
+    setRefresh(true);
     getListedNFTsByCollection({
       market: market,
       symbol: id,
@@ -82,14 +92,11 @@ export const ExCollectionView = () => {
       min: filter.price.min,
       max: filter.price.max,
     });
-  }, [searchKey, sort, filter]);
-
-  const onUpdateFilters = (priceFilter, attributeFilter) => {
-    setFilter({ price: priceFilter, attributes: attributeFilter });
   };
 
   const fetchMore = () => {
     if (hasMore) {
+      setRefresh(false);
       getListedNFTsByCollection({
         market: market,
         symbol: id,
@@ -144,6 +151,7 @@ export const ExCollectionView = () => {
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
+                onRefresh={onRefresh}
                 filter={filter}
                 hasMore={hasMore}
                 fetchMore={fetchMore}

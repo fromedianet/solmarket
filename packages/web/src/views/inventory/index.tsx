@@ -46,8 +46,10 @@ export const InventoryView = () => {
   const onChange = event => {
     const key = event.target.value;
     setFilters(
-      collections.filter(item =>
-        item.name.toLocaleLowerCase().includes(key.toLocaleLowerCase()),
+      collections.filter(
+        item =>
+          item.name.toLocaleLowerCase().includes(key.toLocaleLowerCase()) ||
+          item.symbol.toLocaleLowerCase().includes(key.toLocaleLowerCase()),
       ),
     );
   };
