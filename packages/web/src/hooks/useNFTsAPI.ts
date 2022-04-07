@@ -61,9 +61,9 @@ export const useNFTsAPI = () => {
   }
 
   async function updateInfo(params: {
-    mint: string,
-    tokenAddress: string,
-    owner: string,
+    mint: string;
+    tokenAddress: string;
+    owner: string;
   }) {
     const result = await runAPI(
       false,
