@@ -13,7 +13,7 @@ import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
-type QUERIES = {
+export type QUERIES = {
   symbol: string;
   sort: number;
   status: boolean;
@@ -24,6 +24,60 @@ type QUERIES = {
   skip?: number;
   limit?: number;
 };
+
+export function getQueryPrameter(param: QUERIES) {
+  const queries = {
+    skip: param.skip ? param.skip : 0,
+    limit: PER_PAGE,
+  };
+  const match = { symbol: param.symbol };
+  if (param.searchKey) {
+    match['search'] = param.searchKey;
+  }
+  match['status'] = param.status;
+
+  if (param.min || param.max) {
+    const price = {};
+    if (param.min) {
+      price['gte'] = param.min * LAMPORTS_PER_SOL;
+    }
+    if (param.max) {
+      price['lte'] = param.max * LAMPORTS_PER_SOL;
+    }
+    match['price'] = price;
+  }
+
+  if (param.attributes && Object.keys(param.attributes).length > 0) {
+    const attrs: any[] = [];
+    Object.keys(param.attributes).forEach(key => {
+      // @ts-ignore
+      const subAttrs = param.attributes[key].map(val => ({
+        trait_type: key,
+        value: val,
+      }));
+      attrs.push(subAttrs);
+    });
+    match['attributes'] = attrs;
+  }
+
+  queries['match'] = match;
+
+  const sortQuery = {};
+  if (param.sort === 2) {
+    sortQuery['price'] = 1;
+  } else if (param.sort === 3) {
+    sortQuery['price'] = -1;
+  }
+  sortQuery['createdAt'] = -1;
+
+  queries['sort'] = sortQuery;
+
+  const result = {
+    query: JSON.stringify(queries),
+  };
+
+  return result;
+}
 
 export const useCollection = (symbol: string) => {
   const [loading, setLoading] = useState(false);
@@ -85,7 +139,7 @@ export const useCollection = (symbol: string) => {
     if (loading) return;
     setLoading(true);
 
-    const query = _getQueryPrameter(param);
+    const query = getQueryPrameter(param);
 
     getListedNftsByQuery(query)
       // @ts-ignore
@@ -134,60 +188,6 @@ export const useCollection = (symbol: string) => {
       console.error(e);
     }
     return attrs;
-  }
-
-  function _getQueryPrameter(param: QUERIES) {
-    const queries = {
-      skip: param.skip ? param.skip : 0,
-      limit: PER_PAGE,
-    };
-    const match = { symbol: param.symbol };
-    if (param.searchKey) {
-      match['search'] = param.searchKey;
-    }
-    match['status'] = param.status;
-
-    if (param.min || param.max) {
-      const price = {};
-      if (param.min) {
-        price['gte'] = param.min * LAMPORTS_PER_SOL;
-      }
-      if (param.max) {
-        price['lte'] = param.max * LAMPORTS_PER_SOL;
-      }
-      match['price'] = price;
-    }
-
-    if (param.attributes && Object.keys(param.attributes).length > 0) {
-      const attrs: any[] = [];
-      Object.keys(param.attributes).forEach(key => {
-        // @ts-ignore
-        const subAttrs = param.attributes[key].map(val => ({
-          trait_type: key,
-          value: val,
-        }));
-        attrs.push(subAttrs);
-      });
-      match['attributes'] = attrs;
-    }
-
-    queries['match'] = match;
-
-    const sortQuery = {};
-    if (param.sort === 2) {
-      sortQuery['price'] = 1;
-    } else if (param.sort === 3) {
-      sortQuery['price'] = -1;
-    }
-    sortQuery['createdAt'] = -1;
-
-    queries['sort'] = sortQuery;
-
-    const result = {
-      query: JSON.stringify(queries),
-    };
-
-    return result;
   }
 
   return {

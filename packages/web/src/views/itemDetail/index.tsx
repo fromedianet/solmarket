@@ -6,12 +6,16 @@ import { InfoSection } from './infoSection';
 import { EmptyView } from '../../components/EmptyView';
 import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 import { useNFT } from '../../hooks/useNFT';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
+import { NFT } from '../../models/exCollection';
+import { getQueryPrameter } from '../../hooks/useCollection';
 
 export const ItemDetailView = () => {
   const { mint } = useParams<{ mint: string }>();
   const [priceData, setPriceData] = useState<any[]>([]);
+  const [nftList, setNFTList] = useState<NFT[]>([]);
   const history = useHistory();
-
+  const { getListedNftsByQuery } = useNFTsAPI();
   const { nft, loading, transactions } = useNFT(mint);
 
   useEffect(() => {
@@ -20,10 +24,27 @@ export const ItemDetailView = () => {
       date: getDateStringFromUnixTimestamp(item.blockTime),
       price: item.price || 0,
     }));
-    if (data.length > 0) {
-      setPriceData(data);
-    }
+
+    setPriceData(data);
   }, [transactions]);
+
+  useEffect(() => {
+    if (nft) {
+      const query = getQueryPrameter({
+        symbol: nft.symbol,
+        sort: 1,
+        status: false,
+      });
+      getListedNftsByQuery(query)
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            const data = res['data'].filter(item => item.mint !== nft.mint);
+            setNFTList(data);
+          }
+        });
+    }
+  }, [nft]);
 
   return (
     <div className="main-area">
@@ -38,7 +59,11 @@ export const ItemDetailView = () => {
                 priceData={priceData}
                 onRefresh={() => history.go(0)}
               />
-              <BottomSection transactions={transactions} nft={nft} />
+              <BottomSection
+                transactions={transactions}
+                nft={nft}
+                nftList={nftList}
+              />
             </>
           ) : (
             <EmptyView />

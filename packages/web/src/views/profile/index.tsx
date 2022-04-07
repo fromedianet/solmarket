@@ -3,15 +3,25 @@ import {
   CopySpan,
   MetaplexModal,
   shortenAddress,
+  useConnectionConfig,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useEffect, useState } from 'react';
-import { Button, Row, Col, Statistic, Tabs, Form, Input, message } from 'antd';
+import { Button, Row, Col, Statistic, Tabs, Form, Input, Table } from 'antd';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
 import { useCreator } from '../../hooks';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { NFTCard } from '../marketplace/components/Items';
+import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
+import { Transaction } from '../../models/exCollection';
+
+TimeAgo.setDefaultLocale(en.locale);
+TimeAgo.addLocale(en);
+// Create formatter (English).
+const timeAgo = new TimeAgo('en-US');
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -24,9 +34,93 @@ export const ProfileView = () => {
   const [visible, setVisible] = useState(false);
   const [myItems, setMyItems] = useState<any[]>([]);
   const [listedItems, setListedItems] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
+  const endpoint = useConnectionConfig();
+  const network = endpoint.endpoint.name;
+  const { getTransactionsByWallet } = useTransactionsAPI();
+
+  const getColor = txType => {
+    if (txType === 'SALE') {
+      return '#2fc27d';
+    } else if (txType === 'PLACE BID') {
+      return '#6d79c9';
+    } else if (txType === 'LISTING') {
+      return '#f8f7f8';
+    } else {
+      return '#9c93a5';
+    }
+  };
+
+  const columns = [
+    {
+      title: '',
+      dataIndex: 'image',
+      key: 'image',
+      render: uri => <img src={uri} width={40} alt="image" />,
+    },
+    {
+      title: 'NAME',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => (
+        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
+          {record.name}
+        </a>
+      ),
+    },
+    {
+      title: 'TRANSACTION ID',
+      dataIndex: 'transaction',
+      key: 'transaction',
+      render: txId => (
+        <a
+          href={`https://explorer.solana.com/tx/${txId}${
+            network === 'mainnet-beta' ? '' : `?cluster=${network}`
+          }`}
+          target="_blank"
+          rel="noreferrer"
+          style={{ cursor: 'pointer' }}
+        >
+          {shortenAddress(txId)}
+        </a>
+      ),
+    },
+    {
+      title: 'TRANSACTION TYPE',
+      dataIndex: 'txType',
+      key: 'txType',
+      render: type => <span style={{ color: getColor(type) }}>{type}</span>,
+    },
+    {
+      title: 'TIME',
+      dataIndex: 'blockTime',
+      key: 'blockTime',
+      render: timestamp => timeAgo.format(timestamp * 1000),
+    },
+    {
+      title: 'TOTAL AMOUNT',
+      dataIndex: 'price',
+      key: 'price',
+      render: price => price > 0 && `${price} SOL`,
+    },
+    {
+      title: 'BUYER',
+      dataIndex: 'buyer',
+      key: 'buyer',
+      render: text =>
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
+    },
+    {
+      title: 'SELLER',
+      dataIndex: 'seller',
+      key: 'seller',
+      render: text =>
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
+    },
+  ];
 
   useEffect(() => {
     if (wallet.publicKey) {
@@ -37,6 +131,14 @@ export const ProfileView = () => {
             const result = res['data'];
             setMyItems(result.filter(item => item.price === 0));
             setListedItems(result.filter(item => item.price > 0));
+          }
+        });
+
+      getTransactionsByWallet(wallet.publicKey.toBase58())
+        // @ts-ignore
+        .then((res: {}) => {
+          if (res['data']) {
+            setTransactions(res['data']);
           }
         });
     }
@@ -52,12 +154,9 @@ export const ProfileView = () => {
 
   const onSubmit = values => {
     console.log(values);
-    message.success('Submit success!');
   };
 
-  const onSubmitFailed = () => {
-    message.error('Submit failed!');
-  };
+  const onSubmitFailed = () => {};
 
   const EmptyView = () => {
     return (
@@ -177,7 +276,12 @@ export const ProfileView = () => {
               Offers received - Comming soon
             </TabPane>
             <TabPane tab="Activites" key="5">
-              Activites - Comming soon
+              <Table
+                columns={columns}
+                dataSource={transactions}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
             </TabPane>
           </Tabs>
         </div>
