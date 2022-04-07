@@ -81,6 +81,10 @@ export const AUCTION_HOUSE_ID = new PublicKey(
   'GEL1XMuVTEtL88DzpYGjDrFQFCG2V8do4BJo2NMoi6pP',
 );
 
+export const AUCTION_HOUSE_PROGRAM_ID = new PublicKey(
+  'hausS13jsjafwWwGqZTUQRmWyvyxn9EQpqMwV1PBBmk',
+);
+
 export const PACK_CREATE_ID = new PublicKey(
   'packFeFNZzMfD9aVWL7QbGz1WcU7R9zpf6pvNsw2BLu',
 );
