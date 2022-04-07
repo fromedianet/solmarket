@@ -263,10 +263,6 @@ export const InfoSection = (props: {
                 <span className="details-key">Transaction Fee</span>
                 <div className="details-value">2%</div>
               </div>
-              <div className="sub-container">
-                <span className="details-key">List/Bid/Cancel</span>
-                <div className="details-value">Free</div>
-              </div>
             </div>
           </Panel>
         </Collapse>
