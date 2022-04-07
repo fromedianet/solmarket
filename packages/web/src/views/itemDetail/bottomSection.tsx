@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Collapse, Table } from 'antd';
 import { CopySpan, shortenAddress, useConnectionConfig } from '@oyster/common';
 import { NFT, Transaction } from '../../models/exCollection';
@@ -6,7 +6,6 @@ import TimeAgo from 'javascript-time-ago';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import en from 'javascript-time-ago/locale/en.json';
 import { NFTCard } from '../marketplace/components/Items';
-import { useCollection } from '../../hooks/useCollection';
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
@@ -18,18 +17,10 @@ const { Panel } = Collapse;
 export const BottomSection = (props: {
   transactions: Transaction[];
   nft: NFT;
+  nftList: NFT[];
 }) => {
   const endpoint = useConnectionConfig();
-  const [nftList, setNFTList] = useState<NFT[]>([]);
-  const { nfts } = useCollection(props.nft.symbol);
   const network = endpoint.endpoint.name;
-
-  useEffect(() => {
-    const filters = nfts.filter(item => item.mint !== props.nft.mint);
-    if (filters.length > 0) {
-      setNFTList(filters);
-    }
-  }, [nfts]);
 
   const getColor = txType => {
     if (txType === 'SALE') {
@@ -135,9 +126,9 @@ export const BottomSection = (props: {
           <img src="/icons/compass.svg" width={24} alt="more collection" />
         }
       >
-        {nftList.length > 0 && (
+        {props.nftList.length > 0 && (
           <HorizontalGrid
-            childrens={nftList.map((item, index) => (
+            childrens={props.nftList.map((item, index) => (
               <NFTCard
                 key={index}
                 itemId={`${index}`}
