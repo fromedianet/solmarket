@@ -30,7 +30,7 @@ export async function cacheAllAuctions(
   if (tempCache.storeIndexer.length) {
     console.log('----> Previously indexed. Pulling all.');
     // well now we need to pull first.
-    tempCache = await loadAccounts(connection);
+    // tempCache = await loadAccounts(connection);
   }
 
   let auctionManagersToCache = Object.values(tempCache.auctionManagersByAuction)

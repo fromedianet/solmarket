@@ -144,7 +144,7 @@ export function MetaProvider({
       }
       return state;
     } else if (!state.store) {
-      setIsLoading(true);
+      setIsLoading(false);
     }
     console.log('------->Query started');
 
@@ -281,7 +281,7 @@ export function MetaProvider({
       loadedMetadataLength.current !== userAccounts.length;
 
     if (shouldFetch) {
-      pullUserMetadata(userAccounts);
+      // pullUserMetadata(userAccounts);
     }
   }, [
     isLoading,
