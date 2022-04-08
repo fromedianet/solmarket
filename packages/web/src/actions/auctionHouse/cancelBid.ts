@@ -23,7 +23,7 @@ export async function cancelBid(params: {
   const { createCancelInstruction, createCancelBidReceiptInstruction } =
     AuctionHouseProgram.instructions;
   let status: any = { err: true };
-  if (!offer) {
+  if (!wallet.publicKey || !offer) {
     return status;
   }
 
