@@ -518,14 +518,20 @@ export const ProfileView = () => {
           </div>
           <Row>
             <Col span={9}>
-              <Button onClick={() => onWithdrawFromFee(selectedOffer!)}>
+              <Button onClick={() => {
+                setCancelVisible(false);
+                onWithdrawFromFee(selectedOffer!);
+              }}>
                 Withdraw
               </Button>
             </Col>
             <Col span={12}>
               <Button
                 style={{ marginLeft: 8, background: '#009999' }}
-                onClick={() => onCancelBid(selectedOffer!)}
+                onClick={() => {
+                  setCancelVisible(false);
+                  onCancelBid(selectedOffer!);
+                }}
               >
                 Keep funds in escrow
               </Button>

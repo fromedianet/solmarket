@@ -23,12 +23,12 @@ export async function cancelBid(params: {
   const { createCancelInstruction, createCancelBidReceiptInstruction } =
     AuctionHouseProgram.instructions;
   let status: any = { err: true };
-  const pubkey = wallet.publicKey;
-  if (!pubkey || !offer) {
+  if (!offer) {
     return status;
   }
 
   try {
+    const buyerKey = new PublicKey(offer.buyer);
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
@@ -36,7 +36,7 @@ export async function cancelBid(params: {
 
     const cancelInstruction = createCancelInstruction(
       {
-        wallet: pubkey,
+        wallet: buyerKey,
         tokenAccount: new PublicKey(offer.tokenAccount),
         tokenMint: new PublicKey(offer.mint),
         authority: auctionHouseObj.authority,
@@ -50,8 +50,9 @@ export async function cancelBid(params: {
       },
     );
 
+    const [receipt] = await AuctionHouseProgram.findBidReceiptAddress(new PublicKey(offer.tradeState));
     const cancelBidReceiptInstruction = createCancelBidReceiptInstruction({
-      receipt: new PublicKey(offer.buyer),
+      receipt: receipt,
       instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
     });
 
