@@ -85,7 +85,6 @@ export const ProfileView = () => {
   });
 
   const offersReceivedColumns = OffersReceivedColumns({
-    onReject: (data: Offer) => onCancelBid(data),
     onAccept: (data: Offer) => onAcceptOffer(data),
   });
 

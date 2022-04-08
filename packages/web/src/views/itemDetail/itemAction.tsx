@@ -199,7 +199,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           connection,
           wallet,
           buyerPrice: price,
-          mint: props.nft.mint,
+          nft: props.nft,
         });
         if (!result['err']) {
           setTimeout(() => {

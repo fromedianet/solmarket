@@ -23,7 +23,7 @@ export async function acceptOffer(params: {
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   const {
     createSellInstruction,
-    createBuyInstruction,
+    createPublicBuyInstruction,
     createCancelInstruction,
     createExecuteSaleInstruction,
     createPrintPurchaseReceiptInstruction,
@@ -105,7 +105,7 @@ export async function acceptOffer(params: {
       1,
     );
 
-    const cancelInstruction = createCancelInstruction(
+    const cancelOrignListingInstruction = createCancelInstruction(
       {
         wallet: sellerKey,
         tokenAccount,
@@ -142,7 +142,7 @@ export async function acceptOffer(params: {
       },
     );
 
-    const buyInstruction = createBuyInstruction(
+    const buyInstruction = createPublicBuyInstruction(
       {
         wallet: buyerKey,
         paymentAccount: buyerKey,
@@ -235,11 +235,11 @@ export async function acceptOffer(params: {
       connection,
       wallet,
       [
-        cancelInstruction,
         listingInstruction,
-        buyInstruction,
+        // buyInstruction,
         executeSaleInstructionEx,
         purchaseReceiptInstruction,
+        cancelOrignListingInstruction,
       ],
       [],
     );

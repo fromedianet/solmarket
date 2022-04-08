@@ -159,10 +159,7 @@ export const OffersMadeColumns = (props: {
   ];
 };
 
-export const OffersReceivedColumns = (props: {
-  onReject: (p) => void;
-  onAccept: (p) => void;
-}) => {
+export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
   return [
     {
       title: 'Name',
@@ -212,12 +209,11 @@ export const OffersReceivedColumns = (props: {
       key: 'action',
       render: (text, record) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Button onClick={() => props.onReject(record)}>Reject</Button>
           <Button
             style={{ marginLeft: 8, background: '#009999' }}
             onClick={() => props.onAccept(record)}
           >
-            Accept
+            Accept offer
           </Button>
         </div>
       ),

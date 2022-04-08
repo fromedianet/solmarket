@@ -10,41 +10,44 @@ import {
   SYSVAR_INSTRUCTIONS_PUBKEY,
 } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
+import { NFT } from '../../models/exCollection';
 
 export async function sendPlaceBid(params: {
   connection: Connection;
   wallet: WalletSigner;
   buyerPrice: number;
-  mint: string;
+  nft: NFT;
 }) {
-  const { connection, wallet, buyerPrice, mint } = params;
+  const { connection, wallet, buyerPrice, nft } = params;
   const {
     createDepositInstruction,
-    createBuyInstruction,
+    createPublicBuyInstruction,
     createPrintBidReceiptInstruction,
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
   const buyerKey = wallet.publicKey;
-  if (!buyerKey || !mint || buyerPrice === 0) {
+  if (!buyerKey || !nft || buyerPrice === 0) {
     return status;
   }
 
   try {
-    const metadata = await getMetadata(mint);
-    const mintKey = new PublicKey(mint);
-    const results = await connection.getTokenLargestAccounts(mintKey);
-    const tokenAccount = results.value[0].address;
+    const metadata = await getMetadata(nft.metadataAddress);
+    const mintKey = new PublicKey(nft.mint);
+    const [tokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        mintKey,
+        new PublicKey(nft.owner),
+      );
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
     );
 
     const [buyerTradeState, tradeStateBump] =
-      await AuctionHouseProgram.findTradeStateAddress(
+      await AuctionHouseProgram.findPublicBidTradeStateAddress(
         buyerKey,
         AUCTION_HOUSE_ID,
-        tokenAccount,
         auctionHouseObj.treasuryMint,
         mintKey,
         buyerPrice,
@@ -74,7 +77,7 @@ export async function sendPlaceBid(params: {
       },
     );
 
-    const buyInstruction = createBuyInstruction(
+    const publicBuyInstruction = createPublicBuyInstruction(
       {
         wallet: buyerKey,
         paymentAccount: buyerKey,
@@ -112,7 +115,7 @@ export async function sendPlaceBid(params: {
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [depositInstruction, buyInstruction, printBidReceiptInstruction],
+      [depositInstruction, publicBuyInstruction, printBidReceiptInstruction],
       [],
     );
 
