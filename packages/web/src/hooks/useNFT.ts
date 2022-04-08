@@ -35,10 +35,13 @@ export const useNFT = (mint: string, refresh?: number) => {
                 });
               }
             }
-          });
+          })
+          .finally(() => setLoading(false));
+        } else {
+          setLoading(false);
         }
       })
-      .finally(() => setLoading(false));
+      .catch(() => setLoading(false));
 
     getTransactionsByMint(mint)
       // @ts-ignore
