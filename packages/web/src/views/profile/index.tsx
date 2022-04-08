@@ -27,6 +27,8 @@ import {
   cancelBid,
   withdrawFromFee,
   acceptOffer,
+  withdraw,
+  deposit,
 } from '../../actions/auctionHouse';
 import { Offer } from '../../models/offer';
 import { EmptyView } from '../../components/EmptyView';
@@ -52,6 +54,7 @@ export const ProfileView = () => {
   const [balance, setBalance] = useState(0);
   const [withdrawValue, setWithdrawValue] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
+  const [refresh, setRefresh] = useState(0);
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
   const connection = useConnection();
@@ -113,7 +116,7 @@ export const ProfileView = () => {
           }
         });
     }
-  }, [wallet.publicKey]);
+  }, [wallet.publicKey, refresh]);
 
   useEffect(() => {
     let total = 0;
@@ -139,7 +142,9 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          setTimeout(() => {}, 7000);
+          setTimeout(() => {
+            setRefresh(Date.now());
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -176,7 +181,9 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          setTimeout(() => {}, 7000);
+          setTimeout(() => {
+            setRefresh(Date.now());
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -213,7 +220,9 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          setTimeout(() => {}, 7000);
+          setTimeout(() => {
+            setRefresh(Date.now());
+          }, 7000);
           resolve('');
         } else {
           reject();
@@ -229,6 +238,86 @@ export const ProfileView = () => {
         pending: 'Accept offer now...',
         error: 'Accept offer rejected.',
         success: 'Accept offer successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onDeposit = (amount: number) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await deposit({
+          connection,
+          wallet,
+          amount,
+        });
+        if (!result['err']) {
+          setTimeout(() => {
+            setRefresh(Date.now());
+          }, 7000);
+          setDepositValue(0);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Deposit now...',
+        error: 'Deposit rejected.',
+        success: 'Deposit successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onWithdraw = (amount: number) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await withdraw({
+          connection,
+          wallet,
+          amount,
+        });
+        if (!result['err']) {
+          setTimeout(() => {
+            setRefresh(Date.now());
+          }, 7000);
+          setWithdrawValue(0);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Withdraw now...',
+        error: 'Withdraw rejected.',
+        success: 'Withdraw successed. Your data maybe updated in a minute',
       },
       {
         position: 'top-center',
@@ -311,7 +400,7 @@ export const ProfileView = () => {
             <Col span={12} md={8} lg={6} className="details-container">
               <Statistic
                 title="TOTAL FLOOR VALUE"
-                value={`${totalFloorPrice > 0 ? totalFloorPrice : '---'} SOL`}
+                value={`${totalFloorPrice > 0 ? totalFloorPrice.toFixed(2) : '---'} SOL`}
               />
             </Col>
           </Row>
@@ -468,11 +557,13 @@ export const ProfileView = () => {
                     value={{ number: depositValue }}
                     onChange={val => setDepositValue(val.number || 0)}
                   />
-                  <span
-                    className={`balance-btn ${depositValue <= 0 && 'disabled'}`}
+                  <button
+                    className='balance-btn'
+                    disabled={depositValue <= 0}
+                    onClick={() => onDeposit(depositValue)}
                   >
                     Deposit
-                  </span>
+                  </button>
                 </div>
               </div>
               <div>
@@ -485,14 +576,13 @@ export const ProfileView = () => {
                     value={{ number: withdrawValue }}
                     onChange={val => setWithdrawValue(val.number || 0)}
                   />
-                  <span
-                    className={`balance-btn ${
-                      (withdrawValue <= 0 || withdrawValue > balance) &&
-                      'disabled'
-                    }`}
+                  <button
+                    className='balance-btn'
+                    disabled={withdrawValue <= 0 || withdrawValue > balance}
+                    onClick={() => onWithdraw(withdrawValue)}
                   >
                     Withdraw
-                  </span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -96,7 +96,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
 export const OffersMadeColumns = (props: {
   balance: number;
   onCancel: (p) => void;
-  onDeposit: (p) => void;
+  onDeposit: () => void;
 }) => {
   return [
     {
@@ -148,7 +148,7 @@ export const OffersMadeColumns = (props: {
           {record.bidPrice > props.balance && (
             <Button
               style={{ marginLeft: 8, background: '#009999' }}
-              onClick={() => props.onDeposit(record)}
+              onClick={() => props.onDeposit()}
             >
               Deposit
             </Button>
