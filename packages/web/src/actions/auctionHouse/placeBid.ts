@@ -25,9 +25,12 @@ export async function sendPlaceBid(params: {
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const buyerKey = wallet.publicKey;
+  if (!buyerKey || !mint || buyerPrice === 0) {
+    return { status };
+  }
 
   try {
-    const buyerKey = wallet.publicKey!;
     const metadata = await getMetadata(mint);
     const mintKey = new PublicKey(mint);
     const results = await connection.getTokenLargestAccounts(mintKey);

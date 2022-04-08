@@ -32,9 +32,12 @@ export async function sendSell(params: {
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const buyerKey = wallet.publicKey;
+  if (!buyerKey || !mint || buyerPrice === 0 || !seller) {
+    return { status };
+  }
 
   try {
-    const buyerKey = wallet.publicKey!;
     const sellerKey = new PublicKey(seller);
     const metadata = await getMetadata(mint);
     const tokenAccount = (await getAtaForMint(toPublicKey(mint), sellerKey))[0];

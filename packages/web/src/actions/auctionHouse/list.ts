@@ -24,9 +24,12 @@ export async function sendList(params: {
     AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const sellerKey = wallet.publicKey;
+  if (!sellerKey || !mint || buyerPrice === 0) {
+    return { status };
+  }
 
   try {
-    const sellerKey = wallet.publicKey!;
     const metadata = await getMetadata(mint);
     const tokenAccount = (await getAtaForMint(toPublicKey(mint), sellerKey))[0];
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(

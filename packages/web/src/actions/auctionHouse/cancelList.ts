@@ -23,10 +23,14 @@ export async function sendCancelList(params: {
     AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const pubkey = wallet.publicKey;
+  if (!pubkey || !mint || buyerPrice === 0) {
+    return { status };
+  }
 
   try {
     const tokenAccount = (
-      await getAtaForMint(toPublicKey(mint), wallet.publicKey!)
+      await getAtaForMint(toPublicKey(mint), pubkey)
     )[0];
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
@@ -34,7 +38,7 @@ export async function sendCancelList(params: {
     );
     const mintKey = new PublicKey(mint);
     const [tradeState] = await AuctionHouseProgram.findTradeStateAddress(
-      wallet.publicKey!,
+      pubkey,
       AUCTION_HOUSE_ID,
       tokenAccount,
       auctionHouseObj.treasuryMint,
@@ -45,7 +49,7 @@ export async function sendCancelList(params: {
 
     const instruction = createCancelInstruction(
       {
-        wallet: wallet.publicKey!,
+        wallet: pubkey,
         tokenAccount,
         tokenMint: mintKey,
         authority: auctionHouseObj.authority,
