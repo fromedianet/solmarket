@@ -1,44 +1,9 @@
 import { useWallet } from '@solana/wallet-adapter-react';
-import React, { useState } from 'react';
-import { Row, Col, Button, InputNumber, Form, Spin } from 'antd';
+import React from 'react';
+import { Row, Col, Button, Form, Spin } from 'antd';
 import { ConnectButton } from '@oyster/common';
 import { AuctionState } from '../auctionCreate';
-
-interface PriceValue {
-  number?: number;
-}
-interface PriceInputProps {
-  value?: PriceValue;
-  onChange?: (value: PriceValue) => void;
-}
-
-const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
-  const [number, setNumber] = useState(0);
-  const triggerChange = (changedValue: { number?: number }) => {
-    onChange?.({ number, ...value, ...changedValue });
-  };
-  const onNumberChange = (info?: number) => {
-    const newNumber = parseFloat(info?.toString() || '0');
-    if (Number.isNaN(number)) {
-      return;
-    }
-    setNumber(newNumber);
-    triggerChange({ number: newNumber });
-  };
-
-  return (
-    <InputNumber
-      autoFocus
-      className="price-input"
-      placeholder="Price"
-      controls={false}
-      addonAfter="SOL"
-      bordered={false}
-      value={value.number || number}
-      onChange={onNumberChange}
-    />
-  );
-};
+import { PriceInput } from '../../components/PriceInput';
 
 export const ArtOwnerAction = (props: {
   loading: boolean;
@@ -74,6 +39,8 @@ export const ArtOwnerAction = (props: {
               <Col span={12}>
                 <Form.Item name="price" rules={[{ validator: checkPrice }]}>
                   <PriceInput
+                    placeholder="Price"
+                    addonAfter="SOL"
                     onChange={value =>
                       props.setAttributes({
                         ...props.attributes,

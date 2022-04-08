@@ -1,15 +1,20 @@
 import { Layout } from 'antd';
 import React from 'react';
-import { useStore } from '@oyster/common';
-import { useMeta } from '../../contexts';
+// import { useStore } from '@oyster/common';
+// import { useMeta } from '../../contexts';
 import { SalesListView } from './components/SalesList';
-import { SetupView } from './setup';
+// import { SetupView } from './setup';
 
 export const HomeView = () => {
-  const { isLoading, store } = useMeta();
-  const { isConfigured } = useStore();
+  // const { isLoading, store } = useMeta();
+  // const { isConfigured } = useStore();
 
-  const showAuctions = (store && isConfigured) || isLoading;
+  // const showAuctions = (store && isConfigured) || isLoading;
 
-  return <Layout>{showAuctions ? <SalesListView /> : <SetupView />}</Layout>;
+  // return <Layout>{showAuctions ? <SalesListView /> : <SetupView />}</Layout>;
+  return (
+    <Layout>
+      <SalesListView />
+    </Layout>
+  );
 };

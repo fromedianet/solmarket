@@ -85,7 +85,7 @@ export const MarketplaceView = () => {
       max: filter.price.max,
       status: filter.status,
     });
-  }
+  };
 
   const onUpdateFilters = (priceFilter, attributeFilter, status) => {
     setFilter({
