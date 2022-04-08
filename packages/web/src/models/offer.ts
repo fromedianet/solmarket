@@ -9,4 +9,4 @@ export type Offer = {
   tokenSize: number;
   txType: string;
   createdAt: string;
-}
+};

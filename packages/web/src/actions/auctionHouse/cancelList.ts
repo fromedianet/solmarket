@@ -29,9 +29,7 @@ export async function sendCancelList(params: {
   }
 
   try {
-    const tokenAccount = (
-      await getAtaForMint(toPublicKey(mint), pubkey)
-    )[0];
+    const tokenAccount = (await getAtaForMint(toPublicKey(mint), pubkey))[0];
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,

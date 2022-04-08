@@ -16,10 +16,20 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { NFTCard } from '../marketplace/components/Items';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { Transaction } from '../../models/exCollection';
-import { ActivityColumns, OffersMadeColumns, OffersReceivedColumns } from './tableColumns';
+import {
+  ActivityColumns,
+  OffersMadeColumns,
+  OffersReceivedColumns,
+} from './tableColumns';
 import { PriceInput } from '../../components/PriceInput';
-import { showEscrow } from '../../actions/auctionHouse/showEscrow';
+import {
+  showEscrow,
+  cancelBid,
+  withdrawFromFee,
+} from '../../actions/auctionHouse';
 import { Offer } from '../../models/offer';
+import { EmptyView } from '../../components/EmptyView';
+import { toast } from 'react-toastify';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -36,6 +46,7 @@ export const ProfileView = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [offersMade, setOffersMade] = useState<Offer[]>([]);
   const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
+  const [selectedOffer, setSelectedOffer] = useState<Offer>();
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const [balance, setBalance] = useState(0);
   const [withdrawValue, setWithdrawValue] = useState(0);
@@ -51,12 +62,15 @@ export const ProfileView = () => {
   const activityColumns = ActivityColumns(network);
   const offersMadeColumns = OffersMadeColumns({
     balance: balance,
-    onCancel: () => { setCancelVisible(true) },
+    onCancel: (data: Offer) => {
+      setSelectedOffer(data);
+      setCancelVisible(true);
+    },
     onDeposit: () => {},
   });
 
   const offersReceivedColumns = OffersReceivedColumns({
-    onReject: () => {},
+    onReject: (data: Offer) => onCancelBid(data),
     onAccept: () => {},
   });
 
@@ -114,12 +128,77 @@ export const ProfileView = () => {
 
   const onSubmitFailed = () => {};
 
-  const EmptyView = () => {
-    return (
-      <div className="empty-container">
-        <img src="/icons/no-data.svg" width={100} alt="empty" />
-        <span>No Items</span>
-      </div>
+  const onCancelBid = (offer: Offer) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await cancelBid({
+          connection,
+          wallet,
+          offer,
+        });
+        if (!result['err']) {
+          setTimeout(() => {}, 7000);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Cancel bid now...',
+        error: 'Cancel bid rejected.',
+        success: 'Cancel bid successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onWithdrawFromFee = (offer: Offer) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await withdrawFromFee({
+          connection,
+          wallet,
+          offer,
+        });
+        if (!result['err']) {
+          setTimeout(() => {}, 7000);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Cancel bid now...',
+        error: 'Cancel bid rejected.',
+        success: 'Cancel bid successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
     );
   };
 
@@ -295,23 +374,31 @@ export const ProfileView = () => {
         onCancel={() => setCancelVisible(false)}
       >
         <div className="cancel-modal">
-          <div className='header-container'>
-            <img src='/icons/wallet.png' className='header-icon' alt='wallet'/>
-            <span className="header-text">After cancelling your offer, do you want to withdraw funds back to your wallet?</span>
+          <div className="header-container">
+            <img src="/icons/wallet.png" className="header-icon" alt="wallet" />
+            <span className="header-text">
+              After cancelling your offer, do you want to withdraw funds back to
+              your wallet?
+            </span>
           </div>
           <div className="body-container">
             <span className="main-text">
-              The funds for your offer is held in an escrow account as collatral to support multiple offers. If you choose &quot;Keep funds in escrow&quot;, you will be able to make offers faster and more easily. 
+              The funds for your offer is held in an escrow account as collatral
+              to support multiple offers. If you choose &quot;Keep funds in
+              escrow&quot;, you will be able to make offers faster and more
+              easily.
             </span>
           </div>
           <Row>
             <Col span={9}>
-              <Button onClick={() => {}}>Withdraw</Button>
+              <Button onClick={() => onWithdrawFromFee(selectedOffer!)}>
+                Withdraw
+              </Button>
             </Col>
             <Col span={12}>
               <Button
                 style={{ marginLeft: 8, background: '#009999' }}
-                onClick={() => {}}
+                onClick={() => onCancelBid(selectedOffer!)}
               >
                 Keep funds in escrow
               </Button>

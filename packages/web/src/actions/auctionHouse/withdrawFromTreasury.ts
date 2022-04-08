@@ -41,13 +41,14 @@ export async function withdrawFromTreasury(params: {
       {
         treasuryMint: auctionHouseObj.treasuryMint,
         authority: auctionHouseObj.authority,
-        treasuryWithdrawalDestination: auctionHouseObj.treasuryWithdrawalDestination,
+        treasuryWithdrawalDestination:
+          auctionHouseObj.treasuryWithdrawalDestination,
         auctionHouseTreasury: auctionHouseObj.auctionHouseTreasury,
-        auctionHouse: AUCTION_HOUSE_ID
+        auctionHouse: AUCTION_HOUSE_ID,
       },
       {
-        amount: new BN(offer.bidPrice * LAMPORTS_PER_SOL)
-      }
+        amount: new BN(offer.bidPrice * LAMPORTS_PER_SOL),
+      },
     );
 
     const cancelInstruction = createCancelInstruction(

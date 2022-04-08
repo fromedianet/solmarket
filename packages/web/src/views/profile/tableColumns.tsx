@@ -184,7 +184,9 @@ export const OffersReceivedColumns = (props: {
       title: 'Bidder',
       dataIndex: 'buyer',
       key: 'buyer',
-      render: buyer => <CopySpan value={shortenAddress(buyer)} copyText={buyer}/>,
+      render: buyer => (
+        <CopySpan value={shortenAddress(buyer)} copyText={buyer} />
+      ),
     },
     {
       title: 'Offer price',
@@ -202,7 +204,7 @@ export const OffersReceivedColumns = (props: {
       title: 'Time',
       dataIndex: 'blockTime',
       key: 'blockTime',
-      render: timestamp => timeAgo.format(timestamp * 1000)
+      render: timestamp => timeAgo.format(timestamp * 1000),
     },
     {
       title: 'Action',

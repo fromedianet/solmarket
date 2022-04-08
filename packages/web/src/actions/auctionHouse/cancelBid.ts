@@ -13,17 +13,15 @@ import {
 import { BN } from 'bn.js';
 import { Offer } from '../../models/offer';
 
-export async function withdrawFromFee(params: {
+export async function cancelBid(params: {
   connection: Connection;
   wallet: WalletSigner;
   offer: Offer;
 }) {
   const { connection, wallet, offer } = params;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
-  const {
-    createCancelInstruction,
-    createCancelBidReceiptInstruction,
-  } = AuctionHouseProgram.instructions;
+  const { createCancelInstruction, createCancelBidReceiptInstruction } =
+    AuctionHouseProgram.instructions;
   let status: any = { err: true };
   const pubkey = wallet.publicKey;
   if (!pubkey || !offer) {
