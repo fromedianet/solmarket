@@ -5,6 +5,7 @@ import { Button } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
+
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
 // Create formatter (English).
@@ -104,10 +105,10 @@ export const OffersMadeColumns = (props: {
       key: 'name',
       render: (text, record) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src={record.image} width={32} alt="image" />
+          <img src={record.image} width={40} alt="image" />
           <Link
             to={`/item-details/${record.mint}`}
-            style={{ cursor: 'pointer', marginLeft: 8 }}
+            style={{ cursor: 'pointer', marginLeft: 16 }}
           >
             {record.name}
           </Link>
@@ -152,6 +153,70 @@ export const OffersMadeColumns = (props: {
               Deposit
             </Button>
           )}
+        </div>
+      ),
+    },
+  ];
+};
+
+export const OffersReceivedColumns = (props: {
+  onReject: (p) => void;
+  onAccept: (p) => void;
+}) => {
+  return [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img src={record.image} width={40} alt="image" />
+          <Link
+            to={`/item-details/${record.mint}`}
+            style={{ cursor: 'pointer', marginLeft: 16 }}
+          >
+            {record.name}
+          </Link>
+        </div>
+      ),
+    },
+    {
+      title: 'Bidder',
+      dataIndex: 'buyer',
+      key: 'buyer',
+      render: buyer => <CopySpan value={shortenAddress(buyer)} copyText={buyer}/>,
+    },
+    {
+      title: 'Offer price',
+      dataIndex: 'bidPrice',
+      key: 'bidPrice',
+      render: price => `${price} SOL`,
+    },
+    {
+      title: 'Current price',
+      dataIndex: 'listingPrice',
+      key: 'listingPrice',
+      render: price => `${price} SOL`,
+    },
+    {
+      title: 'Time',
+      dataIndex: 'blockTime',
+      key: 'blockTime',
+      render: timestamp => timeAgo.format(timestamp * 1000)
+    },
+    {
+      title: 'Action',
+      dataIndex: 'mint',
+      key: 'action',
+      render: (text, record) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Button onClick={() => props.onReject(record)}>Reject</Button>
+          <Button
+            style={{ marginLeft: 8, background: '#009999' }}
+            onClick={() => props.onAccept(record)}
+          >
+            Accept
+          </Button>
         </div>
       ),
     },

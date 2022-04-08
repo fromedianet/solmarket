@@ -16,7 +16,7 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { NFTCard } from '../marketplace/components/Items';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { Transaction } from '../../models/exCollection';
-import { ActivityColumns, OffersMadeColumns } from './tableColumns';
+import { ActivityColumns, OffersMadeColumns, OffersReceivedColumns } from './tableColumns';
 import { PriceInput } from '../../components/PriceInput';
 import { showEscrow } from '../../actions/auctionHouse/showEscrow';
 
@@ -51,6 +51,11 @@ export const ProfileView = () => {
     balance: balance,
     onCancel: () => {},
     onDeposit: () => {},
+  });
+
+  const offersReceivedColumns = OffersReceivedColumns({
+    onReject: () => {},
+    onAccept: () => {},
   });
 
   useEffect(() => {
@@ -227,7 +232,12 @@ export const ProfileView = () => {
               />
             </TabPane>
             <TabPane tab="Offers received" key="4">
-              Offers received - Comming soon
+              <Table
+                columns={offersReceivedColumns}
+                dataSource={offersReceived}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
             </TabPane>
             <TabPane tab="Activites" key="5">
               <Table
