@@ -22,21 +22,22 @@ export const useNFT = (mint: string, refresh?: number) => {
       .then((res: {}) => {
         if (res['data']) {
           const data = res['data'];
-          getTokenAccount(mint).then(res => {
-            if (res) {
-              setNFT({
-                ...data,
-                ...res,
-              });
-              if (!data.tokenAddress) {
-                updateInfo({
+          getTokenAccount(mint)
+            .then(res => {
+              if (res) {
+                setNFT({
+                  ...data,
                   ...res,
-                  mint,
                 });
+                if (!data.tokenAddress) {
+                  updateInfo({
+                    ...res,
+                    mint,
+                  });
+                }
               }
-            }
-          })
-          .finally(() => setLoading(false));
+            })
+            .finally(() => setLoading(false));
         } else {
           setLoading(false);
         }

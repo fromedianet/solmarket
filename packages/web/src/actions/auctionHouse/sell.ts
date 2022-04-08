@@ -158,6 +158,10 @@ export async function sendSell(params: {
       keys: executeSaleInstruction.keys.concat(creatorKeys),
     });
 
+    executeSaleInstructionEx.keys
+      .filter(k => k.pubkey.equals(auctionHouseObj.authority))
+      .map(k => (k.isWritable = true));
+
     const [purchaseReceipt, purchaseReceiptBump] =
       await AuctionHouseProgram.findPurchaseReceiptAddress(
         sellerTradeState,
