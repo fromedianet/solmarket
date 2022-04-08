@@ -123,16 +123,16 @@ export function MetaProvider({
     tempState?: MetaState,
   ): Promise<void> {
     setIsLoadingMetadata(true);
-    loadedMetadataLength.current = userTokenAccounts.length;
+    // loadedMetadataLength.current = userTokenAccounts.length;
 
-    const nextState = await pullYourMetadata(
-      connection,
-      userTokenAccounts,
-      tempState || state,
-    );
-    await updateMints(nextState.metadataByMint);
+    // const nextState = await pullYourMetadata(
+    //   connection,
+    //   userTokenAccounts,
+    //   tempState || state,
+    // );
+    // await updateMints(nextState.metadataByMint);
 
-    setState(nextState);
+    // setState(nextState);
     setIsLoadingMetadata(false);
   }
 
@@ -171,11 +171,11 @@ export function MetaProvider({
       setIsLoading(true);
     }
 
-    let nextState = await pullPage(connection, page, state);
-    console.log('-----> Query started');
+    // let nextState = await pullPage(connection, page, state);
+    // console.log('-----> Query started');
 
-    if (nextState.storeIndexer.length) {
-      if (USE_SPEED_RUN) {
+    // if (nextState.storeIndexer.length) {
+    //   if (USE_SPEED_RUN) {
         // nextState = await limitedLoadAccounts(connection);
 
         // console.log('------->Query finished');
@@ -183,9 +183,9 @@ export function MetaProvider({
         // setState(nextState);
 
         //@ts-ignore
-        window.loadingData = false;
-        setIsLoading(false);
-      } else {
+      //   window.loadingData = false;
+      //   setIsLoading(false);
+      // } else {
         // console.log('------->Pagination detected, pulling page', page);
 
         // const auction = window.location.href.match(/#\/auction\/(\w+)/);
@@ -212,11 +212,11 @@ export function MetaProvider({
         // setLastLength(nextState.storeIndexer.length);
 
         //@ts-ignore
-        window.loadingData = false;
-        setIsLoading(false);
-        setState(nextState);
-      }
-    } else {
+    //     window.loadingData = false;
+    //     setIsLoading(false);
+    //     setState(nextState);
+    //   }
+    // } else {
       // console.log('------->No pagination detected');
       // nextState = !USE_SPEED_RUN
       //   ? await loadAccounts(connection)
@@ -227,10 +227,11 @@ export function MetaProvider({
       // setState(nextState);
 
       //@ts-ignore
-      window.loadingData = false;
-      setIsLoading(false);
-    }
+    //   window.loadingData = false;
+    //   setIsLoading(false);
+    // }
 
+    setIsLoading(false);
     console.log('------->set finished');
 
     // if (auctionAddress && bidderAddress) {
