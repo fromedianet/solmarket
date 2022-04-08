@@ -21,7 +21,7 @@ export async function sendPlaceBid(params: {
   const { connection, wallet, buyerPrice, nft } = params;
   const {
     createDepositInstruction,
-    createPublicBuyInstruction,
+    createBuyInstruction,
     createPrintBidReceiptInstruction,
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
@@ -32,7 +32,7 @@ export async function sendPlaceBid(params: {
   }
 
   try {
-    const metadata = await getMetadata(nft.metadataAddress);
+    const metadata = await getMetadata(nft.mint);
     const mintKey = new PublicKey(nft.mint);
     const [tokenAccount] =
       await AuctionHouseProgram.findAssociatedTokenAccountAddress(
@@ -45,9 +45,10 @@ export async function sendPlaceBid(params: {
     );
 
     const [buyerTradeState, tradeStateBump] =
-      await AuctionHouseProgram.findPublicBidTradeStateAddress(
+      await AuctionHouseProgram.findTradeStateAddress(
         buyerKey,
         AUCTION_HOUSE_ID,
+        tokenAccount,
         auctionHouseObj.treasuryMint,
         mintKey,
         buyerPrice,
@@ -77,7 +78,7 @@ export async function sendPlaceBid(params: {
       },
     );
 
-    const publicBuyInstruction = createPublicBuyInstruction(
+    const buyInstruction = createBuyInstruction(
       {
         wallet: buyerKey,
         paymentAccount: buyerKey,
@@ -101,9 +102,9 @@ export async function sendPlaceBid(params: {
 
     const [receipt, receiptBump] =
       await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
-    const printBidReceiptInstruction = await createPrintBidReceiptInstruction(
+    const printBidReceiptInstruction = createPrintBidReceiptInstruction(
       {
-        receipt,
+        receipt: receipt,
         bookkeeper: buyerKey,
         instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
       },
@@ -115,7 +116,7 @@ export async function sendPlaceBid(params: {
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [depositInstruction, publicBuyInstruction, printBidReceiptInstruction],
+      [depositInstruction, buyInstruction, printBidReceiptInstruction],
       [],
     );
 

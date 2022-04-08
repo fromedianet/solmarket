@@ -151,10 +151,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       try {
         const result = await sendSell({
           connection,
-          seller: props.nft.owner,
           wallet,
           buyerPrice: price,
-          mint: props.nft.mint,
           nft: props.nft,
         });
         if (!result['err']) {

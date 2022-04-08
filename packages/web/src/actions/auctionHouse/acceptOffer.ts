@@ -1,6 +1,7 @@
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
 import {
   AUCTION_HOUSE_ID,
+  getMetadata,
   sendTransactionWithRetry,
   WalletSigner,
 } from '@oyster/common';
@@ -23,8 +24,9 @@ export async function acceptOffer(params: {
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   const {
     createSellInstruction,
-    createPublicBuyInstruction,
+    createPrintListingReceiptInstruction,
     createCancelInstruction,
+    createCancelListingReceiptInstruction,
     createExecuteSaleInstruction,
     createPrintPurchaseReceiptInstruction,
   } = AuctionHouseProgram.instructions;
@@ -40,10 +42,12 @@ export async function acceptOffer(params: {
       connection,
       AUCTION_HOUSE_ID,
     );
-
-    const tokenAccount = new PublicKey(offer.tokenAccount);
     const tokenMint = new PublicKey(offer.mint);
-    const metadataKey = new PublicKey(offer.metadata);
+    const [tokenAccount] = await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+      tokenMint,
+      sellerKey,
+    );
+    const metadata = await getMetadata(offer.mint);
     const buyerPrice = new BN(offer.bidPrice * LAMPORTS_PER_SOL);
     const listingPrice = new BN(offer.listingPrice * LAMPORTS_PER_SOL);
 
@@ -58,16 +62,15 @@ export async function acceptOffer(params: {
         1,
       );
 
-    const [buyerTradeState, buyerTradeStateBump] =
-      await AuctionHouseProgram.findTradeStateAddress(
-        buyerKey,
-        AUCTION_HOUSE_ID,
-        tokenAccount,
-        auctionHouseObj.treasuryMint,
-        tokenMint,
-        buyerPrice.toNumber(),
-        1,
-      );
+    const [buyerTradeState] = await AuctionHouseProgram.findTradeStateAddress(
+      buyerKey,
+      AUCTION_HOUSE_ID,
+      tokenAccount,
+      auctionHouseObj.treasuryMint,
+      tokenMint,
+      buyerPrice.toNumber(),
+      1,
+    );
 
     const [freeTradeState, freeTradeStateBump] =
       await AuctionHouseProgram.findTradeStateAddress(
@@ -125,7 +128,7 @@ export async function acceptOffer(params: {
       {
         wallet: sellerKey,
         tokenAccount: tokenAccount,
-        metadata: metadataKey,
+        metadata: new PublicKey(metadata),
         authority: auctionHouseObj.authority,
         auctionHouse: AUCTION_HOUSE_ID,
         auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
@@ -142,35 +145,13 @@ export async function acceptOffer(params: {
       },
     );
 
-    const buyInstruction = createPublicBuyInstruction(
-      {
-        wallet: buyerKey,
-        paymentAccount: buyerKey,
-        transferAuthority: buyerKey,
-        treasuryMint: auctionHouseObj.treasuryMint,
-        tokenAccount: tokenAccount,
-        metadata: metadataKey,
-        escrowPaymentAccount: escrowPaymentAccount,
-        authority: auctionHouseObj.authority,
-        auctionHouse: AUCTION_HOUSE_ID,
-        auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
-        buyerTradeState: buyerTradeState,
-      },
-      {
-        tradeStateBump: buyerTradeStateBump,
-        escrowPaymentBump,
-        buyerPrice,
-        tokenSize: 1,
-      },
-    );
-
     const executeSaleInstruction = createExecuteSaleInstruction(
       {
         buyer: buyerKey,
         seller: sellerKey,
         tokenAccount: tokenAccount,
         tokenMint: tokenMint,
-        metadata: metadataKey,
+        metadata: new PublicKey(metadata),
         treasuryMint: auctionHouseObj.treasuryMint,
         escrowPaymentAccount: escrowPaymentAccount,
         sellerPaymentReceiptAccount: sellerKey,
@@ -211,11 +192,28 @@ export async function acceptOffer(params: {
         buyerTradeState,
       );
 
-    const [listingReceipt] =
+    const [listingReceipt, listingReceiptBump] =
       await AuctionHouseProgram.findListingReceiptAddress(sellerTradeState);
 
     const [bidReceipt] = await AuctionHouseProgram.findBidReceiptAddress(
       buyerTradeState,
+    );
+
+    const cancelListingReceiptInstruction =
+      createCancelListingReceiptInstruction({
+        receipt: listingReceipt,
+        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+      });
+
+    const listingReceiptInstruction = createPrintListingReceiptInstruction(
+      {
+        receipt: listingReceipt,
+        bookkeeper: sellerKey,
+        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+      },
+      {
+        receiptBump: listingReceiptBump,
+      },
     );
 
     const purchaseReceiptInstruction = createPrintPurchaseReceiptInstruction(
@@ -236,10 +234,11 @@ export async function acceptOffer(params: {
       wallet,
       [
         listingInstruction,
-        // buyInstruction,
+        listingReceiptInstruction,
         executeSaleInstructionEx,
         purchaseReceiptInstruction,
         cancelOrignListingInstruction,
+        cancelListingReceiptInstruction,
       ],
       [],
     );
