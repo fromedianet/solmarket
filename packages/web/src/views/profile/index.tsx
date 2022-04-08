@@ -238,7 +238,7 @@ export const ProfileView = () => {
         pauseOnFocusLoss: false,
       },
     );
-  }
+  };
 
   if (!wallet.connected) {
     return (

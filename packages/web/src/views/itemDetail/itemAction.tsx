@@ -67,7 +67,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           buyerPrice: price,
           mint: props.nft.mint,
         });
-        if (result['status'] && !result['status']['err']) {
+        if (!result['err']) {
           setTimeout(() => {
             props.onRefresh();
           }, 7000);
@@ -111,7 +111,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           buyerPrice: price,
           mint: props.nft.mint,
         });
-        if (result['status'] && !result['status']['err']) {
+        if (!result['err']) {
           setTimeout(() => {
             props.onRefresh();
           }, 7000);
@@ -157,7 +157,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
           nft: props.nft,
         });
-        if (result['status'] && !result['status']['err']) {
+        if (!result['err']) {
           setTimeout(() => {
             props.onRefresh();
           }, 7000);
@@ -201,7 +201,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           buyerPrice: price,
           mint: props.nft.mint,
         });
-        if (result['status'] && !result['status']['err']) {
+        if (!result['err']) {
           setTimeout(() => {
             props.onRefresh();
           }, 7000);

@@ -27,7 +27,7 @@ export async function sendPlaceBid(params: {
   let status: any = { err: true };
   const buyerKey = wallet.publicKey;
   if (!buyerKey || !mint || buyerPrice === 0) {
-    return { status };
+    return status;
   }
 
   try {
@@ -121,10 +121,9 @@ export async function sendPlaceBid(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

@@ -64,6 +64,7 @@ export async function cancelBid(params: {
 
     if (txid) {
       status = await connection.confirmTransaction(txid, 'confirmed');
+      console.log('>>> txid >>>', txid);
       console.log('>>> WithdrawFromFee status >>>', status);
     }
   } catch (e) {

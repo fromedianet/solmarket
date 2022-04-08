@@ -33,7 +33,7 @@ export async function sendSell(params: {
   let status: any = { err: true };
   const buyerKey = wallet.publicKey;
   if (!buyerKey || !mint || buyerPrice === 0 || !seller) {
-    return { status };
+    return status;
   }
 
   try {
@@ -85,10 +85,11 @@ export async function sendSell(params: {
         buyerKey,
       );
 
-    const [buyerReceiptTokenAccount] = await AuctionHouseProgram.findAssociatedTokenAccountAddress(
-      mintKey,
-      buyerKey,
-    );
+    const [buyerReceiptTokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        mintKey,
+        buyerKey,
+      );
 
     const [programAsSigner, programAsSignerBump] =
       await AuctionHouseProgram.findAuctionHouseProgramAsSignerAddress();
@@ -163,9 +164,10 @@ export async function sendSell(params: {
       );
     const [listingReceipt] =
       await AuctionHouseProgram.findListingReceiptAddress(sellerTradeState);
-    
-    const [bidReceipt] =
-      await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
+
+    const [bidReceipt] = await AuctionHouseProgram.findBidReceiptAddress(
+      buyerTradeState,
+    );
 
     const purchaseReceiptInstruction = createPrintPurchaseReceiptInstruction(
       {
@@ -183,11 +185,7 @@ export async function sendSell(params: {
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [
-        buyInstruction,
-        executeSaleInstructionEx,
-        purchaseReceiptInstruction,
-      ],
+      [buyInstruction, executeSaleInstructionEx, purchaseReceiptInstruction],
       [],
     );
 
@@ -196,10 +194,9 @@ export async function sendSell(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

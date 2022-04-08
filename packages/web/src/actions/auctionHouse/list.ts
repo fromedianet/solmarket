@@ -26,7 +26,7 @@ export async function sendList(params: {
   let status: any = { err: true };
   const sellerKey = wallet.publicKey;
   if (!sellerKey || !mint || buyerPrice === 0) {
-    return { status };
+    return status;
   }
 
   try {
@@ -106,10 +106,9 @@ export async function sendList(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

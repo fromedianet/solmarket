@@ -25,7 +25,7 @@ export async function sendCancelList(params: {
   let status: any = { err: true };
   const pubkey = wallet.publicKey;
   if (!pubkey || !mint || buyerPrice === 0) {
-    return { status };
+    return status;
   }
 
   try {
@@ -81,10 +81,9 @@ export async function sendCancelList(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

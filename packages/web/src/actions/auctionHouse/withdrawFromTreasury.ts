@@ -4,10 +4,7 @@ import {
   sendTransactionWithRetry,
   WalletSigner,
 } from '@oyster/common';
-import {
-  Connection,
-  LAMPORTS_PER_SOL,
-} from '@solana/web3.js';
+import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { BN } from 'bn.js';
 
 export async function withdrawFromTreasury(params: {
@@ -17,12 +14,11 @@ export async function withdrawFromTreasury(params: {
 }) {
   const { connection, wallet, amount } = params;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
-  const {
-    createWithdrawFromTreasuryInstruction,
-  } = AuctionHouseProgram.instructions;
+  const { createWithdrawFromTreasuryInstruction } =
+    AuctionHouseProgram.instructions;
   let status: any = { err: true };
   const pubkey = wallet.publicKey;
-  if (!pubkey || !amount) {
+  if (!pubkey || amount === 0) {
     return status;
   }
 
@@ -55,6 +51,7 @@ export async function withdrawFromTreasury(params: {
 
     if (txid) {
       status = await connection.confirmTransaction(txid, 'confirmed');
+      console.log('>>> txid >>>', txid);
       console.log('>>> WithdrawFromTreasury status >>>', status);
     }
   } catch (e) {
