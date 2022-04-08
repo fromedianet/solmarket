@@ -19,6 +19,7 @@ import { Transaction } from '../../models/exCollection';
 import { ActivityColumns, OffersMadeColumns, OffersReceivedColumns } from './tableColumns';
 import { PriceInput } from '../../components/PriceInput';
 import { showEscrow } from '../../actions/auctionHouse/showEscrow';
+import { Offer } from '../../models/offer';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -33,8 +34,8 @@ export const ProfileView = () => {
   const [myItems, setMyItems] = useState<any[]>([]);
   const [listedItems, setListedItems] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [offersMade, setOffersMade] = useState<any[]>([]);
-  const [offersReceived, setOffersReceived] = useState<any[]>([]);
+  const [offersMade, setOffersMade] = useState<Offer[]>([]);
+  const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const [balance, setBalance] = useState(0);
   const [withdrawValue, setWithdrawValue] = useState(0);
