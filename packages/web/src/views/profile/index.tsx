@@ -29,6 +29,7 @@ export const ProfileView = () => {
   const { authentication } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
   const [visible, setVisible] = useState(false);
+  const [cancelVisible, setCancelVisible] = useState(false);
   const [myItems, setMyItems] = useState<any[]>([]);
   const [listedItems, setListedItems] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -49,7 +50,7 @@ export const ProfileView = () => {
   const activityColumns = ActivityColumns(network);
   const offersMadeColumns = OffersMadeColumns({
     balance: balance,
-    onCancel: () => {},
+    onCancel: () => { setCancelVisible(true) },
     onDeposit: () => {},
   });
 
@@ -286,6 +287,35 @@ export const ProfileView = () => {
               </Button>
             </Form.Item>
           </Form>
+        </div>
+      </MetaplexModal>
+      <MetaplexModal
+        visible={cancelVisible}
+        onCancel={() => setCancelVisible(false)}
+      >
+        <div className="cancel-modal">
+          <div className='header-container'>
+            <img src='/icons/wallet.png' className='header-icon' alt='wallet'/>
+            <span className="header-text">After cancelling your offer, do you want to withdraw funds back to your wallet?</span>
+          </div>
+          <div className="body-container">
+            <span className="main-text">
+              The funds for your offer is held in an escrow account as collatral to support multiple offers. If you choose &quot;Keep funds in escrow&quot;, you will be able to make offers faster and more easily. 
+            </span>
+          </div>
+          <Row>
+            <Col span={9}>
+              <Button onClick={() => {}}>Withdraw</Button>
+            </Col>
+            <Col span={12}>
+              <Button
+                style={{ marginLeft: 8, background: '#009999' }}
+                onClick={() => {}}
+              >
+                Keep funds in escrow
+              </Button>
+            </Col>
+          </Row>
         </div>
       </MetaplexModal>
       <div className="balance-container">
