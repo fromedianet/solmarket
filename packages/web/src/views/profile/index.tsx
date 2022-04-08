@@ -26,6 +26,7 @@ import {
   showEscrow,
   cancelBid,
   withdrawFromFee,
+  acceptOffer,
 } from '../../actions/auctionHouse';
 import { Offer } from '../../models/offer';
 import { EmptyView } from '../../components/EmptyView';
@@ -71,7 +72,7 @@ export const ProfileView = () => {
 
   const offersReceivedColumns = OffersReceivedColumns({
     onReject: (data: Offer) => onCancelBid(data),
-    onAccept: () => {},
+    onAccept: (data: Offer) => onAcceptOffer(data),
   });
 
   useEffect(() => {
@@ -201,6 +202,43 @@ export const ProfileView = () => {
       },
     );
   };
+
+  const onAcceptOffer = (offer: Offer) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await acceptOffer({
+          connection,
+          wallet,
+          offer,
+        });
+        if (!result['err']) {
+          setTimeout(() => {}, 7000);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Accept offer now...',
+        error: 'Accept offer rejected.',
+        success: 'Accept offer successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  }
 
   if (!wallet.connected) {
     return (

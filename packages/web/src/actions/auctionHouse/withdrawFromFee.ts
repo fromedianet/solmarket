@@ -13,6 +13,11 @@ import {
 import { BN } from 'bn.js';
 import { Offer } from '../../models/offer';
 
+/**
+ * CancelBid + withdrawFromFee
+ * @param params
+ * @returns
+ */
 export async function withdrawFromFee(params: {
   connection: Connection;
   wallet: WalletSigner;
@@ -73,7 +78,7 @@ export async function withdrawFromFee(params: {
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [cancelInstruction, cancelBidReceiptInstruction, withdrawInstruction],
+      [withdrawInstruction, cancelInstruction, cancelBidReceiptInstruction],
       [],
     );
 

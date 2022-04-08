@@ -27,7 +27,6 @@ export async function sendSell(params: {
   const {
     createBuyInstruction,
     createExecuteSaleInstruction,
-    createPrintBidReceiptInstruction,
     createPrintPurchaseReceiptInstruction,
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
@@ -86,6 +85,11 @@ export async function sendSell(params: {
         buyerKey,
       );
 
+    const [buyerReceiptTokenAccount] = await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+      mintKey,
+      buyerKey,
+    );
+
     const [programAsSigner, programAsSignerBump] =
       await AuctionHouseProgram.findAuctionHouseProgramAsSignerAddress();
 
@@ -111,19 +115,6 @@ export async function sendSell(params: {
       },
     );
 
-    const [bidReceipt, receiptBump] =
-      await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
-    const printBidReceiptInstruction = await createPrintBidReceiptInstruction(
-      {
-        receipt: bidReceipt,
-        bookkeeper: buyerKey,
-        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
-      },
-      {
-        receiptBump,
-      },
-    );
-
     const executeSaleInstruction = createExecuteSaleInstruction(
       {
         buyer: buyerKey,
@@ -134,7 +125,7 @@ export async function sendSell(params: {
         treasuryMint: auctionHouseObj.treasuryMint,
         escrowPaymentAccount: escrowPaymentAccount,
         sellerPaymentReceiptAccount: sellerKey,
-        buyerReceiptTokenAccount: (await getAtaForMint(mintKey, buyerKey))[0],
+        buyerReceiptTokenAccount: buyerReceiptTokenAccount,
         authority: auctionHouseObj.authority,
         auctionHouse: AUCTION_HOUSE_ID,
         auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
@@ -172,6 +163,9 @@ export async function sendSell(params: {
       );
     const [listingReceipt] =
       await AuctionHouseProgram.findListingReceiptAddress(sellerTradeState);
+    
+    const [bidReceipt] =
+      await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
 
     const purchaseReceiptInstruction = createPrintPurchaseReceiptInstruction(
       {
@@ -191,7 +185,6 @@ export async function sendSell(params: {
       wallet,
       [
         buyInstruction,
-        printBidReceiptInstruction,
         executeSaleInstructionEx,
         purchaseReceiptInstruction,
       ],
