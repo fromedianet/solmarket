@@ -7,15 +7,14 @@ import {
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { BN } from 'bn.js';
 
-export async function withdrawFromTreasury(params: {
+export async function deposit(params: {
   connection: Connection;
   wallet: WalletSigner;
   amount: number;
 }) {
   const { connection, wallet, amount } = params;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
-  const { createWithdrawFromTreasuryInstruction } =
-    AuctionHouseProgram.instructions;
+  const { createDepositInstruction } = AuctionHouseProgram.instructions;
   let status: any = { err: true };
   const pubkey = wallet.publicKey;
   if (!pubkey || amount === 0) {
@@ -28,16 +27,25 @@ export async function withdrawFromTreasury(params: {
       AUCTION_HOUSE_ID,
     );
 
-    const instruction = createWithdrawFromTreasuryInstruction(
+    const [escrowPaymentAccount, escrowPaymentBump] =
+      await AuctionHouseProgram.findEscrowPaymentAccountAddress(
+        AUCTION_HOUSE_ID,
+        pubkey,
+      );
+
+    const instruction = createDepositInstruction(
       {
+        wallet: pubkey,
+        paymentAccount: pubkey,
+        transferAuthority: pubkey,
+        escrowPaymentAccount: escrowPaymentAccount,
         treasuryMint: auctionHouseObj.treasuryMint,
         authority: auctionHouseObj.authority,
-        treasuryWithdrawalDestination:
-          auctionHouseObj.treasuryWithdrawalDestination,
-        auctionHouseTreasury: auctionHouseObj.auctionHouseTreasury,
         auctionHouse: AUCTION_HOUSE_ID,
+        auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
       },
       {
+        escrowPaymentBump,
         amount: new BN(amount * LAMPORTS_PER_SOL),
       },
     );
@@ -52,7 +60,7 @@ export async function withdrawFromTreasury(params: {
     if (txid) {
       status = await connection.confirmTransaction(txid, 'confirmed');
       console.log('>>> txid >>>', txid);
-      console.log('>>> WithdrawFromTreasury status >>>', status);
+      console.log('>>> Deposit status >>>', status);
     }
   } catch (e) {
     console.error(e);

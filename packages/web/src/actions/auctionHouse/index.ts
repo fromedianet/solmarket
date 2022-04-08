@@ -7,3 +7,5 @@ export * from './cancelBid';
 export * from './withdrawFromFee';
 export * from './withdrawFromTreasury';
 export * from './acceptOffer';
+export * from './deposit';
+export * from './withdraw';
