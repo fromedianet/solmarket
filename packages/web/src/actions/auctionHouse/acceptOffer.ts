@@ -38,16 +38,17 @@ export async function acceptOffer(params: {
 
   try {
     const buyerKey = new PublicKey(offer.buyer);
+    const tokenMint = new PublicKey(offer.mint);
+    const metadata = await getMetadata(offer.mint);
+    const [tokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        tokenMint,
+        sellerKey,
+      );
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
     );
-    const tokenMint = new PublicKey(offer.mint);
-    const [tokenAccount] = await AuctionHouseProgram.findAssociatedTokenAccountAddress(
-      tokenMint,
-      sellerKey,
-    );
-    const metadata = await getMetadata(offer.mint);
     const buyerPrice = new BN(offer.bidPrice * LAMPORTS_PER_SOL);
     const listingPrice = new BN(offer.listingPrice * LAMPORTS_PER_SOL);
 
@@ -97,32 +98,6 @@ export async function acceptOffer(params: {
 
     const [programAsSigner, programAsSignerBump] =
       await AuctionHouseProgram.findAuctionHouseProgramAsSignerAddress();
-
-    const [cancelTradeState] = await AuctionHouseProgram.findTradeStateAddress(
-      sellerKey,
-      AUCTION_HOUSE_ID,
-      tokenAccount,
-      auctionHouseObj.treasuryMint,
-      tokenMint,
-      listingPrice.toNumber(),
-      1,
-    );
-
-    const cancelOrignListingInstruction = createCancelInstruction(
-      {
-        wallet: sellerKey,
-        tokenAccount,
-        tokenMint,
-        authority: auctionHouseObj.authority,
-        auctionHouse: AUCTION_HOUSE_ID,
-        auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
-        tradeState: cancelTradeState,
-      },
-      {
-        buyerPrice: listingPrice,
-        tokenSize: 1,
-      },
-    );
 
     const listingInstruction = createSellInstruction(
       {
@@ -177,7 +152,7 @@ export async function acceptOffer(params: {
     const creatorKeys = offer.nftCreators.map(creator => ({
       pubkey: new PublicKey(creator.address),
       isSigner: false,
-      isWritable: false,
+      isWritable: true,
     }));
 
     const executeSaleInstructionEx = new TransactionInstruction({
@@ -198,12 +173,6 @@ export async function acceptOffer(params: {
     const [bidReceipt] = await AuctionHouseProgram.findBidReceiptAddress(
       buyerTradeState,
     );
-
-    const cancelListingReceiptInstruction =
-      createCancelListingReceiptInstruction({
-        receipt: listingReceipt,
-        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
-      });
 
     const listingReceiptInstruction = createPrintListingReceiptInstruction(
       {
@@ -229,6 +198,32 @@ export async function acceptOffer(params: {
       },
     );
 
+    const cancelInstruction = createCancelInstruction(
+      {
+        wallet: sellerKey,
+        tokenAccount,
+        tokenMint,
+        authority: auctionHouseObj.authority,
+        auctionHouse: AUCTION_HOUSE_ID,
+        auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
+        tradeState: new PublicKey(offer.tradeState),
+      },
+      {
+        buyerPrice: listingPrice,
+        tokenSize: 1,
+      },
+    );
+
+    const [cancelTradeStateReceipt] =
+      await AuctionHouseProgram.findListingReceiptAddress(
+        new PublicKey(offer.tradeState),
+      );
+
+    const cancelReceiptInstruction = createCancelListingReceiptInstruction({
+      receipt: cancelTradeStateReceipt,
+      instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+    });
+
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
@@ -237,8 +232,8 @@ export async function acceptOffer(params: {
         listingReceiptInstruction,
         executeSaleInstructionEx,
         purchaseReceiptInstruction,
-        cancelOrignListingInstruction,
-        cancelListingReceiptInstruction,
+        cancelInstruction,
+        cancelReceiptInstruction,
       ],
       [],
     );
