@@ -104,6 +104,7 @@ export async function acceptOffer(params: {
       listingPrice.toNumber(),
       1,
     );
+
     const cancelInstruction = createCancelInstruction(
       {
         wallet: sellerKey,

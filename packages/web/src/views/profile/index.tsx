@@ -8,7 +8,17 @@ import {
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useEffect, useState } from 'react';
-import { Button, Row, Col, Statistic, Tabs, Form, Input, Table } from 'antd';
+import {
+  Button,
+  Row,
+  Col,
+  Statistic,
+  Tabs,
+  Form,
+  Input,
+  Table,
+  Spin,
+} from 'antd';
 import { useCreator } from '../../hooks';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
@@ -55,6 +65,7 @@ export const ProfileView = () => {
   const [withdrawValue, setWithdrawValue] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
   const [refresh, setRefresh] = useState(0);
+  const [loadingBalance, setLoadingBalance] = useState(false);
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
   const connection = useConnection();
@@ -80,7 +91,7 @@ export const ProfileView = () => {
 
   useEffect(() => {
     if (wallet.publicKey) {
-      showEscrow(connection, wallet.publicKey).then(val => setBalance(val));
+      callShowEscrow();
 
       getNFTsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
@@ -131,6 +142,17 @@ export const ProfileView = () => {
   };
 
   const onSubmitFailed = () => {};
+
+  const callShowEscrow = () => {
+    if (wallet.publicKey) {
+      setLoadingBalance(true);
+      showEscrow(connection, wallet.publicKey)
+        .then(val => {
+          setBalance(val);
+        })
+        .finally(() => setLoadingBalance(false));
+    }
+  };
 
   const onCancelBid = (offer: Offer) => {
     // eslint-disable-next-line no-async-promise-executor
@@ -260,9 +282,8 @@ export const ProfileView = () => {
         });
         if (!result['err']) {
           setTimeout(() => {
-            setRefresh(Date.now());
-          }, 7000);
-          setDepositValue(0);
+            callShowEscrow();
+          }, 15000);
           resolve('');
         } else {
           reject();
@@ -300,9 +321,8 @@ export const ProfileView = () => {
         });
         if (!result['err']) {
           setTimeout(() => {
-            setRefresh(Date.now());
-          }, 7000);
-          setWithdrawValue(0);
+            callShowEscrow();
+          }, 15000);
           resolve('');
         } else {
           reject();
@@ -400,7 +420,9 @@ export const ProfileView = () => {
             <Col span={12} md={8} lg={6} className="details-container">
               <Statistic
                 title="TOTAL FLOOR VALUE"
-                value={`${totalFloorPrice > 0 ? totalFloorPrice.toFixed(2) : '---'} SOL`}
+                value={`${
+                  totalFloorPrice > 0 ? totalFloorPrice.toFixed(2) : '---'
+                } SOL`}
               />
             </Col>
           </Row>
@@ -518,10 +540,12 @@ export const ProfileView = () => {
           </div>
           <Row>
             <Col span={9}>
-              <Button onClick={() => {
-                setCancelVisible(false);
-                onWithdrawFromFee(selectedOffer!);
-              }}>
+              <Button
+                onClick={() => {
+                  setCancelVisible(false);
+                  onWithdrawFromFee(selectedOffer!);
+                }}
+              >
                 Withdraw
               </Button>
             </Col>
@@ -550,6 +574,20 @@ export const ProfileView = () => {
               Account balance:{' '}
               <span style={{ color: '#eb2f96' }}>{`${balance} SOL`}</span>
             </span>
+            <button
+              onClick={callShowEscrow}
+              className="balance-btn"
+              disabled={loadingBalance}
+            >
+              {loadingBalance ? (
+                <Spin />
+              ) : (
+                <img
+                  src="/icons/refresh.svg"
+                  style={{ width: 16, height: 16 }}
+                />
+              )}
+            </button>
           </Col>
           <Col span={24} md={12}>
             <div className="right-container">
@@ -564,7 +602,7 @@ export const ProfileView = () => {
                     onChange={val => setDepositValue(val.number || 0)}
                   />
                   <button
-                    className='balance-btn'
+                    className="balance-btn"
                     disabled={depositValue <= 0}
                     onClick={() => onDeposit(depositValue)}
                   >
@@ -583,7 +621,7 @@ export const ProfileView = () => {
                     onChange={val => setWithdrawValue(val.number || 0)}
                   />
                   <button
-                    className='balance-btn'
+                    className="balance-btn"
                     disabled={withdrawValue <= 0 || withdrawValue > balance}
                     onClick={() => onWithdraw(withdrawValue)}
                   >

@@ -50,7 +50,9 @@ export async function cancelBid(params: {
       },
     );
 
-    const [receipt] = await AuctionHouseProgram.findBidReceiptAddress(new PublicKey(offer.tradeState));
+    const [receipt] = await AuctionHouseProgram.findBidReceiptAddress(
+      new PublicKey(offer.tradeState),
+    );
     const cancelBidReceiptInstruction = createCancelBidReceiptInstruction({
       receipt: receipt,
       instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
