@@ -149,7 +149,7 @@ export async function sendSell(params: {
     const creatorKeys = nft.creators.map(creator => ({
       pubkey: new PublicKey(creator.address),
       isSigner: false,
-      isWritable: false,
+      isWritable: true,
     }));
 
     const executeSaleInstructionEx = new TransactionInstruction({
@@ -157,10 +157,6 @@ export async function sendSell(params: {
       data: executeSaleInstruction.data,
       keys: executeSaleInstruction.keys.concat(creatorKeys),
     });
-
-    executeSaleInstructionEx.keys
-      .filter(k => k.pubkey.equals(auctionHouseObj.authority))
-      .map(k => (k.isWritable = true));
 
     const [purchaseReceipt, purchaseReceiptBump] =
       await AuctionHouseProgram.findPurchaseReceiptAddress(
