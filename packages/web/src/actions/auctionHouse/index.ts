@@ -4,6 +4,7 @@ export * from './placeBid';
 export * from './sell';
 export * from './showEscrow';
 export * from './cancelBid';
+export * from './cancelBidAndWithdraw';
 export * from './withdrawFromFee';
 export * from './withdrawFromTreasury';
 export * from './acceptOffer';
