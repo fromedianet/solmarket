@@ -20,8 +20,11 @@ export async function cancelBidAndWithdraw(params: {
 }) {
   const { connection, wallet, offer } = params;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
-  const { createWithdrawInstruction, createCancelInstruction, createCancelBidReceiptInstruction } =
-    AuctionHouseProgram.instructions;
+  const {
+    createWithdrawInstruction,
+    createCancelInstruction,
+    createCancelBidReceiptInstruction,
+  } = AuctionHouseProgram.instructions;
   let status: any = { err: true };
   const pubkey = wallet.publicKey;
   if (!pubkey || !offer) {
@@ -35,10 +38,11 @@ export async function cancelBidAndWithdraw(params: {
       AUCTION_HOUSE_ID,
     );
 
-    const [escrowPaymentAccount, escrowPaymentBump] = await AuctionHouseProgram.findEscrowPaymentAccountAddress(
-      AUCTION_HOUSE_ID,
-      pubkey,
-    );
+    const [escrowPaymentAccount, escrowPaymentBump] =
+      await AuctionHouseProgram.findEscrowPaymentAccountAddress(
+        AUCTION_HOUSE_ID,
+        pubkey,
+      );
 
     const withdrawInstruction = createWithdrawInstruction(
       {
@@ -53,7 +57,7 @@ export async function cancelBidAndWithdraw(params: {
       {
         escrowPaymentBump,
         amount: buyerPrice,
-      }
+      },
     );
 
     const cancelInstruction = createCancelInstruction(

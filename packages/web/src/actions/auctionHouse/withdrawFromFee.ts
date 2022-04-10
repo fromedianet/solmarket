@@ -4,10 +4,7 @@ import {
   sendTransactionWithRetry,
   WalletSigner,
 } from '@oyster/common';
-import {
-  Connection,
-  LAMPORTS_PER_SOL,
-} from '@solana/web3.js';
+import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { BN } from 'bn.js';
 
 /**
@@ -22,9 +19,7 @@ export async function withdrawFromFee(params: {
 }) {
   const { connection, wallet, amount } = params;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
-  const {
-    createWithdrawFromFeeInstruction,
-  } = AuctionHouseProgram.instructions;
+  const { createWithdrawFromFeeInstruction } = AuctionHouseProgram.instructions;
   let status: any = { err: true };
   if (!wallet.publicKey || amount === 0) {
     return status;

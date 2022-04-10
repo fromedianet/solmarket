@@ -100,7 +100,6 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onCancelList = async () => {
-    const price = props.nft.price * LAMPORTS_PER_SOL;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -108,8 +107,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         const result = await sendCancelList({
           connection,
           wallet,
-          buyerPrice: price,
-          mint: props.nft.mint,
+          nft: props.nft,
         });
         if (!result['err']) {
           setTimeout(() => {
