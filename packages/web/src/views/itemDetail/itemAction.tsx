@@ -4,7 +4,7 @@ import {
   useConnection,
   useNativeAccount,
 } from '@oyster/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -17,11 +17,13 @@ import {
 } from '../../actions/auctionHouse';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
+import { useSocket } from '../../contexts/socketProvider';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
   const connection = useConnection();
+  const { socket } = useSocket();
   const { account } = useNativeAccount();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const [showOfferModal, setShowOfferModal] = useState(false);
@@ -37,6 +39,14 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [balanceError, setBalanceError] = useState('');
+
+  useEffect(() => {
+    socket.on('syncedAuctionHouse', params => {
+      if (wallet.publicKey && wallet.publicKey.toBase58 === params.wallet) {
+        props.onRefresh();
+      }
+    });
+  }, [socket]);
 
   const onChangeOffer = (value: number) => {
     let err = '';
@@ -69,8 +79,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         });
         if (!result['err']) {
           setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+            socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          }, 15000);
           resolve('');
         } else {
           reject();
@@ -111,8 +121,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         });
         if (!result['err']) {
           setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+            socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          }, 15000);
           resolve('');
         } else {
           reject();
@@ -155,8 +165,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         });
         if (!result['err']) {
           setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+            socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          }, 15000);
           resolve('');
         } else {
           reject();
@@ -199,8 +209,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         });
         if (!result['err']) {
           setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+            socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          }, 15000);
           resolve('');
         } else {
           reject();
