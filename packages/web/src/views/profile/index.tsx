@@ -35,7 +35,7 @@ import { PriceInput } from '../../components/PriceInput';
 import {
   showEscrow,
   cancelBid,
-  withdrawFromFee,
+  cancelBidAndWithdraw,
   acceptOffer,
   withdraw,
   deposit,
@@ -192,11 +192,11 @@ export const ProfileView = () => {
     );
   };
 
-  const onWithdrawFromFee = (offer: Offer) => {
+  const onCancelBidAndWithdraw = (offer: Offer) => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result = await withdrawFromFee({
+        const result = await cancelBidAndWithdraw({
           connection,
           wallet,
           offer,
@@ -542,7 +542,7 @@ export const ProfileView = () => {
               <Button
                 onClick={() => {
                   setCancelVisible(false);
-                  onWithdrawFromFee(selectedOffer!);
+                  onCancelBidAndWithdraw(selectedOffer!);
                 }}
               >
                 Withdraw

@@ -4,14 +4,8 @@ import {
   sendTransactionWithRetry,
   WalletSigner,
 } from '@oyster/common';
-import {
-  Connection,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  SYSVAR_INSTRUCTIONS_PUBKEY,
-} from '@solana/web3.js';
+import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { BN } from 'bn.js';
-import { Offer } from '../../models/offer';
 
 /**
  * CancelBid + withdrawFromFee
@@ -21,22 +15,17 @@ import { Offer } from '../../models/offer';
 export async function withdrawFromFee(params: {
   connection: Connection;
   wallet: WalletSigner;
-  offer: Offer;
+  amount: number;
 }) {
-  const { connection, wallet, offer } = params;
+  const { connection, wallet, amount } = params;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
-  const {
-    createWithdrawFromFeeInstruction,
-    createCancelInstruction,
-    createCancelBidReceiptInstruction,
-  } = AuctionHouseProgram.instructions;
+  const { createWithdrawFromFeeInstruction } = AuctionHouseProgram.instructions;
   let status: any = { err: true };
-  if (!wallet.publicKey || !offer) {
+  if (!wallet.publicKey || amount === 0) {
     return status;
   }
 
   try {
-    const buyerKey = new PublicKey(offer.buyer);
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
@@ -50,38 +39,14 @@ export async function withdrawFromFee(params: {
         auctionHouse: AUCTION_HOUSE_ID,
       },
       {
-        amount: new BN(offer.bidPrice * LAMPORTS_PER_SOL),
+        amount: new BN(amount * LAMPORTS_PER_SOL),
       },
     );
-
-    const cancelInstruction = createCancelInstruction(
-      {
-        wallet: buyerKey,
-        tokenAccount: new PublicKey(offer.tokenAccount),
-        tokenMint: new PublicKey(offer.mint),
-        authority: auctionHouseObj.authority,
-        auctionHouse: AUCTION_HOUSE_ID,
-        auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
-        tradeState: new PublicKey(offer.tradeState),
-      },
-      {
-        buyerPrice: new BN(offer.bidPrice * LAMPORTS_PER_SOL),
-        tokenSize: offer.tokenSize,
-      },
-    );
-
-    const [receipt] = await AuctionHouseProgram.findBidReceiptAddress(
-      new PublicKey(offer.tradeState),
-    );
-    const cancelBidReceiptInstruction = createCancelBidReceiptInstruction({
-      receipt: receipt,
-      instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
-    });
 
     const { txid } = await sendTransactionWithRetry(
       connection,
       wallet,
-      [withdrawInstruction, cancelInstruction, cancelBidReceiptInstruction],
+      [withdrawInstruction],
       [],
     );
 

@@ -149,7 +149,7 @@ export async function sendSell(params: {
     const creatorKeys = nft.creators.map(creator => ({
       pubkey: new PublicKey(creator.address),
       isSigner: false,
-      isWritable: false,
+      isWritable: true,
     }));
 
     const executeSaleInstructionEx = new TransactionInstruction({
