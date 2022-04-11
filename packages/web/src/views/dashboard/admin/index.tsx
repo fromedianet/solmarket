@@ -18,7 +18,7 @@ export const DashboardAdmin = () => {
   useEffect(() => {
     // @ts-ignore
     getCollectionsWithoutDraft().then((res: {}) => {
-      if (res['data']) {
+      if ('data' in res) {
         setLists({
           submitted: res['data'].filter(item => item.status === 'submitted'),
           // reviewed: res['data'].filter(item => item.status === 'reviewed'),

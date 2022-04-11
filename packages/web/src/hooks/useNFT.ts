@@ -20,7 +20,7 @@ export const useNFT = (mint: string, refresh?: number) => {
     getNftByMint(mint)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           const data = res['data'];
           getTokenAccount(mint)
             .then(res => {
@@ -47,7 +47,7 @@ export const useNFT = (mint: string, refresh?: number) => {
     getTransactionsByMint(mint)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setTransactions(res['data']);
         }
       });

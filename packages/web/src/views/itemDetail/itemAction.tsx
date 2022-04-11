@@ -4,7 +4,7 @@ import {
   useConnection,
   useNativeAccount,
 } from '@oyster/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -17,17 +17,25 @@ import {
 } from '../../actions/auctionHouse';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
+import { useSocket } from '../../contexts/socketProvider';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
   const connection = useConnection();
+  const { socket } = useSocket();
   const { account } = useNativeAccount();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
   const isOwner = props.nft.owner === wallet.publicKey?.toBase58();
+  const isOfferAccepted = props.nft.txType === 'ACCEPT OFFER';
+  const isWinner = props.nft.bookKeeper === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
+  const showCurrentPrice =
+    (alreadyListed && !isOfferAccepted) ||
+    (alreadyListed && isOwner) ||
+    (alreadyListed && isOfferAccepted && isWinner);
   const checkPrice = (_: any, value: { number: number }) => {
     if (value && value.number > 0) {
       return Promise.resolve();
@@ -37,6 +45,16 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [balanceError, setBalanceError] = useState('');
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('syncedAuctionHouse', (params: any[]) => {
+        if (params.some(k => k.mint === props.nft.mint)) {
+          props.onRefresh();
+        }
+      });
+    }
+  }, [socket]);
 
   const onChangeOffer = (value: number) => {
     let err = '';
@@ -68,9 +86,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+          socket.emit('auctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -110,9 +126,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+          socket.emit('auctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -154,9 +168,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+          socket.emit('auctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -198,9 +210,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            props.onRefresh();
-          }, 7000);
+          socket.emit('auctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -231,7 +241,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
 
   return (
     <div className="action-view">
-      {alreadyListed && <span className="label">Current Price</span>}
+      {showCurrentPrice && <span className="label">Current Price</span>}
       <div className="price-container">
         <img
           src="/icons/price.svg"
@@ -239,21 +249,27 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           alt="price"
           style={{ marginRight: '8px' }}
         />
-        {alreadyListed && <span className="value">{props.nft.price} SOL</span>}
+        {showCurrentPrice && (
+          <span className="value">{props.nft.price} SOL</span>
+        )}
       </div>
-      {!alreadyListed && <span className="value">Not listed</span>}
+      {!showCurrentPrice && <span className="value">Not listed</span>}
       <div className="btn-container">
         {!wallet.connected ? (
           <ConnectButton className="button" />
         ) : isOwner ? (
           alreadyListed ? (
-            <Button
-              className="button"
-              onClick={onCancelList}
-              disabled={loading}
-            >
-              {loading ? <Spin /> : 'Cancel Listing'}
-            </Button>
+            isOfferAccepted ? (
+              <span className="value">Offer is already accepted</span>
+            ) : (
+              <Button
+                className="button"
+                onClick={onCancelList}
+                disabled={loading}
+              >
+                {loading ? <Spin /> : 'Cancel Listing'}
+              </Button>
+            )
           ) : (
             <Form
               form={form}
@@ -286,7 +302,14 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             </Form>
           )
         ) : (
-          alreadyListed && (
+          alreadyListed &&
+          (isOfferAccepted ? (
+            isWinner && (
+              <Button className="button" onClick={onBuyNow} disabled={loading}>
+                Claim
+              </Button>
+            )
+          ) : (
             <Row gutter={16}>
               <Col span={10}>
                 <Button
@@ -310,7 +333,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                 </Button>
               </Col>
             </Row>
-          )
+          ))
         )}
       </div>
       <MetaplexModal

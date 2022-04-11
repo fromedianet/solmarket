@@ -20,7 +20,7 @@ export const DashboardAdminDetails = () => {
     setLoading(true);
     // @ts-ignore
     getCollectionById(id).then((res: {}) => {
-      if (res['data']) {
+      if ('data' in res) {
         setCollection(res['data']);
       } else {
         history.goBack();
@@ -37,7 +37,7 @@ export const DashboardAdminDetails = () => {
       status: status,
     }) // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           history.goBack();
         } else {
           notify({
@@ -61,7 +61,7 @@ export const DashboardAdminDetails = () => {
       reject_info: values.reject_info,
     }) // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           history.goBack();
         } else {
           notify({

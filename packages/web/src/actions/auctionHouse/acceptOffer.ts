@@ -73,14 +73,14 @@ export async function acceptOffer(params: {
       },
     );
 
-    const [cancelReceipt] = await AuctionHouseProgram.findListingReceiptAddress(cancelTradeState);
-
-    const cancelReceiptInstruction = createCancelListingReceiptInstruction(
-      {
-        receipt: cancelReceipt,
-        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
-      },
+    const [cancelReceipt] = await AuctionHouseProgram.findListingReceiptAddress(
+      cancelTradeState,
     );
+
+    const cancelReceiptInstruction = createCancelListingReceiptInstruction({
+      receipt: cancelReceipt,
+      instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+    });
 
     const [sellerTradeState, sellerTradeStateBump] =
       await AuctionHouseProgram.findTradeStateAddress(
@@ -101,7 +101,7 @@ export async function acceptOffer(params: {
         auctionHouseObj.treasuryMint,
         tokenMint,
         0,
-        1
+        1,
       );
 
     const [programAsSigner, programAsSignerBump] =
@@ -138,8 +138,8 @@ export async function acceptOffer(params: {
         instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
       },
       {
-        receiptBump: listingReceiptBump
-      }
+        receiptBump: listingReceiptBump,
+      },
     );
 
     const { txid } = await sendTransactionWithRetry(

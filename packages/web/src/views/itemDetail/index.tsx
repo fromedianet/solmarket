@@ -25,7 +25,7 @@ export const ItemDetailView = () => {
       price: item.price || 0,
     }));
 
-    setPriceData(data);
+    setPriceData(data.reverse());
   }, [transactions]);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const ItemDetailView = () => {
       getListedNftsByQuery(query)
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             const data = res['data'].filter(item => item.mint !== nft.mint);
             setNFTList(data);
           }

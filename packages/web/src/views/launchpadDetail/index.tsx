@@ -72,7 +72,7 @@ export const LaunchpadDetailView = () => {
     getCollectionBySymbol(symbol)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setCollection(res['data']);
           const candyMachineId = res['data']['candymachine_id'];
           if (candyMachineId) {

@@ -33,7 +33,7 @@ export const DashboardListingView = () => {
     getCollectionById(id)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setCollection(res['data']);
         } else {
           notify({

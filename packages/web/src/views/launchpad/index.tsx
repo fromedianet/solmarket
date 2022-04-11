@@ -19,7 +19,7 @@ export const LaunchPadView = () => {
     getLaunchpadCollections()
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           parseData(res['data']);
         }
       })

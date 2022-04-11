@@ -17,7 +17,7 @@ export const SalesListView = () => {
     featuredCollectionsCarousel()
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setFeaturedCollections(res['data']);
         }
       });

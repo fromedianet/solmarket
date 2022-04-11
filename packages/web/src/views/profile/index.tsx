@@ -43,12 +43,15 @@ import {
 import { Offer } from '../../models/offer';
 import { EmptyView } from '../../components/EmptyView';
 import { toast } from 'react-toastify';
+import { useSocket } from '../../contexts/socketProvider';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export const ProfileView = () => {
   const wallet = useWallet();
+  const { socket } = useSocket();
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
@@ -89,13 +92,35 @@ export const ProfileView = () => {
   });
 
   useEffect(() => {
+    if (socket) {
+      socket.on('syncedAuctionHouse', (params: any[]) => {
+        if (
+          wallet.publicKey &&
+          params.some(k => k.wallet === wallet.publicKey!.toBase58())
+        ) {
+          setRefresh(Date.now());
+        }
+      });
+
+      socket.on('syncedAcceptOffer', params => {
+        if (
+          wallet.publicKey &&
+          params.some(k => k.wallet === wallet.publicKey!.toBase58())
+        ) {
+          setRefresh(Date.now());
+        }
+      });
+    }
+  }, [socket]);
+
+  useEffect(() => {
     if (wallet.publicKey) {
       callShowEscrow();
 
       getNFTsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             const result = res['data'];
             setMyItems(result.filter(item => item.price === 0));
             setListedItems(result.filter(item => item.price > 0));
@@ -105,7 +130,7 @@ export const ProfileView = () => {
       getTransactionsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             setTransactions(res['data']);
           }
         });
@@ -113,7 +138,7 @@ export const ProfileView = () => {
       getOffersMade(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             setOffersMade(res['data']);
           }
         });
@@ -121,7 +146,7 @@ export const ProfileView = () => {
       getOffersReceived(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             setOffersReceived(res['data']);
           }
         });
@@ -163,9 +188,7 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            setRefresh(Date.now());
-          }, 7000);
+          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
           resolve('');
         } else {
           reject();
@@ -202,9 +225,7 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            setRefresh(Date.now());
-          }, 7000);
+          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
           resolve('');
         } else {
           reject();
@@ -241,9 +262,12 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          setTimeout(() => {
-            setRefresh(Date.now());
-          }, 7000);
+          socket.emit('acceptOffer', {
+            bookKeeper: wallet.publicKey!.toBase58(),
+            buyer: offer.buyer,
+            mint: offer.mint,
+            price: offer.bidPrice * LAMPORTS_PER_SOL,
+          });
           resolve('');
         } else {
           reject();

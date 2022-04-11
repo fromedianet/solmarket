@@ -12,6 +12,7 @@ import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
 import { AuthProvider } from './contexts/authProvider';
 import SidebarProvider from './contexts/sidebar';
+import { SocketProvider } from './contexts/socketProvider';
 import { DashboardLayout } from './views/dashboard';
 
 export const Providers: FC = ({ children }) => {
@@ -41,7 +42,9 @@ export const Providers: FC = ({ children }) => {
                     <LoaderProvider>
                       <ConfettiProvider>
                         <SidebarProvider>
-                          <AppLayout>{children}</AppLayout>
+                          <SocketProvider>
+                            <AppLayout>{children}</AppLayout>
+                          </SocketProvider>
                         </SidebarProvider>
                       </ConfettiProvider>
                     </LoaderProvider>

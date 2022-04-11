@@ -33,7 +33,7 @@ export const useAuthAPI = () => {
         JSON.stringify({ publicKey, signature }),
       ) // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             resolve(res['data']);
           } else {
             reject();
