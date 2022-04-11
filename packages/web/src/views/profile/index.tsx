@@ -2,6 +2,7 @@ import {
   ConnectButton,
   CopySpan,
   MetaplexModal,
+  notify,
   shortenAddress,
   useConnection,
   useConnectionConfig,
@@ -92,26 +93,33 @@ export const ProfileView = () => {
   });
 
   useEffect(() => {
-    if (socket) {
+    if (socket && wallet.publicKey) {
       socket.on('syncedAuctionHouse', (params: any[]) => {
-        if (
-          wallet.publicKey &&
-          params.some(k => k.wallet === wallet.publicKey!.toBase58())
-        ) {
+        if (params.some(k => k.wallet === wallet.publicKey!.toBase58())) {
           setRefresh(Date.now());
         }
       });
 
       socket.on('syncedAcceptOffer', params => {
-        if (
-          wallet.publicKey &&
-          params.some(k => k.wallet === wallet.publicKey!.toBase58())
-        ) {
+        if (params.some(k => k.wallet === wallet.publicKey!.toBase58())) {
           setRefresh(Date.now());
         }
       });
+
+      socket.emit('loadAllTokenAccounts', {
+        wallet: wallet.publicKey.toBase58(),
+      });
+
+      socket.on('syncedAllTokenAccounts', params => {
+        if (params.wallet === wallet.publicKey?.toBase58()) {
+          notify({
+            message: 'Your NFT data will be synced within 1 ~ 2 minutes',
+            type: 'info',
+          });
+        }
+      });
     }
-  }, [socket]);
+  }, [socket, wallet]);
 
   useEffect(() => {
     if (wallet.publicKey) {
