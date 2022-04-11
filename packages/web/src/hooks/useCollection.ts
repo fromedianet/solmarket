@@ -124,7 +124,7 @@ export const useCollection = (symbol: string) => {
         }
       });
 
-    getListedNFTs({ symbol: symbol, sort: 1, status: false });
+    // getListedNFTs({ symbol: symbol, sort: 1, status: false });
 
     getTransactionsBySymbol(symbol)
       // @ts-ignore
