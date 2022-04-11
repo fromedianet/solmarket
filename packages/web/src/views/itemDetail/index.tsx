@@ -25,7 +25,7 @@ export const ItemDetailView = () => {
       price: item.price || 0,
     }));
 
-    setPriceData(data);
+    setPriceData(data.reverse());
   }, [transactions]);
 
   useEffect(() => {
