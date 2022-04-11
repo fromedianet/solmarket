@@ -27,7 +27,7 @@ export const CollectionsView = () => {
       getNewCollections()
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             setCollections(res['data']);
             setFilters(res['data']);
           }
@@ -37,7 +37,7 @@ export const CollectionsView = () => {
       getAllCollections()
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             setCollections(res['data']);
             setFilters(res['data']);
           }

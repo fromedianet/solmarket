@@ -1,51 +1,58 @@
 import {
   AUCTION_HOUSE_ID,
   sendTransactionWithRetry,
-  toPublicKey,
   WalletSigner,
 } from '@oyster/common';
 import {
   Connection,
+  LAMPORTS_PER_SOL,
   PublicKey,
   SYSVAR_INSTRUCTIONS_PUBKEY,
 } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
-import { getAtaForMint } from '../../views/launchpadDetail/utils';
+import { NFT } from '../../models/exCollection';
+import { BN } from 'bn.js';
 
 export async function sendCancelList(params: {
   connection: Connection;
   wallet: WalletSigner;
-  buyerPrice: number;
-  mint: string;
+  nft: NFT;
 }) {
-  const { connection, wallet, buyerPrice, mint } = params;
+  const { connection, wallet, nft } = params;
   const { createCancelInstruction, createCancelListingReceiptInstruction } =
     AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const pubkey = wallet.publicKey;
+  if (!pubkey || !nft) {
+    return status;
+  }
 
   try {
-    const tokenAccount = (
-      await getAtaForMint(toPublicKey(mint), wallet.publicKey!)
-    )[0];
+    const mintKey = new PublicKey(nft.mint);
+    const buyerPrice = new BN(nft.price * LAMPORTS_PER_SOL);
+    const [tokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        mintKey,
+        pubkey,
+      );
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
     );
-    const mintKey = new PublicKey(mint);
     const [tradeState] = await AuctionHouseProgram.findTradeStateAddress(
-      wallet.publicKey!,
+      pubkey,
       AUCTION_HOUSE_ID,
       tokenAccount,
       auctionHouseObj.treasuryMint,
       mintKey,
-      buyerPrice,
+      buyerPrice.toNumber(),
       1,
     );
 
     const instruction = createCancelInstruction(
       {
-        wallet: wallet.publicKey!,
+        wallet: pubkey,
         tokenAccount,
         tokenMint: mintKey,
         authority: auctionHouseObj.authority,
@@ -79,10 +86,9 @@ export async function sendCancelList(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

@@ -15,7 +15,7 @@ export const AuctionView = () => {
   const { pullAuctionPage } = useMeta();
   useEffect(() => {
     console.log('------------- pullAuctionPage -----------');
-    pullAuctionPage(id);
+    // pullAuctionPage(id);
   }, []);
 
   const hasDescription = data === undefined || data.description === undefined;

@@ -123,16 +123,16 @@ export function MetaProvider({
     tempState?: MetaState,
   ): Promise<void> {
     setIsLoadingMetadata(true);
-    loadedMetadataLength.current = userTokenAccounts.length;
+    // loadedMetadataLength.current = userTokenAccounts.length;
 
-    const nextState = await pullYourMetadata(
-      connection,
-      userTokenAccounts,
-      tempState || state,
-    );
-    await updateMints(nextState.metadataByMint);
+    // const nextState = await pullYourMetadata(
+    //   connection,
+    //   userTokenAccounts,
+    //   tempState || state,
+    // );
+    // await updateMints(nextState.metadataByMint);
 
-    setState(nextState);
+    // setState(nextState);
     setIsLoadingMetadata(false);
   }
 
@@ -144,7 +144,7 @@ export function MetaProvider({
       }
       return state;
     } else if (!state.store) {
-      setIsLoading(true);
+      setIsLoading(false);
     }
     console.log('------->Query started');
 
@@ -171,66 +171,67 @@ export function MetaProvider({
       setIsLoading(true);
     }
 
-    let nextState = await pullPage(connection, page, state);
-    console.log('-----> Query started');
+    // let nextState = await pullPage(connection, page, state);
+    // console.log('-----> Query started');
 
-    if (nextState.storeIndexer.length) {
-      if (USE_SPEED_RUN) {
-        // nextState = await limitedLoadAccounts(connection);
+    // if (nextState.storeIndexer.length) {
+    //   if (USE_SPEED_RUN) {
+    // nextState = await limitedLoadAccounts(connection);
 
-        // console.log('------->Query finished');
+    // console.log('------->Query finished');
 
-        // setState(nextState);
+    // setState(nextState);
 
-        //@ts-ignore
-        window.loadingData = false;
-        setIsLoading(false);
-      } else {
-        // console.log('------->Pagination detected, pulling page', page);
+    //@ts-ignore
+    //   window.loadingData = false;
+    //   setIsLoading(false);
+    // } else {
+    // console.log('------->Pagination detected, pulling page', page);
 
-        // const auction = window.location.href.match(/#\/auction\/(\w+)/);
-        // if (auction && page == 0) {
-        //   console.log(
-        //     '---------->Loading auction page on initial load, pulling sub accounts',
-        //   );
+    // const auction = window.location.href.match(/#\/auction\/(\w+)/);
+    // if (auction && page == 0) {
+    //   console.log(
+    //     '---------->Loading auction page on initial load, pulling sub accounts',
+    //   );
 
-        //   nextState = await pullAuctionSubaccounts(
-        //     connection,
-        //     auction[1],
-        //     nextState,
-        //   );
-        // }
+    //   nextState = await pullAuctionSubaccounts(
+    //     connection,
+    //     auction[1],
+    //     nextState,
+    //   );
+    // }
 
-        // let currLastLength;
-        // setLastLength(last => {
-        //   currLastLength = last;
-        //   return last;
-        // });
-        // if (nextState.storeIndexer.length != currLastLength) {
-        //   setPage(page => page + 1);
-        // }
-        // setLastLength(nextState.storeIndexer.length);
+    // let currLastLength;
+    // setLastLength(last => {
+    //   currLastLength = last;
+    //   return last;
+    // });
+    // if (nextState.storeIndexer.length != currLastLength) {
+    //   setPage(page => page + 1);
+    // }
+    // setLastLength(nextState.storeIndexer.length);
 
-        //@ts-ignore
-        window.loadingData = false;
-        setIsLoading(false);
-        setState(nextState);
-      }
-    } else {
-      // console.log('------->No pagination detected');
-      // nextState = !USE_SPEED_RUN
-      //   ? await loadAccounts(connection)
-      //   : await limitedLoadAccounts(connection);
+    //@ts-ignore
+    //     window.loadingData = false;
+    //     setIsLoading(false);
+    //     setState(nextState);
+    //   }
+    // } else {
+    // console.log('------->No pagination detected');
+    // nextState = !USE_SPEED_RUN
+    //   ? await loadAccounts(connection)
+    //   : await limitedLoadAccounts(connection);
 
-      // console.log('------->Query finished');
+    // console.log('------->Query finished');
 
-      // setState(nextState);
+    // setState(nextState);
 
-      //@ts-ignore
-      window.loadingData = false;
-      setIsLoading(false);
-    }
+    //@ts-ignore
+    //   window.loadingData = false;
+    //   setIsLoading(false);
+    // }
 
+    setIsLoading(false);
     console.log('------->set finished');
 
     // if (auctionAddress && bidderAddress) {
@@ -281,7 +282,7 @@ export function MetaProvider({
       loadedMetadataLength.current !== userAccounts.length;
 
     if (shouldFetch) {
-      pullUserMetadata(userAccounts);
+      // pullUserMetadata(userAccounts);
     }
   }, [
     isLoading,

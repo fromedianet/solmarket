@@ -2,7 +2,6 @@ import {
   AUCTION_HOUSE_ID,
   getMetadata,
   sendTransactionWithRetry,
-  toPublicKey,
   WalletSigner,
 } from '@oyster/common';
 import {
@@ -12,37 +11,41 @@ import {
   TransactionInstruction,
 } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
-import { getAtaForMint } from '../../views/launchpadDetail/utils';
 import { NFT } from '../../models/exCollection';
 
 export async function sendSell(params: {
   connection: Connection;
-  seller: string;
   wallet: WalletSigner;
   buyerPrice: number;
-  mint: string;
   nft: NFT;
 }) {
-  const { connection, seller, wallet, buyerPrice, mint, nft } = params;
+  const { connection, wallet, buyerPrice, nft } = params;
   const {
     createBuyInstruction,
-    createExecuteSaleInstruction,
     createPrintBidReceiptInstruction,
+    createExecuteSaleInstruction,
     createPrintPurchaseReceiptInstruction,
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const buyerKey = wallet.publicKey;
+  if (!buyerKey || !nft || buyerPrice === 0) {
+    return status;
+  }
 
   try {
-    const buyerKey = wallet.publicKey!;
-    const sellerKey = new PublicKey(seller);
-    const metadata = await getMetadata(mint);
-    const tokenAccount = (await getAtaForMint(toPublicKey(mint), sellerKey))[0];
+    const sellerKey = new PublicKey(nft.owner);
+    const mintKey = new PublicKey(nft.mint);
+    const metadata = await getMetadata(nft.mint);
+    const [tokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        mintKey,
+        sellerKey,
+      );
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
     );
-    const mintKey = new PublicKey(mint);
     const [buyerTradeState, tradeStateBump] =
       await AuctionHouseProgram.findTradeStateAddress(
         buyerKey,
@@ -83,6 +86,12 @@ export async function sendSell(params: {
         buyerKey,
       );
 
+    const [buyerReceiptTokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        mintKey,
+        buyerKey,
+      );
+
     const [programAsSigner, programAsSignerBump] =
       await AuctionHouseProgram.findAuctionHouseProgramAsSignerAddress();
 
@@ -108,19 +117,6 @@ export async function sendSell(params: {
       },
     );
 
-    const [bidReceipt, receiptBump] =
-      await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
-    const printBidReceiptInstruction = await createPrintBidReceiptInstruction(
-      {
-        receipt: bidReceipt,
-        bookkeeper: buyerKey,
-        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
-      },
-      {
-        receiptBump,
-      },
-    );
-
     const executeSaleInstruction = createExecuteSaleInstruction(
       {
         buyer: buyerKey,
@@ -131,7 +127,7 @@ export async function sendSell(params: {
         treasuryMint: auctionHouseObj.treasuryMint,
         escrowPaymentAccount: escrowPaymentAccount,
         sellerPaymentReceiptAccount: sellerKey,
-        buyerReceiptTokenAccount: (await getAtaForMint(mintKey, buyerKey))[0],
+        buyerReceiptTokenAccount: buyerReceiptTokenAccount,
         authority: auctionHouseObj.authority,
         auctionHouse: AUCTION_HOUSE_ID,
         auctionHouseFeeAccount: auctionHouseObj.auctionHouseFeeAccount,
@@ -153,7 +149,7 @@ export async function sendSell(params: {
     const creatorKeys = nft.creators.map(creator => ({
       pubkey: new PublicKey(creator.address),
       isSigner: false,
-      isWritable: false,
+      isWritable: true,
     }));
 
     const executeSaleInstructionEx = new TransactionInstruction({
@@ -169,6 +165,20 @@ export async function sendSell(params: {
       );
     const [listingReceipt] =
       await AuctionHouseProgram.findListingReceiptAddress(sellerTradeState);
+
+    const [bidReceipt, bidReceiptBump] =
+      await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
+
+    const bidReceiptInstruction = createPrintBidReceiptInstruction(
+      {
+        receipt: bidReceipt,
+        bookkeeper: buyerKey,
+        instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
+      },
+      {
+        receiptBump: bidReceiptBump,
+      },
+    );
 
     const purchaseReceiptInstruction = createPrintPurchaseReceiptInstruction(
       {
@@ -188,7 +198,7 @@ export async function sendSell(params: {
       wallet,
       [
         buyInstruction,
-        printBidReceiptInstruction,
+        bidReceiptInstruction,
         executeSaleInstructionEx,
         purchaseReceiptInstruction,
       ],
@@ -200,10 +210,9 @@ export async function sendSell(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

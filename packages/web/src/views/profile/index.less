@@ -1,6 +1,7 @@
 .profile-page {
   display: flex;
   justify-content: center;
+  padding-bottom: 100px;
 
   .profile-info {
     width: 100%;
@@ -151,3 +152,103 @@
     }
   }
 }
+
+.cancel-modal {
+  padding: 16px;
+
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+
+  .header-text {
+    font-size: 16px;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .body-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+
+  .main-text {
+    font-size: 14px;
+    color: white;
+    text-align: center;
+  }
+
+}
+
+.balance-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: @bg-third-color;
+  box-shadow: 10px 3px 3px 10px rgba(0, 0, 0, 0.12);
+  padding-top: 12px;
+  padding-bottom: 20px;
+
+  .label {
+    color: white;
+    font-size: 16px;
+    margin-left: 24px;
+  }
+
+  .price {
+    width: 100px;
+  }
+
+  .right-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: 24px;
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .balance-label {
+    color: white;
+    font-size: 12px;
+  }
+
+  .balance-input {
+    max-width: 150px;
+  }
+
+  .balance-btn {
+    margin-left: 8px;
+    margin-right: 24px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+
+    &:disabled {
+      color: #888888;
+      cursor: not-allowed;
+    }
+  }
+}
+

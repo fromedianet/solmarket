@@ -98,7 +98,7 @@ export const useCollection = (symbol: string) => {
     getCollectionBySymbol(symbol)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setCollection(res['data']);
         }
       });
@@ -106,7 +106,7 @@ export const useCollection = (symbol: string) => {
     getCollectionStatsBySymbol(symbol)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           const {
             availableAttributes,
             floorPrice,
@@ -129,7 +129,7 @@ export const useCollection = (symbol: string) => {
     getTransactionsBySymbol(symbol)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setTransactions(res['data']);
         }
       });

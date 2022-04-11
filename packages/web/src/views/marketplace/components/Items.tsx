@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Select, Tag, Input, Card } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../../components/EmptyView';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArtContent } from '../../../components/ArtContent';
 import { ExCollection } from '../../../models/exCollection';
 
@@ -28,9 +28,9 @@ export const Items = (props: {
   onSortChange: (a: number) => void;
   updateFilters: (p, a, s) => void;
   fetchMore: () => void;
+  onRefresh: () => void;
 }) => {
   const searchRef = useRef(null);
-  const history = useHistory();
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
   const [attributeFilter, setAttributeFilter] = useState(
     props.filter.attributes,
@@ -65,10 +65,6 @@ export const Items = (props: {
   const existsAttributes = () => {
     const values = Object.values(attributeFilter);
     return values.length > 0;
-  };
-
-  const onRefresh = () => {
-    history.go(0);
   };
 
   const onCloseStatusTag = () => {
@@ -118,7 +114,7 @@ export const Items = (props: {
     <div className="items-container">
       <Row>
         <Col span={24} md={12} className="control-container">
-          <div className="refresh-btn" onClick={onRefresh}>
+          <div className="refresh-btn" onClick={props.onRefresh}>
             <img src="/icons/refresh.svg" alt="refresh" />
           </div>
           <Search
@@ -131,7 +127,7 @@ export const Items = (props: {
           />
         </Col>
         <Col span={24} md={12} className="control-container">
-          <div className="filter-btn" onClick={onRefresh}>
+          <div className="filter-btn" onClick={props.onRefresh}>
             <img src="/icons/filter.svg" alt="filter" />
           </div>
           <Select

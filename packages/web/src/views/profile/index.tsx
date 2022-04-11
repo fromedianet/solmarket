@@ -3,13 +3,22 @@ import {
   CopySpan,
   MetaplexModal,
   shortenAddress,
+  useConnection,
   useConnectionConfig,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useEffect, useState } from 'react';
-import { Button, Row, Col, Statistic, Tabs, Form, Input, Table } from 'antd';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
+import {
+  Button,
+  Row,
+  Col,
+  Statistic,
+  Tabs,
+  Form,
+  Input,
+  Table,
+  Spin,
+} from 'antd';
 import { useCreator } from '../../hooks';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
@@ -17,117 +26,101 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { NFTCard } from '../marketplace/components/Items';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { Transaction } from '../../models/exCollection';
-
-TimeAgo.setDefaultLocale(en.locale);
-TimeAgo.addLocale(en);
-// Create formatter (English).
-const timeAgo = new TimeAgo('en-US');
+import {
+  ActivityColumns,
+  OffersMadeColumns,
+  OffersReceivedColumns,
+} from './tableColumns';
+import { PriceInput } from '../../components/PriceInput';
+import {
+  showEscrow,
+  cancelBid,
+  cancelBidAndWithdraw,
+  acceptOffer,
+  withdraw,
+  deposit,
+} from '../../actions/auctionHouse';
+import { Offer } from '../../models/offer';
+import { EmptyView } from '../../components/EmptyView';
+import { toast } from 'react-toastify';
+import { useSocket } from '../../contexts/socketProvider';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export const ProfileView = () => {
   const wallet = useWallet();
+  const { socket } = useSocket();
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
   const [visible, setVisible] = useState(false);
+  const [cancelVisible, setCancelVisible] = useState(false);
   const [myItems, setMyItems] = useState<any[]>([]);
   const [listedItems, setListedItems] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [offersMade, setOffersMade] = useState<Offer[]>([]);
+  const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
+  const [selectedOffer, setSelectedOffer] = useState<Offer>();
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [withdrawValue, setWithdrawValue] = useState(0);
+  const [depositValue, setDepositValue] = useState(0);
+  const [refresh, setRefresh] = useState(0);
+  const [loadingBalance, setLoadingBalance] = useState(false);
   const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
+  const connection = useConnection();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
-  const { getTransactionsByWallet } = useTransactionsAPI();
+  const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
+    useTransactionsAPI();
 
-  const getColor = txType => {
-    if (txType === 'SALE') {
-      return '#2fc27d';
-    } else if (txType === 'PLACE BID') {
-      return '#6d79c9';
-    } else if (txType === 'LISTING') {
-      return '#f8f7f8';
-    } else {
-      return '#9c93a5';
+  const activityColumns = ActivityColumns(network);
+  const offersMadeColumns = OffersMadeColumns({
+    balance: balance,
+    onCancel: (data: Offer) => {
+      setSelectedOffer(data);
+      setCancelVisible(true);
+    },
+    onDeposit: () => {},
+  });
+
+  const offersReceivedColumns = OffersReceivedColumns({
+    onAccept: (data: Offer) => onAcceptOffer(data),
+  });
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('syncedAuctionHouse', (params: any[]) => {
+        if (
+          wallet.publicKey &&
+          params.some(k => k.wallet === wallet.publicKey!.toBase58())
+        ) {
+          setRefresh(Date.now());
+        }
+      });
+
+      socket.on('syncedAcceptOffer', params => {
+        if (
+          wallet.publicKey &&
+          params.some(k => k.wallet === wallet.publicKey!.toBase58())
+        ) {
+          setRefresh(Date.now());
+        }
+      });
     }
-  };
-
-  const columns = [
-    {
-      title: '',
-      dataIndex: 'image',
-      key: 'image',
-      render: uri => <img src={uri} width={40} alt="image" />,
-    },
-    {
-      title: 'NAME',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => (
-        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
-          {record.name}
-        </a>
-      ),
-    },
-    {
-      title: 'TRANSACTION ID',
-      dataIndex: 'transaction',
-      key: 'transaction',
-      render: txId => (
-        <a
-          href={`https://explorer.solana.com/tx/${txId}${
-            network === 'mainnet-beta' ? '' : `?cluster=${network}`
-          }`}
-          target="_blank"
-          rel="noreferrer"
-          style={{ cursor: 'pointer' }}
-        >
-          {shortenAddress(txId)}
-        </a>
-      ),
-    },
-    {
-      title: 'TRANSACTION TYPE',
-      dataIndex: 'txType',
-      key: 'txType',
-      render: type => <span style={{ color: getColor(type) }}>{type}</span>,
-    },
-    {
-      title: 'TIME',
-      dataIndex: 'blockTime',
-      key: 'blockTime',
-      render: timestamp => timeAgo.format(timestamp * 1000),
-    },
-    {
-      title: 'TOTAL AMOUNT',
-      dataIndex: 'price',
-      key: 'price',
-      render: price => price > 0 && `${price} SOL`,
-    },
-    {
-      title: 'BUYER',
-      dataIndex: 'buyer',
-      key: 'buyer',
-      render: text =>
-        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
-    },
-    {
-      title: 'SELLER',
-      dataIndex: 'seller',
-      key: 'seller',
-      render: text =>
-        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
-    },
-  ];
+  }, [socket]);
 
   useEffect(() => {
     if (wallet.publicKey) {
+      callShowEscrow();
+
       getNFTsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             const result = res['data'];
             setMyItems(result.filter(item => item.price === 0));
             setListedItems(result.filter(item => item.price > 0));
@@ -137,12 +130,28 @@ export const ProfileView = () => {
       getTransactionsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
         .then((res: {}) => {
-          if (res['data']) {
+          if ('data' in res) {
             setTransactions(res['data']);
           }
         });
+
+      getOffersMade(wallet.publicKey.toBase58())
+        // @ts-ignore
+        .then((res: {}) => {
+          if ('data' in res) {
+            setOffersMade(res['data']);
+          }
+        });
+
+      getOffersReceived(wallet.publicKey.toBase58())
+        // @ts-ignore
+        .then((res: {}) => {
+          if ('data' in res) {
+            setOffersReceived(res['data']);
+          }
+        });
     }
-  }, [wallet.publicKey]);
+  }, [wallet.publicKey, refresh]);
 
   useEffect(() => {
     let total = 0;
@@ -158,12 +167,208 @@ export const ProfileView = () => {
 
   const onSubmitFailed = () => {};
 
-  const EmptyView = () => {
-    return (
-      <div className="empty-container">
-        <img src="/icons/no-data.svg" width={100} alt="empty" />
-        <span>No Items</span>
-      </div>
+  const callShowEscrow = () => {
+    if (wallet.publicKey) {
+      setLoadingBalance(true);
+      showEscrow(connection, wallet.publicKey)
+        .then(val => {
+          setBalance(val);
+        })
+        .finally(() => setLoadingBalance(false));
+    }
+  };
+
+  const onCancelBid = (offer: Offer) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await cancelBid({
+          connection,
+          wallet,
+          offer,
+        });
+        if (!result['err']) {
+          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Cancel bid now...',
+        error: 'Cancel bid rejected.',
+        success: 'Cancel bid successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onCancelBidAndWithdraw = (offer: Offer) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await cancelBidAndWithdraw({
+          connection,
+          wallet,
+          offer,
+        });
+        if (!result['err']) {
+          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Cancel bid now...',
+        error: 'Cancel bid rejected.',
+        success: 'Cancel bid successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onAcceptOffer = (offer: Offer) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await acceptOffer({
+          connection,
+          wallet,
+          offer,
+        });
+        if (!result['err']) {
+          socket.emit('acceptOffer', {
+            bookKeeper: wallet.publicKey!.toBase58(),
+            buyer: offer.buyer,
+            mint: offer.mint,
+            price: offer.bidPrice * LAMPORTS_PER_SOL,
+          });
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Accept offer now...',
+        error: 'Accept offer rejected.',
+        success: 'Accept offer successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onDeposit = (amount: number) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await deposit({
+          connection,
+          wallet,
+          amount,
+        });
+        if (!result['err']) {
+          setTimeout(() => {
+            callShowEscrow();
+          }, 15000);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Deposit now...',
+        error: 'Deposit rejected.',
+        success: 'Deposit successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  };
+
+  const onWithdraw = (amount: number) => {
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result = await withdraw({
+          connection,
+          wallet,
+          amount,
+        });
+        if (!result['err']) {
+          setTimeout(() => {
+            callShowEscrow();
+          }, 15000);
+          resolve('');
+        } else {
+          reject();
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending: 'Withdraw now...',
+        error: 'Withdraw rejected.',
+        success: 'Withdraw successed. Your data maybe updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
     );
   };
 
@@ -238,7 +443,9 @@ export const ProfileView = () => {
             <Col span={12} md={8} lg={6} className="details-container">
               <Statistic
                 title="TOTAL FLOOR VALUE"
-                value={`${totalFloorPrice > 0 ? totalFloorPrice : '---'} SOL`}
+                value={`${
+                  totalFloorPrice > 0 ? totalFloorPrice.toFixed(2) : '---'
+                } SOL`}
               />
             </Col>
           </Row>
@@ -270,14 +477,24 @@ export const ProfileView = () => {
               )}
             </TabPane>
             <TabPane tab="Offers made" key="3">
-              Offers made - Comming soom
+              <Table
+                columns={offersMadeColumns}
+                dataSource={offersMade}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
             </TabPane>
             <TabPane tab="Offers received" key="4">
-              Offers received - Comming soon
+              <Table
+                columns={offersReceivedColumns}
+                dataSource={offersReceived}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
             </TabPane>
             <TabPane tab="Activites" key="5">
               <Table
-                columns={columns}
+                columns={activityColumns}
                 dataSource={transactions}
                 style={{ overflowX: 'auto' }}
                 pagination={{ position: ['bottomLeft'], pageSize: 10 }}
@@ -324,6 +541,121 @@ export const ProfileView = () => {
           </Form>
         </div>
       </MetaplexModal>
+      <MetaplexModal
+        visible={cancelVisible}
+        onCancel={() => setCancelVisible(false)}
+      >
+        <div className="cancel-modal">
+          <div className="header-container">
+            <img src="/icons/wallet.png" className="header-icon" alt="wallet" />
+            <span className="header-text">
+              After cancelling your offer, do you want to withdraw funds back to
+              your wallet?
+            </span>
+          </div>
+          <div className="body-container">
+            <span className="main-text">
+              The funds for your offer is held in an escrow account as collatral
+              to support multiple offers. If you choose &quot;Keep funds in
+              escrow&quot;, you will be able to make offers faster and more
+              easily.
+            </span>
+          </div>
+          <Row>
+            <Col span={9}>
+              <Button
+                onClick={() => {
+                  setCancelVisible(false);
+                  onCancelBidAndWithdraw(selectedOffer!);
+                }}
+              >
+                Withdraw
+              </Button>
+            </Col>
+            <Col span={12}>
+              <Button
+                style={{ marginLeft: 8, background: '#009999' }}
+                onClick={() => {
+                  setCancelVisible(false);
+                  onCancelBid(selectedOffer!);
+                }}
+              >
+                Keep funds in escrow
+              </Button>
+            </Col>
+          </Row>
+        </div>
+      </MetaplexModal>
+      <div className="balance-container">
+        <Row>
+          <Col
+            span={24}
+            md={12}
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <span className="label">
+              Account balance:{' '}
+              <span style={{ color: '#eb2f96' }}>{`${balance} SOL`}</span>
+            </span>
+            <button
+              onClick={callShowEscrow}
+              className="balance-btn"
+              disabled={loadingBalance}
+            >
+              {loadingBalance ? (
+                <Spin />
+              ) : (
+                <img
+                  src="/icons/refresh.svg"
+                  style={{ width: 16, height: 16 }}
+                />
+              )}
+            </button>
+          </Col>
+          <Col span={24} md={12}>
+            <div className="right-container">
+              <div>
+                <span className="balance-label">Deposit</span>
+                <div className="button-container">
+                  <PriceInput
+                    placeholder="Price"
+                    addonAfter="SOL"
+                    className="balance-input"
+                    value={{ number: depositValue }}
+                    onChange={val => setDepositValue(val.number || 0)}
+                  />
+                  <button
+                    className="balance-btn"
+                    disabled={depositValue <= 0}
+                    onClick={() => onDeposit(depositValue)}
+                  >
+                    Deposit
+                  </button>
+                </div>
+              </div>
+              <div>
+                <span className="balance-label">Withdraw</span>
+                <div className="button-container">
+                  <PriceInput
+                    placeholder="Price"
+                    addonAfter="SOL"
+                    className="balance-input"
+                    value={{ number: withdrawValue }}
+                    onChange={val => setWithdrawValue(val.number || 0)}
+                  />
+                  <button
+                    className="balance-btn"
+                    disabled={withdrawValue <= 0 || withdrawValue > balance}
+                    onClick={() => onWithdraw(withdrawValue)}
+                  >
+                    Withdraw
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };

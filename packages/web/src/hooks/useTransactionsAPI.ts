@@ -48,9 +48,41 @@ export const useTransactionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get offers made
+   * @param params
+   * @returns
+   */
+  async function getOffersMade(wallet: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/audits/getOffersMade',
+      JSON.stringify({ wallet }),
+    );
+    return result;
+  }
+
+  /**
+   * Get offers received
+   * @param params
+   * @returns
+   */
+  async function getOffersReceived(wallet: string) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/audits/getOffersReceived',
+      JSON.stringify({ wallet }),
+    );
+    return result;
+  }
+
   return {
     getTransactionsBySymbol,
     getTransactionsByMint,
     getTransactionsByWallet,
+    getOffersMade,
+    getOffersReceived,
   };
 };

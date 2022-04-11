@@ -6,6 +6,7 @@ export const useExNFT = (
   mintAddress: string,
   market: string,
   price?: number,
+  refresh?: number,
 ) => {
   const { runOthersAPI } = ApiUtils();
   const [nft, setNFT] = useState<NFTData>();
@@ -16,7 +17,7 @@ export const useExNFT = (
     if (loading) return;
     getNFTByMintAddress(mintAddress, price);
     getTransactions(mintAddress, market);
-  }, [mintAddress]);
+  }, [mintAddress, refresh]);
 
   function getNFTByMintAddress(mint: string, price?: number) {
     setLoading(true);

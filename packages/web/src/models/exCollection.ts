@@ -55,6 +55,8 @@ export type NFT = {
   creators: Creator[];
   price: number;
   collectionName: string;
+  bookKeeper?: string | null;
+  txType?: string | null;
 };
 
 export type NFTData = {

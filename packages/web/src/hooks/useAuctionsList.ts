@@ -12,10 +12,10 @@ export const useAuctionsList = (
   const { pullAuctionListData, isLoading } = useMeta();
 
   useEffect(() => {
-    if (!auctions.length || isLoading) return;
-    for (const auction of auctions) {
-      pullAuctionListData(auction.auction.pubkey);
-    }
+    // if (!auctions.length || isLoading) return;
+    // for (const auction of auctions) {
+    //   pullAuctionListData(auction.auction.pubkey);
+    // }
   }, [auctions.length, isLoading]);
 
   const filteredAuctions = useMemo(() => {

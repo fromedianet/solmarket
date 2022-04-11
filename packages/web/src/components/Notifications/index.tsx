@@ -426,7 +426,7 @@ export function Notifications() {
     ),
     action: async () => {
       try {
-        await pullAllSiteData();
+        // await pullAllSiteData();
       } catch (e) {
         console.error(e);
         return false;

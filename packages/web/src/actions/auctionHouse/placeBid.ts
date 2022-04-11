@@ -10,14 +10,15 @@ import {
   SYSVAR_INSTRUCTIONS_PUBKEY,
 } from '@solana/web3.js';
 import { AuctionHouseProgram } from '@metaplex-foundation/mpl-auction-house';
+import { NFT } from '../../models/exCollection';
 
 export async function sendPlaceBid(params: {
   connection: Connection;
   wallet: WalletSigner;
   buyerPrice: number;
-  mint: string;
+  nft: NFT;
 }) {
-  const { connection, wallet, buyerPrice, mint } = params;
+  const { connection, wallet, buyerPrice, nft } = params;
   const {
     createDepositInstruction,
     createBuyInstruction,
@@ -25,13 +26,19 @@ export async function sendPlaceBid(params: {
   } = AuctionHouseProgram.instructions;
   const { AuctionHouse } = AuctionHouseProgram.accounts;
   let status: any = { err: true };
+  const buyerKey = wallet.publicKey;
+  if (!buyerKey || !nft || buyerPrice === 0) {
+    return status;
+  }
 
   try {
-    const buyerKey = wallet.publicKey!;
-    const metadata = await getMetadata(mint);
-    const mintKey = new PublicKey(mint);
-    const results = await connection.getTokenLargestAccounts(mintKey);
-    const tokenAccount = results.value[0].address;
+    const metadata = await getMetadata(nft.mint);
+    const mintKey = new PublicKey(nft.mint);
+    const [tokenAccount] =
+      await AuctionHouseProgram.findAssociatedTokenAccountAddress(
+        mintKey,
+        new PublicKey(nft.owner),
+      );
     const auctionHouseObj = await AuctionHouse.fromAccountAddress(
       connection,
       AUCTION_HOUSE_ID,
@@ -95,9 +102,9 @@ export async function sendPlaceBid(params: {
 
     const [receipt, receiptBump] =
       await AuctionHouseProgram.findBidReceiptAddress(buyerTradeState);
-    const printBidReceiptInstruction = await createPrintBidReceiptInstruction(
+    const printBidReceiptInstruction = createPrintBidReceiptInstruction(
       {
-        receipt,
+        receipt: receipt,
         bookkeeper: buyerKey,
         instruction: SYSVAR_INSTRUCTIONS_PUBKEY,
       },
@@ -118,10 +125,9 @@ export async function sendPlaceBid(params: {
       console.log('>>> txid >>>', txid);
       console.log('>>> status >>>', status);
     }
-    return { status, txid };
   } catch (e) {
     console.error(e);
   }
 
-  return { status };
+  return status;
 }

@@ -28,6 +28,7 @@ export const MarketplaceView = () => {
   });
   const [searchKey, setSearchKey] = useState('');
   const [sort, setSort] = useState(1);
+  const [refresh, setRefresh] = useState(false);
 
   const {
     collection,
@@ -62,14 +63,19 @@ export const MarketplaceView = () => {
   });
 
   useEffect(() => {
-    if (skip > 0) {
-      setList(prev => prev.concat(nfts));
-    } else {
+    if (refresh) {
       setList(nfts);
+    } else {
+      setList(prev => prev.concat(nfts));
     }
   }, [nfts]);
 
   useEffect(() => {
+    onRefresh();
+  }, [searchKey, sort, filter]);
+
+  const onRefresh = () => {
+    setRefresh(true);
     getListedNFTs({
       symbol: symbol,
       sort: sort,
@@ -79,7 +85,7 @@ export const MarketplaceView = () => {
       max: filter.price.max,
       status: filter.status,
     });
-  }, [searchKey, sort, filter]);
+  };
 
   const onUpdateFilters = (priceFilter, attributeFilter, status) => {
     setFilter({
@@ -91,6 +97,7 @@ export const MarketplaceView = () => {
 
   const fetchMore = () => {
     if (hasMore) {
+      setRefresh(false);
       getListedNFTs({
         symbol: symbol,
         sort: sort,
@@ -141,6 +148,7 @@ export const MarketplaceView = () => {
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
+                onRefresh={onRefresh}
                 filter={filter}
                 hasMore={hasMore}
                 fetchMore={fetchMore}

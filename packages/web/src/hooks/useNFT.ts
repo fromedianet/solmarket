@@ -5,7 +5,7 @@ import { NFT, Transaction } from '../models/exCollection';
 import { useNFTsAPI } from './useNFTsAPI';
 import { useTransactionsAPI } from './useTransactionsAPI';
 
-export const useNFT = (mint: string) => {
+export const useNFT = (mint: string, refresh?: number) => {
   const connection = useConnection();
   const [nft, setNFT] = useState<NFT>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -20,34 +20,38 @@ export const useNFT = (mint: string) => {
     getNftByMint(mint)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           const data = res['data'];
-          getTokenAccount(mint).then(res => {
-            if (res) {
-              setNFT({
-                ...data,
-                ...res,
-              });
-              if (!data.tokenAddress) {
-                updateInfo({
+          getTokenAccount(mint)
+            .then(res => {
+              if (res) {
+                setNFT({
+                  ...data,
                   ...res,
-                  mint,
                 });
+                if (!data.tokenAddress) {
+                  updateInfo({
+                    ...res,
+                    mint,
+                  });
+                }
               }
-            }
-          });
+            })
+            .finally(() => setLoading(false));
+        } else {
+          setLoading(false);
         }
       })
-      .finally(() => setLoading(false));
+      .catch(() => setLoading(false));
 
     getTransactionsByMint(mint)
       // @ts-ignore
       .then((res: {}) => {
-        if (res['data']) {
+        if ('data' in res) {
           setTransactions(res['data']);
         }
       });
-  }, [mint]);
+  }, [mint, refresh]);
 
   async function getTokenAccount(mint: string) {
     try {
