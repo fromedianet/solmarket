@@ -49,10 +49,6 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   useEffect(() => {
     if (socket) {
       socket.on('syncedAuctionHouse', (params: any[]) => {
-        console.log(
-          '----------------- syncedAuctionHouse ------------------',
-          params,
-        );
         if (params.some(k => k.mint === props.nft.mint)) {
           props.onRefresh();
         }
