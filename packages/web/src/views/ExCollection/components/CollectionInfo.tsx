@@ -10,11 +10,11 @@ export const CollectionInfo = (props: {
 }) => {
   return (
     <div className="info-container">
-      {props.collection && props.collection.thumbnail ? (
+      {props.collection && props.collection.image ? (
         <Image
           loading="lazy"
           className="info-image"
-          src={props.collection.thumbnail}
+          src={props.collection.image}
           alt="avatar"
         />
       ) : (
