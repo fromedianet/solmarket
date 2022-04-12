@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Radio } from 'antd';
+import { Link } from 'react-router-dom';
 import { CardLoader } from '../../../components/MyLoader';
 import { Banner } from '../../../components/Banner';
 import { HowToBuyModal } from '../../../components/HowToBuyModal';
@@ -11,15 +13,22 @@ import { ExCollection } from '../../../models/exCollection';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
-  const [featuredCollections, setFeaturedCollections] = useState({});
-
+  const [featuredCollections, setFeaturedCollections] = useState({
+    launchpad: [],
+    upcoming: [],
+    popular1: [],
+    popular7: [],
+    popular30: [],
+    new: [],
+  });
+  const [popularStatus, setPopularStatus] = useState('7d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
   const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
 
   useEffect(() => {
     setLoading(true);
     loadAllData()
-      .then(res => {
+      .then((res: any) => {
         setFeaturedCollections(res);
       })
       .finally(() => setLoading(false));
@@ -79,7 +88,7 @@ export const SalesListView = () => {
                     <HomeCard
                       key={index}
                       item={item}
-                      itemId={index}
+                      itemId={item['_id']}
                       link={`/launchpad/${item['symbol']}`}
                       showCountdown={true}
                     />
@@ -91,21 +100,73 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Popular Collections</span>
+          <Radio.Group
+            defaultValue={popularStatus}
+            buttonStyle="solid"
+            className="section-radio"
+          >
+            <Radio.Button value="1d" onClick={() => setPopularStatus('1d')}>
+              24 hours
+            </Radio.Button>
+            <Radio.Button value="7d" onClick={() => setPopularStatus('7d')}>
+              7 days
+            </Radio.Button>
+            <Radio.Button value="30d" onClick={() => setPopularStatus('30d')}>
+              30 days
+            </Radio.Button>
+          </Radio.Group>
+          <Link to={`/collections/popular`} className="see-all">
+            See All
+          </Link>
         </div>
-        {loading
-          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : featuredCollections['new'] && (
-              <HorizontalGrid
-                childrens={featuredCollections['new'].map((item, index) => (
-                  <HomeCard
-                    key={index}
-                    item={item}
-                    itemId={index}
-                    link={`/marketplace/${item['symbol']}`}
-                  />
-                ))}
+        {loading ? (
+          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+        ) : popularStatus === '1d' ? (
+          <HorizontalGrid
+            childrens={featuredCollections['popular1'].map((item, index) => (
+              <HomeCard
+                key={index}
+                item={item}
+                itemId={item['_id']}
+                link={
+                  item['market'] === MarketType.MagicEden
+                    ? `/excollection/${item['symbol']}?market=${item['market']}`
+                    : `/marketplace/${item['symbol']}`
+                }
               />
-            )}
+            ))}
+          />
+        ) : popularStatus === '7d' ? (
+          <HorizontalGrid
+            childrens={featuredCollections['popular7'].map((item, index) => (
+              <HomeCard
+                key={index}
+                item={item}
+                itemId={item['_id']}
+                link={
+                  item['market'] === MarketType.MagicEden
+                    ? `/excollection/${item['symbol']}?market=${item['market']}`
+                    : `/marketplace/${item['symbol']}`
+                }
+              />
+            ))}
+          />
+        ) : (
+          <HorizontalGrid
+            childrens={featuredCollections['popular30'].map((item, index) => (
+              <HomeCard
+                key={index}
+                item={item}
+                itemId={item['_id']}
+                link={
+                  item['market'] === MarketType.MagicEden
+                    ? `/excollection/${item['symbol']}?market=${item['market']}`
+                    : `/marketplace/${item['symbol']}`
+                }
+              />
+            ))}
+          />
+        )}
       </div>
       <div className="home-section">
         <div className="section-header">
@@ -120,7 +181,7 @@ export const SalesListView = () => {
                     <HomeCard
                       key={index}
                       item={item}
-                      itemId={index}
+                      itemId={item['_id']}
                       link={`/launchpad/${item['symbol']}`}
                     />
                   ),
@@ -140,8 +201,12 @@ export const SalesListView = () => {
                   <HomeCard
                     key={index}
                     item={item}
-                    itemId={index}
-                    link={`/marketplace/${item['symbol']}`}
+                    itemId={item['_id']}
+                    link={
+                      item['market'] === MarketType.MagicEden
+                        ? `/excollection/${item['symbol']}?market=${item['market']}`
+                        : `/marketplace/${item['symbol']}`
+                    }
                   />
                 ))}
               />

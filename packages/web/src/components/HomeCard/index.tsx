@@ -14,7 +14,7 @@ export const HomeCard = ({
   item: {};
   link: string;
   showCountdown?: boolean;
-  itemId: number;
+  itemId: string;
 }) => {
   const { isEnded, state } = useCountdown(item['publishedAt'], showCountdown);
 
