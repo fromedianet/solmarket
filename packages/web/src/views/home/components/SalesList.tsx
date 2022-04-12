@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { useMeta } from '../../../contexts';
 import { CardLoader } from '../../../components/MyLoader';
 import { Banner } from '../../../components/Banner';
 import { HowToBuyModal } from '../../../components/HowToBuyModal';
 import { HorizontalGrid } from '../../../components/HorizontalGrid';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
 import { HomeCard } from '../../../components/HomeCard';
+import { useExCollectionsAPI } from '../../../hooks/useExCollections';
+import { MarketType } from '../../../constants';
 
 export const SalesListView = () => {
-  const { isLoading } = useMeta();
-
-  const { featuredCollectionsCarousel } = useCollectionsAPI();
+  const [loading, setLoading] = useState(false);
   const [featuredCollections, setFeaturedCollections] = useState({});
 
+  const { featuredCollectionsCarousel } = useCollectionsAPI();
+  const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
+
   useEffect(() => {
+    setLoading(true);
     featuredCollectionsCarousel()
       // @ts-ignore
       .then((res: {}) => {
         if ('data' in res) {
           setFeaturedCollections(res['data']);
         }
-      });
+      })
+      .finally(() => setLoading(false));
+
+    getPopularCollections({ market: MarketType.MagicEden, timeRange: '1d' });
   }, []);
 
   return (
@@ -36,7 +42,7 @@ export const SalesListView = () => {
         <div className="section-header">
           <span className="section-title">Launchpad Drops</span>
         </div>
-        {isLoading
+        {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
           : featuredCollections['launchpad-collections'] && (
               <HorizontalGrid
@@ -57,7 +63,7 @@ export const SalesListView = () => {
         <div className="section-header">
           <span className="section-title">Upcoming Collections</span>
         </div>
-        {isLoading
+        {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
           : featuredCollections['upcoming-collections'] && (
               <HorizontalGrid
@@ -77,7 +83,7 @@ export const SalesListView = () => {
         <div className="section-header">
           <span className="section-title">New Collections</span>
         </div>
-        {isLoading
+        {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
           : featuredCollections['new-collections'] && (
               <HorizontalGrid

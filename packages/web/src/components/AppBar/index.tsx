@@ -89,7 +89,7 @@ export const AppBar = () => {
               {collections.map((item, index) => (
                 <Option key={index} value={item.symbol}>
                   <img
-                    src={item.thumbnail}
+                    src={item.image}
                     className="creator-icon"
                     alt={item.name}
                   />

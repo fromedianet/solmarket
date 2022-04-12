@@ -5,7 +5,7 @@ export interface ExCollection {
   description: string | null;
   symbol: string;
   banner?: string | null;
-  thumbnail: string;
+  image: string;
   discord?: string | null;
   twitter?: string | null;
   website?: string | null;

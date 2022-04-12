@@ -8,8 +8,55 @@ import {
 } from '../models/exCollection';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { ApiUtils } from '../utils/apiUtils';
+import { MarketType } from '../constants';
 
 const PER_PAGE = 20;
+
+export const useExCollectionsAPI = () => {
+  const { runOthersAPI } = ApiUtils();
+
+  async function getNewCollections(params: { market: string; more?: boolean }) {
+    const result: any = await runOthersAPI(
+      'post',
+      '/new_collections',
+      JSON.stringify(params),
+    );
+    if (result && result['data']) {
+      return result['data'];
+    }
+    return [];
+  }
+
+  async function getPopularCollections(params: {
+    market: string;
+    timeRange: string;
+    more?: boolean;
+  }) {
+    const result: any = await runOthersAPI(
+      'post',
+      '/popular_collections',
+      JSON.stringify(params),
+    );
+    if (result && result['data']) {
+      return result['data'];
+    }
+    return [];
+  }
+
+  async function getAllCollections(market: string) {
+    const result: any = await runOthersAPI('get', `/excollections/${market}`);
+    if (result && result['data']) {
+      return result['data'];
+    }
+    return [];
+  }
+
+  return {
+    getAllCollections,
+    getPopularCollections,
+    getNewCollections,
+  };
+};
 
 export const useExCollections = (market: string) => {
   const { runOthersAPI } = ApiUtils();
@@ -83,13 +130,13 @@ export const useExCollection = (symbol: string, market: string) => {
     setLoading(true);
 
     let queryBody = {};
-    if (param.market === 'magiceden') {
+    if (param.market === MarketType.MagicEden) {
       queryBody = getParamsForMagicEden(param);
-    } else if (market === 'solanart') {
+    } else if (market === MarketType.Solanart) {
       queryBody = getParamsForSolanart(param);
-    } else if (market === 'digital_eyes') {
+    } else if (market === MarketType.DigitalEyes) {
       queryBody = getParamsForDigitalEyes(param);
-    } else if (market === 'alpha_art') {
+    } else if (market === MarketType.AlphaArt) {
       queryBody = getParamsForAlphaArt(param);
     }
 
@@ -98,7 +145,7 @@ export const useExCollection = (symbol: string, market: string) => {
       .then((result: {}) => {
         setNFTs(result['data']);
 
-        if (param.market === 'magiceden') {
+        if (param.market === MarketType.MagicEden) {
           if (result['data'].length < PER_PAGE) {
             setSkip(0);
             setHasMore(false);
@@ -106,7 +153,7 @@ export const useExCollection = (symbol: string, market: string) => {
             setSkip(prev => prev + PER_PAGE);
             setHasMore(true);
           }
-        } else if (param.market === 'solanart') {
+        } else if (param.market === MarketType.Solanart) {
           if (result['skip']) {
             setSkip(result['skip']);
             setHasMore(true);
@@ -114,7 +161,7 @@ export const useExCollection = (symbol: string, market: string) => {
             setSkip(0);
             setHasMore(false);
           }
-        } else if (param.market === 'digital_eyes') {
+        } else if (param.market === MarketType.DigitalEyes) {
           if (result['listedCount'] || result['floorPrice']) {
             setCollectionStats(prev => ({
               ...prev,
@@ -129,7 +176,7 @@ export const useExCollection = (symbol: string, market: string) => {
             setCursor(undefined);
             setHasMore(false);
           }
-        } else if (param.market === 'alpha_art') {
+        } else if (param.market === MarketType.AlphaArt) {
           if (result['listedCount'] || result['floorPrice']) {
             setCollectionStats(prev => ({
               ...prev,
@@ -144,16 +191,19 @@ export const useExCollection = (symbol: string, market: string) => {
 
   const getTransactions = (param: QUERIES) => {
     const queryBody = { market: param.market };
-    if (param.market === 'magiceden') {
+    if (param.market === MarketType.MagicEden) {
       const query = {
         $match: { collection_symbol: param.symbol },
         $sort: { blockTime: -1, createdAt: -1 },
         $skip: 0,
       };
       queryBody['params'] = encodeURI(`?q=${JSON.stringify(query)}`);
-    } else if (param.market === 'solanart' || param.market === 'digital_eyes') {
+    } else if (
+      param.market === MarketType.Solanart ||
+      param.market === MarketType.DigitalEyes
+    ) {
       queryBody['params'] = encodeURI(`?collection=${param.symbol}`);
-    } else if (param.market === 'alpha_art') {
+    } else if (param.market === MarketType.AlphaArt) {
       queryBody['params'] = encodeURI(
         `${param.symbol}?trading_types=1%2C2%2C3&no_foreign_listing=true`,
       );
