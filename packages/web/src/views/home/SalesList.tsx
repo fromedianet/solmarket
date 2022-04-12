@@ -131,7 +131,7 @@ export const SalesListView = () => {
               30 days
             </Radio.Button>
           </Radio.Group>
-          <Link to={`/collections/popular`} className="see-all">
+          <Link to="/collections?type=popular" className="see-all">
             See All
           </Link>
         </div>
@@ -206,7 +206,7 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">New Collections</span>
-          <Link to={`/collections/new`} className="see-all">
+          <Link to="/collections?type=new" className="see-all">
             See All
           </Link>
         </div>

@@ -52,11 +52,9 @@ export const AppBar = () => {
   const [collections, setCollections] = useState<ExCollection[]>([]);
 
   useEffect(() => {
-    getAllCollections()
-      .then(res => {
-        console.log(res);
-        setCollections(res);
-      });
+    getAllCollections().then(res => {
+      setCollections(res);
+    });
   }, []);
 
   const onChange = value => {

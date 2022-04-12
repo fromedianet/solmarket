@@ -108,9 +108,7 @@ export const CollectionsView = () => {
     } else if (val === MarketType.PaperCity) {
       setFilters(collections.filter(item => !item.market));
     } else {
-      setFilters(
-        collections.filter(item => item.market == val),
-      );
+      setFilters(collections.filter(item => item.market == val));
     }
   };
 
