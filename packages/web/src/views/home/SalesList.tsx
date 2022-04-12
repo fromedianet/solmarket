@@ -145,8 +145,8 @@ export const SalesListView = () => {
                 item={item}
                 itemId={item['_id']}
                 link={
-                  item['market'] === MarketType.MagicEden
-                    ? `/excollection/${item['symbol']}?market=${item['market']}`
+                  item['market']
+                    ? `/marketplace/${item['symbol']}?market=${item['market']}`
                     : `/marketplace/${item['symbol']}`
                 }
               />
@@ -160,8 +160,8 @@ export const SalesListView = () => {
                 item={item}
                 itemId={item['_id']}
                 link={
-                  item['market'] === MarketType.MagicEden
-                    ? `/excollection/${item['symbol']}?market=${item['market']}`
+                  item['market']
+                    ? `/marketplace/${item['symbol']}?market=${item['market']}`
                     : `/marketplace/${item['symbol']}`
                 }
               />
@@ -175,8 +175,8 @@ export const SalesListView = () => {
                 item={item}
                 itemId={item['_id']}
                 link={
-                  item['market'] === MarketType.MagicEden
-                    ? `/excollection/${item['symbol']}?market=${item['market']}`
+                  item['market']
+                    ? `/marketplace/${item['symbol']}?market=${item['market']}`
                     : `/marketplace/${item['symbol']}`
                 }
               />
@@ -206,6 +206,9 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">New Collections</span>
+          <Link to={`/collections/new`} className="see-all">
+            See All
+          </Link>
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
@@ -217,8 +220,8 @@ export const SalesListView = () => {
                     item={item}
                     itemId={item['_id']}
                     link={
-                      item['market'] === MarketType.MagicEden
-                        ? `/excollection/${item['symbol']}?market=${item['market']}`
+                      item['market']
+                        ? `/marketplace/${item['symbol']}?market=${item['market']}`
                         : `/marketplace/${item['symbol']}`
                     }
                   />
