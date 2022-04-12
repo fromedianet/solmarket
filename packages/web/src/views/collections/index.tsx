@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Input, Radio } from 'antd';
+import { Row, Col, Input, Radio, Select } from 'antd';
 import { CollectionCard } from '../../components/CollectionCard';
 import { useQuerySearch } from '@oyster/common';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -11,6 +11,12 @@ import { useExCollectionsAPI } from '../../hooks/useExCollections';
 import { MarketType } from '../../constants';
 
 const { Search } = Input;
+
+const MARKETPLACES = [
+  MarketType.All,
+  MarketType.PaperCity,
+  MarketType.MagicEden,
+];
 
 export const CollectionsView = () => {
   const searchParams = useQuerySearch();
@@ -46,6 +52,11 @@ export const CollectionsView = () => {
     }
   }, [type, timeRange]);
 
+  useEffect(() => {
+    setHasMore(true);
+    setItems(filters.slice(0, PER_PAGE));
+  }, [filters]);
+
   async function loadCollections(type: string) {
     let data: ExCollection[] = [];
     if (type === 'new') {
@@ -69,11 +80,6 @@ export const CollectionsView = () => {
     return data;
   }
 
-  useEffect(() => {
-    setHasMore(true);
-    setItems(filters.slice(0, PER_PAGE));
-  }, [filters]);
-
   const fetchMoreData = () => {
     if (items.length === filters.length) {
       setHasMore(false);
@@ -87,7 +93,7 @@ export const CollectionsView = () => {
     }, 500);
   };
 
-  const onChange = event => {
+  const onSearchKey = event => {
     const key = event.target.value;
     setFilters(
       collections.filter(item =>
@@ -96,16 +102,41 @@ export const CollectionsView = () => {
     );
   };
 
+  const onChangeMarketType = (val: MarketType) => {
+    if (val === MarketType.All) {
+      setFilters(collections);
+    } else if (val === MarketType.PaperCity) {
+      setFilters(collections.filter(item => !item.market));
+    } else {
+      setFilters(
+        collections.filter(item => item.market == val),
+      );
+    }
+  };
+
   return (
     <div className="main-area">
       <div className="collections-page">
-        <h1>{title}</h1>
+        <div className="title-container">
+          <h1>{title}</h1>
+          <Select
+            style={{ width: 120 }}
+            defaultValue={MarketType.All}
+            onChange={onChangeMarketType}
+          >
+            {MARKETPLACES.map((item, index) => (
+              <Select.Option key={index} value={item}>
+                {item}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
         <Row className="search-container">
           <Col span={24} md={24} lg={14}>
             <Search
               placeholder="Search collections by name"
               className="search-content"
-              onChange={onChange}
+              onChange={onSearchKey}
               allowClear
             />
           </Col>
