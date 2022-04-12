@@ -53,11 +53,9 @@ export const AppBar = () => {
 
   useEffect(() => {
     getAllCollections()
-      // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setCollections(res['data']);
-        }
+      .then(res => {
+        console.log(res);
+        setCollections(res);
       });
   }, []);
 
