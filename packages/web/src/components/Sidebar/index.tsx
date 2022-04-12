@@ -8,7 +8,7 @@ import {
   CopyrightOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
-  ShoppingOutlined,
+  // ShoppingOutlined,
   TagOutlined,
   UsergroupAddOutlined,
   UserOutlined,
@@ -40,9 +40,9 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         <Menu.Item key="all-collections">
           <Link to="/collections">All</Link>
         </Menu.Item>
-        {/* <Menu.Item key="popular-collections">
+        <Menu.Item key="popular-collections">
           <Link to="/collections?type=popular">Popular</Link>
-        </Menu.Item> */}
+        </Menu.Item>
         <Menu.Item key="new-collections">
           <Link to="/collections?type=new">new</Link>
         </Menu.Item>
@@ -97,7 +97,7 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
           <Link to="/faq">FAQ</Link>
         </Menu.Item>
       </SubMenu>
-      <SubMenu
+      {/* <SubMenu
         key="inventory"
         title="Inventory"
         icon={<ShoppingOutlined style={{ fontSize: 20 }} />}
@@ -114,13 +114,7 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
         <Menu.Item key="alpha_art">
           <Link to="/inventory/alpha_art">Alpha Art</Link>
         </Menu.Item>
-        {/* <Menu.Item key="exchange_art">
-          <Link to="/inventory/exchange_art">Exchange Art</Link>
-        </Menu.Item>
-        <Menu.Item key="solsea">
-          <Link to="/inventory/solsea">Solsea</Link>
-        </Menu.Item> */}
-      </SubMenu>
+      </SubMenu> */}
     </Menu>
   );
 };

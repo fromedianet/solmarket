@@ -19,7 +19,7 @@ export const LaunchpadCard = ({
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"
-            uri={item['thumbnail'] || ''}
+            uri={item['image'] || ''}
             preview={false}
             artview={true}
             allowMeshRender={false}

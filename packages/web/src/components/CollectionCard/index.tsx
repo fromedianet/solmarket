@@ -12,7 +12,7 @@ export interface CollectionCardProps extends CardProps {
 }
 
 export const CollectionCard = (props: CollectionCardProps) => {
-  const { name, description, thumbnail } = props.item;
+  const { name, description, image } = props.item;
 
   return (
     <Card className="collection-card" hoverable={true} bordered={false}>
@@ -20,7 +20,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"
-            uri={thumbnail}
+            uri={image}
             preview={false}
             artview={true}
             allowMeshRender={false}

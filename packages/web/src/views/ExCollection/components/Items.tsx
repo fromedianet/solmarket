@@ -5,6 +5,7 @@ import { EmptyView } from '../../../components/EmptyView';
 import { ExCollection, ExNFT } from '../../../models/exCollection';
 import { Link } from 'react-router-dom';
 import { ArtContent } from '../../../components/ArtContent';
+import { MarketType } from '../../../constants';
 
 const { Search } = Input;
 const DELIMITER = '|&=&|';
@@ -113,7 +114,8 @@ export const Items = (props: {
             className="search-control"
             value={props.searchKey}
             disabled={
-              props.market === 'digital_eyes' || props.market === 'alpha_art'
+              props.market === MarketType.DigitalEyes ||
+              props.market === MarketType.AlphaArt
             }
             onChange={event => props.onSearch(event.target.value)}
             allowClear
