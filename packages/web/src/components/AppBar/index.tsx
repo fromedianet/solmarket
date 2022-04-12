@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { MenuOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Select } from 'antd';
-import { ConnectButton, shortenAddress } from '@oyster/common';
+import { ConnectButton } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Link, useHistory } from 'react-router-dom';
 import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { ExCollection } from '../../models/exCollection';
+import { useExCollectionsAPI } from '../../hooks/useExCollections';
+import { MarketType } from '../../constants';
 
 const { Option } = Select;
 
@@ -49,18 +51,25 @@ export const AppBar = () => {
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
   const { getAllCollections } = useCollectionsAPI();
+  const exAPI = useExCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
 
   useEffect(() => {
-    getAllCollections()
-      .then(res => {
-        console.log(res);
-        setCollections(res);
-      });
+    loadCollections().then(res => {
+      setCollections(res);
+    });
   }, []);
 
+  async function loadCollections() {
+    let data = [];
+    data = await getAllCollections();
+    const exData = await exAPI.getAllCollections(MarketType.MagicEden);
+    data = data.concat(exData);
+    return data;
+  }
+
   const onChange = value => {
-    history.push(`/marketplace/${value}`);
+    history.push(value);
   };
 
   return (
@@ -85,13 +94,20 @@ export const AppBar = () => {
               value={null}
             >
               {collections.map((item, index) => (
-                <Option key={index} value={item.symbol}>
+                <Option
+                  key={index}
+                  value={
+                    item.market
+                      ? `/excollection/${item.symbol}?market=${item.market}`
+                      : `/marketplace/${item.symbol}`
+                  }
+                >
                   <img
                     src={item.image}
                     className="creator-icon"
                     alt={item.name}
                   />
-                  <span>{shortenAddress(item.name)}</span>
+                  <span>{item.name}</span>
                 </Option>
               ))}
             </Select>

@@ -3,8 +3,6 @@ import React from 'react';
 
 import { useMeta } from '../../contexts';
 import { CardLoader } from '../../components/MyLoader';
-import { Banner } from '../../components/Banner';
-import { HowToBuyModal } from '../../components/HowToBuyModal';
 import { AuctionViewState, useAuctions } from '../../hooks';
 import { AuctionRenderCard } from '../../components/AuctionRenderCard';
 
@@ -16,13 +14,6 @@ export const AuctionsView = () => {
 
   return (
     <div className="main-area">
-      <Banner
-        src="/solana-logo.jpg"
-        headingText="The amazing world of Solana NFT."
-        subHeadingText="Buy exclusive Solana NFTs."
-        actionComponent={<HowToBuyModal buttonClassName="secondary-btn" />}
-        useBannerBg
-      />
       <div className="auction-section">
         <span className="auction-title">Live Auctions</span>
         <Row style={{ width: '100%' }} gutter={[16, 16]}>
