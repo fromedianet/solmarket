@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Radio } from 'antd';
 import { Link } from 'react-router-dom';
-import { CardLoader } from '../../../components/MyLoader';
-import { Banner } from '../../../components/Banner';
-import { HowToBuyModal } from '../../../components/HowToBuyModal';
-import { HorizontalGrid } from '../../../components/HorizontalGrid';
-import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
-import { HomeCard } from '../../../components/HomeCard';
-import { useExCollectionsAPI } from '../../../hooks/useExCollections';
-import { MarketType } from '../../../constants';
-import { ExCollection } from '../../../models/exCollection';
+import { CardLoader } from '../../components/MyLoader';
+import { HorizontalGrid } from '../../components/HorizontalGrid';
+import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { HomeCard } from '../../components/HomeCard';
+import { useExCollectionsAPI } from '../../hooks/useExCollections';
+import { MarketType } from '../../constants';
+import { ExCollection } from '../../models/exCollection';
+import { CarouselView } from './components/carousel';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
-  const [featuredCollections, setFeaturedCollections] = useState({
+  const [collections, setCollections] = useState({
     launchpad: [],
     upcoming: [],
     popular1: [],
@@ -21,6 +20,7 @@ export const SalesListView = () => {
     popular30: [],
     new: [],
   });
+  const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
   const [popularStatus, setPopularStatus] = useState('7d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
   const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
@@ -29,7 +29,7 @@ export const SalesListView = () => {
     setLoading(true);
     loadAllData()
       .then((res: any) => {
-        setFeaturedCollections(res);
+        setCollections(res);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -63,37 +63,53 @@ export const SalesListView = () => {
     result['popular7'] = popular7;
     result['popular30'] = popular30;
 
+    const data: ExCollection[] = [];
+    if (result['launchpad'].length > 0) {
+      data.push({
+        ...result['launchpad'][0],
+        type: 'launchpad',
+      });
+    }
+
+    if (result['new'].length > 0) {
+      data.push({
+        ...result['new'][0],
+        type: 'collection',
+      });
+    }
+
+    if (result['popular7'].length > 0) {
+      data.push({
+        ...result['popular7'][0],
+        type: 'collection',
+      });
+    }
+
+    setCarouselData(data);
+
     return result;
   }
 
   return (
     <div className="main-area">
-      <Banner
-        src="/solana-logo.jpg"
-        headingText="The amazing world of Solana NFT."
-        subHeadingText="Buy exclusive Solana NFTs."
-        actionComponent={<HowToBuyModal buttonClassName="secondary-btn" />}
-        useBannerBg
-      />
+      {loading ? <CardLoader /> : <CarouselView data={carouselData} />}
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Launchpad Drops</span>
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : featuredCollections['launchpad'] && (
+          : collections['launchpad'] && (
               <HorizontalGrid
-                childrens={featuredCollections['launchpad'].map(
-                  (item, index) => (
-                    <HomeCard
-                      key={index}
-                      item={item}
-                      itemId={item['_id']}
-                      link={`/launchpad/${item['symbol']}`}
-                      showCountdown={true}
-                    />
-                  ),
-                )}
+                childrens={collections['launchpad'].map((item, index) => (
+                  <HomeCard
+                    key={index}
+                    item={item}
+                    itemId={item['_id']}
+                    link={`/launchpad/${item['symbol']}`}
+                    showCountdown={true}
+                  />
+                ))}
               />
             )}
       </div>
@@ -123,7 +139,7 @@ export const SalesListView = () => {
           [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
         ) : popularStatus === '1d' ? (
           <HorizontalGrid
-            childrens={featuredCollections['popular1'].map((item, index) => (
+            childrens={collections['popular1'].map((item, index) => (
               <HomeCard
                 key={index}
                 item={item}
@@ -138,7 +154,7 @@ export const SalesListView = () => {
           />
         ) : popularStatus === '7d' ? (
           <HorizontalGrid
-            childrens={featuredCollections['popular7'].map((item, index) => (
+            childrens={collections['popular7'].map((item, index) => (
               <HomeCard
                 key={index}
                 item={item}
@@ -153,7 +169,7 @@ export const SalesListView = () => {
           />
         ) : (
           <HorizontalGrid
-            childrens={featuredCollections['popular30'].map((item, index) => (
+            childrens={collections['popular30'].map((item, index) => (
               <HomeCard
                 key={index}
                 item={item}
@@ -174,18 +190,16 @@ export const SalesListView = () => {
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : featuredCollections['upcoming'] && (
+          : collections['upcoming'] && (
               <HorizontalGrid
-                childrens={featuredCollections['upcoming'].map(
-                  (item, index) => (
-                    <HomeCard
-                      key={index}
-                      item={item}
-                      itemId={item['_id']}
-                      link={`/launchpad/${item['symbol']}`}
-                    />
-                  ),
-                )}
+                childrens={collections['upcoming'].map((item, index) => (
+                  <HomeCard
+                    key={index}
+                    item={item}
+                    itemId={item['_id']}
+                    link={`/launchpad/${item['symbol']}`}
+                  />
+                ))}
               />
             )}
       </div>
@@ -195,9 +209,9 @@ export const SalesListView = () => {
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : featuredCollections['new'] && (
+          : collections['new'] && (
               <HorizontalGrid
-                childrens={featuredCollections['new'].map((item, index) => (
+                childrens={collections['new'].map((item, index) => (
                   <HomeCard
                     key={index}
                     item={item}

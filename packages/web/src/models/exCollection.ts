@@ -7,12 +7,13 @@ export interface ExCollection {
   symbol: string;
   banner?: string | null;
   image: string;
-  discord?: string | null;
-  twitter?: string | null;
+  discord: string;
+  twitter: string;
   website?: string | null;
   market?: string;
   itemId?: string;
   createdAt: string;
+  type?: string;
 }
 
 export type ExAttribute = {

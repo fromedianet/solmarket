@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 import React from 'react';
 // import { useStore } from '@oyster/common';
 // import { useMeta } from '../../contexts';
-import { SalesListView } from './components/SalesList';
+import { SalesListView } from './SalesList';
 // import { SetupView } from './setup';
 
 export const HomeView = () => {
