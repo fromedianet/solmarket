@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Input } from 'antd';
+import { Row, Col, Input, Radio } from 'antd';
 import { CollectionCard } from '../../components/CollectionCard';
 import { useQuerySearch } from '@oyster/common';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -7,44 +7,67 @@ import { CardLoader } from '../../components/MyLoader';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../components/EmptyView';
 import { ExCollection } from '../../models/exCollection';
+import { useExCollectionsAPI } from '../../hooks/useExCollections';
+import { MarketType } from '../../constants';
 
 const { Search } = Input;
 
 export const CollectionsView = () => {
   const searchParams = useQuerySearch();
-  const type = searchParams.get('type');
+  const type = searchParams.get('type') || 'all';
   const { getAllCollections, getNewCollections } = useCollectionsAPI();
+  const exAPI = useExCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [title, setTitle] = useState('');
+  const [timeRange, setTimeRange] = useState('30d');
   const [filters, setFilters] = useState<ExCollection[]>([]);
   const [items, setItems] = useState<ExCollection[]>([]);
   const PER_PAGE = 20;
 
   useEffect(() => {
     setLoading(true);
+    loadCollections(type)
+      .then(res => {
+        setCollections(res);
+        setFilters(res);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
     if (type === 'new') {
-      getNewCollections()
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setCollections(res['data']);
-            setFilters(res['data']);
-          }
-        })
-        .finally(() => setLoading(false));
+      setTitle('New Collections');
+    } else if (type === 'popular') {
+      setTitle('Popular Collections');
     } else {
-      getAllCollections()
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setCollections(res['data']);
-            setFilters(res['data']);
-          }
-        })
-        .finally(() => setLoading(false));
+      setTitle('All Collections');
     }
-  }, [type]);
+  }, [type, timeRange]);
+
+  async function loadCollections(type: string) {
+    let data: ExCollection[] = [];
+    if (type === 'new') {
+      data = await getNewCollections();
+      const exData = await exAPI.getNewCollections({
+        market: MarketType.MagicEden,
+        more: true,
+      });
+      data = data.concat(exData);
+    } else if (type === 'popular') {
+      data = await exAPI.getPopularCollections({
+        market: MarketType.MagicEden,
+        timeRange: timeRange,
+        more: true,
+      });
+    } else {
+      data = await getAllCollections();
+      const exData = await exAPI.getAllCollections(MarketType.MagicEden);
+      data = data.concat(exData);
+    }
+    return data;
+  }
 
   useEffect(() => {
     setHasMore(true);
@@ -76,13 +99,37 @@ export const CollectionsView = () => {
   return (
     <div className="main-area">
       <div className="collections-page">
-        <h1>{type === 'new' ? 'New Collections' : 'All Collections'}</h1>
-        <Search
-          placeholder="Search collections by name"
-          className="collection-search"
-          onChange={onChange}
-          allowClear
-        />
+        <h1>{title}</h1>
+        <Row className="search-container">
+          <Col span={24} md={24} lg={14}>
+            <Search
+              placeholder="Search collections by name"
+              className="search-content"
+              onChange={onChange}
+              allowClear
+            />
+          </Col>
+          {type === 'popular' && (
+            <Col span={24} md={24} lg={10} className="radio-content">
+              <Radio.Group
+                defaultValue={timeRange}
+                buttonStyle="solid"
+                className="section-radio "
+              >
+                <Radio.Button value="1d" onClick={() => setTimeRange('1d')}>
+                  24 hours
+                </Radio.Button>
+                <Radio.Button value="7d" onClick={() => setTimeRange('7d')}>
+                  7 days
+                </Radio.Button>
+                <Radio.Button value="30d" onClick={() => setTimeRange('30d')}>
+                  30 days
+                </Radio.Button>
+              </Radio.Group>
+            </Col>
+          )}
+        </Row>
+
         {loading ? (
           [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
         ) : items.length > 0 ? (
@@ -105,7 +152,11 @@ export const CollectionsView = () => {
               >
                 <CollectionCard
                   item={item}
-                  link={`/marketplace/${item.symbol}`}
+                  link={
+                    item.market
+                      ? `/excollection/${item.symbol}?market=${item.market}`
+                      : `/marketplace/${item.symbol}`
+                  }
                 />
               </Col>
             ))}

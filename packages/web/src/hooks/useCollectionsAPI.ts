@@ -208,16 +208,30 @@ export const useCollectionsAPI = () => {
    * Get all live collections
    */
   async function getAllCollections() {
-    const result = await runAPI(false, 'get', '/collections/getAllCollections');
-    return result;
+    const result: any = await runAPI(
+      false,
+      'get',
+      '/collections/getAllCollections',
+    );
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   /**
    * Get all live new collections
    */
   async function getNewCollections() {
-    const result = await runAPI(false, 'get', '/collections/getNewCollections');
-    return result;
+    const result: any = await runAPI(
+      false,
+      'get',
+      '/collections/getNewCollections',
+    );
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   /**
