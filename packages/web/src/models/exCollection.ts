@@ -1,6 +1,7 @@
 import { Attribute, Creator } from '@oyster/common';
 
 export interface ExCollection {
+  _id: string;
   name: string;
   description: string | null;
   symbol: string;
@@ -11,6 +12,7 @@ export interface ExCollection {
   website?: string | null;
   market?: string;
   itemId?: string;
+  createdAt: string;
 }
 
 export type ExAttribute = {

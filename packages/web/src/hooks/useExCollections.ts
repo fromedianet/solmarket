@@ -21,7 +21,7 @@ export const useExCollectionsAPI = () => {
       '/new_collections',
       JSON.stringify(params),
     );
-    if (result && result['data']) {
+    if (result && 'data' in result) {
       return result['data'];
     }
     return [];
@@ -37,7 +37,7 @@ export const useExCollectionsAPI = () => {
       '/popular_collections',
       JSON.stringify(params),
     );
-    if (result && result['data']) {
+    if (result && 'data' in result) {
       return result['data'];
     }
     return [];
@@ -45,7 +45,7 @@ export const useExCollectionsAPI = () => {
 
   async function getAllCollections(market: string) {
     const result: any = await runOthersAPI('get', `/excollections/${market}`);
-    if (result && result['data']) {
+    if (result && 'data' in result) {
       return result['data'];
     }
     return [];
@@ -95,13 +95,13 @@ export const useExCollection = (symbol: string, market: string) => {
     runOthersAPI('get', `/excollections/${market}/${encodeURI(symbol)}`)
       // @ts-ignore
       .then((result: {}) => {
-        if (result['collection']) {
+        if ('collection' in result) {
           setCollection(result['collection']);
         }
-        if (result['attributes']) {
+        if ('attributes' in result) {
           setAttributes(result['attributes']);
         }
-        if (result['stats']) {
+        if ('stats' in result) {
           setCollectionStats(result['stats']);
         }
       });
@@ -154,7 +154,7 @@ export const useExCollection = (symbol: string, market: string) => {
             setHasMore(true);
           }
         } else if (param.market === MarketType.Solanart) {
-          if (result['skip']) {
+          if ('skip' in result) {
             setSkip(result['skip']);
             setHasMore(true);
           } else {
@@ -162,14 +162,14 @@ export const useExCollection = (symbol: string, market: string) => {
             setHasMore(false);
           }
         } else if (param.market === MarketType.DigitalEyes) {
-          if (result['listedCount'] || result['floorPrice']) {
+          if ('listedCount' in result || 'floorPrice' in result) {
             setCollectionStats(prev => ({
               ...prev,
               listedCount: result['listedCount'] || 0,
               floorPrice: result['floorPrice'] || 0,
             }));
           }
-          if (result['cursor']) {
+          if ('cursor' in result) {
             setCursor(result['cursor']);
             setHasMore(true);
           } else {
@@ -177,7 +177,7 @@ export const useExCollection = (symbol: string, market: string) => {
             setHasMore(false);
           }
         } else if (param.market === MarketType.AlphaArt) {
-          if (result['listedCount'] || result['floorPrice']) {
+          if ('listedCount' in result || 'floorPrice' in result) {
             setCollectionStats(prev => ({
               ...prev,
               listedCount: result['listedCount'] || 0,

@@ -230,12 +230,16 @@ export const useCollectionsAPI = () => {
    * - collections : mint_ended is tru and updatedAt is greater than 7 days
    */
   async function featuredCollectionsCarousel() {
-    const result = await runAPI(
+    const result: any = await runAPI(
       false,
       'get',
       '/collections/featuredCollectionsCarousel',
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    } else {
+      return {};
+    }
   }
 
   /**
