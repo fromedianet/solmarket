@@ -34,27 +34,6 @@ footer.ant-layout-footer {
       border-radius: 2px;
     }
 
-    .section-radio.ant-radio-group {
-      border: 1px solid @border-primary-color;
-      border-radius: 20px;
-      margin-left: 32px;
-
-      .ant-radio-button-wrapper {
-        border: none;
-        border-radius: 20px;
-        background: transparent;
-        color: @text-primary-color;
-      }
-
-      .ant-radio-button-wrapper-checked {
-        background: @bg-pink;
-      }
-
-      .ant-radio-button-wrapper:not(:first-child)::before {
-        width: 0;
-      }
-    }
-
     @media (max-width: 768px) {
       .section-title {
         color: @text-primary-color;
@@ -70,5 +49,106 @@ footer.ant-layout-footer {
 
   .home-collection {
     width: 218px!important;
+  }
+}
+
+.section-radio.ant-radio-group {
+  border: 1px solid @border-primary-color;
+  border-radius: 20px;
+  margin-left: 32px;
+
+  .ant-radio-button-wrapper {
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: @text-primary-color;
+  }
+
+  .ant-radio-button-wrapper-checked {
+    background: @bg-pink;
+  }
+
+  .ant-radio-button-wrapper:not(:first-child)::before {
+    width: 0;
+  }
+}
+
+.carousel-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  @media screen and (min-width: 992px) {
+    padding: 16px;
+  }
+
+  .carousel-content {
+    display: flex;
+    border: none;
+    width: 100%;
+
+    @media screen and (min-width: 992px) {
+      max-width: 1024px;
+      border: 1px solid @border-primary-color;
+      border-radius: 8px;
+    }
+  }
+
+  .card-container {
+    width: 100%;
+    flex-flow: row wrap-reverse;
+
+    @media screen and (min-width: 992px) {
+      height: 600px;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+      height: 100%;
+      
+      h2 {
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 120%;
+        overflow-wrap: break-word;
+        color: @text-primary-color;
+        text-align: start;
+  
+        @media screen and (min-width: 992px) {
+          font-size: 48px;
+        }
+      }
+  
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        color: @text-secondary-color;
+        text-align: start;
+        margin-bottom: 48px;
+      }
+    }
+  
+    .image-content {
+      border-radius: 6px;
+      overflow: hidden;
+      height: 320px;
+      order: 1;
+      
+      @media screen and (min-width: 992px) {
+        height: 100%;
+        order: 2;
+      }
+    }
+  }
+
+  .carousel .control-dots .dot {
+    width: 50px;
+    height: 4px;
+    border-radius: 2px;
   }
 }

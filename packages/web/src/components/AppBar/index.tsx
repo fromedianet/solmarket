@@ -53,11 +53,9 @@ export const AppBar = () => {
 
   useEffect(() => {
     getAllCollections()
-      // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setCollections(res['data']);
-        }
+      .then(res => {
+        console.log(res);
+        setCollections(res);
       });
   }, []);
 
@@ -89,7 +87,7 @@ export const AppBar = () => {
               {collections.map((item, index) => (
                 <Option key={index} value={item.symbol}>
                   <img
-                    src={item.thumbnail}
+                    src={item.image}
                     className="creator-icon"
                     alt={item.name}
                   />

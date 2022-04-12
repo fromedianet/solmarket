@@ -8,10 +8,13 @@ export const HomeCard = ({
   item,
   link,
   showCountdown = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  itemId,
 }: {
   item: {};
   link: string;
   showCountdown?: boolean;
+  itemId: string;
 }) => {
   const { isEnded, state } = useCountdown(item['publishedAt'], showCountdown);
 

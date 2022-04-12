@@ -1,16 +1,19 @@
 import { Attribute, Creator } from '@oyster/common';
 
 export interface ExCollection {
+  _id: string;
   name: string;
   description: string | null;
   symbol: string;
   banner?: string | null;
-  thumbnail: string;
-  discord?: string | null;
-  twitter?: string | null;
+  image: string;
+  discord: string;
+  twitter: string;
   website?: string | null;
   market?: string;
   itemId?: string;
+  createdAt: string;
+  type?: string;
 }
 
 export type ExAttribute = {
