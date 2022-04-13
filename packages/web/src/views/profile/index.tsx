@@ -538,8 +538,8 @@ export const ProfileView = () => {
                 value={creator?.info.description}
               />
             </Form.Item>
-            <Form.Item name={['user', 'twitter']} label="Twitter">
-              <Input addonBefore="https://" value={creator?.info.twitter} />
+            <Form.Item name={['user', 'email']} label="Email">
+              <Input value={creator?.info.twitter} />
             </Form.Item>
             <Form.Item>
               <Button htmlType="submit" className="submit-button">

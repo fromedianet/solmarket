@@ -1,4 +1,4 @@
-export type Offer = {
+export interface Offer {
   mint: string;
   metadata: string;
   tradeState: string;
@@ -10,4 +10,4 @@ export type Offer = {
   txType: string;
   createdAt: string;
   nftCreators: any[];
-};
+}
