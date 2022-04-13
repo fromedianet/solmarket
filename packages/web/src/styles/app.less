@@ -559,6 +559,17 @@ model-viewer {
   .ant-form-item-extra {
     color: @text-secondary-color;
   }
+  .ant-form-item-label > label {
+    color: @text-primary-color;
+
+    .ant-form-item-optional {
+      color: @text-secondary-color;
+    }
+  }
+  .ant-form-item-has-error
+    :not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+    color: @text-color;
+  }
 }
 
 /* Optional, different gutter size on mobile */

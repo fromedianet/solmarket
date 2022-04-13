@@ -20,7 +20,6 @@ import {
   Table,
   Spin,
 } from 'antd';
-import { useCreator } from '../../hooks';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
@@ -53,8 +52,8 @@ const { TextArea } = Input;
 export const ProfileView = () => {
   const wallet = useWallet();
   const { socket } = useSocket();
-  const { authToken } = useAuthToken();
-  const { authentication } = useAuthAPI();
+  const { authToken, user } = useAuthToken();
+  const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
   const [visible, setVisible] = useState(false);
   const [cancelVisible, setCancelVisible] = useState(false);
@@ -70,7 +69,6 @@ export const ProfileView = () => {
   const [depositValue, setDepositValue] = useState(0);
   const [refresh, setRefresh] = useState(0);
   const [loadingBalance, setLoadingBalance] = useState(false);
-  const creator = useCreator(wallet.publicKey?.toBase58());
   const [form] = Form.useForm();
   const connection = useConnection();
   const endpoint = useConnectionConfig();
@@ -169,11 +167,53 @@ export const ProfileView = () => {
     setTotalFloorPrice(total);
   }, [listedItems]);
 
+  useEffect(() => {
+    if (user) {
+      form.setFieldsValue({
+        displayName: user.displayName,
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+      });
+    }
+  }, [user]);
+
   const onSubmit = values => {
-    console.log(values);
+    const displayName = values.displayName || '';
+    const username = values.username || '';
+    const email = values.email || '';
+    const bio = values.bio || '';
+
+    if (checkUpdatedInfo(displayName, username, email, bio)) {
+      updateUser({
+        displayName,
+        username,
+        email,
+        bio,
+      }).then((res: any) => {
+        notify({
+          message: `Your profile is saved. ${
+            res.email && !res.emailVerified
+              ? 'Please check email inbox to verify your email.'
+              : ''
+          }`,
+          type: 'success',
+        });
+      });
+    }
   };
 
-  const onSubmitFailed = () => {};
+  function checkUpdatedInfo(displayName, username, email, bio) {
+    if (
+      user?.displayName === displayName &&
+      user?.username === username &&
+      user?.email === email &&
+      user?.bio === bio
+    ) {
+      return false;
+    }
+    return true;
+  }
 
   const callShowEscrow = () => {
     if (wallet.publicKey) {
@@ -520,26 +560,31 @@ export const ProfileView = () => {
             requiredMark="optional"
             autoComplete="off"
             onFinish={onSubmit}
-            onFinishFailed={onSubmitFailed}
           >
             <Form.Item
-              name={['user', 'name']}
+              name="displayName"
               label="Display name"
-              required
-              tooltip="This is a required field"
-              rules={[{ required: true }]}
+              rules={[{ min: 3, max: 50 }]}
             >
-              <Input placeholder="Display name" value={creator?.info.name} />
+              <Input value={user?.displayName || ''} />
             </Form.Item>
-            <Form.Item name={['user', 'description']} label="Description">
+            <Form.Item
+              name="username"
+              label="Username"
+              rules={[
+                { min: 3, max: 20, pattern: new RegExp('^[a-zA-Z0-9]{3,20}$') },
+              ]}
+            >
+              <Input value={user?.username || ''} />
+            </Form.Item>
+            <Form.Item name="email" label="Email" rules={[{ type: 'email' }]}>
+              <Input value={user?.email || ''} />
+            </Form.Item>
+            <Form.Item name="bio" label="Bio">
               <TextArea
-                placeholder="Description"
-                autoSize={{ minRows: 2, maxRows: 5 }}
-                value={creator?.info.description}
+                autoSize={{ minRows: 5, maxRows: 5 }}
+                value={user?.bio || ''}
               />
-            </Form.Item>
-            <Form.Item name={['user', 'email']} label="Email">
-              <Input value={creator?.info.twitter} />
             </Form.Item>
             <Form.Item>
               <Button htmlType="submit" className="submit-button">
