@@ -440,7 +440,7 @@ export const ProfileView = () => {
     <div className="main-area">
       <div className="profile-page">
         <div className="container">
-          <div className="profile-info">
+          <div className="profile-area">
             {wallet.publicKey ? (
               <img
                 src={`https://avatars.dicebear.com/api/jdenticon/${wallet.publicKey.toBase58()}.svg`}
@@ -452,21 +452,30 @@ export const ProfileView = () => {
                 className="profile-image"
               />
             )}
+            {user?.displayName && <h1>{user.displayName}</h1>}
             {wallet.publicKey && (
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
                   alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
+                {user?.username && (
+                  <CopySpan
+                    value={`@${user.username}`}
+                    copyText={user.username}
+                    className="username"
+                  />
+                )}
                 <CopySpan
                   value={shortenAddress(wallet.publicKey.toBase58(), 8)}
-                  copyText={wallet.publicKey!.toBase58()}
+                  copyText={wallet.publicKey.toBase58()}
                   className="wallet-address"
                 />
               </div>
             )}
+            {user?.bio && <p className="description">{user.bio}</p>}
             {wallet.connected ? (
               authToken ? (
                 <Button

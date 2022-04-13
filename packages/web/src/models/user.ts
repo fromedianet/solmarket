@@ -1,4 +1,5 @@
 export interface User {
+  id: string;
   wallet: string;
   displayName: string;
   username: string;

@@ -2,7 +2,6 @@ import bs58 from 'bs58';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useAuthToken } from '../contexts/authProvider';
 import { ApiUtils } from '../utils/apiUtils';
-import { result } from 'lodash';
 
 export const useAuthAPI = () => {
   const wallet = useWallet();
@@ -93,8 +92,8 @@ export const useAuthAPI = () => {
     return new Promise((resolve, reject) => {
       runAPI(true, 'post', '/user/updateUser', JSON.stringify(params))
         .then((res: any) => {
-          if ('data' in res) {
-            setAuthToken(authToken, result['data']);
+          if (res['data']) {
+            setAuthToken(authToken, res['data']);
             resolve(res['data']);
           } else {
             reject();

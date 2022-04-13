@@ -28,16 +28,20 @@ export const AuthProvider: FC = ({ children }) => {
   useEffect(() => {
     const data = localStorage.getItem(AUTH_TOKEN);
     if (data) {
+      console.log('----------- JSON parse ---------', data);
       const splits = data.split(DELIMITER);
       setToken(splits[0]);
-      if (splits[1]) {
+      if (splits[1] && splits[1] !== 'undefined') {
+        console.log('----------- JSON parse ---------', splits[1]);
         setUser(JSON.parse(splits[1]));
       }
     }
   }, []);
 
   const setAuthToken = (newToken: string, user: User) => {
+    console.log('------------------- setAuthToken --------------------', user);
     const data = newToken + DELIMITER + JSON.stringify(user);
+    console.log('------------------- setAuthToken --------------------', data);
     const saved = localStorage.setItem(AUTH_TOKEN, data);
     if (saved) {
       setToken(newToken);
