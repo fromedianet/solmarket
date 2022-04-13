@@ -26,6 +26,7 @@ export const SalesListView = () => {
   const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
 
   useEffect(() => {
+    if (loading) return;
     setLoading(true);
     loadAllData()
       .then((res: any) => {
