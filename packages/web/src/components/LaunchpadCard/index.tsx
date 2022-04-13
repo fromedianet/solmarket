@@ -15,7 +15,7 @@ export const LaunchpadCard = ({
 
   return (
     <Card className="launchpad-card" hoverable={true} bordered={false}>
-      <Link to={`launchpad/${item['symbol']}`}>
+      <Link to={`/launchpad/${item['symbol']}`}>
         <div className="image-over image-container">
           <ArtContent
             className="image no-event"

@@ -32,10 +32,7 @@ export function AppRoutes() {
         <Providers>
           <Routes>
             {/* <Route path="/admin" element={<AdminView />} /> */}
-            <Route
-              path="/art-create/:step_param"
-              element={<ArtCreateView />}
-            />
+            <Route path="/art-create/:step_param" element={<ArtCreateView />} />
             <Route path="/item-details/:mint" element={<ItemDetailView />} />
             <Route path="/auctions" element={<AuctionsView />} />
             <Route
