@@ -192,7 +192,24 @@ export const LaunchpadDetailView = () => {
         console.log('candyMachine', cndy);
         setCandyMachine(cndy);
       } catch (e) {
-        console.log('There was a problem fetching Candy Machine state');
+        if (e instanceof Error) {
+          if (e.message === `Account does not exist ${candyMachineId}`) {
+            notify({
+              message: `Couldn't fetch candy machine state from candy machine with address: ${candyMachineId}, using rpc: ${endpoint.url}!`,
+              type: 'error',
+            });
+          } else if (e.message.startsWith('failed to get info about account')) {
+            notify({
+              message: `Couldn't fetch candy machine state with rpc: ${endpoint.url}!`,
+              type: 'error',
+            });
+          }
+        } else {
+          notify({
+            message: `${e}`,
+            type: 'error',
+          });
+        }
         console.log(e);
       }
     }
