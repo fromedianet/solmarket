@@ -6,7 +6,7 @@ import { ApiUtils } from '../utils/apiUtils';
 export const useAuthAPI = () => {
   const wallet = useWallet();
   const { runAPI } = ApiUtils();
-  const { setAuthToken, removeAuthToken } = useAuthToken();
+  const { authToken, setAuthToken, removeAuthToken } = useAuthToken();
 
   function fetchNonce(wallet: string) {
     return new Promise((resolve, reject) => {
@@ -76,14 +76,35 @@ export const useAuthAPI = () => {
       );
       if (result) {
         // @ts-ignore
-        setAuthToken(result['token'], result['isAdmin']);
+        setAuthToken(result['token'], result['user']);
       } else {
         removeAuthToken();
       }
     }
   }
 
+  function updateUser(params: {
+    displayName: string | null;
+    username: string | null;
+    email: string | null;
+    bio: string | null;
+  }) {
+    return new Promise((resolve, reject) => {
+      runAPI(true, 'post', '/user/updateUser', JSON.stringify(params))
+        .then((res: any) => {
+          if (res['data']) {
+            setAuthToken(authToken, res['data']);
+            resolve(res['data']);
+          } else {
+            reject();
+          }
+        })
+        .catch(() => reject());
+    });
+  }
+
   return {
     authentication,
+    updateUser,
   };
 };
