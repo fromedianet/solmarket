@@ -1,8 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Providers } from './providers';
 import {
-  AnalyticsView,
   ArtCreateView,
   AuctionCreateView,
   AuctionView,
@@ -14,7 +13,6 @@ import { AuctionsView } from './views/auctions';
 import { ProfileView } from './views/profile';
 import { LaunchPadView } from './views/launchpad';
 import { LaunchpadDetailView } from './views/launchpadDetail';
-import { StatsView } from './views/stats';
 import { FAQView } from './views/faq';
 import { CollectionsView } from './views/collections';
 import { MarketplaceView } from './views/marketplace';
@@ -27,96 +25,49 @@ import { DashboardView } from './views/dashboard/dashboard';
 import { DashboardAdmin } from './views/dashboard/admin';
 import { DashboardAdminDetails } from './views/dashboard/admin/details';
 
-export function Routes() {
+export function AppRoutes() {
   return (
     <>
-      <BrowserRouter basename={'/'}>
+      <BrowserRouter>
         <Providers>
-          <Switch>
-            {/* <Route exact path="/admin" component={() => <AdminView />} /> */}
+          <Routes>
+            {/* <Route path="/admin" element={<AdminView />} /> */}
             <Route
-              exact
-              path="/analytics"
-              component={() => <AnalyticsView />}
+              path="/art-create/:step_param"
+              element={<ArtCreateView />}
             />
+            <Route path="/item-details/:mint" element={<ItemDetailView />} />
+            <Route path="/auctions" element={<AuctionsView />} />
             <Route
-              exact
-              path="/art/create/:step_param?"
-              component={() => <ArtCreateView />}
+              path="/auction-create/:step_param"
+              element={<AuctionCreateView />}
             />
+            <Route path="/auction/:id" element={<AuctionView />} />
+            <Route path="/collections" element={<CollectionsView />} />
+            <Route path="/marketplace/:symbol" element={<MarketplaceView />} />
+            <Route path="/inventory/:id" element={<InventoryView />} />
+            <Route path="/excollection/:id" element={<ExCollectionView />} />
+            <Route path="/exnft/:id" element={<ExNFTView />} />
+            <Route path="/launchpad" element={<LaunchPadView />} />
             <Route
-              exact
-              path="/item-details/:mint"
-              component={() => <ItemDetailView />}
-            />
-            <Route exact path="/auctions" component={() => <AuctionsView />} />
-            <Route
-              exact
-              path="/auction/create/:step_param?"
-              component={() => <AuctionCreateView />}
-            />
-            <Route
-              exact
-              path="/auction/:id"
-              component={() => <AuctionView />}
-            />
-            <Route
-              exact
-              path="/collections"
-              component={() => <CollectionsView />}
-            />
-            <Route
-              exact
-              path="/marketplace/:symbol"
-              component={() => <MarketplaceView />}
-            />
-            <Route
-              exact
-              path="/inventory/:id"
-              component={() => <InventoryView />}
-            />
-            <Route
-              exact
-              path="/excollection/:id"
-              component={() => <ExCollectionView />}
-            />
-            <Route exact path="/exnft/:id" component={() => <ExNFTView />} />
-            <Route
-              exact
-              path="/launchpad"
-              component={() => <LaunchPadView />}
-            />
-            <Route
-              exact
               path="/launchpad/:symbol"
-              component={() => <LaunchpadDetailView />}
+              element={<LaunchpadDetailView />}
             />
-            <Route exact path="/stats" component={() => <StatsView />} />
-            <Route exact path="/faq" component={() => <FAQView />} />
-            <Route exact path="/profile" component={() => <ProfileView />} />
-            <Route path="/about" component={() => <StaticPageView />} />
+            <Route path="/faq" element={<FAQView />} />
+            <Route path="/profile" element={<ProfileView />} />
+            <Route path="/about" element={<StaticPageView />} />
+            <Route path="/dashboard" element={<DashboardView />} />
             <Route
-              exact
-              path="/dashboard"
-              component={() => <DashboardView />}
-            />
-            <Route
-              exact
               path="/dashboard/listing/:id"
-              component={() => <DashboardListingView />}
+              element={<DashboardListingView />}
             />
+            <Route path="/dashboard/admin" element={<DashboardAdmin />} />
             <Route
-              exact
-              path="/dashboard/admin"
-              component={() => <DashboardAdmin />}
-            />
-            <Route
-              exact
               path="/dashboard/admin/:id"
-              component={() => <DashboardAdminDetails />}
+              element={<DashboardAdminDetails />}
             />
-            <Route path="/" component={() => <HomeView />} />
-          </Switch>
+            <Route index element={<HomeView />} />
+          </Routes>
         </Providers>
       </BrowserRouter>
     </>

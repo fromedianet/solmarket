@@ -1,6 +1,6 @@
 import { StringPublicKey } from '@oyster/common';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { Confetti } from '../../../components/Confetti';
 
@@ -11,7 +11,7 @@ export const Congrats = (props: {
     auctionManager: StringPublicKey;
   };
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const newTweetURL = () => {
     const params = {
@@ -50,8 +50,7 @@ export const Congrats = (props: {
           <Button
             style={{ marginBottom: 16 }}
             onClick={() => {
-              history.push(`/`);
-              history.go(0);
+              navigate(`/`, { replace: true });
             }}
           >
             <span>See it in your auctions &gt;</span>

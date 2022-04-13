@@ -12,7 +12,8 @@ import { CollectionCard } from '../../components/CollectionCard';
 const { Search } = Input;
 
 export const InventoryView = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id || '';
   const { loading, collections } = useExCollections(id);
   const [hasMore, setHasMore] = useState(true);
   const [filters, setFilters] = useState<ExCollection[]>([]);

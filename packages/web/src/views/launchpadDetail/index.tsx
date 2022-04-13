@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import * as anchor from '@project-serum/anchor';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Row, Col, Spin, Button, Progress } from 'antd';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import {
@@ -26,13 +26,14 @@ import { MintButton } from './MintButton';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const params = useParams<{ symbol: string }>();
+  const symbol = params.symbol || '';
   const { getCollectionBySymbol, updateCollectionMintStatus } =
     useCollectionsAPI();
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState({});
   const [candyMachineId, setCandyMachineId] = useState<PublicKey>();
@@ -450,7 +451,7 @@ export const LaunchpadDetailView = () => {
                       <Button
                         className="mint-btn"
                         onClick={() => {
-                          history.push(`/marketplace/${symbol}`);
+                          navigate(`/marketplace/${symbol}`);
                         }}
                       >
                         Visit Collection

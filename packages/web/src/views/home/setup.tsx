@@ -8,7 +8,7 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Button } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { saveAdmin } from '../../actions/saveAdmin';
 import { useMeta } from '../../contexts';
 import { SetupVariables } from '../../components/SetupVariables';
@@ -18,7 +18,7 @@ export const SetupView = () => {
   const connection = useConnection();
   const { store } = useMeta();
   const { setStoreForOwner } = useStore();
-  const history = useHistory();
+  const navigate = useNavigate();
   const wallet = useWallet();
   const { setVisible } = useWalletModal();
   const connect = useCallback(
@@ -60,7 +60,7 @@ export const SetupView = () => {
     await setStoreForOwner(undefined);
     await setStoreForOwner(wallet.publicKey.toBase58());
 
-    history.push('/admin');
+    navigate('/admin');
   };
 
   return (
