@@ -27,46 +27,41 @@ import { DashboardAdminDetails } from './views/dashboard/admin/details';
 
 export function AppRoutes() {
   return (
-    <>
-      <BrowserRouter>
-        <Providers>
-          <Routes>
-            {/* <Route path="/admin" element={<AdminView />} /> */}
-            <Route path="/art-create/:step_param" element={<ArtCreateView />} />
-            <Route path="/item-details/:mint" element={<ItemDetailView />} />
-            <Route path="/auctions" element={<AuctionsView />} />
-            <Route
-              path="/auction-create/:step_param"
-              element={<AuctionCreateView />}
-            />
-            <Route path="/auction/:id" element={<AuctionView />} />
-            <Route path="/collections" element={<CollectionsView />} />
-            <Route path="/marketplace/:symbol" element={<MarketplaceView />} />
-            <Route path="/inventory/:id" element={<InventoryView />} />
-            <Route path="/excollection/:id" element={<ExCollectionView />} />
-            <Route path="/exnft/:id" element={<ExNFTView />} />
-            <Route path="/launchpad" element={<LaunchPadView />} />
-            <Route
-              path="/launchpad/:symbol"
-              element={<LaunchpadDetailView />}
-            />
-            <Route path="/faq" element={<FAQView />} />
-            <Route path="/profile" element={<ProfileView />} />
-            <Route path="/about" element={<StaticPageView />} />
-            <Route path="/dashboard" element={<DashboardView />} />
-            <Route
-              path="/dashboard/listing/:id"
-              element={<DashboardListingView />}
-            />
-            <Route path="/dashboard/admin" element={<DashboardAdmin />} />
-            <Route
-              path="/dashboard/admin/:id"
-              element={<DashboardAdminDetails />}
-            />
-            <Route index element={<HomeView />} />
-          </Routes>
-        </Providers>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Providers>
+        <Routes>
+          {/* <Route path="/admin" element={<AdminView />} /> */}
+          <Route path="/art-create/:step_param" element={<ArtCreateView />} />
+          <Route path="/item-details/:mint" element={<ItemDetailView />} />
+          <Route path="/auctions" element={<AuctionsView />} />
+          <Route
+            path="/auction-create/:step_param"
+            element={<AuctionCreateView />}
+          />
+          <Route path="/auction/:id" element={<AuctionView />} />
+          <Route path="/collections" element={<CollectionsView />} />
+          <Route path="/marketplace/:symbol" element={<MarketplaceView />} />
+          <Route path="/inventory/:id" element={<InventoryView />} />
+          <Route path="/excollection/:id" element={<ExCollectionView />} />
+          <Route path="/exnft/:id" element={<ExNFTView />} />
+          <Route path="/launchpad" element={<LaunchPadView />} />
+          <Route path="/launchpad/:symbol" element={<LaunchpadDetailView />} />
+          <Route path="/faq" element={<FAQView />} />
+          <Route path="/profile" element={<ProfileView />} />
+          <Route path="/about" element={<StaticPageView />} />
+          <Route path="/dashboard" element={<DashboardView />} />
+          <Route
+            path="/dashboard/listing/:id"
+            element={<DashboardListingView />}
+          />
+          <Route path="/dashboard/admin" element={<DashboardAdmin />} />
+          <Route
+            path="/dashboard/admin/:id"
+            element={<DashboardAdminDetails />}
+          />
+          <Route index element={<HomeView />} />
+        </Routes>
+      </Providers>
+    </BrowserRouter>
   );
 }

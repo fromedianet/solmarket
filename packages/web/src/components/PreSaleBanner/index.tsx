@@ -5,7 +5,7 @@ import { AuctionView, useArt } from '../../hooks';
 import { ArtContent } from '../ArtContent';
 import { AuctionCard } from '../AuctionCard';
 import { Link } from 'react-router-dom';
-import { useMeta } from '../../contexts';
+import { useMeta } from '@oyster/common';
 
 interface IPreSaleBanner {
   auction?: AuctionView;

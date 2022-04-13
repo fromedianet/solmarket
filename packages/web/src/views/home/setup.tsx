@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   useConnection,
+  useMeta,
   useStore,
   useWalletModal,
   WhitelistedCreator,
@@ -10,7 +11,6 @@ import { Button } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { saveAdmin } from '../../actions/saveAdmin';
-import { useMeta } from '../../contexts';
 import { SetupVariables } from '../../components/SetupVariables';
 
 export const SetupView = () => {

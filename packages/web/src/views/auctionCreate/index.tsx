@@ -12,6 +12,7 @@ import {
   IPartialCreateAuctionArgs,
   StringPublicKey,
   WRAPPED_SOL_MINT,
+  useMeta,
 } from '@oyster/common';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -27,7 +28,6 @@ import {
 } from '../../actions/createAuctionManager';
 import BN from 'bn.js';
 import { constants } from '@oyster/common';
-import { useMeta } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { CategoryStep } from './steps/CategoryStep';

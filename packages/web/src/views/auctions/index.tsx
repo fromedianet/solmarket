@@ -1,10 +1,9 @@
 import { Col, Row } from 'antd';
 import React from 'react';
-
-import { useMeta } from '../../contexts';
 import { CardLoader } from '../../components/MyLoader';
 import { AuctionViewState, useAuctions } from '../../hooks';
 import { AuctionRenderCard } from '../../components/AuctionRenderCard';
+import { useMeta } from '@oyster/common';
 
 export const AuctionsView = () => {
   const { isLoading } = useMeta();

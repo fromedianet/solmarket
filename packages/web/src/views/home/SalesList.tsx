@@ -32,7 +32,9 @@ export const SalesListView = () => {
       .then((res: any) => {
         setCollections(res);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   async function loadAllData() {

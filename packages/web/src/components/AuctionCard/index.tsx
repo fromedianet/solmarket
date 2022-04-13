@@ -26,6 +26,7 @@ import {
   Bid,
   BidderPot,
   shortenAddress,
+  useMeta,
 } from '@oyster/common';
 import {
   AuctionView,
@@ -47,7 +48,6 @@ import BN from 'bn.js';
 import { Confetti } from '../Confetti';
 import { QUOTE_MINT } from '../../constants';
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { useMeta } from '../../contexts';
 import moment from 'moment';
 import { AmountLabel } from '../AmountLabel';
 import { HowAuctionsWorkModal } from '../HowAuctionsWorkModal';

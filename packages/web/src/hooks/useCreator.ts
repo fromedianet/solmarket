@@ -1,5 +1,4 @@
-import { StringPublicKey, pubkeyToString } from '@oyster/common';
-import { useMeta } from '../contexts';
+import { StringPublicKey, pubkeyToString, useMeta } from '@oyster/common';
 
 export const useCreator = (id?: StringPublicKey) => {
   const { whitelistedCreatorsByCreator } = useMeta();

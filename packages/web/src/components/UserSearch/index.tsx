@@ -1,9 +1,8 @@
-import { shortenAddress } from '@oyster/common';
+import { shortenAddress, useMeta } from '@oyster/common';
 import { Select, Spin } from 'antd';
 import { SelectProps } from 'antd/es/select';
 import debounce from 'lodash/debounce';
 import React, { useMemo, useRef, useState } from 'react';
-import { useMeta } from '../../contexts';
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType>, 'options' | 'children'> {

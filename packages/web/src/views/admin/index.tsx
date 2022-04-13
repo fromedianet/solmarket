@@ -12,7 +12,6 @@ import {
   Divider,
 } from 'antd';
 import { toast } from 'react-toastify';
-import { useMeta } from '../../contexts';
 import {
   Store,
   WhitelistedCreator,
@@ -23,6 +22,7 @@ import {
   shortenAddress,
   StringPublicKey,
   useConnection,
+  useMeta,
   useStore,
   useWalletModal,
   WalletSigner,
