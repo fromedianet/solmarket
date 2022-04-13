@@ -15,7 +15,8 @@ const { Content } = Layout;
 const { TabPane } = Tabs;
 
 export const ExCollectionView = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id || '';
   const searchParams = useQuerySearch();
   const market = searchParams.get('market') || '';
   const { width } = useWindowDimensions();

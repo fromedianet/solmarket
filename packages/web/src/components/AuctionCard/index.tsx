@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, InputNumber, Spin } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   useConnection,
@@ -26,6 +26,7 @@ import {
   Bid,
   BidderPot,
   shortenAddress,
+  useMeta,
 } from '@oyster/common';
 import {
   AuctionView,
@@ -47,7 +48,6 @@ import BN from 'bn.js';
 import { Confetti } from '../Confetti';
 import { QUOTE_MINT } from '../../constants';
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { useMeta } from '../../contexts';
 import moment from 'moment';
 import { AmountLabel } from '../AmountLabel';
 import { HowAuctionsWorkModal } from '../HowAuctionsWorkModal';
@@ -200,7 +200,7 @@ export const AuctionCard = ({
   hideDefaultAction?: boolean;
   action?: JSX.Element;
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const connection = useConnection();
   const { update } = useMeta();
 
@@ -942,7 +942,7 @@ export const AuctionCard = ({
           item => ' ' + (item.name || shortenAddress(item.address || '')),
         )}!`}
         extraButtonText="View My Items"
-        onClickExtraButton={() => history.push('/artworks')}
+        onClickExtraButton={() => navigate('/artworks')}
       />
     </div>
   );

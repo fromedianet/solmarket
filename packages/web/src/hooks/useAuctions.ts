@@ -12,11 +12,11 @@ import {
   StringPublicKey,
   AuctionDataExtended,
   createPipelineExecutor,
+  useMeta,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import BN from 'bn.js';
 import { useEffect, useMemo, useState } from 'react';
-import { useMeta } from '../contexts';
 import {
   AuctionManager,
   AuctionManagerStatus,

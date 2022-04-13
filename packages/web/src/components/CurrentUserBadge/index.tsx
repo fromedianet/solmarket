@@ -33,7 +33,7 @@ const UserActions = (props: { onClick?: any }) => {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {authToken ? (
         <>
-          <Link to={`/art/create`}>
+          <Link to={`/art-create/0`}>
             <Button
               onClick={() => {
                 props.onClick ? props.onClick() : null;

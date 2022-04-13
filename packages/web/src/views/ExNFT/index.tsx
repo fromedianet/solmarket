@@ -10,7 +10,8 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 
 export const ExNFTView = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id || '';
   const searchParams = useQuerySearch();
   const market = searchParams.get('market') || '';
   const price = searchParams.get('price') || '0';

@@ -13,7 +13,8 @@ const { Content } = Layout;
 const { TabPane } = Tabs;
 
 export const MarketplaceView = () => {
-  const { symbol } = useParams<{ symbol: string }>();
+  const params = useParams<{ symbol: string }>();
+  const symbol = params.symbol || '';
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
   const [list, setList] = useState<any[]>([]);

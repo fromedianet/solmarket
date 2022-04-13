@@ -8,7 +8,8 @@ import { CopySpan, shortenAddress, useMeta } from '@oyster/common';
 import { BidLines } from './components/BidLines';
 
 export const AuctionView = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id || '';
   const auction = useAuction(id);
   const art = useArt(auction?.thumbnail.metadata.pubkey);
   const { ref, data } = useExtendedArt(auction?.thumbnail.metadata.pubkey);

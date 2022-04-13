@@ -25,7 +25,7 @@ export const Identicon = (props: {
         ref.current.appendChild(
           Jazzicon(
             style?.width || 16,
-            parseInt(bs58.decode(address).toString('hex').slice(5, 15), 16),
+            parseInt(bs58.decode(address).toString().slice(5, 15), 16),
           ),
         );
       } catch (err) {

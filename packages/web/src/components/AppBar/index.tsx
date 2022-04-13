@@ -3,7 +3,7 @@ import { MenuOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Select } from 'antd';
 import { ConnectButton } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -47,7 +47,7 @@ export const LogoLink = () => {
 };
 
 export const AppBar = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
   const { getAllCollections } = useCollectionsAPI();
@@ -68,10 +68,6 @@ export const AppBar = () => {
     return data;
   }
 
-  const onChange = value => {
-    history.push(value);
-  };
-
   return (
     <div className="navbar-expand-lg">
       <div className="nav-container">
@@ -89,7 +85,7 @@ export const AppBar = () => {
               className="search-control"
               placeholder="Search Collections"
               optionFilterProp="children"
-              onChange={onChange}
+              onChange={(value: string) => navigate(value)}
               suffixIcon={<SearchOutlined />}
               value={null}
             >
