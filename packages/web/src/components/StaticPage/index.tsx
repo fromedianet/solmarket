@@ -5,9 +5,9 @@ import BN from 'bn.js';
 
 import Masonry from 'react-masonry-css';
 import { CardLoader } from '../MyLoader';
-import { useMeta } from '../../contexts';
 import { AuctionRenderCard } from '../AuctionRenderCard';
 import { AuctionViewState, useAuctions } from '../../hooks';
+import { useMeta } from '@oyster/common';
 
 interface Connect {
   label: string;

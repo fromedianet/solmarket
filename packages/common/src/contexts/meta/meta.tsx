@@ -253,25 +253,25 @@ export function MetaProvider({
 
   useEffect(() => {
     //@ts-ignore
-    if (window.loadingData) {
-      console.log('currently another update is running, so queue for 3s...');
-      updateRequestsInQueue.current += 1;
-      const interval = setInterval(() => {
-        //@ts-ignore
-        if (window.loadingData) {
-          console.log('not running queued update right now, still loading');
-        } else {
-          console.log('running queued update');
-          update(undefined, undefined);
-          updateRequestsInQueue.current -= 1;
-          clearInterval(interval);
-        }
-      }, 3000);
-    } else {
-      console.log('no update is running, updating.');
-      update(undefined, undefined);
-      updateRequestsInQueue.current = 0;
-    }
+    // if (window.loadingData) {
+    //   console.log('currently another update is running, so queue for 3s...');
+    //   updateRequestsInQueue.current += 1;
+    //   const interval = setInterval(() => {
+    //     //@ts-ignore
+    //     if (window.loadingData) {
+    //       console.log('not running queued update right now, still loading');
+    //     } else {
+    //       console.log('running queued update');
+    //       update(undefined, undefined);
+    //       updateRequestsInQueue.current -= 1;
+    //       clearInterval(interval);
+    //     }
+    //   }, 3000);
+    // } else {
+    //   console.log('no update is running, updating.');
+    //   update(undefined, undefined);
+    //   updateRequestsInQueue.current = 0;
+    // }
   }, [connection, setState, updateMints, storeAddress, isReady, page]);
 
   // Fetch metadata on userAccounts change

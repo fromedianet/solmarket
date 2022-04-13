@@ -1,5 +1,5 @@
+import { useMeta } from '@oyster/common';
 import { useMemo } from 'react';
-import { useMeta } from '../contexts';
 import { Artist } from '../types';
 import { AuctionView } from './useAuctions';
 

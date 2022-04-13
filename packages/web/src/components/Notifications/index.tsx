@@ -11,6 +11,7 @@ import {
   StringPublicKey,
   toPublicKey,
   useConnection,
+  useMeta,
   useUserAccounts,
   VaultState,
   WalletSigner,
@@ -27,7 +28,6 @@ import { unwindVault } from '../../actions/unwindVault';
 import { settle } from '../../actions/settle';
 import { startAuctionManually } from '../../actions/startAuctionManually';
 import { QUOTE_MINT } from '../../constants';
-import { useMeta } from '../../contexts';
 import {
   AuctionViewState,
   processAccountsIntoAuctionView,

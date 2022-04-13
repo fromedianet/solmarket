@@ -1,8 +1,8 @@
 import React from 'react';
 import { ArtCard } from '../../components/ArtCard';
 import PackCard from '../../components/PackCard';
-import { useMeta } from '../../contexts';
 import { SafetyDepositDraft } from '../../actions/createAuctionManager';
+import { useMeta } from '@oyster/common';
 
 interface IAuctionItemCard {
   current: SafetyDepositDraft;

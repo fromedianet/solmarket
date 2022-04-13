@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, Spin, Form } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MetaplexModal, notify, useQuerySearch } from '@oyster/common';
 import moment from 'moment';
 import { useCollectionsAPI } from '../../../../hooks/useCollectionsAPI';
 
 export const DashboardAdminDetails = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params.id || '';
   const searchParams = useQuerySearch();
   const type = searchParams.get('type') || '';
   const [form] = Form.useForm();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [collection, setCollection] = useState({});
   const [loading, setLoading] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -23,7 +24,7 @@ export const DashboardAdminDetails = () => {
       if ('data' in res) {
         setCollection(res['data']);
       } else {
-        history.goBack();
+        navigate(-1);
       }
       setLoading(false);
     });
@@ -38,7 +39,7 @@ export const DashboardAdminDetails = () => {
     }) // @ts-ignore
       .then((res: {}) => {
         if ('data' in res) {
-          history.goBack();
+          navigate(-1);
         } else {
           notify({
             description: res['message'],
@@ -62,7 +63,7 @@ export const DashboardAdminDetails = () => {
     }) // @ts-ignore
       .then((res: {}) => {
         if ('data' in res) {
-          history.goBack();
+          navigate(-1);
         } else {
           notify({
             description: res['message'],

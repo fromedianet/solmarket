@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, Button, Row, Col } from 'antd';
 import { BadgeText } from '../../../components/BadgeText';
 import uuid from 'react-uuid';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCollectionsAPI } from '../../../hooks/useCollectionsAPI';
 import { DashboardCollectionCard } from '../../../components/DashboardCollectionCard';
 
 const { TabPane } = Tabs;
 
 export const DashboardView = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { createCollection, getMyCollections } = useCollectionsAPI();
   const [lists, setLists] = useState({
     drafts: [],
@@ -39,7 +39,7 @@ export const DashboardView = () => {
 
     try {
       await createCollection({ _id });
-      history.push(`/dashboard/listing/${_id}`);
+      navigate(`/dashboard/listing/${_id}`);
     } catch (e) {
       console.error(e);
     }

@@ -10,11 +10,12 @@ import { CollectionStep } from './steps/CollectionStep';
 import { DetailsStep } from './steps/DetailsStep';
 import { CandyMachineStep } from './steps/CandyMachineStep';
 import { SubmitStep } from './steps/SubmitStep';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const DashboardListingView = () => {
-  const { id }: { id: string } = useParams();
-  const history = useHistory();
+  const params = useParams<{ id: string }>();
+  const id = params.id || '';
+  const navigate = useNavigate();
   const [step, setStep] = useState<number>(1);
   const {
     getCollectionById,
@@ -131,7 +132,7 @@ export const DashboardListingView = () => {
             message: 'Submit has successed!',
             type: 'success',
           });
-          history.goBack();
+          navigate(-1);
         }
       })
       .finally(() => {

@@ -1,6 +1,6 @@
 import { StringPublicKey } from '@oyster/common';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { Confetti } from '../../../components/Confetti';
 
@@ -10,7 +10,7 @@ export const Congrats = (props: {
   };
   alert?: string;
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const newTweetURL = () => {
     const params = {
@@ -31,7 +31,7 @@ export const Congrats = (props: {
       <>
         <div className="waiting-title">Sorry, there was an error!</div>
         <p>{props.alert}</p>
-        <Button onClick={() => history.push('/art/create')}>
+        <Button onClick={() => navigate('/art-create/0')}>
           Back to Create NFT
         </Button>
       </>
@@ -50,7 +50,7 @@ export const Congrats = (props: {
         </Button>
         <Button
           style={{ marginBottom: 16 }}
-          onClick={() => history.push('/collections')}
+          onClick={() => navigate('/collections')}
         >
           <span>Go to collection page &gt;</span>
         </Button>

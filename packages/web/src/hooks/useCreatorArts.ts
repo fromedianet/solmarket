@@ -1,5 +1,9 @@
-import { useMeta } from '../contexts';
-import { Metadata, ParsedAccount, StringPublicKey } from '@oyster/common';
+import {
+  Metadata,
+  ParsedAccount,
+  StringPublicKey,
+  useMeta,
+} from '@oyster/common';
 import { useAuctions } from './useAuctions';
 
 export const useCreatorArts = (id?: StringPublicKey) => {

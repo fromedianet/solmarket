@@ -12,11 +12,12 @@ import {
   IPartialCreateAuctionArgs,
   StringPublicKey,
   WRAPPED_SOL_MINT,
+  useMeta,
 } from '@oyster/common';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { MintInfo } from '@solana/spl-token';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   WinningConfigType,
   AmountRange,
@@ -27,7 +28,6 @@ import {
 } from '../../actions/createAuctionManager';
 import BN from 'bn.js';
 import { constants } from '@oyster/common';
-import { useMeta } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { CategoryStep } from './steps/CategoryStep';
@@ -116,8 +116,9 @@ export const AuctionCreateView = () => {
   const connection = useConnection();
   const wallet = useWallet();
   const { whitelistedCreatorsByCreator, storeIndexer } = useMeta();
-  const { step_param }: { step_param: string } = useParams();
-  const history = useHistory();
+  const params = useParams<{ step_param: string }>();
+  const step_param = params.step_param || '';
+  const navigate = useNavigate();
   const mint = useMint(QUOTE_MINT);
   const { width } = useWindowDimensions();
 
@@ -162,7 +163,7 @@ export const AuctionCreateView = () => {
 
   const gotoNextStep = (_step?: number) => {
     const nextStep = _step === undefined ? step + 1 : _step;
-    history.push(`/auction/create/${nextStep.toString()}`);
+    navigate(`/auction-create/${nextStep.toString()}`);
   };
 
   const createAuction = async () => {

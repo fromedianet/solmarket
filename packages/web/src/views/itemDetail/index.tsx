@@ -11,7 +11,8 @@ import { NFT } from '../../models/exCollection';
 import { getQueryPrameter } from '../../hooks/useCollection';
 
 export const ItemDetailView = () => {
-  const { mint } = useParams<{ mint: string }>();
+  const params = useParams<{ mint: string }>();
+  const mint = params.mint || '';
   const [priceData, setPriceData] = useState<any[]>([]);
   const [nftList, setNFTList] = useState<NFT[]>([]);
   const [refresh, setRefresh] = useState(0);

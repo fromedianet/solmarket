@@ -59,12 +59,6 @@ const SidebarMenu = (props: { onCollapse: () => void }) => {
       >
         <Link to="/auctions">Auctions</Link>
       </Menu.Item> */}
-      {/* <Menu.Item
-        key="stats"
-        icon={<BarChartOutlined style={{ fontSize: 20 }} />}
-      >
-        <Link to="/stats">Stats</Link>
-      </Menu.Item> */}
       <SubMenu
         key="creators"
         title="Creators"

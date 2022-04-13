@@ -26,12 +26,15 @@ export const SalesListView = () => {
   const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
 
   useEffect(() => {
+    if (loading) return;
     setLoading(true);
     loadAllData()
       .then((res: any) => {
         setCollections(res);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   async function loadAllData() {

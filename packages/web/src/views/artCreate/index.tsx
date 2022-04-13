@@ -10,7 +10,7 @@ import {
   StringPublicKey,
 } from '@oyster/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useWindowDimensions from '../../utils/layout';
 import { InfoStep } from './steps/InfoStep';
 import { CategoryStep } from './steps/CategoryStep';
@@ -27,7 +27,8 @@ import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 const { Step } = Steps;
 
 export const ArtCreateView = () => {
-  const { step_param }: { step_param: string } = useParams();
+  const params = useParams<{ step_param: string }>();
+  const step_param = params.step_param || '';
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const wallet = useWallet();
@@ -36,7 +37,7 @@ export const ArtCreateView = () => {
   const { getMyListedCollections } = useCollectionsAPI();
   const { createNft } = useNFTsAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { width } = useWindowDimensions();
   const [nftCreateProgress, setNFTcreateProgress] = useState<number>(0);
   const [collections, setCollections] = useState<any[]>([]);
@@ -66,7 +67,7 @@ export const ArtCreateView = () => {
 
   const gotoStep = useCallback(
     (_step: number) => {
-      history.push(`/art/create/${_step.toString()}`);
+      navigate(`/art-create/${_step.toString()}`);
       if (_step === 0) setStepsVisible(true);
     },
     [history],

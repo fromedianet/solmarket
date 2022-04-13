@@ -11,7 +11,7 @@ import { ConfettiProvider } from './components/Confetti';
 import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
 import { AuthProvider } from './contexts/authProvider';
-import SidebarProvider from './contexts/sidebar';
+import SidebarProvider from './contexts/sidebarProvider';
 import { SocketProvider } from './contexts/socketProvider';
 import { DashboardLayout } from './views/dashboard';
 

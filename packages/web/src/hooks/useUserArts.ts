@@ -2,6 +2,7 @@ import {
   MasterEditionV1,
   MetadataKey,
   ParsedAccount,
+  useMeta,
   useUserAccounts,
 } from '@oyster/common';
 import BN from 'bn.js';
@@ -12,7 +13,6 @@ import {
   WinningConfigType,
   WinningConstraint,
 } from '@oyster/common/dist/lib/models/metaplex/index';
-import { useMeta } from './../contexts';
 
 export const useUserArts = (): SafetyDepositDraft[] => {
   const { metadata, masterEditions, editions } = useMeta();

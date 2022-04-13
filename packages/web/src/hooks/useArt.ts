@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useMeta } from '../contexts';
 import { Art, Artist, ArtType } from '../types';
 import {
   Edition,
@@ -11,6 +10,7 @@ import {
   StringPublicKey,
   useLocalStorage,
   pubkeyToString,
+  useMeta,
 } from '@oyster/common';
 import { WhitelistedCreator } from '@oyster/common/dist/lib/models/metaplex/index';
 import { Cache } from 'three';
