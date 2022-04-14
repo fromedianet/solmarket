@@ -273,6 +273,95 @@ code {
   }
 }
 
+.ant-spin-dot-item {
+  background-color: white;
+}
+
+.ant-select {
+  color: @text-primary-color;
+  background-color: transparent;
+  border-radius: 8px;
+  border: 1px solid @border-primary-color;
+
+  .ant-select-selector {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: auto;
+    min-height: 40px;
+
+    .ant-select-selection-item {
+      background: transparent;
+      border: none;
+      height: 28px;
+      line-height: 28px;
+    }
+  }
+
+  &:not(.ant-select-customize-input) .ant-select-selector {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    color: inherit;
+    border: none;
+    height: 40px;
+  }
+
+  .ant-select-arrow {
+    color: @text-primary-color;
+  }
+
+  .ant-select-clear {
+    background: transparent;
+    color: @text-primary-color;
+  }
+
+  &.ant-select-open {
+    border-color: @border-pink;
+  }
+}
+
+.ant-select-dropdown {
+  background-color: @bg-text-color;
+  .ant-select-item {
+    color: @text-primary-color;
+
+    &.ant-select-item-option-disabled {
+      color: rgba(255, 255, 255, 0.3);
+      background: transparent;
+    }
+  }
+}
+.ant-select-disabled.ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  color: @text-primary-color;
+  background: transparent;
+}
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background: rgba(255, 255, 255, 0.1);
+
+  & .ant-select-item-option-state {
+    color: @text-primary-color;
+  }
+}
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.ant-select-multiple .ant-select-selection-item-remove {
+  color: @text-secondary-color;
+}
+.ant-input-group-addon {
+  background: @bg-text-color;
+  border: none;
+  border-radius: 0 8px 8px 0;
+
+  .ant-select-open .ant-select-selector,
+  .ant-select-focused .ant-select-selector {
+    color: @text-primary-color;
+  }
+}
+
 .full-history {
   color: #6d6d6d;
   padding-top: 5px;
@@ -461,6 +550,10 @@ model-viewer {
 
 .ant-tabs-nav-list {
   align-items: center;
+}
+
+.ant-tag .ant-tag-close-icon {
+  color: @text-secondary-color;
 }
 
 .refresh-button {

@@ -242,17 +242,6 @@
           margin-bottom: 12px;
         }
 
-        .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-          background: transparent;
-          border: none;
-        }
-
-        .ant-select-disabled.ant-select:not(.ant-select-customize-input)
-          .ant-select-selector {
-          color: @text-primary-color;
-          background: transparent;
-        }
-
         .ant-input-number {
           border: none;
           border-radius: 8px;
@@ -359,7 +348,7 @@
         .search-control {
           height: 40px;
           flex: 1 1 auto;
-          border: 1px solid #595280;
+          border: 1px solid @border-light;
           border-radius: 4px;
 
           .ant-input-group {
@@ -393,12 +382,8 @@
 
           &.ant-select {
             background: transparent;
-
-            &:not(.ant-select-customize-input) .ant-select-selector {
-              background: transparent;
-              border-color: #595280;
-              border-radius: 4px;
-            }
+            border-color: @border-light;
+            border-radius: 4px;
           }
         }
       }
@@ -438,15 +423,4 @@
   }
 }
 
-.ant-select-item-option-selected:not(.ant-select-item-option-disabled)
-  .ant-select-item-option-state {
-  color: @text-primary-color;
-}
 
-.ant-select-multiple .ant-select-selection-item-remove {
-  color: @text-secondary-color;
-}
-
-.ant-tag .ant-tag-close-icon {
-  color: @text-secondary-color;
-}
