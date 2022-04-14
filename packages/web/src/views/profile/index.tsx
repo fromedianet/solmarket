@@ -103,19 +103,6 @@ export const ProfileView = () => {
           setRefresh(Date.now());
         }
       });
-
-      socket.emit('loadAllTokenAccounts', {
-        wallet: wallet.publicKey.toBase58(),
-      });
-
-      socket.on('syncedAllTokenAccounts', params => {
-        if (params.wallet === wallet.publicKey?.toBase58()) {
-          notify({
-            message: 'Your NFT data will be synced within 1 ~ 2 minutes',
-            type: 'info',
-          });
-        }
-      });
     }
   }, [socket, wallet]);
 

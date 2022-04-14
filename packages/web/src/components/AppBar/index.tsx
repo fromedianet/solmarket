@@ -53,12 +53,17 @@ export const AppBar = () => {
   const { getAllCollections } = useCollectionsAPI();
   const exAPI = useExCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
+  const [filters, setFilters] = useState<ExCollection[]>([]);
 
   useEffect(() => {
     loadCollections().then(res => {
       setCollections(res);
     });
   }, []);
+
+  useEffect(() => {
+    setFilters(collections);
+  }, [collections]);
 
   async function loadCollections() {
     let data = [];
@@ -67,6 +72,14 @@ export const AppBar = () => {
     data = data.concat(exData);
     return data;
   }
+
+  const onSearch = (val: string) => {
+    const searchKey = val.toLowerCase();
+    const newData = collections.filter(k =>
+      k.name.toLowerCase().includes(searchKey),
+    );
+    setFilters(newData);
+  };
 
   return (
     <div className="navbar-expand-lg">
@@ -84,12 +97,14 @@ export const AppBar = () => {
             <Select
               className="search-control"
               placeholder="Search Collections"
-              optionFilterProp="children"
-              onChange={(value: string) => navigate(value)}
+              filterOption={false}
+              showSearch={true}
+              onSelect={val => navigate(val)}
+              onSearch={val => onSearch(val)}
               suffixIcon={<SearchOutlined />}
               value={null}
             >
-              {collections.map((item, index) => (
+              {filters.map((item, index) => (
                 <Option
                   key={index}
                   value={

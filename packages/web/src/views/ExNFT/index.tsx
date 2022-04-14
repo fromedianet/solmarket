@@ -31,7 +31,7 @@ export const ExNFTView = () => {
     const filters = transactions.filter(item => item.txType === 'SALE');
     const data = filters.map(item => ({
       date: getDateStringFromUnixTimestamp(item.blockTime),
-      price: (item.price || 0) / LAMPORTS_PER_SOL,
+      price: item.price || 0,
     }));
     if (data.length > 0) {
       setPriceData(data);
