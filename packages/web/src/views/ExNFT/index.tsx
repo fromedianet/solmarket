@@ -6,8 +6,8 @@ import { MetaplexModal, useQuerySearch } from '@oyster/common';
 import { useExNFT } from '../../hooks/useExNFT';
 import { InfoSection } from './InfoSection';
 import { EmptyView } from '../../components/EmptyView';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { getDateStringFromUnixTimestamp } from '../../utils/utils';
+import { NFTData, Transaction } from '../../models/exCollection';
 
 export const ExNFTView = () => {
   const params = useParams<{ id: string }>();
@@ -17,15 +17,25 @@ export const ExNFTView = () => {
   const price = searchParams.get('price') || '0';
   const collection = searchParams.get('collection') || '';
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [nft, setNFT] = useState<NFTData>();
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [priceData, setPriceData] = useState<any[]>([]);
   const [refresh, setRefresh] = useState(0);
 
-  const { nft, loading, transactions } = useExNFT(
-    id,
-    market,
-    parseFloat(price),
-    refresh,
-  );
+  const { getExNFTByMintAddress, getExTransactions } = useExNFT();
+
+  useEffect(() => {
+    setLoading(true);
+    loadData()
+      .then(res => {
+        if (res) {
+          setNFT(res.nft);
+          setTransactions(res.transactions);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [refresh]);
 
   useEffect(() => {
     const filters = transactions.filter(item => item.txType === 'SALE');
@@ -37,6 +47,19 @@ export const ExNFTView = () => {
       setPriceData(data);
     }
   }, [transactions]);
+
+  async function loadData() {
+    if (id && market) {
+      const nftRes = await getExNFTByMintAddress(id, parseFloat(price));
+      const txRes = await getExTransactions(id, market);
+
+      return {
+        nft: nftRes,
+        transactions: txRes,
+      };
+    }
+    return null;
+  }
 
   return (
     <div className="main-area">

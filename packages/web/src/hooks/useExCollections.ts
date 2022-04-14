@@ -16,13 +16,17 @@ export const useExCollectionsAPI = () => {
   const { runOthersAPI } = ApiUtils();
 
   async function getNewCollections(params: { market: string; more?: boolean }) {
-    const result: any = await runOthersAPI(
-      'post',
-      '/new_collections',
-      JSON.stringify(params),
-    );
-    if (result && 'data' in result) {
-      return result['data'];
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/new_collections',
+        JSON.stringify(params),
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
     }
     return [];
   }
@@ -32,21 +36,29 @@ export const useExCollectionsAPI = () => {
     timeRange: string;
     more?: boolean;
   }) {
-    const result: any = await runOthersAPI(
-      'post',
-      '/popular_collections',
-      JSON.stringify(params),
-    );
-    if (result && 'data' in result) {
-      return result['data'];
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/popular_collections',
+        JSON.stringify(params),
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
     }
     return [];
   }
 
   async function getAllCollections(market: string) {
-    const result: any = await runOthersAPI('get', `/excollections/${market}`);
-    if (result && 'data' in result) {
-      return result['data'];
+    try {
+      const result: any = await runOthersAPI('get', `/excollections/${market}`);
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
     }
     return [];
   }
