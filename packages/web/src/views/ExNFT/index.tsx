@@ -23,7 +23,7 @@ export const ExNFTView = () => {
   const [priceData, setPriceData] = useState<any[]>([]);
   const [refresh, setRefresh] = useState(0);
 
-  const { getNFTByMintAddress, getTransactions } = useExNFT();
+  const { getExNFTByMintAddress, getExTransactions } = useExNFT();
 
   useEffect(() => {
     setLoading(true);
@@ -50,13 +50,13 @@ export const ExNFTView = () => {
 
   async function loadData() {
     if (id && market) {
-      const nftRes = await getNFTByMintAddress(id, parseFloat(price));
-      const txRes = await getTransactions(id, market);
+      const nftRes = await getExNFTByMintAddress(id, parseFloat(price));
+      const txRes = await getExTransactions(id, market);
 
       return {
         nft: nftRes,
         transactions: txRes,
-      }
+      };
     }
     return null;
   }

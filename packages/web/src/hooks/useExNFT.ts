@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react';
-import { NFTData, Transaction } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
 import { MarketType } from '../constants';
 
 export const useExNFT = () => {
   const { runOthersAPI } = ApiUtils();
 
-  async function getNFTByMintAddress(mint: string, price?: number) {
+  async function getExNFTByMintAddress(mint: string, price?: number) {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/exnft/${mint}`,
-      );
+      const result: any = await runOthersAPI('get', `/exnft/${mint}`);
       if (result && 'data' in result) {
         if (price && result['data']['price'] === 0) {
           result['data']['price'] = price;
@@ -24,7 +19,7 @@ export const useExNFT = () => {
     return null;
   }
 
-  async function getTransactions(mint: string, market: string) {
+  async function getExTransactions(mint: string, market: string) {
     const queryBody = { market: market };
     if (market === MarketType.MagicEden) {
       const query = {
@@ -58,9 +53,40 @@ export const useExNFT = () => {
     return [];
   }
 
-  function getNFTsByOwner(wallet: string, market: string) {
-
+  async function getExNFTsByOwner(wallet: string, market: string) {
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getNFTsByOwner/${market}/${wallet}`,
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
   }
 
-  return { getNFTByMintAddress, getTransactions };
+  async function getExNFTsByEscrowOwner(wallet: string, market: string) {
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getNFTsByEscrowOwner/${market}/${wallet}`,
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  }
+
+  return {
+    getExNFTByMintAddress,
+    getExTransactions,
+    getExNFTsByOwner,
+    getExNFTsByEscrowOwner,
+  };
 };
