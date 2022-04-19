@@ -1,9 +1,4 @@
-import {
-  CANDY_MACHINE_PROGRAM_ID,
-  decodeMetadata,
-  METADATA_PROGRAM_ID,
-  pubkeyToString,
-} from '@oyster/common';
+import { CANDY_MACHINE_PROGRAM_ID, METADATA_PROGRAM_ID } from '@oyster/common';
 import * as anchor from '@project-serum/anchor';
 
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
@@ -11,8 +6,6 @@ import {
   SystemProgram,
   Transaction,
   SYSVAR_SLOT_HASHES_PUBKEY,
-  Connection,
-  AccountInfo,
   TransactionInstruction,
 } from '@solana/web3.js';
 import { sendTransactions, SequenceType } from './connection';
@@ -240,26 +233,6 @@ const getMetadata = async (
   )[0];
 };
 
-export const loadMetadata = async (
-  connection: Connection,
-  metadataAddress: anchor.web3.PublicKey,
-) => {
-  console.log('>>> loadMetadata metadataAddress', metadataAddress.toBase58());
-  try {
-    const account = await connection.getAccountInfo(metadataAddress);
-    console.log('>>> loadMetadata', account);
-    if (account && isMetadataAccount(account)) {
-      return decodeMetadata(account.data);
-    }
-    return null;
-  } catch {
-    return null;
-  }
-};
-
-const isMetadataAccount = (account: AccountInfo<Buffer>) =>
-  pubkeyToString(account.owner) === METADATA_PROGRAM_ID;
-
 export const getCandyMachineCreator = async (
   candyMachine: anchor.web3.PublicKey,
 ): Promise<[anchor.web3.PublicKey, number]> => {
@@ -378,7 +351,7 @@ export const mintOneToken = async (
   beforeTransactions: Transaction[] = [],
   afterTransactions: Transaction[] = [],
   setupState?: SetupState,
-): Promise<{}> => {
+): Promise<string[]> => {
   const mint = setupState?.mint ?? anchor.web3.Keypair.generate();
   const userTokenAccountAddress = (
     await getAtaForMint(mint.publicKey, payer)

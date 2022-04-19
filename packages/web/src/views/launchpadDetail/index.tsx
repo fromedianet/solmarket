@@ -28,7 +28,6 @@ import { MintCountdown } from './MintCountdown';
 import { DEFAULT_TIMEOUT, sendTransaction } from './connection';
 import { MintButton } from './MintButton';
 import { useSocket } from '../../contexts';
-// import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
   const params = useParams<{ symbol: string }>();
@@ -392,12 +391,12 @@ export const LaunchpadDetailView = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setRefresh(Date.now());
-    }, 10000);
+    }, 20000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (candyMachineId) {
+    if (candyMachineId && !isUserMinting) {
       refreshCandyMachineState();
     }
   }, [
