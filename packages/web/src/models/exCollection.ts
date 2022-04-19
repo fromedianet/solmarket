@@ -68,8 +68,8 @@ export type NFTData = {
   img: string;
   animationURL?: string;
   price?: number;
-  collectionName: string;
-  collectionTitle: string;
+  symbol?: string;
+  collectionName?: string;
   mintAddress: string;
   owner?: string;
   tokenAddress?: string;
@@ -82,6 +82,7 @@ export type NFTData = {
   tokenDelegateValid?: boolean;
   attributes: Attribute[];
   creators: Creator[];
+  v2: V2 | null;
 };
 
 export type Transaction = {
@@ -96,4 +97,10 @@ export type Transaction = {
   transaction: string | null;
   price: number | undefined;
   txType: string;
+};
+
+export type V2 = {
+  auctionHouseKey: string;
+  expiry: number;
+  sellerReferral: string;
 };

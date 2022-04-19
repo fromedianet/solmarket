@@ -247,7 +247,7 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          socket.emit('syncAuctionHouse', { wallet: wallet.publicKey! });
           resolve('');
         } else {
           reject();
@@ -284,7 +284,7 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          socket.emit('syncAuctionHouse', { wallet: wallet.publicKey! });
           resolve('');
         } else {
           reject();

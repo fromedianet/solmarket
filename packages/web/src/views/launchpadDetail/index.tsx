@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import * as anchor from '@project-serum/anchor';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Row, Col, Spin, Button, Progress } from 'antd';
@@ -16,24 +16,29 @@ import {
   CandyMachineAccount,
   getCandyMachineState,
   mintOneToken,
+  getCollectionPDA,
+  SetupState,
+  createAccountsForMint,
+  awaitTransactionSignatureConfirmation,
 } from './candy-machine';
 import { formatNumber, getAtaForMint, toDate } from './utils';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { GatewayProvider } from '@civic/solana-gateway-react';
 import { MintCountdown } from './MintCountdown';
-import { sendTransaction } from './connection';
+import { DEFAULT_TIMEOUT, sendTransaction } from './connection';
 import { MintButton } from './MintButton';
-import { useNFTsAPI } from '../../hooks/useNFTsAPI';
+import { useSocket } from '../../contexts';
 
 export const LaunchpadDetailView = () => {
   const params = useParams<{ symbol: string }>();
   const symbol = params.symbol || '';
-  const { getCollectionBySymbol, updateCollectionMintStatus } =
+  const { getCollectionBySymbol, updateCandyMachineStatus } =
     useCollectionsAPI();
   const wallet = useWallet();
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const navigate = useNavigate();
+  const { socket } = useSocket();
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState({});
   const [candyMachineId, setCandyMachineId] = useState<PublicKey>();
@@ -47,8 +52,9 @@ export const LaunchpadDetailView = () => {
   const [isPresale, setIsPresale] = useState(false);
   const [discountPrice, setDiscountPrice] = useState<anchor.BN>();
   const [showMintInfo, setShowMintInfo] = useState(false);
-  const [count, setCount] = useState(0);
-  const { createNft } = useNFTsAPI();
+  const [needTxnSplit, setNeedTxnSplit] = useState(true);
+  const [setupTxn, setSetupTxn] = useState<SetupState>();
+  const [refresh, setRefresh] = useState(0);
   const one_day = (24 * 60) & 60;
 
   const anchorWallet = useMemo(() => {
@@ -86,7 +92,7 @@ export const LaunchpadDetailView = () => {
       });
   }, [symbol]);
 
-  const refreshCandyMachineState = async () => {
+  const refreshCandyMachineState = useCallback(async () => {
     if (!anchorWallet) {
       return;
     }
@@ -181,17 +187,32 @@ export const LaunchpadDetailView = () => {
         if (cndy.state.isSoldOut) {
           active = false;
           if (!collection['mint_ended']) {
-            updateCollectionMintStatus({
-              symbol: symbol,
+            updateCandyMachineStatus({
+              candymachine_id: candyMachineId.toBase58(),
               mint_ended: true,
-            }).then(res => console.log('>>> updateCollectionMintStatus', res));
+            }).then(res => console.log('>>> updateCandyMachineStatus', res));
           }
         }
+
+        const [collectionPDA] = await getCollectionPDA(candyMachineId);
+        const collectionPDAAccount =
+          await cndy.program.provider.connection.getAccountInfo(collectionPDA);
 
         setIsActive((cndy.state.isActive = active));
         setIsPresale((cndy.state.isPresale = presale));
         console.log('candyMachine', cndy);
         setCandyMachine(cndy);
+
+        const txnEstimate =
+          892 +
+          (!!collectionPDAAccount && cndy.state.retainAuthority ? 182 : 0) +
+          (cndy.state.tokenMint ? 177 : 0) +
+          (cndy.state.whitelistMintSettings ? 33 : 0) +
+          (cndy.state.whitelistMintSettings?.mode?.burnEveryTime ? 145 : 0) +
+          (cndy.state.gatekeeper ? 33 : 0) +
+          (cndy.state.gatekeeper?.expireOnUse ? 66 : 0);
+
+        setNeedTxnSplit(txnEstimate > 1230);
       } catch (e) {
         if (e instanceof Error) {
           if (e.message === `Account does not exist ${candyMachineId}`) {
@@ -214,7 +235,7 @@ export const LaunchpadDetailView = () => {
         console.log(e);
       }
     }
-  };
+  }, [wallet, connection, candyMachineId, refresh]);
 
   const onMint = async (
     beforeTransactions: Transaction[] = [],
@@ -224,23 +245,84 @@ export const LaunchpadDetailView = () => {
       setIsUserMinting(true);
       document.getElementById('#identity')?.click();
       if (wallet.connected && candyMachine?.program && wallet.publicKey) {
+        let setupMint: SetupState | undefined;
+        if (needTxnSplit && setupTxn === undefined) {
+          notify({
+            message: 'Please sign account setup transaction',
+            type: 'info',
+          });
+          setupMint = await createAccountsForMint(
+            candyMachine,
+            wallet.publicKey,
+          );
+          let status: any = { err: true };
+          if (setupMint.transaction) {
+            status = await awaitTransactionSignatureConfirmation(
+              setupMint.transaction,
+              DEFAULT_TIMEOUT,
+              connection,
+              true,
+            );
+          }
+          if (status && !status.err) {
+            setSetupTxn(setupMint);
+            notify({
+              message:
+                'Setup transaction succeeded! Please sign minting transaction',
+              type: 'info',
+            });
+          } else {
+            notify({
+              message: 'Mint failed! Please try again!',
+              type: 'error',
+            });
+            setIsUserMinting(false);
+            return;
+          }
+        } else {
+          notify({
+            message: 'Please sign minting transaction',
+            type: 'info',
+          });
+        }
+
         const mintResult = await mintOneToken(
-          connection,
           candyMachine,
           wallet.publicKey,
           beforeTransactions,
           afterTransactions,
+          setupMint ?? setupTxn,
         );
 
         console.log('>>> mintResult', mintResult);
+        const mintTxId = mintResult[0];
 
-        if (mintResult['status'] && !mintResult['status']['err']) {
-          createNft(mintResult['metadataAddress'])
-            .then(res => console.log('>>> createNFT', res))
-            .catch(err => console.error('>>> createNFT error', err));
+        let status: any = { err: true };
+        if (mintTxId) {
+          status = await awaitTransactionSignatureConfirmation(
+            mintTxId,
+            DEFAULT_TIMEOUT,
+            connection,
+            true,
+          );
+        }
+
+        if (status && !status.err) {
+          // manual update since the refresh might not detect
+          // the change immediately
+          const redeemed = itemsRedeemed! + 1;
+          setItemsRedeemed(redeemed);
+          setIsActive(
+            (candyMachine.state.isActive = itemsLimit - redeemed > 0),
+          );
+          candyMachine.state.isSoldOut = itemsLimit - redeemed === 0;
+          setSetupTxn(undefined);
           notify({
             message: 'Congratulations! Mint succeeded!',
             type: 'success',
+          });
+          socket.emit('syncCandyMachine', {
+            candyMachineId: candyMachineId!.toBase58(),
           });
         } else {
           notify({
@@ -253,7 +335,7 @@ export const LaunchpadDetailView = () => {
       let message = error.msg || 'Minting failed! Please try again!';
       if (!error.msg) {
         if (!error.message) {
-          message = 'Transaction Timeout! Please try again.';
+          message = 'Transaction timeout! Please try again.';
         } else if (error.message.indexOf('0x137')) {
           console.log(error);
           message = `SOLD OUT!`;
@@ -274,6 +356,10 @@ export const LaunchpadDetailView = () => {
         message,
         type: 'error',
       });
+
+      // updates the candy machine state to reflect the latest
+      // information on chain
+      refreshCandyMachineState();
     } finally {
       setIsUserMinting(false);
     }
@@ -304,16 +390,22 @@ export const LaunchpadDetailView = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount(Date.now());
-    }, 10000);
+      setRefresh(Date.now());
+    }, 20000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (candyMachineId) {
+    if (candyMachineId && !isUserMinting) {
       refreshCandyMachineState();
     }
-  }, [candyMachineId, anchorWallet, connection, count]);
+  }, [
+    candyMachineId,
+    anchorWallet,
+    connection,
+    refreshCandyMachineState,
+    refresh,
+  ]);
 
   const getCountdownDate = (
     candyMachine: CandyMachineAccount,
