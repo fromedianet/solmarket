@@ -92,7 +92,7 @@ export const InfoSection = (props: {
         <div className="collection-container">
           <Link to={collectionUri} className="collection-name">
             <img width={20} src={'/icons/check.svg'} />
-            <span>{props.nft.collectionTitle || props.collection}</span>
+            <span>{props.nft.collectionName || props.collection}</span>
           </Link>
           <div
             onClick={props.onRefresh}
@@ -120,7 +120,7 @@ export const InfoSection = (props: {
               {!wallet.connected ? (
                 <ConnectButton className="button" />
               ) : (
-                <Button className="button" onClick={props.onBuy} disabled>
+                <Button className="button" onClick={props.onBuy} disabled={!props.nft.v2}>
                   Buy now
                 </Button>
               )}

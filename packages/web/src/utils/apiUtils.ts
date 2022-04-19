@@ -98,8 +98,39 @@ export const ApiUtils = () => {
     });
   }
 
+  function runMagicEdenAPI(method: Method, url: string, data?: string | FormData | {}) {
+    axiosInstance.defaults.baseURL = APIS.magiceden_base_url;
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .request({
+          method: method,
+          url: url,
+          data: data,
+        })
+        .then(res => {
+          if (res.status === 200) {
+            resolve(res.data);
+          } else {
+            notify({
+              message: res.data.message,
+              type: 'error',
+            });
+            reject();
+          }
+        })
+        .catch(err => {
+          notify({
+            message: err.message,
+            type: 'error',
+          });
+          reject();
+        });
+    });
+  }
+
   return {
     runAPI,
     runOthersAPI,
+    runMagicEdenAPI,
   };
 };
