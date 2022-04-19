@@ -27,6 +27,7 @@ import { GatewayProvider } from '@civic/solana-gateway-react';
 import { MintCountdown } from './MintCountdown';
 import { DEFAULT_TIMEOUT, sendTransaction } from './connection';
 import { MintButton } from './MintButton';
+import { useSocket } from '../../contexts';
 // import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 export const LaunchpadDetailView = () => {
@@ -38,6 +39,7 @@ export const LaunchpadDetailView = () => {
   const connection = useConnection();
   const { endpoint } = useConnectionConfig();
   const navigate = useNavigate();
+  const { socket } = useSocket();
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState({});
   const [candyMachineId, setCandyMachineId] = useState<PublicKey>();
@@ -319,6 +321,9 @@ export const LaunchpadDetailView = () => {
           notify({
             message: 'Congratulations! Mint succeeded!',
             type: 'success',
+          });
+          socket.emit('syncCandyMachine', {
+            candyMachineId: candyMachineId!.toBase58(),
           });
         } else {
           notify({
