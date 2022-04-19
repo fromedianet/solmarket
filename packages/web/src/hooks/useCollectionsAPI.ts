@@ -284,14 +284,14 @@ export const useCollectionsAPI = () => {
   /**
    * Update collection mint_ended status
    */
-  async function updateCollectionMintStatus(props: {
-    symbol: string;
+  async function updateCandyMachineStatus(props: {
+    candymachine_id: string;
     mint_ended: boolean;
   }) {
     const result = await runAPI(
       true,
       'post',
-      '/collections/updateCollectionMintStatus',
+      '/collections/updateCandyMachineStatus',
       JSON.stringify(props),
     );
     return result;
@@ -324,6 +324,6 @@ export const useCollectionsAPI = () => {
     getLaunchpadCollections,
     getCollectionBySymbol,
     getCollectionStatsBySymbol,
-    updateCollectionMintStatus,
+    updateCandyMachineStatus,
   };
 };

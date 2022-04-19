@@ -215,6 +215,9 @@ export const NFTCard = (props: {
   itemId?: string;
   className?: string;
 }) => {
+  const url = props.item.market
+    ? `/exnft/${props.item.mint}?market=${props.item.market}`
+    : `/item-details/${props.item.mint}`;
   return (
     <Card
       hoverable={true}
@@ -222,7 +225,7 @@ export const NFTCard = (props: {
       style={{ maxWidth: 250 }}
       bordered={false}
     >
-      <Link to={`/item-details/${props.item.mint}`}>
+      <Link to={url}>
         <div className="image-over art-image-container">
           <ArtContent
             className="art-image no-event"

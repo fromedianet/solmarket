@@ -45,6 +45,8 @@ import { EmptyView } from '../../components/EmptyView';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { useExNFT } from '../../hooks/useExNFT';
+import { MarketType } from '../../constants';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -75,6 +77,7 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
+  const { getExNFTsByOwner, getExNFTsByEscrowOwner } = useExNFT();
 
   const activityColumns = ActivityColumns(network);
   const offersMadeColumns = OffersMadeColumns({
@@ -110,15 +113,10 @@ export const ProfileView = () => {
     if (wallet.publicKey) {
       callShowEscrow();
 
-      getNFTsByWallet(wallet.publicKey.toBase58())
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            const result = res['data'];
-            setMyItems(result.filter(item => item.price === 0));
-            setListedItems(result.filter(item => item.price > 0));
-          }
-        });
+      loadNFTs().then(res => {
+        setMyItems(res.myItems);
+        setListedItems(res.listedItems);
+      });
 
       getTransactionsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
@@ -164,6 +162,32 @@ export const ProfileView = () => {
       });
     }
   }, [user]);
+
+  async function loadNFTs() {
+    const result = {
+      myItems: [],
+      listedItems: [],
+    };
+    if (wallet.publicKey) {
+      const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
+      if ('data' in res) {
+        result.myItems = res['data'].filter(k => k.price === 0);
+        result.listedItems = res['data'].filter(k => k.price > 0);
+      }
+      const exRes1 = await getExNFTsByOwner(
+        wallet.publicKey.toBase58(),
+        MarketType.MagicEden,
+      );
+      result.myItems = result.myItems.concat(exRes1);
+      const exRes2 = await getExNFTsByEscrowOwner(
+        wallet.publicKey.toBase58(),
+        MarketType.MagicEden,
+      );
+      result.listedItems = result.listedItems.concat(exRes2);
+    }
+
+    return result;
+  }
 
   const onSubmit = values => {
     const displayName = values.displayName || '';
@@ -223,7 +247,7 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          socket.emit('syncAuctionHouse', { wallet: wallet.publicKey! });
           resolve('');
         } else {
           reject();
@@ -260,7 +284,7 @@ export const ProfileView = () => {
           offer,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { wallet: wallet.publicKey! });
+          socket.emit('syncAuctionHouse', { wallet: wallet.publicKey! });
           resolve('');
         } else {
           reject();

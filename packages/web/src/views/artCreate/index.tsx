@@ -34,8 +34,8 @@ export const ArtCreateView = () => {
   const wallet = useWallet();
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
-  const { getMyListedCollections } = useCollectionsAPI();
   const { createNft } = useNFTsAPI();
+  const { getMyListedCollections } = useCollectionsAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
   const navigate = useNavigate();
   const { width } = useWindowDimensions();

@@ -1,41 +1,25 @@
-import { useEffect, useState } from 'react';
-import { NFTData, Transaction } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
 import { MarketType } from '../constants';
 
-export const useExNFT = (
-  mintAddress: string,
-  market: string,
-  price?: number,
-  refresh?: number,
-) => {
+export const useExNFT = () => {
   const { runOthersAPI } = ApiUtils();
-  const [nft, setNFT] = useState<NFTData>();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (loading) return;
-    getNFTByMintAddress(mintAddress, price);
-    getTransactions(mintAddress, market);
-  }, [mintAddress, refresh]);
-
-  function getNFTByMintAddress(mint: string, price?: number) {
-    setLoading(true);
-    runOthersAPI('get', `/exnft/${mint}`)
-      // @ts-ignore
-      .then((result: {}) => {
-        if (result['data']) {
-          if (price && result['data']['price'] === 0) {
-            result['data']['price'] = price;
-          }
-          setNFT(result['data']);
+  async function getExNFTByMintAddress(mint: string, price?: number) {
+    try {
+      const result: any = await runOthersAPI('get', `/exnft/${mint}`);
+      if (result && 'data' in result) {
+        if (price && result['data']['price'] === 0) {
+          result['data']['price'] = price;
         }
-      })
-      .finally(() => setLoading(false));
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
   }
 
-  function getTransactions(mint: string, market: string) {
+  async function getExTransactions(mint: string, market: string) {
     const queryBody = { market: market };
     if (market === MarketType.MagicEden) {
       const query = {
@@ -54,12 +38,55 @@ export const useExNFT = (
       ] = `${mint}?trading_types=2%2C1%2C3&no_foreign_listing=true`;
     }
 
-    runOthersAPI('post', '/exnft/transactions', JSON.stringify(queryBody))
-      // @ts-ignore
-      .then((result: {}) => {
-        setTransactions(result['data']);
-      });
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/exnft/transactions',
+        JSON.stringify(queryBody),
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
   }
 
-  return { nft, loading, transactions };
+  async function getExNFTsByOwner(wallet: string, market: string) {
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getNFTsByOwner/${market}/${wallet}`,
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  }
+
+  async function getExNFTsByEscrowOwner(wallet: string, market: string) {
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getNFTsByEscrowOwner/${market}/${wallet}`,
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  }
+
+  return {
+    getExNFTByMintAddress,
+    getExTransactions,
+    getExNFTsByOwner,
+    getExNFTsByEscrowOwner,
+  };
 };

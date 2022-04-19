@@ -86,7 +86,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           mint: props.nft.mint,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { mint: props.nft.mint });
+          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -126,7 +126,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { mint: props.nft.mint });
+          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -168,7 +168,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { mint: props.nft.mint });
+          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();
@@ -210,7 +210,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           nft: props.nft,
         });
         if (!result['err']) {
-          socket.emit('auctionHouse', { mint: props.nft.mint });
+          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
           resolve('');
         } else {
           reject();

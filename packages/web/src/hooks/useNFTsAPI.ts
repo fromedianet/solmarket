@@ -2,8 +2,9 @@ import { ApiUtils } from '../utils/apiUtils';
 
 export const useNFTsAPI = () => {
   const { runAPI } = ApiUtils();
+
   /**
-   * Create new NFT when mint in the LaunchPad
+   * Create new NFT when mint NFT manually
    * @param props
    */
   async function createNft(metadataAddress: string) {
