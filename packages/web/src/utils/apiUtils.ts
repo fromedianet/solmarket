@@ -98,7 +98,11 @@ export const ApiUtils = () => {
     });
   }
 
-  function runMagicEdenAPI(method: Method, url: string, data?: string | FormData | {}) {
+  function runMagicEdenAPI(
+    method: Method,
+    url: string,
+    data?: string | FormData | {},
+  ) {
     axiosInstance.defaults.baseURL = APIS.magiceden_base_url;
     return new Promise((resolve, reject) => {
       axiosInstance

@@ -120,7 +120,11 @@ export const InfoSection = (props: {
               {!wallet.connected ? (
                 <ConnectButton className="button" />
               ) : (
-                <Button className="button" onClick={props.onBuy} disabled={!props.nft.v2}>
+                <Button
+                  className="button"
+                  onClick={props.onBuy}
+                  disabled={!props.nft.v2}
+                >
                   Buy now
                 </Button>
               )}

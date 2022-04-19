@@ -116,7 +116,7 @@ export const ExNFTView = () => {
         },
       );
     }
-  }
+  };
 
   return (
     <div className="main-area">

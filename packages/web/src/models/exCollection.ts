@@ -103,4 +103,4 @@ export type V2 = {
   auctionHouseKey: string;
   expiry: number;
   sellerReferral: string;
-}
+};
