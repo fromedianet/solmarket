@@ -4,6 +4,20 @@ export const useNFTsAPI = () => {
   const { runAPI } = ApiUtils();
 
   /**
+   * Create new NFT when mint NFT manually
+   * @param props
+   */
+  async function createNft(metadataAddress: string) {
+    const result = await runAPI(
+      true,
+      'post',
+      '/nfts/create',
+      JSON.stringify({ metadataAddress }),
+    );
+    return result;
+  }
+
+  /**
    * Get listed nfts by query
    * @param props
    * @returns
@@ -62,6 +76,7 @@ export const useNFTsAPI = () => {
   }
 
   return {
+    createNft,
     getListedNftsByQuery,
     getNftByMint,
     getNFTsByWallet,

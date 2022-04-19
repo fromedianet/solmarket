@@ -22,6 +22,7 @@ import { Congrats } from './steps/Congrats';
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 
 const { Step } = Steps;
 
@@ -33,6 +34,7 @@ export const ArtCreateView = () => {
   const wallet = useWallet();
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
+  const { createNft } = useNFTsAPI();
   const { getMyListedCollections } = useCollectionsAPI();
   const [alertMessage, setAlertMessage] = useState<string>();
   const navigate = useNavigate();
@@ -123,6 +125,7 @@ export const ArtCreateView = () => {
 
       if (_nft) {
         setNft(_nft);
+        await createNft(_nft.metadataAccount);
       }
       setAlertMessage('');
     } catch (e: any) {
