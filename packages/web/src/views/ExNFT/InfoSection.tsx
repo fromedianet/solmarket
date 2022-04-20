@@ -173,6 +173,28 @@ export const InfoSection = (props: {
               <div className="sub-container">
                 <span className="details-key">Mint Address</span>
                 <div className="details-value">
+                  <a
+                    href={`https://solscan.io/token/${props.nft.mintAddress}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src="/icons/solscan.png"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <a
+                    href={`https://explorer.solana.com/address/${props.nft.mintAddress}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
+                  >
+                    <img
+                      src="/icons/sol.svg"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
                   <CopySpan
                     value={shortenAddress(props.nft.mintAddress)}
                     copyText={props.nft.mintAddress}
@@ -182,6 +204,28 @@ export const InfoSection = (props: {
               <div className="sub-container">
                 <span className="details-key">Token Address</span>
                 <div className="details-value">
+                  <a
+                    href={`https://solscan.io/token/${props.nft.tokenAddress}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src="/icons/solscan.png"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <a
+                    href={`https://explorer.solana.com/address/${props.nft.tokenAddress}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
+                  >
+                    <img
+                      src="/icons/sol.svg"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
                   <CopySpan
                     value={shortenAddress(props.nft.tokenAddress || '')}
                     copyText={props.nft.tokenAddress || ''}
@@ -191,6 +235,28 @@ export const InfoSection = (props: {
               <div className="sub-container">
                 <span className="details-key">Owner</span>
                 <div className="details-value">
+                  <a
+                    href={`https://solscan.io/token/${props.nft.owner}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src="/icons/solscan.png"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
+                  <a
+                    href={`https://explorer.solana.com/address/${props.nft.owner}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
+                  >
+                    <img
+                      src="/icons/sol.svg"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  </a>
                   <CopySpan
                     value={shortenAddress(props.nft.owner || '')}
                     copyText={props.nft.owner || ''}

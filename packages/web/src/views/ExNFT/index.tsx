@@ -123,7 +123,7 @@ export const ExNFTView = () => {
       <div className="main-page">
         <div className="container art-container">
           {loading ? (
-            <Spin />
+            <Spin size="large" />
           ) : nft ? (
             <>
               <InfoSection
