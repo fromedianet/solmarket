@@ -36,7 +36,14 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
+        <a
+          href={
+            record.market
+              ? `/exnft/${record.mint}?market=${record.market}`
+              : `/item-details/${record.mint}`
+          }
+          style={{ cursor: 'pointer' }}
+        >
           {record.name}
         </a>
       ),
@@ -62,7 +69,20 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       title: 'TRANSACTION TYPE',
       dataIndex: 'txType',
       key: 'txType',
-      render: type => <span style={{ color: getColor(type) }}>{type}</span>,
+      render: (text, record) => (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span style={{ color: getColor(record.txType) }}>
+            {record.txType}
+          </span>
+          {record.market && <span style={{ color: '#e93a88' }}>(ME)</span>}
+        </div>
+      ),
     },
     {
       title: 'TIME',
