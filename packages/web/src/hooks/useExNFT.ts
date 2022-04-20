@@ -109,7 +109,11 @@ export const useExNFT = () => {
     return [];
   }
 
-  async function getExEscrowBalance(params: {wallet: string, auctionHouse: string, market: string}) {
+  async function getExEscrowBalance(params: {
+    wallet: string;
+    auctionHouse: string;
+    market: string;
+  }) {
     try {
       const result: any = await runOthersAPI(
         'post',
