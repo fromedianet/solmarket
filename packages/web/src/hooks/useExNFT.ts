@@ -109,11 +109,28 @@ export const useExNFT = () => {
     return [];
   }
 
+  async function getExEscrowBalance(params: {wallet: string, auctionHouse: string, market: string}) {
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/escrowBalance',
+        JSON.stringify(params),
+      );
+      if (result && 'data' in result) {
+        return result['data']['balance'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return 0;
+  }
+
   return {
     getExNFTByMintAddress,
     getExTransactions,
     getExNFTsByOwner,
     getExNFTsByEscrowOwner,
     getExGlobalActivities,
+    getExEscrowBalance,
   };
 };

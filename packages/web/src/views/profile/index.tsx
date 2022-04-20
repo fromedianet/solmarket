@@ -69,6 +69,7 @@ export const ProfileView = () => {
   const [selectedOffer, setSelectedOffer] = useState<Offer>();
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const [balance, setBalance] = useState(0);
+  const [exBalance, setExBalance] = useState(0);
   const [withdrawValue, setWithdrawValue] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
   const [refresh, setRefresh] = useState(0);
@@ -80,7 +81,7 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
-  const { getExNFTsByOwner, getExNFTsByEscrowOwner, getExGlobalActivities } =
+  const { getExNFTsByOwner, getExNFTsByEscrowOwner, getExGlobalActivities, getExEscrowBalance } =
     useExNFT();
 
   const activityColumns = ActivityColumns(network);
@@ -262,14 +263,19 @@ export const ProfileView = () => {
     return true;
   }
 
-  const callShowEscrow = () => {
+  const callShowEscrow = async () => {
     if (wallet.publicKey) {
       setLoadingBalance(true);
-      showEscrow(connection, wallet.publicKey)
-        .then(val => {
-          setBalance(val);
-        })
-        .finally(() => setLoadingBalance(false));
+      const val = await showEscrow(connection, wallet.publicKey)
+      setBalance(val);
+      
+      const val1 = await getExEscrowBalance({
+        wallet: wallet.publicKey.toBase58(),
+        auctionHouse: "",
+        market: MarketType.MagicEden
+      });
+      setExBalance(val1);
+      setLoadingBalance(false);
     }
   };
 
@@ -566,7 +572,7 @@ export const ProfileView = () => {
                 <ListedItems items={listedItems} />
               </TabPane>
               <TabPane tab="Offers made" key="3">
-                <OffersMade />
+                <OffersMade balance={balance} exBalance={exBalance} loadingBalance={loadingBalance} callShowEscrow={callShowEscrow}/>
                 {/* <Table
                   columns={offersMadeColumns}
                   dataSource={offersMade}
