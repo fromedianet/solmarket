@@ -83,10 +83,37 @@ export const useExNFT = () => {
     return [];
   }
 
+  async function getExGlobalActivities(wallet: string, market: string) {
+    const queryBody = { market: market };
+    const query = {
+      $match: {
+        $or: [{ seller_address: wallet }, { buyer_address: wallet }],
+      },
+      $sort: { blockTime: -1, createdAt: -1 },
+      $skip: 0,
+    };
+    queryBody['params'] = `?q=${encodeURI(JSON.stringify(query))}`;
+
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/globalActivities',
+        JSON.stringify(queryBody),
+      );
+      if (result && 'data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  }
+
   return {
     getExNFTByMintAddress,
     getExTransactions,
     getExNFTsByOwner,
     getExNFTsByEscrowOwner,
+    getExGlobalActivities,
   };
 };
