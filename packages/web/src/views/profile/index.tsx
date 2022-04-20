@@ -79,7 +79,8 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
-  const { getExNFTsByOwner, getExNFTsByEscrowOwner } = useExNFT();
+  const { getExNFTsByOwner, getExNFTsByEscrowOwner, getExGlobalActivities } =
+    useExNFT();
 
   const activityColumns = ActivityColumns(network);
   const offersMadeColumns = OffersMadeColumns({
@@ -123,13 +124,9 @@ export const ProfileView = () => {
         })
         .finally(() => setLoading(false));
 
-      getTransactionsByWallet(wallet.publicKey.toBase58())
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setTransactions(res['data']);
-          }
-        });
+      loadGlobalActivities().then(res => {
+        setTransactions(res);
+      });
 
       getOffersMade(wallet.publicKey.toBase58())
         // @ts-ignore
@@ -206,6 +203,25 @@ export const ProfileView = () => {
       myItems: items1,
       listedItems: items2,
     };
+  }
+
+  async function loadGlobalActivities() {
+    let data: Transaction[] = [];
+    if (wallet.publicKey) {
+      const res: any = await getTransactionsByWallet(
+        wallet.publicKey.toBase58(),
+      );
+      if ('data' in res) {
+        data = res['data'];
+      }
+      const exData: Transaction[] = await getExGlobalActivities(
+        wallet.publicKey.toBase58(),
+        MarketType.MagicEden,
+      );
+      data = data.concat(exData);
+      data.sort((a, b) => b.blockTime - a.blockTime);
+    }
+    return data;
   }
 
   const onSubmit = values => {

@@ -97,6 +97,7 @@ export type Transaction = {
   transaction: string | null;
   price: number | undefined;
   txType: string;
+  market?: string;
 };
 
 export type V2 = {
