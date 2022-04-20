@@ -1,6 +1,7 @@
 import {
   ConnectButton,
   CopySpan,
+  formatAmount,
   MetaplexModal,
   notify,
   shortenAddress,
@@ -23,9 +24,8 @@ import {
 import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
-import { NFTCard } from '../marketplace/components/Items';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
-import { Transaction } from '../../models/exCollection';
+import { NFT, Transaction } from '../../models/exCollection';
 import {
   ActivityColumns,
   OffersMadeColumns,
@@ -41,12 +41,13 @@ import {
   deposit,
 } from '../../actions/auctionHouse';
 import { Offer } from '../../models/offer';
-import { EmptyView } from '../../components/EmptyView';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useExNFT } from '../../hooks/useExNFT';
 import { MarketType } from '../../constants';
+import { MyItems } from './components/myItems';
+import { ListedItems } from './components/listedItems';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -59,8 +60,8 @@ export const ProfileView = () => {
   const { getNFTsByWallet } = useNFTsAPI();
   const [visible, setVisible] = useState(false);
   const [cancelVisible, setCancelVisible] = useState(false);
-  const [myItems, setMyItems] = useState<any[]>([]);
-  const [listedItems, setListedItems] = useState<any[]>([]);
+  const [myItems, setMyItems] = useState<NFT[]>([]);
+  const [listedItems, setListedItems] = useState<NFT[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [offersMade, setOffersMade] = useState<Offer[]>([]);
   const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
@@ -70,6 +71,7 @@ export const ProfileView = () => {
   const [withdrawValue, setWithdrawValue] = useState(0);
   const [depositValue, setDepositValue] = useState(0);
   const [refresh, setRefresh] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [form] = Form.useForm();
   const connection = useConnection();
@@ -111,12 +113,15 @@ export const ProfileView = () => {
 
   useEffect(() => {
     if (wallet.publicKey) {
+      setLoading(true);
       callShowEscrow();
 
-      loadNFTs().then(res => {
-        setMyItems(res.myItems);
-        setListedItems(res.listedItems);
-      });
+      loadNFTs()
+        .then(res => {
+          setMyItems(res.myItems);
+          setListedItems(res.listedItems);
+        })
+        .finally(() => setLoading(false));
 
       getTransactionsByWallet(wallet.publicKey.toBase58())
         // @ts-ignore
@@ -164,29 +169,43 @@ export const ProfileView = () => {
   }, [user]);
 
   async function loadNFTs() {
-    const result = {
-      myItems: [],
-      listedItems: [],
-    };
+    let items1: any[] = [];
+    let items2: any[] = [];
     if (wallet.publicKey) {
       const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
       if ('data' in res) {
-        result.myItems = res['data'].filter(k => k.price === 0);
-        result.listedItems = res['data'].filter(k => k.price > 0);
+        items1 = res['data'].filter(k => k.price === 0);
+        items2 = res['data'].filter(k => k.price > 0);
       }
+
       const exRes1 = await getExNFTsByOwner(
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
-      result.myItems = result.myItems.concat(exRes1);
+      items1 = items1.concat(exRes1);
       const exRes2 = await getExNFTsByEscrowOwner(
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
-      result.listedItems = result.listedItems.concat(exRes2);
+      items2 = items2.concat(exRes2);
+
+      items1 = items1.map(item => ({
+        ...item,
+        symbol: item.symbol || 'undefined',
+        collectionName: item.collectionName || 'undefined',
+      }));
+
+      items2 = items2.map(item => ({
+        ...item,
+        symbol: item.symbol || 'undefined',
+        collectionName: item.collectionName || 'undefined',
+      }));
     }
 
-    return result;
+    return {
+      myItems: items1,
+      listedItems: items2,
+    };
   }
 
   const onSubmit = values => {
@@ -512,63 +531,49 @@ export const ProfileView = () => {
               <Statistic
                 title="TOTAL FLOOR VALUE"
                 value={`${
-                  totalFloorPrice > 0 ? totalFloorPrice.toFixed(2) : '---'
+                  totalFloorPrice > 0
+                    ? formatAmount(totalFloorPrice, 2, true)
+                    : '--'
                 } SOL`}
               />
             </Col>
           </Row>
-          <Tabs defaultActiveKey="1" className="profile-tabs">
-            <TabPane tab="My items" key="1">
-              {myItems.length > 0 ? (
-                <Row gutter={[16, 16]}>
-                  {myItems.map((item, index) => (
-                    <Col key={index} span={12} md={8} lg={6} xl={4}>
-                      <NFTCard item={item} collection={item.collectionName} />
-                    </Col>
-                  ))}
-                </Row>
-              ) : (
-                <EmptyView />
-              )}
-            </TabPane>
-            <TabPane tab="Listed items" key="2">
-              {listedItems.length > 0 ? (
-                <Row gutter={[16, 16]}>
-                  {listedItems.map((item, index) => (
-                    <Col key={index} span={12} md={8} lg={6} xl={4}>
-                      <NFTCard item={item} collection={item.collectionName} />
-                    </Col>
-                  ))}
-                </Row>
-              ) : (
-                <EmptyView />
-              )}
-            </TabPane>
-            <TabPane tab="Offers made" key="3">
-              <Table
-                columns={offersMadeColumns}
-                dataSource={offersMade}
-                style={{ overflowX: 'auto' }}
-                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-              />
-            </TabPane>
-            <TabPane tab="Offers received" key="4">
-              <Table
-                columns={offersReceivedColumns}
-                dataSource={offersReceived}
-                style={{ overflowX: 'auto' }}
-                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-              />
-            </TabPane>
-            <TabPane tab="Activites" key="5">
-              <Table
-                columns={activityColumns}
-                dataSource={transactions}
-                style={{ overflowX: 'auto' }}
-                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-              />
-            </TabPane>
-          </Tabs>
+          {loading ? (
+            <Spin size="large" />
+          ) : (
+            <Tabs defaultActiveKey="2" className="profile-tabs">
+              <TabPane tab="My items" key="1">
+                <MyItems items={myItems} />
+              </TabPane>
+              <TabPane tab="Listed items" key="2">
+                <ListedItems items={listedItems} />
+              </TabPane>
+              <TabPane tab="Offers made" key="3">
+                <Table
+                  columns={offersMadeColumns}
+                  dataSource={offersMade}
+                  style={{ overflowX: 'auto' }}
+                  pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+                />
+              </TabPane>
+              <TabPane tab="Offers received" key="4">
+                <Table
+                  columns={offersReceivedColumns}
+                  dataSource={offersReceived}
+                  style={{ overflowX: 'auto' }}
+                  pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+                />
+              </TabPane>
+              <TabPane tab="Activites" key="5">
+                <Table
+                  columns={activityColumns}
+                  dataSource={transactions}
+                  style={{ overflowX: 'auto' }}
+                  pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+                />
+              </TabPane>
+            </Tabs>
+          )}
         </div>
       </div>
       <MetaplexModal visible={visible} onCancel={() => setVisible(false)}>
