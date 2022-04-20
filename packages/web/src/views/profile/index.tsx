@@ -48,6 +48,7 @@ import { useExNFT } from '../../hooks/useExNFT';
 import { MarketType } from '../../constants';
 import { MyItems } from './components/myItems';
 import { ListedItems } from './components/listedItems';
+import { OffersMade } from './components/offersMade';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -549,12 +550,13 @@ export const ProfileView = () => {
                 <ListedItems items={listedItems} />
               </TabPane>
               <TabPane tab="Offers made" key="3">
-                <Table
+                <OffersMade />
+                {/* <Table
                   columns={offersMadeColumns}
                   dataSource={offersMade}
                   style={{ overflowX: 'auto' }}
                   pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-                />
+                /> */}
               </TabPane>
               <TabPane tab="Offers received" key="4">
                 <Table

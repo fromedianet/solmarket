@@ -354,3 +354,49 @@
     }
   }
 }
+
+.offers-made {
+  
+  .wallet-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .wallet-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      border: 1px solid @border-card;
+      border-radius: 8px;
+      margin-right: 24px;
+      margin-bottom: 16px;
+      padding: 12px;
+
+      .wallet-icon {
+        background: @bg-table-odd;
+        border-radius: 999px;
+        padding: 12px;
+        margin-right: 16px;
+      }
+
+      .wallet-info {
+        display: flex;
+        flex-direction: column;
+        margin-right: 24px;
+      }
+
+      .wallet-name {
+        font-size: 14px;
+        color: @text-primary-color;
+        line-height: 20px;
+      }
+
+      .wallet-price {
+        font-size: 14px;
+        line-height: 20px;
+        color: @text-primary-color;
+        font-weight: 700;
+      }
+    }
+  }
+}
