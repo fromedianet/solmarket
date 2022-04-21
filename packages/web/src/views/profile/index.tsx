@@ -569,6 +569,8 @@ export const ProfileView = () => {
                   callShowEscrow={callShowEscrow}
                   onCancelBid={onCancelBid}
                   onCancelBidAndWithdraw={onCancelBidAndWithdraw}
+                  onDeposit={onDeposit}
+                  onWithdraw={onWithdraw}
                 />
               </TabPane>
               <TabPane tab="Offers received" key="4">
