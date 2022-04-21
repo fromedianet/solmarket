@@ -10,4 +10,5 @@ export interface Offer {
   txType: string;
   createdAt: string;
   nftCreators: any[];
+  market?: string;
 }

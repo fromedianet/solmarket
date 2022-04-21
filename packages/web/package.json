@@ -2,8 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
-    "@civic/solana-gateway-react": "^0.5.0",
+    "@civic/solana-gateway-react": "^0.6.0",
     "@cloudflare/stream-react": "^1.7.0",
     "@google/model-viewer": "^1.11.1",
     "@identity.com/solana-gateway-ts": "^0.8.2",
@@ -19,6 +18,7 @@
     "@solana/wallet-adapter-base": "^0.4.1",
     "@solana/wallet-adapter-react": "^0.7.2",
     "@solana/web3.js": "^1.33.0",
+    "antd": "^4.20.0-alpha.1",
     "axios": "^0.26.1",
     "bn.js": "^5.2.0",
     "borsh": "^0.7.0",
