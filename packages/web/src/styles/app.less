@@ -366,6 +366,29 @@ code {
     color: @text-primary-color;
   }
 }
+.ant-dropdown {
+  color: @text-primary-color;
+  background-color: transparent;
+  border: 1px solid @border-primary-color;
+  border-radius: 4px;
+
+  .ant-dropdown-menu {
+    background-color: black;
+
+    .ant-dropdown-menu-item,
+    .ant-dropdown-menu-submenu-title {
+      color: @text-primary-color;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  .ant-dropdown-menu-item-disabled, .ant-dropdown-menu-submenu-title-disabled {
+    color: rgba(255, 255, 255, 0.25) !important;
+  }
+}
 
 .full-history {
   color: #6d6d6d;

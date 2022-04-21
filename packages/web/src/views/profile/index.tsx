@@ -26,12 +26,7 @@ import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { NFT, Transaction } from '../../models/exCollection';
-import {
-  ActivityColumns,
-  OffersMadeColumns,
-  OffersReceivedColumns,
-} from './tableColumns';
-import { PriceInput } from '../../components/PriceInput';
+import { ActivityColumns, OffersReceivedColumns } from './tableColumns';
 import {
   showEscrow,
   cancelBid,
@@ -48,6 +43,7 @@ import { useExNFT } from '../../hooks/useExNFT';
 import { MarketType } from '../../constants';
 import { MyItems } from './components/myItems';
 import { ListedItems } from './components/listedItems';
+import { OffersMade } from './components/offersMade';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -59,17 +55,16 @@ export const ProfileView = () => {
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
   const [visible, setVisible] = useState(false);
-  const [cancelVisible, setCancelVisible] = useState(false);
+
   const [myItems, setMyItems] = useState<NFT[]>([]);
   const [listedItems, setListedItems] = useState<NFT[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [offersMade, setOffersMade] = useState<Offer[]>([]);
   const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
-  const [selectedOffer, setSelectedOffer] = useState<Offer>();
+
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const [balance, setBalance] = useState(0);
-  const [withdrawValue, setWithdrawValue] = useState(0);
-  const [depositValue, setDepositValue] = useState(0);
+  const [exBalance, setExBalance] = useState(0);
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
@@ -79,18 +74,14 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
-  const { getExNFTsByOwner, getExNFTsByEscrowOwner, getExGlobalActivities } =
-    useExNFT();
+  const {
+    getExNFTsByOwner,
+    getExNFTsByEscrowOwner,
+    getExGlobalActivities,
+    getExEscrowBalance,
+  } = useExNFT();
 
   const activityColumns = ActivityColumns(network);
-  const offersMadeColumns = OffersMadeColumns({
-    balance: balance,
-    onCancel: (data: Offer) => {
-      setSelectedOffer(data);
-      setCancelVisible(true);
-    },
-    onDeposit: () => {},
-  });
 
   const offersReceivedColumns = OffersReceivedColumns({
     onAccept: (data: Offer) => onAcceptOffer(data),
@@ -261,14 +252,19 @@ export const ProfileView = () => {
     return true;
   }
 
-  const callShowEscrow = () => {
+  const callShowEscrow = async () => {
     if (wallet.publicKey) {
       setLoadingBalance(true);
-      showEscrow(connection, wallet.publicKey)
-        .then(val => {
-          setBalance(val);
-        })
-        .finally(() => setLoadingBalance(false));
+      const val = await showEscrow(connection, wallet.publicKey);
+      setBalance(val);
+
+      const val1 = await getExEscrowBalance({
+        wallet: wallet.publicKey.toBase58(),
+        auctionHouse: '',
+        market: MarketType.MagicEden,
+      });
+      setExBalance(val1);
+      setLoadingBalance(false);
     }
   };
 
@@ -565,11 +561,16 @@ export const ProfileView = () => {
                 <ListedItems items={listedItems} />
               </TabPane>
               <TabPane tab="Offers made" key="3">
-                <Table
-                  columns={offersMadeColumns}
-                  dataSource={offersMade}
-                  style={{ overflowX: 'auto' }}
-                  pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+                <OffersMade
+                  offers={offersMade}
+                  balance={balance}
+                  exBalance={exBalance}
+                  loadingBalance={loadingBalance}
+                  callShowEscrow={callShowEscrow}
+                  onCancelBid={onCancelBid}
+                  onCancelBidAndWithdraw={onCancelBidAndWithdraw}
+                  onDeposit={onDeposit}
+                  onWithdraw={onWithdraw}
                 />
               </TabPane>
               <TabPane tab="Offers received" key="4">
@@ -635,121 +636,6 @@ export const ProfileView = () => {
           </Form>
         </div>
       </MetaplexModal>
-      <MetaplexModal
-        visible={cancelVisible}
-        onCancel={() => setCancelVisible(false)}
-      >
-        <div className="cancel-modal">
-          <div className="header-container">
-            <img src="/icons/wallet.png" className="header-icon" alt="wallet" />
-            <span className="header-text">
-              After cancelling your offer, do you want to withdraw funds back to
-              your wallet?
-            </span>
-          </div>
-          <div className="body-container">
-            <span className="main-text">
-              The funds for your offer is held in an escrow account as collatral
-              to support multiple offers. If you choose &quot;Keep funds in
-              escrow&quot;, you will be able to make offers faster and more
-              easily.
-            </span>
-          </div>
-          <Row>
-            <Col span={9}>
-              <Button
-                onClick={() => {
-                  setCancelVisible(false);
-                  onCancelBidAndWithdraw(selectedOffer!);
-                }}
-              >
-                Withdraw
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button
-                style={{ marginLeft: 8, background: '#009999' }}
-                onClick={() => {
-                  setCancelVisible(false);
-                  onCancelBid(selectedOffer!);
-                }}
-              >
-                Keep funds in escrow
-              </Button>
-            </Col>
-          </Row>
-        </div>
-      </MetaplexModal>
-      <div className="balance-container">
-        <Row>
-          <Col
-            span={24}
-            md={12}
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <span className="label">
-              Account balance:{' '}
-              <span style={{ color: '#eb2f96' }}>{`${balance} SOL`}</span>
-            </span>
-            <button
-              onClick={callShowEscrow}
-              className="balance-btn"
-              disabled={loadingBalance}
-            >
-              {loadingBalance ? (
-                <Spin />
-              ) : (
-                <img
-                  src="/icons/refresh.svg"
-                  style={{ width: 16, height: 16 }}
-                />
-              )}
-            </button>
-          </Col>
-          <Col span={24} md={12}>
-            <div className="right-container">
-              <div>
-                <span className="balance-label">Deposit</span>
-                <div className="button-container">
-                  <PriceInput
-                    placeholder="Price"
-                    addonAfter="SOL"
-                    className="balance-input"
-                    value={{ number: depositValue }}
-                    onChange={val => setDepositValue(val.number || 0)}
-                  />
-                  <button
-                    className="balance-btn"
-                    disabled={depositValue <= 0}
-                    onClick={() => onDeposit(depositValue)}
-                  >
-                    Deposit
-                  </button>
-                </div>
-              </div>
-              <div>
-                <span className="balance-label">Withdraw</span>
-                <div className="button-container">
-                  <PriceInput
-                    placeholder="Price"
-                    addonAfter="SOL"
-                    className="balance-input"
-                    value={{ number: withdrawValue }}
-                    onChange={val => setWithdrawValue(val.number || 0)}
-                  />
-                  <button
-                    className="balance-btn"
-                    disabled={withdrawValue <= 0 || withdrawValue > balance}
-                    onClick={() => onWithdraw(withdrawValue)}
-                  >
-                    Withdraw
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
     </div>
   );
 };
