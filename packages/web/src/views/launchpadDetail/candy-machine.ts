@@ -573,8 +573,8 @@ export const mintOneToken = async (
         collectionMint,
         collectionPDA,
       );
-      console.log(collectionMint);
-      if (collectionMint) {
+      console.log('collectionMint', collectionMint.toBase58());
+      if (collectionMint && candyMachine.state.authority.equals(payer)) {
         const collectionMetadata = await getMetadata(collectionMint);
         const collectionMasterEdition = await getMasterEdition(collectionMint);
         console.log('Collection PDA: ', collectionPDA.toBase58());
@@ -598,7 +598,7 @@ export const mintOneToken = async (
         );
       }
     } catch (error) {
-      console.error(error);
+      console.error('----- collectionPDAAccount error -----', error);
     }
   }
 
@@ -622,7 +622,7 @@ export const mintOneToken = async (
       )
     ).txs.map(t => t.txid);
   } catch (e) {
-    console.log(e);
+    console.log('------ sendTransactions error -----', e);
   }
   return [];
 };
