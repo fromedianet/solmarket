@@ -11,7 +11,7 @@ import { Button, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
-import { sendList, sendCancelList, sendSell } from '../../actions/auctionHouse';
+import { sendList, sendCancelList } from '../../actions/auctionHouse';
 import { LAMPORTS_PER_SOL, Message, Transaction } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
 import { useSocket } from '../../contexts/socketProvider';
@@ -24,7 +24,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const { socket } = useSocket();
   const { account } = useNativeAccount();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
-  const { placeBid } = useInstructionsAPI();
+  const { placeBid, buyNow } = useInstructionsAPI();
 
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
@@ -156,23 +156,29 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onBuyNow = async () => {
-    const price = props.nft.price * LAMPORTS_PER_SOL;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendSell({
-          connection,
-          wallet,
-          buyerPrice: price,
-          nft: props.nft,
+        const result: any = await buyNow({
+          buyer: wallet.publicKey!.toBase58(),
+          seller: props.nft.owner,
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: props.nft.mint,
+          price: props.nft.price,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: props.nft.mint });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       } finally {
