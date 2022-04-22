@@ -14,7 +14,7 @@ import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
-export const useCollection = (symbol: string, market?: string) => {
+export const useCollection = (symbol: string, market: string | null) => {
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
@@ -28,7 +28,11 @@ export const useCollection = (symbol: string, market?: string) => {
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsBySymbol } = useTransactionsAPI();
-  const { getMECollectionBySymbol, getMEListedNFTsByCollection, getMETransactionsBySymbol } = useMECollectionsAPI();
+  const {
+    getMECollectionBySymbol,
+    getMEListedNFTsByCollection,
+    getMETransactionsBySymbol,
+  } = useMECollectionsAPI();
 
   useEffect(() => {
     if (market) {
@@ -93,14 +97,13 @@ export const useCollection = (symbol: string, market?: string) => {
           }
         });
     }
-    
   }, [symbol, market]);
 
-  const getListedNFTs = (param: QUERIES, market?: string) => {
+  const getListedNFTs = (param: QUERIES) => {
     if (loading) return;
     setLoading(true);
 
-    if (market) {
+    if (param.market) {
       getMEListedNFTsByCollection(param)
         .then((data: []) => {
           setNFTs(data);

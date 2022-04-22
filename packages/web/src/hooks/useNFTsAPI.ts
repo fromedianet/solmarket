@@ -45,7 +45,7 @@ export const useNFTsAPI = () => {
       match['search'] = param.searchKey;
     }
     match['status'] = param.status;
-  
+
     if (param.min || param.max) {
       const price = {};
       if (param.min) {
@@ -56,7 +56,7 @@ export const useNFTsAPI = () => {
       }
       match['price'] = price;
     }
-  
+
     if (param.attributes && Object.keys(param.attributes).length > 0) {
       const attrs: any[] = [];
       Object.keys(param.attributes).forEach(key => {
@@ -69,9 +69,9 @@ export const useNFTsAPI = () => {
       });
       match['attributes'] = attrs;
     }
-  
+
     queries['match'] = match;
-  
+
     const sortQuery = {};
     if (param.sort === 2) {
       sortQuery['price'] = 1;
@@ -79,13 +79,13 @@ export const useNFTsAPI = () => {
       sortQuery['price'] = -1;
     }
     sortQuery['createdAt'] = -1;
-  
+
     queries['sort'] = sortQuery;
-  
+
     const result = {
       query: JSON.stringify(queries),
     };
-  
+
     return result;
   }
 

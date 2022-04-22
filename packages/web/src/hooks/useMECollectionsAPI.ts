@@ -1,6 +1,6 @@
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { QUERIES } from "../models/exCollection";
-import { ApiUtils } from "../utils/apiUtils"
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { QUERIES } from '../models/exCollection';
+import { ApiUtils } from '../utils/apiUtils';
 
 export const useMECollectionsAPI = () => {
   const { runOthersAPI } = ApiUtils();
@@ -55,7 +55,10 @@ export const useMECollectionsAPI = () => {
 
   async function getMECollectionBySymbol(market: string, symbol: string) {
     try {
-      const result = await runOthersAPI('get', `/excollections/${market}/${encodeURI(symbol)}`);
+      const result = await runOthersAPI(
+        'get',
+        `/excollections/${market}/${encodeURI(symbol)}`,
+      );
       return result;
     } catch (e) {
       console.error(e);
@@ -66,7 +69,11 @@ export const useMECollectionsAPI = () => {
   async function getMEListedNFTsByCollection(param: QUERIES) {
     const queryBody = getParamsForMagicEden(param);
     try {
-      const result: any = await runOthersAPI('post', '/excollections/list', JSON.stringify(queryBody));
+      const result: any = await runOthersAPI(
+        'post',
+        '/excollections/list',
+        JSON.stringify(queryBody),
+      );
       if ('data' in result) {
         return result['data'];
       }
@@ -99,7 +106,7 @@ export const useMECollectionsAPI = () => {
       }
       match['takerAmount'] = takerAmount;
     }
-  
+
     if (param.attributes && Object.keys(param.attributes).length > 0) {
       const attrs: any[] = [];
       Object.keys(param.attributes).forEach(key => {
@@ -114,12 +121,12 @@ export const useMECollectionsAPI = () => {
         }));
         attrs.push({ $or: subAttrs });
       });
-  
+
       match['$and'] = attrs;
     }
-  
+
     queries['$match'] = match;
-  
+
     const sortQuery = {};
     if (param.sort === 2) {
       sortQuery['takerAmount'] = 1;
@@ -127,16 +134,16 @@ export const useMECollectionsAPI = () => {
       sortQuery['takerAmount'] = -1;
     }
     sortQuery['createdAt'] = -1;
-  
+
     queries['$sort'] = sortQuery;
-  
+
     const queryStr = `?q=${JSON.stringify(queries)}`;
-  
+
     const result = {
       market: param.market,
       params: encodeURI(queryStr),
     };
-  
+
     return result;
   }
 
@@ -148,7 +155,7 @@ export const useMECollectionsAPI = () => {
     };
     const queryBody = {
       market: param.market,
-      params: encodeURI(`?q=${JSON.stringify(query)}`)
+      params: encodeURI(`?q=${JSON.stringify(query)}`),
     };
 
     try {
@@ -174,4 +181,4 @@ export const useMECollectionsAPI = () => {
     getMEListedNFTsByCollection,
     getMETransactionsBySymbol,
   };
-}
+};

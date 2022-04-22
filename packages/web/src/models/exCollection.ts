@@ -108,7 +108,7 @@ export type V2 = {
 
 export type QUERIES = {
   symbol: string;
-  market?: string;
+  market: string | null;
   sort: number;
   status?: boolean;
   searchKey?: string;
