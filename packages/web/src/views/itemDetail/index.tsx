@@ -32,6 +32,7 @@ export const ItemDetailView = () => {
     if (nft) {
       const param = {
         symbol: nft.symbol,
+        market: null,
         sort: 1,
         status: false,
       };

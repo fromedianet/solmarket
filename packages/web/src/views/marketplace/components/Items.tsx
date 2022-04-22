@@ -116,7 +116,11 @@ export const Items = (props: {
       <Row>
         <Col span={24} md={12} className="control-container">
           <div className="refresh-btn" onClick={props.onRefresh}>
-            {props.loading ? <Spin /> : <img src="/icons/refresh.svg" alt="refresh" />}
+            {props.loading ? (
+              <Spin />
+            ) : (
+              <img src="/icons/refresh.svg" alt="refresh" />
+            )}
           </div>
           <Search
             ref={searchRef}
