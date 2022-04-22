@@ -4,6 +4,7 @@ import {
   ExCollection,
   ExCollectionStats,
   ExNFT,
+  QUERIES,
   Transaction,
 } from '../models/exCollection';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
@@ -244,18 +245,6 @@ export const useExCollection = (symbol: string, market: string) => {
     cursor,
     hasMore,
   };
-};
-
-export type QUERIES = {
-  market: string;
-  symbol: string;
-  sort: number;
-  searchKey?: string;
-  attributes?: {};
-  min?: number;
-  max?: number;
-  skip?: number;
-  cursor?: number;
 };
 
 function getParamsForMagicEden(param: QUERIES) {

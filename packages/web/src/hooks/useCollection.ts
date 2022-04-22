@@ -8,6 +8,7 @@ import {
   Transaction,
 } from '../models/exCollection';
 import { useCollectionsAPI } from './useCollectionsAPI';
+import { useMECollectionsAPI } from './useMECollectionsAPI';
 import { useNFTsAPI } from './useNFTsAPI';
 import { useTransactionsAPI } from './useTransactionsAPI';
 
@@ -27,10 +28,32 @@ export const useCollection = (symbol: string, market?: string) => {
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsBySymbol } = useTransactionsAPI();
+  const { getMECollectionBySymbol, getMEListedNFTsByCollection, getMETransactionsBySymbol } = useMECollectionsAPI();
 
   useEffect(() => {
     if (market) {
       // For MagicEden
+      getMECollectionBySymbol(market, symbol)
+        // @ts-ignore
+        .then((result: {}) => {
+          if ('collection' in result) {
+            setCollection(result['collection']);
+          }
+          if ('attributes' in result) {
+            setAttributes(result['attributes']);
+          }
+          if ('stats' in result) {
+            setCollectionStats(result['stats']);
+          }
+        });
+
+      getMETransactionsBySymbol({
+        market: market,
+        symbol: symbol,
+        sort: 1,
+      }).then((data: []) => {
+        setTransactions(data);
+      });
     } else {
       // For own marketplace
       getCollectionBySymbol(symbol)
@@ -62,8 +85,6 @@ export const useCollection = (symbol: string, market?: string) => {
           }
         });
 
-      // getListedNFTs({ symbol: symbol, sort: 1, status: false });
-
       getTransactionsBySymbol(symbol)
         // @ts-ignore
         .then((res: {}) => {
@@ -75,15 +96,13 @@ export const useCollection = (symbol: string, market?: string) => {
     
   }, [symbol, market]);
 
-  const getListedNFTs = (param: QUERIES) => {
+  const getListedNFTs = (param: QUERIES, market?: string) => {
     if (loading) return;
     setLoading(true);
 
-    getListedNftsByQuery(param)
-      // @ts-ignore
-      .then((res: {}) => {
-        const data = res['data'];
-        if (data) {
+    if (market) {
+      getMEListedNFTsByCollection(param)
+        .then((data: []) => {
           setNFTs(data);
           if (data.length < PER_PAGE) {
             setSkip(0);
@@ -92,9 +111,26 @@ export const useCollection = (symbol: string, market?: string) => {
             setSkip(prev => prev + PER_PAGE);
             setHasMore(true);
           }
-        }
-      })
-      .finally(() => setLoading(false));
+        })
+        .finally(() => setLoading(false));
+    } else {
+      getListedNftsByQuery(param)
+        // @ts-ignore
+        .then((res: {}) => {
+          const data = res['data'];
+          if (data) {
+            setNFTs(data);
+            if (data.length < PER_PAGE) {
+              setSkip(0);
+              setHasMore(false);
+            } else {
+              setSkip(prev => prev + PER_PAGE);
+              setHasMore(true);
+            }
+          }
+        })
+        .finally(() => setLoading(false));
+    }
   };
 
   function _parseAttributes(data: any[] | null): ExAttribute[] {
