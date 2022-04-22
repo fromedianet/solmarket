@@ -8,7 +8,6 @@ import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 import { useNFT } from '../../hooks/useNFT';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { NFT } from '../../models/exCollection';
-import { getQueryPrameter } from '../../hooks/useCollection';
 
 export const ItemDetailView = () => {
   const params = useParams<{ mint: string }>();
@@ -31,12 +30,12 @@ export const ItemDetailView = () => {
 
   useEffect(() => {
     if (nft) {
-      const query = getQueryPrameter({
+      const param = {
         symbol: nft.symbol,
         sort: 1,
         status: false,
-      });
-      getListedNftsByQuery(query)
+      };
+      getListedNftsByQuery(param)
         // @ts-ignore
         .then((res: {}) => {
           if ('data' in res) {

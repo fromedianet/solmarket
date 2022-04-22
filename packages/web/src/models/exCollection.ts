@@ -105,3 +105,17 @@ export type V2 = {
   expiry: number;
   sellerReferral: string;
 };
+
+export type QUERIES = {
+  symbol: string;
+  market?: string;
+  sort: number;
+  status?: boolean;
+  searchKey?: string;
+  attributes?: {};
+  min?: number;
+  max?: number;
+  skip?: number;
+  limit?: number;
+  cursor?: number;
+};
