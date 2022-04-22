@@ -218,6 +218,16 @@ code {
   width: 100%;
 }
 
+.ant-tabs-tab-active {
+  .tab-title {
+    color: @text-color;
+  }
+}
+
+.ant-tabs-nav-list {
+  align-items: center;
+}
+
 .ant-avatar-group .ant-avatar {
   border: 1px solid #434343;
 }
@@ -256,12 +266,6 @@ code {
   // display: flex;
   @media (max-width: 475px) {
     flex-wrap: wrap;
-  }
-}
-
-.ant-tabs-tab-active {
-  .tab-title {
-    color: @text-color;
   }
 }
 
@@ -576,10 +580,6 @@ model-viewer {
   margin-bottom: 20px;
 }
 
-.ant-tabs-nav-list {
-  align-items: center;
-}
-
 .ant-tag .ant-tag-close-icon {
   color: @text-secondary-color;
 }
@@ -609,10 +609,6 @@ model-viewer {
     font-size: 16px;
     line-height: 24px;
   }
-}
-
-.ant-tabs-nav-list {
-  align-items: center;
 }
 
 .refresh-button {

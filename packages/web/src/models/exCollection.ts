@@ -35,7 +35,7 @@ export type ExCollectionStats = {
 };
 
 export type ExNFT = {
-  mintAddress: string;
+  mint: string;
   pk?: string;
   name: string;
   image: string;
@@ -60,6 +60,7 @@ export type NFT = {
   collectionName: string;
   bookKeeper?: string | null;
   txType?: string | null;
+  market?: string | null;
 };
 
 export type NFTData = {
@@ -104,4 +105,18 @@ export type V2 = {
   auctionHouseKey: string;
   expiry: number;
   sellerReferral: string;
+};
+
+export type QUERIES = {
+  symbol: string;
+  market: string | null;
+  sort: number;
+  status?: boolean;
+  searchKey?: string;
+  attributes?: {};
+  min?: number;
+  max?: number;
+  skip?: number;
+  limit?: number;
+  cursor?: number;
 };

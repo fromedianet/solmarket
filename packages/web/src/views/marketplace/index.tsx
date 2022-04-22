@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Tabs, Spin } from 'antd';
+import { Layout, Tabs } from 'antd';
 import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { CollectionInfo } from './components/CollectionInfo';
@@ -8,6 +8,7 @@ import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useParams } from 'react-router-dom';
 import { useCollection } from '../../hooks/useCollection';
+import { useQuerySearch } from '@oyster/common';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -15,6 +16,8 @@ const { TabPane } = Tabs;
 export const MarketplaceView = () => {
   const params = useParams<{ symbol: string }>();
   const symbol = params.symbol || '';
+  const searchParams = useQuerySearch();
+  const market = searchParams.get('market');
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
   const [list, setList] = useState<any[]>([]);
@@ -41,7 +44,7 @@ export const MarketplaceView = () => {
     hasMore,
     loading,
     getListedNFTs,
-  } = useCollection(symbol);
+  } = useCollection(symbol, market);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
@@ -79,6 +82,7 @@ export const MarketplaceView = () => {
     setRefresh(true);
     getListedNFTs({
       symbol: symbol,
+      market: market,
       sort: sort,
       searchKey: searchKey,
       attributes: filter.attributes,
@@ -101,6 +105,7 @@ export const MarketplaceView = () => {
       setRefresh(false);
       getListedNFTs({
         symbol: symbol,
+        market: market,
         sort: sort,
         searchKey: searchKey,
         attributes: filter.attributes,
@@ -140,12 +145,13 @@ export const MarketplaceView = () => {
               attributes={attributes}
             />
             <Content className="collection-container">
-              {loading && <Spin />}
               <Items
                 collection={collection}
                 list={list}
                 sort={sort}
                 searchKey={searchKey}
+                loading={loading}
+                market={market}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}

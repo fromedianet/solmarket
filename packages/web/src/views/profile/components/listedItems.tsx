@@ -53,7 +53,11 @@ export const ListedItems = ({ items }: { items: NFT[] }) => {
           <Row gutter={[16, 16]}>
             {groupNFTs.get(selectedSymbol)!.map((item, index) => (
               <Col key={index} span={12} md={8} lg={6} xl={4}>
-                <NFTCard item={item} collection={item.collectionName} />
+                <NFTCard
+                  item={item}
+                  market={item.market}
+                  collection={item.collectionName}
+                />
               </Col>
             ))}
           </Row>
