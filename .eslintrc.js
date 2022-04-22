@@ -23,7 +23,7 @@ module.exports = {
   settings: {
     react: {
       pragma: 'React',
-      version: '17.0.2',
+      version: '18.0.0',
     },
   },
   rules: {

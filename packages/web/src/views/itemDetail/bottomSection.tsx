@@ -133,6 +133,7 @@ export const BottomSection = (props: {
                 key={index}
                 itemId={`${index}`}
                 item={item}
+                market={null}
                 collection={props.nft.collectionName}
                 className="w-250"
               />

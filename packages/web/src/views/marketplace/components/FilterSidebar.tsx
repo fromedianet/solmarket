@@ -191,6 +191,7 @@ export const FilterSidebar = (props: {
                     onChange={value => onChange(attr.key, value)}
                     optionLabelProp="label"
                     value={attributeFilter[attr.key]}
+                    style={{ marginTop: 4, marginBottom: 4 }}
                   >
                     {attr.numbers.map((value, idx) => (
                       <Select.Option key={idx} value={value.value}>
