@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, Col, Select, Tag, Input, Card } from 'antd';
+import { Row, Col, Select, Tag, Input, Card, Spin } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../../components/EmptyView';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ const DELIMITER = '|&=&|';
 export const Items = (props: {
   collection: ExCollection | undefined;
   list: any[];
+  loading: boolean;
   sort: number;
   searchKey: string;
   hasMore: boolean;
@@ -115,7 +116,7 @@ export const Items = (props: {
       <Row>
         <Col span={24} md={12} className="control-container">
           <div className="refresh-btn" onClick={props.onRefresh}>
-            <img src="/icons/refresh.svg" alt="refresh" />
+            {props.loading ? <Spin /> : <img src="/icons/refresh.svg" alt="refresh" />}
           </div>
           <Search
             ref={searchRef}

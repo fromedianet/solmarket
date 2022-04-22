@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Tabs, Spin } from 'antd';
+import { Layout, Tabs } from 'antd';
 import { useSetSidebarState } from '../../contexts';
 import useWindowDimensions from '../../utils/layout';
 import { CollectionInfo } from './components/CollectionInfo';
@@ -145,12 +145,12 @@ export const MarketplaceView = () => {
               attributes={attributes}
             />
             <Content className="collection-container">
-              {loading && <Spin />}
               <Items
                 collection={collection}
                 list={list}
                 sort={sort}
                 searchKey={searchKey}
+                loading={loading}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
