@@ -60,6 +60,7 @@ export type NFT = {
   collectionName: string;
   bookKeeper?: string | null;
   txType?: string | null;
+  market?: string | null;
 };
 
 export type NFTData = {

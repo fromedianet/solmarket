@@ -13,6 +13,7 @@ export const Items = (props: {
   collection: ExCollection | undefined;
   list: any[];
   loading: boolean;
+  market: string | null;
   sort: number;
   searchKey: string;
   hasMore: boolean;
@@ -201,6 +202,7 @@ export const Items = (props: {
               >
                 <NFTCard
                   item={item}
+                  market={props.market}
                   collection={props.collection?.name || item.symbol}
                 />
               </Col>
@@ -217,11 +219,12 @@ export const Items = (props: {
 export const NFTCard = (props: {
   item: any;
   collection: string;
+  market?: string | null;
   itemId?: string;
   className?: string;
 }) => {
-  const url = props.item.market
-    ? `/exnft/${props.item.mint}?market=${props.item.market}`
+  const url = props.market
+    ? `/exnft/${props.item.mint}?market=${props.market}`
     : `/item-details/${props.item.mint}`;
   return (
     <Card

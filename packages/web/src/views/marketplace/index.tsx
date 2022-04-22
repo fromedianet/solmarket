@@ -151,6 +151,7 @@ export const MarketplaceView = () => {
                 sort={sort}
                 searchKey={searchKey}
                 loading={loading}
+                market={market}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
