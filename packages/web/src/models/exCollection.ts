@@ -35,7 +35,7 @@ export type ExCollectionStats = {
 };
 
 export type ExNFT = {
-  mintAddress: string;
+  mint: string;
   pk?: string;
   name: string;
   image: string;

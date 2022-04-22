@@ -26,7 +26,7 @@ export const BottomSection = (props: {
   const { nfts } = useExCollection(props.collection, props.market);
 
   useEffect(() => {
-    const filters = nfts.filter(item => item.mintAddress !== props.mintAddress);
+    const filters = nfts.filter(item => item.mint !== props.mintAddress);
     if (filters.length > 0) {
       setNFTList(filters);
     }

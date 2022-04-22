@@ -213,7 +213,7 @@ export const NFTCard = (props: {
       bordered={false}
     >
       <Link
-        to={`/exnft/${props.item.mintAddress}?market=${
+        to={`/exnft/${props.item.mint}?market=${
           props.market
         }&collection=${encodeURI(props.collection)}&price=${props.item.price}`}
       >
