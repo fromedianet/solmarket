@@ -32,7 +32,7 @@ const CarouselCard = (props: { collection: ExCollection }) => {
     props.collection.type === 'launchpad'
       ? `/launchpad/${props.collection.symbol}`
       : props.collection.market
-      ? `/excollection/${props.collection.symbol}?market=${props.collection.market}`
+      ? `/marketplace/${props.collection.symbol}?market=${props.collection.market}`
       : `/marketplace/${props.collection.symbol}`;
 
   return (
