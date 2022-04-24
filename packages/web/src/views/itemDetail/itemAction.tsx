@@ -2,6 +2,7 @@ import {
   AUCTION_HOUSE_ID,
   ConnectButton,
   MetaplexModal,
+  notify,
   sendTransactionWithRetry,
   useConnection,
   useNativeAccount,
@@ -74,6 +75,13 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
 
   const onListNow = async values => {
     if (!wallet.publicKey) return;
+    if (props.nft.market) {
+      notify({
+        message: 'Commint soon!',
+        type: 'info',
+      });
+      return;
+    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -122,6 +130,13 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
 
   const onCancelList = async () => {
     if (!wallet.publicKey) return;
+    if (props.nft.market) {
+      notify({
+        message: 'Commint soon!',
+        type: 'info',
+      });
+      return;
+    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -170,6 +185,13 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
 
   const onBuyNow = async () => {
     if (!wallet.publicKey) return;
+    if (props.nft.market) {
+      notify({
+        message: 'Commint soon!',
+        type: 'info',
+      });
+      return;
+    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -219,11 +241,17 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
 
   const onPlaceBid = async () => {
     if (!wallet.publicKey) return;
+    if (props.nft.market) {
+      notify({
+        message: 'Commint soon!',
+        type: 'info',
+      });
+      return;
+    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        // TODO: Implement MagicEden placeBid
         // Own marketplace placeBid
         const result: any = await placeBid({
           buyer: wallet.publicKey!.toBase58(),

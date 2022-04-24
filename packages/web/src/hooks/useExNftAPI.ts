@@ -4,9 +4,17 @@ import { MarketType } from '../constants';
 export const useExNftAPI = () => {
   const { runOthersAPI } = ApiUtils();
 
-  async function getExNFTByMintAddress(props: {market: string, mint: string, price?: number}) {
+  async function getExNFTByMintAddress(props: {
+    market: string;
+    mint: string;
+    price?: number;
+  }) {
     try {
-      const result: any = await runOthersAPI('get', `/exnft/${props.market}/${props.mint}`);
+      const result: any = await runOthersAPI(
+        'post',
+        `/exnft/nft`,
+        JSON.stringify(props),
+      );
       if (result && 'data' in result) {
         if (props.price && result['data']['price'] === 0) {
           result['data']['price'] = props.price;

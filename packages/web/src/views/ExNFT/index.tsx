@@ -52,7 +52,7 @@ export const ExNFTView = () => {
       const nftRes = await getExNFTByMintAddress({
         market: market,
         mint: id,
-        price: parseFloat(price)
+        price: parseFloat(price),
       });
       const txRes = await getExTransactions(id, market);
 
@@ -64,8 +64,7 @@ export const ExNFTView = () => {
     return null;
   }
 
-  const onBuy = async () => {
-  };
+  const onBuy = async () => {};
 
   return (
     <div className="main-area">
