@@ -1,6 +1,8 @@
 import {
+  AUCTION_HOUSE_ID,
   ConnectButton,
   MetaplexModal,
+  sendTransactionWithRetry,
   useConnection,
   useNativeAccount,
 } from '@oyster/common';
@@ -9,15 +11,10 @@ import { Button, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
-import {
-  sendList,
-  sendCancelList,
-  sendSell,
-  sendPlaceBid,
-} from '../../actions/auctionHouse';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { LAMPORTS_PER_SOL, Message, Transaction } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
 import { useSocket } from '../../contexts/socketProvider';
+import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
@@ -26,6 +23,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const { socket } = useSocket();
   const { account } = useNativeAccount();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
+  const { buyNow, list, cancelList, placeBid } = useInstructionsAPI();
+
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
   const isOwner = props.nft.owner === wallet.publicKey?.toBase58();
@@ -74,23 +73,29 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onListNow = async values => {
-    const price = values.price.number * LAMPORTS_PER_SOL;
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendList({
-          connection,
-          wallet,
-          buyerPrice: price,
-          mint: props.nft.mint,
+        const result: any = await list({
+          seller: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: props.nft.mint,
+          price: values.price.number,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: props.nft.mint });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       } finally {
@@ -120,17 +125,24 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendCancelList({
-          connection,
-          wallet,
-          nft: props.nft,
+        const result: any = await cancelList({
+          seller: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: props.nft.mint,
+          price: props.nft.price,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: props.nft.mint });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       } finally {
@@ -156,23 +168,29 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onBuyNow = async () => {
-    const price = props.nft.price * LAMPORTS_PER_SOL;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendSell({
-          connection,
-          wallet,
-          buyerPrice: price,
-          nft: props.nft,
+        const result: any = await buyNow({
+          buyer: wallet.publicKey!.toBase58(),
+          seller: props.nft.owner,
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: props.nft.mint,
+          price: props.nft.price,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: props.nft.mint });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       } finally {
@@ -197,24 +215,32 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     );
   };
 
-  const onMakeOffer = async () => {
-    const price = offerPrice * LAMPORTS_PER_SOL;
+  const onPlaceBid = async () => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result = await sendPlaceBid({
-          connection,
-          wallet,
-          buyerPrice: price,
-          nft: props.nft,
+        // TODO: Implement MagicEden placeBid
+        // Own marketplace placeBid
+        const result: any = await placeBid({
+          buyer: wallet.publicKey!.toBase58(),
+          seller: props.nft.owner,
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: props.nft.mint,
+          price: offerPrice,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { mint: props.nft.mint });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: props.nft.mint });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       } finally {
@@ -238,6 +264,27 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       },
     );
   };
+
+  async function runInstructions(data: Buffer) {
+    let status: any = { err: true };
+    try {
+      const transaction = Transaction.populate(Message.from(data));
+      const { txid } = await sendTransactionWithRetry(
+        connection,
+        wallet,
+        transaction.instructions,
+        [],
+      );
+
+      console.log('--------------- txid ------------', txid);
+      if (txid) {
+        status = await connection.confirmTransaction(txid, 'confirmed');
+      }
+    } catch (e) {
+      console.error('----- runInstructions error ------------', e);
+    }
+    return status;
+  }
 
   return (
     <div className="action-view">
@@ -364,7 +411,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             className="button"
             onClick={() => {
               setShowOfferModal(false);
-              onMakeOffer();
+              onPlaceBid();
             }}
             disabled={error !== '' || balanceError !== ''}
           >
