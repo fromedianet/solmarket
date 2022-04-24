@@ -127,6 +127,7 @@ export const ItemDetailView = () => {
             <>
               <InfoSection
                 nft={nft}
+                market={market}
                 priceData={priceData}
                 onRefresh={() => setRefresh(Date.now())}
               />
@@ -134,6 +135,7 @@ export const ItemDetailView = () => {
                 transactions={transactions}
                 nft={nft}
                 nftList={nftList}
+                market={market}
               />
             </>
           ) : (

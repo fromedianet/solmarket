@@ -17,6 +17,7 @@ const { Panel } = Collapse;
 export const BottomSection = (props: {
   transactions: Transaction[];
   nft: NFT;
+  market: string | null;
   nftList: NFT[];
 }) => {
   const endpoint = useConnectionConfig();
@@ -133,7 +134,7 @@ export const BottomSection = (props: {
                 key={index}
                 itemId={`${index}`}
                 item={item}
-                market={item.market}
+                market={props.market}
                 collection={props.nft.collectionName}
                 className="w-250"
               />

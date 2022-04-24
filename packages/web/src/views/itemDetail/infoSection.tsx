@@ -19,6 +19,7 @@ const { Panel } = Collapse;
 
 export const InfoSection = (props: {
   nft: NFT;
+  market: string | null;
   priceData: any[];
   onRefresh: () => void;
 }) => {
@@ -88,7 +89,7 @@ export const InfoSection = (props: {
         <div className="collection-container">
           <Link
             to={`/marketplace/${props.nft.symbol}${
-              props.nft.market ? '?market=' + props.nft.market : ''
+              props.market ? '?market=' + props.market : ''
             }`}
             className="collection-name"
           >
