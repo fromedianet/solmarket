@@ -27,15 +27,16 @@ import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
-import { NFT, Transaction as TransactionModel } from '../../models/exCollection';
-import { ActivityColumns, OffersReceivedColumns } from './tableColumns';
 import {
-  showEscrow,
-} from '../../actions/auctionHouse';
+  NFT,
+  Transaction as TransactionModel,
+} from '../../models/exCollection';
+import { ActivityColumns, OffersReceivedColumns } from './tableColumns';
+import { showEscrow } from '../../actions/auctionHouse';
 import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
-import { LAMPORTS_PER_SOL, Message, Transaction } from '@solana/web3.js';
+import { Message, Transaction } from '@solana/web3.js';
 import { useExNFT } from '../../hooks/useExNFT';
 import { MarketType } from '../../constants';
 import { MyItems } from './components/myItems';
@@ -52,7 +53,8 @@ export const ProfileView = () => {
   const { authToken, user } = useAuthToken();
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
-  const { cancelBid, cancelBidAndWithdraw, acceptOffer, deposit, withdraw } = useInstructionsAPI();
+  const { cancelBid, cancelBidAndWithdraw, acceptOffer, deposit, withdraw } =
+    useInstructionsAPI();
   const [visible, setVisible] = useState(false);
   const [myItems, setMyItems] = useState<NFT[]>([]);
   const [listedItems, setListedItems] = useState<NFT[]>([]);
@@ -283,7 +285,9 @@ export const ProfileView = () => {
           if (data) {
             const status = await runInstructions(data);
             if (!status['err']) {
-              socket.emit('syncAuctionHouse', { wallet: wallet.publicKey!.toBase58() });
+              socket.emit('syncAuctionHouse', {
+                wallet: wallet.publicKey!.toBase58(),
+              });
               resolve('');
               return;
             }
@@ -330,7 +334,9 @@ export const ProfileView = () => {
           if (data) {
             const status = await runInstructions(data);
             if (!status['err']) {
-              socket.emit('syncAuctionHouse', { wallet: wallet.publicKey!.toBase58() });
+              socket.emit('syncAuctionHouse', {
+                wallet: wallet.publicKey!.toBase58(),
+              });
               resolve('');
               return;
             }
@@ -379,7 +385,9 @@ export const ProfileView = () => {
           if (data) {
             const status = await runInstructions(data);
             if (!status['err']) {
-              socket.emit('syncAuctionHouse', { wallet: wallet.publicKey!.toBase58() });
+              socket.emit('syncAuctionHouse', {
+                wallet: wallet.publicKey!.toBase58(),
+              });
               resolve('');
               return;
             }
@@ -510,7 +518,7 @@ export const ProfileView = () => {
         transaction.instructions,
         [],
       );
-      
+
       if (txid) {
         status = await connection.confirmTransaction(txid, 'confirmed');
       }

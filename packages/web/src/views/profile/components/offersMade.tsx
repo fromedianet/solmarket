@@ -54,6 +54,7 @@ export const OffersMade = ({
       setSelectedOffer(data);
       setCancelVisible(true);
     },
+    onDeposit: () => setDepositVisible(true),
   });
 
   const menu = (
@@ -77,6 +78,7 @@ export const OffersMade = ({
 
   const onFinish = values => {
     const val = values.price.number;
+    setDepositVisible(false);
     onDeposit(val);
   };
 
