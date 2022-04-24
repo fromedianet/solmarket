@@ -313,20 +313,30 @@ export const ProfileView = () => {
   };
 
   const onCancelBidAndWithdraw = (offer: Offer) => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result = await cancelBidAndWithdraw({
-          connection,
-          wallet,
-          offer,
+        const result: any = await cancelBidAndWithdraw({
+          buyer: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: offer.mint,
+          tokenAccount: offer.tokenAccount,
+          tradeState: offer.tradeState,
+          price: offer.bidPrice,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { wallet: wallet.publicKey! });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { wallet: wallet.publicKey!.toBase58() });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       }
