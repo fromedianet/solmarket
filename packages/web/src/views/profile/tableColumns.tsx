@@ -117,6 +117,7 @@ export const OffersMadeColumns = (props: {
   balance: number;
   exBalance: number;
   onCancel: (p) => void;
+  onDeposit: () => void;
 }) => {
   return [
     {
@@ -162,11 +163,12 @@ export const OffersMadeColumns = (props: {
       title: 'Action',
       dataIndex: 'mint',
       key: 'action',
-      render: (text, record) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      render: (text, record) =>
+        record.bidPrice < props.balance ? (
           <Button onClick={() => props.onCancel(record)}>Cancel</Button>
-        </div>
-      ),
+        ) : (
+          <Button onClick={() => props.onDeposit()}>Deposit</Button>
+        ),
     },
   ];
 };
