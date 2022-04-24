@@ -22,6 +22,7 @@ const { Sider } = Layout;
 const { Panel } = Collapse;
 
 export const FilterSidebar = (props: {
+  market: string | null;
   attributes: ExAttribute[];
   filter: {
     price: {
@@ -117,17 +118,19 @@ export const FilterSidebar = (props: {
               )
             }
           >
-            <Panel
-              key="status"
-              header="Status"
-              extra={<UnorderedListOutlined className="filter-icon" />}
-            >
-              <div className="status-container">
-                <Checkbox onChange={onStatusChange} checked={status}>
-                  All items
-                </Checkbox>
-              </div>
-            </Panel>
+            {!props.market && (
+              <Panel
+                key="status"
+                header="Status"
+                extra={<UnorderedListOutlined className="filter-icon" />}
+              >
+                <div className="status-container">
+                  <Checkbox onChange={onStatusChange} checked={status}>
+                    All items
+                  </Checkbox>
+                </div>
+              </Panel>
+            )}
             <Panel
               key="price"
               header="Price filter"
