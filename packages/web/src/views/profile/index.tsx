@@ -360,25 +360,32 @@ export const ProfileView = () => {
   };
 
   const onAcceptOffer = (offer: Offer) => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result = await acceptOffer({
-          connection,
-          wallet,
-          offer,
+        const result: any = await acceptOffer({
+          buyer: offer.buyer,
+          seller: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: offer.mint,
+          tokenAccount: offer.tokenAccount,
+          metadata: offer.metadata,
+          bidPrice: offer.bidPrice,
+          listPrice: offer.listingPrice,
         });
-        if (!result['err']) {
-          socket.emit('acceptOffer', {
-            bookKeeper: wallet.publicKey!.toBase58(),
-            buyer: offer.buyer,
-            mint: offer.mint,
-            price: offer.bidPrice * LAMPORTS_PER_SOL,
-          });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { wallet: wallet.publicKey!.toBase58() });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       }
