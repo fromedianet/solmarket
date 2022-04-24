@@ -164,7 +164,7 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'mint',
       key: 'action',
       render: (text, record) =>
-        record.price > props.balance ? (
+        record.bidPrice < props.balance ? (
           <Button onClick={() => props.onCancel(record)}>Cancel</Button>
         ) : (
           <Button onClick={() => props.onDeposit()}>Deposit</Button>
