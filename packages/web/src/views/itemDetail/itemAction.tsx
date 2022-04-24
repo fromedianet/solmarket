@@ -121,6 +121,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onCancelList = async () => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -168,6 +169,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onBuyNow = async () => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -216,6 +218,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   };
 
   const onPlaceBid = async () => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
