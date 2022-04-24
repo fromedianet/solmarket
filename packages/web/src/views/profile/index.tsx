@@ -455,22 +455,29 @@ export const ProfileView = () => {
   };
 
   const onWithdraw = (amount: number) => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result = await withdraw({
-          connection,
-          wallet,
-          amount,
+        const result: any = await withdraw({
+          pubkey: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          amount: amount,
         });
-        if (!result['err']) {
-          setTimeout(() => {
-            callShowEscrow();
-          }, 15000);
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              setTimeout(() => {
+                callShowEscrow();
+              }, 15000);
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       }
