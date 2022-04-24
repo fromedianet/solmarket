@@ -217,6 +217,9 @@ export const tryParseKey = (key: string): PublicKey | null => {
 const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'] as const;
 
 const abbreviateNumber = (number: number, precision: number) => {
+  if (number < 1000) {
+    return number.toFixed(precision);
+  }
   const tier = (Math.log10(number) / 3) | 0;
   let scaled = number;
   const suffix = SI_SYMBOL[tier];

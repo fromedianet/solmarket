@@ -10,7 +10,6 @@ import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 import { NFTData, Transaction } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { ApiUtils } from '../../utils/apiUtils';
-import { buyNowME } from '../../actions/auctionHouse/buyNowME';
 import { toast } from 'react-toastify';
 
 export const ExNFTView = () => {
@@ -81,19 +80,19 @@ export const ExNFTView = () => {
       // eslint-disable-next-line no-async-promise-executor
       const resolveWithData = new Promise(async (resolve, reject) => {
         try {
-          const url = `/instructions/buy_now?buyer=${buyer}&seller=${seller}&tokenMint=${tokenMint}&tokenATA=${tokenATA}&price=${price}&auctionHouseAddress=${auctionHouseAddress}&sellerExpiry=${sellerExpiry}&sellerReferral=${sellerReferral}`;
-          const res: any = await runMagicEdenAPI('get', url);
-          if (res.tx.data) {
-            const result = await buyNowME({
-              connection,
-              wallet,
-              data: res.tx.data,
-            });
-            if (!result['err']) {
-              resolve('');
-              return;
-            }
-          }
+          // const url = `/instructions/buy_now?buyer=${buyer}&seller=${seller}&tokenMint=${tokenMint}&tokenATA=${tokenATA}&price=${price}&auctionHouseAddress=${auctionHouseAddress}&sellerExpiry=${sellerExpiry}&sellerReferral=${sellerReferral}`;
+          // const res: any = await runMagicEdenAPI('get', url);
+          // if (res.tx.data) {
+          //   const result = await buyNowME({
+          //     connection,
+          //     wallet,
+          //     data: res.tx.data,
+          //   });
+          //   if (!result['err']) {
+          //     resolve('');
+          //     return;
+          //   }
+          // }
           reject();
         } catch (e) {
           reject();

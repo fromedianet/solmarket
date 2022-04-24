@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dropdown,
   Menu,
@@ -46,15 +46,20 @@ export const OffersMade = ({
   const [depositVisible, setDepositVisible] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer>();
   const [depositValue, setDepositValue] = useState(0);
+  const [offersColumns, setOffersColumns] = useState<any>();
 
-  const offersColumns = OffersMadeColumns({
-    balance: balance,
-    exBalance: exBalance,
-    onCancel: (data: Offer) => {
-      setSelectedOffer(data);
-      setCancelVisible(true);
-    },
-  });
+  useEffect(() => {
+    const columns = OffersMadeColumns({
+      balance: balance,
+      exBalance: exBalance,
+      onCancel: (data: Offer) => {
+        setSelectedOffer(data);
+        setCancelVisible(true);
+      },
+      onDeposit: () => setDepositVisible(true),
+    });
+    setOffersColumns(columns);
+  }, [balance, exBalance, loadingBalance]);
 
   const menu = (
     <Menu
@@ -77,6 +82,7 @@ export const OffersMade = ({
 
   const onFinish = values => {
     const val = values.price.number;
+    setDepositVisible(false);
     onDeposit(val);
   };
 
@@ -152,12 +158,14 @@ export const OffersMade = ({
           )}
         </button>
       </div>
-      <Table
-        columns={offersColumns}
-        dataSource={offers}
-        style={{ overflowX: 'auto' }}
-        pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-      />
+      {offersColumns && (
+        <Table
+          columns={offersColumns}
+          dataSource={offers}
+          style={{ overflowX: 'auto' }}
+          pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+        />
+      )}
       <MetaplexModal
         className="deposit-modal"
         visible={depositVisible}
