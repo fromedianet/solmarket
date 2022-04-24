@@ -37,7 +37,7 @@ import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
 import { Message, Transaction } from '@solana/web3.js';
-import { useExNFT } from '../../hooks/useExNFT';
+import { useExNftAPI } from '../../hooks/useExNftAPI';
 import { MarketType } from '../../constants';
 import { MyItems } from './components/myItems';
 import { ListedItems } from './components/listedItems';
@@ -78,7 +78,7 @@ export const ProfileView = () => {
     getExNFTsByEscrowOwner,
     getExGlobalActivities,
     getExEscrowBalance,
-  } = useExNFT();
+  } = useExNftAPI();
 
   const activityColumns = ActivityColumns(network);
 

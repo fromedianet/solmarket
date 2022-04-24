@@ -52,7 +52,8 @@ export type NFT = {
   symbol: string;
   description: string | null;
   image: string;
-  animationURL: string | null;
+  animationURL?: string;
+  externalURL?: string;
   seller_fee_basis_points: number;
   attributes: Attribute[];
   creators: Creator[];
@@ -61,29 +62,7 @@ export type NFT = {
   bookKeeper?: string | null;
   txType?: string | null;
   market?: string | null;
-};
-
-export type NFTData = {
-  title: string;
-  content: string;
-  img: string;
-  animationURL?: string;
-  price?: number;
-  symbol?: string;
-  collectionName?: string;
-  mintAddress: string;
-  owner?: string;
-  tokenAddress?: string;
-  updateAuthority: string;
-  externalURL?: string;
-  propertyCategory: string;
-  sellerFeeBasisPoints: number;
-  supply: number;
-  primarySaleHappened?: boolean;
-  tokenDelegateValid?: boolean;
-  attributes: Attribute[];
-  creators: Creator[];
-  v2: V2 | null;
+  v2?: V2 | null;
 };
 
 export type Transaction = {
