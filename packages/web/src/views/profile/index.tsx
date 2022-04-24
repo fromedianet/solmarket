@@ -32,7 +32,7 @@ import {
   Transaction as TransactionModel,
 } from '../../models/exCollection';
 import { ActivityColumns, OffersReceivedColumns } from './tableColumns';
-import { showEscrow } from '../../actions/auctionHouse';
+import { showEscrow } from '../../actions/showEscrow';
 import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
