@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Collapse, Skeleton, Button, Statistic } from 'antd';
-import { NFTData } from '../../models/exCollection';
+import { NFT } from '../../models/exCollection';
 import { ArtContent } from '../../components/ArtContent';
 import { Link } from 'react-router-dom';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -18,7 +18,7 @@ import {
 const { Panel } = Collapse;
 
 export const InfoSection = (props: {
-  nft: NFTData;
+  nft: NFT;
   collection: string;
   market: string;
   priceData: any[];
@@ -36,7 +36,7 @@ export const InfoSection = (props: {
         <div className="artwork-view">
           <ArtContent
             className="artwork-image"
-            uri={props.nft.img}
+            uri={props.nft.image}
             animationURL={props.nft.animationURL}
             active={true}
             allowMeshRender={true}
@@ -87,7 +87,7 @@ export const InfoSection = (props: {
       </Col>
       <Col span={24} lg={12}>
         <div className="art-title">
-          {props.nft.title || <Skeleton paragraph={{ rows: 0 }} />}
+          {props.nft.name || <Skeleton paragraph={{ rows: 0 }} />}
         </div>
         <div className="collection-container">
           <Link to={collectionUri} className="collection-name">
@@ -137,13 +137,13 @@ export const InfoSection = (props: {
           defaultActiveKey={['attributes', 'details']}
         >
           <Panel
-            header={`About ${props.nft.title}`}
+            header={`About ${props.nft.name}`}
             key="about"
             className="bg-secondary"
             extra={<img src="/icons/user.svg" width={24} alt="about" />}
           >
             <div>
-              {props.nft.content || (
+              {props.nft.description || (
                 <div style={{ fontStyle: 'italic' }}>
                   No description provided.
                 </div>
@@ -174,7 +174,7 @@ export const InfoSection = (props: {
                 <span className="details-key">Mint Address</span>
                 <div className="details-value">
                   <a
-                    href={`https://solscan.io/token/${props.nft.mintAddress}`}
+                    href={`https://solscan.io/token/${props.nft.mint}`}
                     target="_blank"
                     rel="noreferrer noopener"
                     style={{ cursor: 'pointer' }}
@@ -185,7 +185,7 @@ export const InfoSection = (props: {
                     />
                   </a>
                   <a
-                    href={`https://explorer.solana.com/address/${props.nft.mintAddress}`}
+                    href={`https://explorer.solana.com/address/${props.nft.mint}`}
                     target="_blank"
                     rel="noreferrer noopener"
                     style={{ cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
@@ -196,8 +196,8 @@ export const InfoSection = (props: {
                     />
                   </a>
                   <CopySpan
-                    value={shortenAddress(props.nft.mintAddress)}
-                    copyText={props.nft.mintAddress}
+                    value={shortenAddress(props.nft.mint)}
+                    copyText={props.nft.mint}
                   />
                 </div>
               </div>
@@ -266,7 +266,7 @@ export const InfoSection = (props: {
               <div className="sub-container">
                 <span className="details-key">Artist Royalties</span>
                 <div className="details-value">
-                  {((props.nft.sellerFeeBasisPoints || 0) / 100).toFixed(2)}%
+                  {((props.nft.seller_fee_basis_points || 0) / 100).toFixed(2)}%
                 </div>
               </div>
             </div>

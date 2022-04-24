@@ -140,6 +140,7 @@ export const MarketplaceView = () => {
         >
           <Layout hasSider>
             <FilterSidebar
+              market={market}
               updateFilters={onUpdateFilters}
               filter={filter}
               attributes={attributes}

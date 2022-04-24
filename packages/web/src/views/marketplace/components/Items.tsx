@@ -224,7 +224,7 @@ export const NFTCard = (props: {
   className?: string;
 }) => {
   const url = props.market
-    ? `/exnft/${props.item.mint}?market=${props.market}`
+    ? `/item-details/${props.item.mint}?market=${props.market}`
     : `/item-details/${props.item.mint}`;
   return (
     <Card
