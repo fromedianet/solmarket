@@ -278,8 +278,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         transaction.instructions,
         [],
       );
-
-      console.log('--------------- txid ------------', txid);
+      
       if (txid) {
         status = await connection.confirmTransaction(txid, 'confirmed');
       }

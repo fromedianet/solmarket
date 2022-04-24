@@ -1,9 +1,11 @@
 import {
+  AUCTION_HOUSE_ID,
   ConnectButton,
   CopySpan,
   formatAmount,
   MetaplexModal,
   notify,
+  sendTransactionWithRetry,
   shortenAddress,
   useConnection,
   useConnectionConfig,
@@ -25,25 +27,21 @@ import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
-import { NFT, Transaction } from '../../models/exCollection';
+import { NFT, Transaction as TransactionModel } from '../../models/exCollection';
 import { ActivityColumns, OffersReceivedColumns } from './tableColumns';
 import {
   showEscrow,
-  cancelBid,
-  cancelBidAndWithdraw,
-  acceptOffer,
-  withdraw,
-  deposit,
 } from '../../actions/auctionHouse';
 import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { LAMPORTS_PER_SOL, Message, Transaction } from '@solana/web3.js';
 import { useExNFT } from '../../hooks/useExNFT';
 import { MarketType } from '../../constants';
 import { MyItems } from './components/myItems';
 import { ListedItems } from './components/listedItems';
 import { OffersMade } from './components/offersMade';
+import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -54,14 +52,13 @@ export const ProfileView = () => {
   const { authToken, user } = useAuthToken();
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
+  const { cancelBid, cancelBidAndWithdraw, acceptOffer, deposit, withdraw } = useInstructionsAPI();
   const [visible, setVisible] = useState(false);
-
   const [myItems, setMyItems] = useState<NFT[]>([]);
   const [listedItems, setListedItems] = useState<NFT[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<TransactionModel[]>([]);
   const [offersMade, setOffersMade] = useState<Offer[]>([]);
   const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
-
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const [balance, setBalance] = useState(0);
   const [exBalance, setExBalance] = useState(0);
@@ -197,7 +194,7 @@ export const ProfileView = () => {
   }
 
   async function loadGlobalActivities() {
-    let data: Transaction[] = [];
+    let data: TransactionModel[] = [];
     if (wallet.publicKey) {
       const res: any = await getTransactionsByWallet(
         wallet.publicKey.toBase58(),
@@ -205,7 +202,7 @@ export const ProfileView = () => {
       if ('data' in res) {
         data = res['data'];
       }
-      const exData: Transaction[] = await getExGlobalActivities(
+      const exData: TransactionModel[] = await getExGlobalActivities(
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
@@ -269,20 +266,30 @@ export const ProfileView = () => {
   };
 
   const onCancelBid = (offer: Offer) => {
+    if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result = await cancelBid({
-          connection,
-          wallet,
-          offer,
+        const result: any = await cancelBid({
+          buyer: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: offer.mint,
+          tokenAccount: offer.tokenAccount,
+          tradeState: offer.tradeState,
+          price: offer.bidPrice,
         });
-        if (!result['err']) {
-          socket.emit('syncAuctionHouse', { wallet: wallet.publicKey! });
-          resolve('');
-        } else {
-          reject();
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { wallet: wallet.publicKey!.toBase58() });
+              resolve('');
+              return;
+            }
+          }
         }
+        reject();
       } catch (e) {
         reject(e);
       }
@@ -461,6 +468,26 @@ export const ProfileView = () => {
       },
     );
   };
+
+  async function runInstructions(data: Buffer) {
+    let status: any = { err: true };
+    try {
+      const transaction = Transaction.populate(Message.from(data));
+      const { txid } = await sendTransactionWithRetry(
+        connection,
+        wallet,
+        transaction.instructions,
+        [],
+      );
+      
+      if (txid) {
+        status = await connection.confirmTransaction(txid, 'confirmed');
+      }
+    } catch (e) {
+      console.error('----- runInstructions error ------------', e);
+    }
+    return status;
+  }
 
   if (!wallet.connected) {
     return (
