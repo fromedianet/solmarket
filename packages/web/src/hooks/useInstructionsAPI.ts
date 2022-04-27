@@ -285,6 +285,27 @@ export const useInstructionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get instructions to cancelBid on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+   async function cancelBidME(props: {
+    buyer: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    price: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/cancelBidME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
   return {
     buyNow,
     list,
@@ -299,5 +320,6 @@ export const useInstructionsAPI = () => {
     withdrawFromTreasury,
     buyNowME,
     placeBidME,
+    cancelBidME,
   };
 };
