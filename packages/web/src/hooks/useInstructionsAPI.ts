@@ -241,12 +241,12 @@ export const useInstructionsAPI = () => {
   }
 
   /**
-   * Get instructions to buyNow on a NFT
+   * Get instructions to buyNow on MagicEden
    *
    * @param props
    * @returns
    */
-   async function buyNowME(props: {
+  async function buyNowME(props: {
     buyer: string;
     seller: string;
     auctionHouseAddress: string;
@@ -259,6 +259,27 @@ export const useInstructionsAPI = () => {
       false,
       'post',
       '/instructions/buyNowME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to placeBid on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function placeBidME(props: {
+    buyer: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    price: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/placeBidME',
       JSON.stringify(props),
     );
     return result;
@@ -277,5 +298,6 @@ export const useInstructionsAPI = () => {
     withdrawFromFee,
     withdrawFromTreasury,
     buyNowME,
+    placeBidME,
   };
 };
