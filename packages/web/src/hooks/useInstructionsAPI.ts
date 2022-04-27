@@ -306,6 +306,46 @@ export const useInstructionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get instructions to deposit on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+   async function depositME(props: {
+    pubkey: string;
+    auctionHouseAddress: string;
+    amount: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/depositME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to withdraw on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+   async function withdrawME(props: {
+    pubkey: string;
+    auctionHouseAddress: string;
+    amount: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/withdrawME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
   return {
     buyNow,
     list,
@@ -321,5 +361,7 @@ export const useInstructionsAPI = () => {
     buyNowME,
     placeBidME,
     cancelBidME,
+    depositME,
+    withdrawME,
   };
 };
