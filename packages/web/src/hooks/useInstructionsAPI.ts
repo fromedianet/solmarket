@@ -240,6 +240,30 @@ export const useInstructionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get instructions to buyNow on a NFT
+   *
+   * @param props
+   * @returns
+   */
+   async function buyNowME(props: {
+    buyer: string;
+    seller: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    escrowPubkey: string;
+    expiry: number;
+    price: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/buyNowME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
   return {
     buyNow,
     list,
@@ -252,5 +276,6 @@ export const useInstructionsAPI = () => {
     withdraw,
     withdrawFromFee,
     withdrawFromTreasury,
+    buyNowME,
   };
 };
