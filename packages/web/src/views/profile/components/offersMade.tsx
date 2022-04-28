@@ -274,7 +274,7 @@ export const OffersMade = ({
               Cancel offer
             </Button>
             <span className="nft-name" style={{ marginTop: 24 }}>
-              {selectedOffer?.name}
+              {`${selectedOffer?.name} ${selectedOffer?.market ? `(ME)` : ''}`}
             </span>
             <span className="nft-symbol">
               {selectedOffer?.symbol}
