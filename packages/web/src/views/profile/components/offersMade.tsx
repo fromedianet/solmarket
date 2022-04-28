@@ -200,14 +200,14 @@ export const OffersMade = ({
             <Divider />
             <div className="wallet-info">
               <span className="wallet-label">Main wallet balance</span>
-              <span className="wallet-label">{`${mainBalance.toFixed(
-                5,
+              <span className="wallet-label">{`${parseFloat(
+                mainBalance.toFixed(5),
               )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Bidding wallet balance</span>
-              <span className="wallet-label">{`${balance.toFixed(
-                5,
+              <span className="wallet-label">{`${parseFloat(
+                balance.toFixed(5),
               )} SOL`}</span>
             </div>
             <Divider />
@@ -222,9 +222,9 @@ export const OffersMade = ({
                   ''
                 )}
               </span>
-              <span className="wallet-label">{`${(
-                mainBalance - depositValue
-              ).toFixed(5)} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                (mainBalance - depositValue).toFixed(5),
+              )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">
@@ -237,9 +237,9 @@ export const OffersMade = ({
                   ''
                 )}
               </span>
-              <span className="wallet-label">{`${(
-                balance + depositValue
-              ).toFixed(5)} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                (balance + depositValue).toFixed(5),
+              )} SOL`}</span>
             </div>
             <span className="bottom-label">
               By selecting &quot;Deposit&quot;, you agree to{' '}

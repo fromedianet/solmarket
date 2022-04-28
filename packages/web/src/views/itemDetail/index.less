@@ -242,3 +242,100 @@
 .w-250 {
   width: 250px !important;
 }
+
+.make-offer-modal {
+  padding: 0;
+
+  .ant-modal-body {
+    padding: 24px;
+  }
+
+  .ant-modal-content {
+    width: 500px;
+    background: @bg-secondary-color;
+  }
+
+  .ant-divider-horizontal {
+    margin: 12px 0;
+    border-color: @border-primary-color;
+  }
+
+  .header-text {
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
+  }
+
+  .body-container {
+    display: flex;
+    flex-direction: column;
+
+    .option-button {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      border: 1px solid @bg-pink;
+      border-radius: 4px;
+      text-align: left;
+      padding: 16px;
+      background: transparent;
+      border-width: 1px;
+      border-radius: 6px;
+      border-color: @border-pink;
+      font-size: 16px;
+      color: @text-primary-color;
+      font-weight: 700;
+
+      .sub-title {
+        font-size: 14px;
+        color: @text-secondary-color;
+        font-weight: 400;
+      }
+    }
+
+    .nft-name {
+      font-size: 14px;
+      color: @text-primary-color;
+      font-weight: 700;
+      line-height: 20px;
+    }
+
+    .nft-symbol {
+      font-size: 12px;
+      color: @text-pink;
+      font-weight: 400;
+      line-height: 16px;
+    }
+
+    .wallet-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .description {
+      font-size: 14px;
+      line-height: 20px;
+      color: @text-secondary-color;
+      margin: 24px 0;
+    }
+
+    .wallet-label {
+      font-size: 16px;
+      line-height: 24px;
+      color: @text-primary-color;
+    }
+
+    .text-gray {
+      color: @text-secondary-color;
+    }
+
+    .bottom-label {
+      font-size: 12px;
+      color: @text-secondary-color;
+      margin: 12px 0;
+    }
+  }
+}

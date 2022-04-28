@@ -109,7 +109,7 @@ export const AppBar = () => {
                   key={index}
                   value={
                     item.market
-                      ? `/excollection/${item.symbol}?market=${item.market}`
+                      ? `/marketplace/${item.symbol}?market=${item.market}`
                       : `/marketplace/${item.symbol}`
                   }
                 >

@@ -240,6 +240,158 @@ export const useInstructionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get instructions to buyNow on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function buyNowME(props: {
+    buyer: string;
+    seller: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    escrowPubkey: string;
+    expiry: number;
+    price: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/buyNowME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to list on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function listME(props: {
+    seller: string;
+    auctionHouseAddress: string;
+    tokenAccount: string;
+    tokenMint: string;
+    price: number;
+    expiry: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/listME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to cancelList on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function cancelListME(props: {
+    seller: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    escrowPayment: string;
+    price: number;
+    expiry: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/cancelListME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to placeBid on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function placeBidME(props: {
+    buyer: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    price: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/placeBidME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to cancelBid on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function cancelBidME(props: {
+    buyer: string;
+    auctionHouseAddress: string;
+    tokenMint: string;
+    price: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/cancelBidME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to deposit on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function depositME(props: {
+    pubkey: string;
+    auctionHouseAddress: string;
+    amount: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/depositME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
+   * Get instructions to withdraw on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function withdrawME(props: {
+    pubkey: string;
+    auctionHouseAddress: string;
+    amount: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/withdrawME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
   return {
     buyNow,
     list,
@@ -252,5 +404,12 @@ export const useInstructionsAPI = () => {
     withdraw,
     withdrawFromFee,
     withdrawFromTreasury,
+    buyNowME,
+    listME,
+    cancelListME,
+    placeBidME,
+    cancelBidME,
+    depositME,
+    withdrawME,
   };
 };
