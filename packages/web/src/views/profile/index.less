@@ -175,46 +175,12 @@
   }
 }
 
-.cancel-modal {
-  padding: 16px;
+.deposit-modal, .cancelModal {
+  padding: 0;
 
-  .header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 24px;
+  .ant-modal-body {
+    padding: 24px;
   }
-
-  .header-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-bottom: 16px;
-    margin-top: 32px;
-  }
-
-  .header-text {
-    font-size: 16px;
-    color: white;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .body-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 32px;
-  }
-
-  .main-text {
-    font-size: 14px;
-    color: white;
-    text-align: center;
-  }
-}
-
-.deposit-modal {
-  padding: 16px;
 
   .ant-modal-content {
     width: 500px;
@@ -230,12 +196,25 @@
     font-size: 20px;
     color: white;
     font-weight: 700;
-    text-align: center;
   }
 
   .body-container {
     display: flex;
     flex-direction: column;
+
+    .nft-name {
+      font-size: 14px;
+      color: @text-primary-color;
+      font-weight: 700;
+      line-height: 20px;
+    }
+
+    .nft-symbol {
+      font-size: 12px;
+      color: @text-pink;
+      font-weight: 400;
+      line-height: 16px;
+    }
 
     .wallet-info {
       display: flex;

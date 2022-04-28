@@ -643,7 +643,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
               )} SOL`}</span>
             </div>
             <span className="bottom-label">
-              By selecting &quot;Deposit&quot;, you agree to{' '}
+              By selecting &quot;Make offer&quot;, you agree to{' '}
               <Link to="" style={{ fontWeight: 600 }}>
                 Terms of Service
               </Link>

@@ -1,4 +1,7 @@
 export interface Offer {
+  name: string;
+  image: string;
+  symbol: string;
   mint: string;
   metadata: string;
   tradeState: string;

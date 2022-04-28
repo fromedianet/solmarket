@@ -68,7 +68,7 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
-  const { cancelBid, cancelBidAndWithdraw, acceptOffer, deposit, withdraw } =
+  const { cancelBid, acceptOffer, deposit, withdraw } =
     useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
@@ -390,55 +390,6 @@ export const ProfileView = () => {
     );
   };
 
-  const onCancelBidAndWithdraw = (offer: Offer) => {
-    if (!wallet.publicKey) return;
-    // eslint-disable-next-line no-async-promise-executor
-    const resolveWithData = new Promise(async (resolve, reject) => {
-      try {
-        const result: any = await cancelBidAndWithdraw({
-          buyer: wallet.publicKey!.toBase58(),
-          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-          tokenMint: offer.mint,
-          tokenAccount: offer.tokenAccount,
-          tradeState: offer.tradeState,
-          price: offer.bidPrice,
-        });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', {
-                wallet: wallet.publicKey!.toBase58(),
-              });
-              resolve('');
-              return;
-            }
-          }
-        }
-        reject();
-      } catch (e) {
-        reject(e);
-      }
-    });
-
-    toast.promise(
-      resolveWithData,
-      {
-        pending: 'Cancel bid now...',
-        error: 'Cancel bid rejected.',
-        success: 'Cancel bid successed. Your data maybe updated in a minute',
-      },
-      {
-        position: 'top-center',
-        theme: 'dark',
-        autoClose: 6000,
-        hideProgressBar: false,
-        pauseOnFocusLoss: false,
-      },
-    );
-  };
-
   const onAcceptOffer = (offer: Offer) => {
     if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
@@ -716,7 +667,6 @@ export const ProfileView = () => {
                   loadingBalance={loadingBalance}
                   callShowEscrow={callShowEscrow}
                   onCancelBid={onCancelBid}
-                  onCancelBidAndWithdraw={onCancelBidAndWithdraw}
                   onDeposit={onDeposit}
                   onWithdraw={onWithdraw}
                 />

@@ -25,7 +25,6 @@ export const OffersMade = ({
   loadingBalance,
   callShowEscrow,
   onCancelBid,
-  onCancelBidAndWithdraw,
   onDeposit,
   onWithdraw,
 }: {
@@ -35,7 +34,6 @@ export const OffersMade = ({
   loadingBalance: boolean;
   callShowEscrow: () => void;
   onCancelBid: (a) => void;
-  onCancelBidAndWithdraw: (a) => void;
   onDeposit: (a) => void;
   onWithdraw: (a) => void;
 }) => {
@@ -251,48 +249,48 @@ export const OffersMade = ({
         </div>
       </MetaplexModal>
       <MetaplexModal
+        className='cancel-modal'
         visible={cancelVisible}
         onCancel={() => setCancelVisible(false)}
       >
-        <div className="cancel-modal">
-          <div className="header-container">
-            <img src="/icons/wallet.png" className="header-icon" alt="wallet" />
-            <span className="header-text">
-              After cancelling your offer, do you want to withdraw funds back to
-              your wallet?
-            </span>
-          </div>
+        <div>
+          <span className='header-text'>Cancel the offer</span>
           <div className="body-container">
-            <span className="main-text">
-              The funds for your offer is held in an escrow account as collatral
-              to support multiple offers. If you choose &quot;Keep funds in
-              escrow&quot;, you will be able to make offers faster and more
-              easily.
+            <span className="description">
+            When your offer is canceled, the funds will remain in your bidding wallet until you withdraw them. This is to allow your other bids to remain open and prevent them from becoming invalid. When you&apos;re ready to withdraw the funds from your bidding wallet, you can do so from the &apos;Offers Made&apos; page of your profile.
+            </span>
+            <Button className='button' onClick={() => {
+              setCancelVisible(false);
+              onCancelBid(selectedOffer!);
+            }}>Cancel offer</Button>
+            <span className="nft-name">{selectedOffer!.name}</span>
+            <span className="nft-symbol">
+              {selectedOffer!.symbol}
+              <img
+                src="/icons/check.svg"
+                style={{ width: 14, height: 14, marginLeft: 8 }}
+              />
+            </span>
+            <Divider/>
+            <div className="wallet-info">
+              <span className="wallet-label text-gray">Buy now price</span>
+              <span className="wallet-label text-gray">{`${parseFloat(
+                selectedOffer!.listingPrice.toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Your offer</span>
+              <span className="wallet-label">{`${parseFloat(
+                selectedOffer!.bidPrice.toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <span className="bottom-label">
+              By selecting &quot;Cancel offer&quot;, you agree to{' '}
+              <Link to="" style={{ fontWeight: 600 }}>
+                Terms of Service
+              </Link>
             </span>
           </div>
-          <Row>
-            <Col span={9}>
-              <Button
-                onClick={() => {
-                  setCancelVisible(false);
-                  onCancelBidAndWithdraw(selectedOffer!);
-                }}
-              >
-                Withdraw
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button
-                style={{ marginLeft: 8, background: '#009999' }}
-                onClick={() => {
-                  setCancelVisible(false);
-                  onCancelBid(selectedOffer!);
-                }}
-              >
-                Keep funds in escrow
-              </Button>
-            </Col>
-          </Row>
         </div>
       </MetaplexModal>
     </div>
