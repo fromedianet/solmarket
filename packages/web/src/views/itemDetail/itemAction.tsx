@@ -79,8 +79,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   useEffect(() => {
     if (wallet.publicKey) {
       if (!props.nft.market) {
-        showEscrow(connection, wallet.publicKey)
-          .then(val => setBiddingBalance(val));
+        showEscrow(connection, wallet.publicKey).then(val =>
+          setBiddingBalance(val),
+        );
       } else {
         getExEscrowBalance({
           wallet: wallet.publicKey.toBase58(),
@@ -531,21 +532,27 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         )}
       </div>
       <MetaplexModal
-        className='make-offer-modal'
+        className="make-offer-modal"
         visible={showOfferModal}
         onCancel={() => setShowOfferModal(false)}
       >
         <div>
-          <span className='header-text'>Make an offer</span>
-          <div className='body-container'>
-            <p className='description'>
-              When you make an offer, the funds are kept in your bidding wallet to allow you to make multiple offers using the same funds. To view, deposit, or withdraw from your bidding wallet, please visit the &apos;Offers Made&apos; page of your profile.
+          <span className="header-text">Make an offer</span>
+          <div className="body-container">
+            <p className="description">
+              When you make an offer, the funds are kept in your bidding wallet
+              to allow you to make multiple offers using the same funds. To
+              view, deposit, or withdraw from your bidding wallet, please visit
+              the &apos;Offers Made&apos; page of your profile.
             </p>
-            <button className='option-button'>
+            <button className="option-button">
               <span>Fund the offer</span>
-              <span className='sub-title'>Transfer money from your main wallet to the bidding wallet account.</span>
+              <span className="sub-title">
+                Transfer money from your main wallet to the bidding wallet
+                account.
+              </span>
             </button>
-            <Row style={{ width: '100%', marginTop: 24, marginBottom: 24}}>
+            <Row style={{ width: '100%', marginTop: 24, marginBottom: 24 }}>
               <Col span={16}>
                 <PriceInput
                   value={{ number: offerPrice }}
@@ -554,9 +561,11 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                   onChange={value => onChangeOffer(value.number!)}
                 />
                 {error && <span className="warning">{error}</span>}
-                {balanceError && <span className="warning">{balanceError}</span>}
+                {balanceError && (
+                  <span className="warning">{balanceError}</span>
+                )}
               </Col>
-              <Col span={7} style={{ marginLeft: 16}}>
+              <Col span={7} style={{ marginLeft: 16 }}>
                 <Button
                   className="button"
                   onClick={() => {
@@ -569,24 +578,38 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                 </Button>
               </Col>
             </Row>
-            <span className='nft-name'>{props.nft.name}</span>
-            <span className='nft-symbol'>{props.nft.symbol}<img src='/icons/check.svg' style={{ width: 14, height: 14, marginLeft: 8}}/></span>
-            <Divider/>
+            <span className="nft-name">{props.nft.name}</span>
+            <span className="nft-symbol">
+              {props.nft.symbol}
+              <img
+                src="/icons/check.svg"
+                style={{ width: 14, height: 14, marginLeft: 8 }}
+              />
+            </span>
+            <Divider />
             <div className="wallet-info">
               <span className="wallet-label text-gray">Buy now price</span>
-              <span className="wallet-label text-gray">{`${parseFloat(props.nft.price.toFixed(5))} SOL`}</span>
+              <span className="wallet-label text-gray">{`${parseFloat(
+                props.nft.price.toFixed(5),
+              )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Minimum offer (50%)</span>
-              <span className="wallet-label">{`${parseFloat((props.nft.price * 0.5).toFixed(5))} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                (props.nft.price * 0.5).toFixed(5),
+              )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Main wallet balance</span>
-              <span className="wallet-label">{`${parseFloat(mainBalance.toFixed(5))} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                mainBalance.toFixed(5),
+              )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Bidding wallet balance</span>
-              <span className="wallet-label">{`${parseFloat(biddingBalance.toFixed(5))} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                biddingBalance.toFixed(5),
+              )} SOL`}</span>
             </div>
             <Divider />
             <div className="wallet-info">
@@ -600,9 +623,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                   ''
                 )}
               </span>
-              <span className="wallet-label">{`${parseFloat((
-                mainBalance - offerPrice
-              ).toFixed(5))} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                (mainBalance - offerPrice).toFixed(5),
+              )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">
@@ -615,9 +638,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                   ''
                 )}
               </span>
-              <span className="wallet-label">{`${parseFloat((
-                biddingBalance + offerPrice
-              ).toFixed(5))} SOL`}</span>
+              <span className="wallet-label">{`${parseFloat(
+                (biddingBalance + offerPrice).toFixed(5),
+              )} SOL`}</span>
             </div>
             <span className="bottom-label">
               By selecting &quot;Deposit&quot;, you agree to{' '}
