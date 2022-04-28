@@ -209,7 +209,7 @@ export const useMECollectionsAPI = () => {
    * @param params
    * @returns
    */
-  async function getMultiCollectionEscrowStats(params: {
+  async function getMEMultiCollectionEscrowStats(params: {
     market: string;
     symbols: string[];
   }) {
@@ -225,7 +225,7 @@ export const useMECollectionsAPI = () => {
     } catch (e) {
       console.error(e);
     }
-    return [];
+    return {};
   }
 
   return {
@@ -235,6 +235,6 @@ export const useMECollectionsAPI = () => {
     getMECollectionBySymbol,
     getMEListedNFTsByCollection,
     getMETransactionsBySymbol,
-    getMultiCollectionEscrowStats,
+    getMEMultiCollectionEscrowStats,
   };
 };
