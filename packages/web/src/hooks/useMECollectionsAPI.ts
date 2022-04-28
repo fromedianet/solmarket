@@ -228,6 +228,25 @@ export const useMECollectionsAPI = () => {
     return {};
   }
 
+  async function getMEBiddingQuery(params: {
+    market: string;
+    params: string;
+  }) {
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/getBiddingQuery',
+        JSON.stringify(params),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  }
+
   return {
     getAllCollections,
     getPopularCollections,
@@ -236,5 +255,6 @@ export const useMECollectionsAPI = () => {
     getMEListedNFTsByCollection,
     getMETransactionsBySymbol,
     getMEMultiCollectionEscrowStats,
+    getMEBiddingQuery,
   };
 };

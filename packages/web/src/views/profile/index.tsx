@@ -68,8 +68,7 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
-  const { cancelBid, acceptOffer, deposit, withdraw } =
-    useInstructionsAPI();
+  const { cancelBid, acceptOffer, deposit, withdraw } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const {
@@ -79,7 +78,8 @@ export const ProfileView = () => {
     getExEscrowBalance,
   } = useExNftAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
-  const { getMEMultiCollectionEscrowStats } = useMECollectionsAPI();
+  const { getMEMultiCollectionEscrowStats, getMEBiddingQuery } =
+    useMECollectionsAPI();
 
   const activityColumns = ActivityColumns(network);
 
@@ -119,13 +119,8 @@ export const ProfileView = () => {
         setTransactions(res);
       });
 
-      getOffersMade(wallet.publicKey.toBase58())
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setOffersMade(res['data']);
-          }
-        });
+      loadOffersMade()
+        .then(res => setOffersMade(res));
 
       getOffersReceived(wallet.publicKey.toBase58())
         // @ts-ignore
@@ -269,6 +264,33 @@ export const ProfileView = () => {
     };
   }
 
+  async function loadOffersMade() {
+    let list: Offer[] = [];
+    if (wallet.publicKey) {
+      const res1: any = await getOffersMade(wallet.publicKey.toBase58());
+      if ('data' in res1) {
+        list = res1['data'];
+      }
+
+      const query = {
+        $match: {
+          bidderPubkey: wallet.publicKey.toBase58(),
+        },
+        $sort: { createdAt: -1 },
+      };
+
+      const params = `?q=${encodeURI(JSON.stringify(query))}`;
+
+      const res2 = await getMEBiddingQuery({
+        market: MarketType.MagicEden,
+        params: params,
+      });
+
+      list = list.concat(res2);
+    }
+    return list;
+  }
+
   async function loadGlobalActivities() {
     let data: TransactionModel[] = [];
     if (wallet.publicKey) {
@@ -351,7 +373,7 @@ export const ProfileView = () => {
           auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
           tokenMint: offer.mint,
           tokenAccount: offer.tokenAccount,
-          tradeState: offer.tradeState,
+          tradeState: offer.tradeState!,
           price: offer.bidPrice,
         });
         if ('data' in result) {
@@ -401,7 +423,6 @@ export const ProfileView = () => {
           auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
           tokenMint: offer.mint,
           tokenAccount: offer.tokenAccount,
-          metadata: offer.metadata,
           bidPrice: offer.bidPrice,
           listPrice: offer.listingPrice,
         });
