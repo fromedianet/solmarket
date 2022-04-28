@@ -228,10 +228,7 @@ export const useMECollectionsAPI = () => {
     return {};
   }
 
-  async function getMEBiddingQuery(params: {
-    market: string;
-    params: string;
-  }) {
+  async function getMEBiddingQuery(params: { market: string; params: string }) {
     try {
       const result: any = await runOthersAPI(
         'post',

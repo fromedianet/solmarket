@@ -1,7 +1,6 @@
 import React from 'react';
 import { CopySpan, ENDPOINT_NAME, shortenAddress } from '@oyster/common';
 import { Link } from 'react-router-dom';
-import { Button } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
@@ -29,7 +28,13 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       title: '',
       dataIndex: 'image',
       key: 'image',
-      render: uri => <img src={uri} width={40} alt="image" />,
+      render: uri => (
+        <img
+          src={uri}
+          style={{ width: 32, height: 32, objectFit: 'cover' }}
+          alt="image"
+        />
+      ),
     },
     {
       title: 'NAME',
@@ -97,18 +102,10 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       render: price => price > 0 && `${price} SOL`,
     },
     {
-      title: 'BUYER',
-      dataIndex: 'buyer',
-      key: 'buyer',
-      render: text =>
-        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
-    },
-    {
-      title: 'SELLER',
-      dataIndex: 'seller',
-      key: 'seller',
-      render: text =>
-        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
+      title: 'MINT ADDRESS',
+      dataIndex: 'mint',
+      key: 'mint',
+      render: mint => <CopySpan value={shortenAddress(mint)} copyText={mint} />,
     },
   ];
 };
@@ -149,10 +146,10 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'bidPrice',
       key: 'status',
       render: price =>
-        price > props.balance ? (
-          <CloseCircleFilled style={{ color: '#eb2f96', fontSize: 24 }} />
-        ) : (
+        price <= props.balance ? (
           <CheckCircleFilled style={{ color: '#52c41a', fontSize: 24 }} />
+        ) : (
+          <CloseCircleFilled style={{ color: '#eb2f96', fontSize: 24 }} />
         ),
     },
     {
@@ -172,10 +169,25 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'mint',
       key: 'action',
       render: (text, record) =>
-        record.bidPrice < props.balance ? (
-          <Button onClick={() => props.onCancel(record)}>Cancel</Button>
+        record.bidPrice <= props.balance ? (
+          <button
+            className="offer-button"
+            onClick={() => props.onCancel(record)}
+          >
+            Cancel
+          </button>
         ) : (
-          <Button onClick={() => props.onDeposit()}>Deposit</Button>
+          <>
+            <button
+              className="offer-button"
+              onClick={() => props.onCancel(record)}
+            >
+              Cancel
+            </button>
+            <button className="offer-button" onClick={() => props.onDeposit()}>
+              Deposit
+            </button>
+          </>
         ),
     },
   ];
@@ -189,7 +201,11 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
       key: 'name',
       render: (text, record) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src={record.image} width={40} alt="image" />
+          <img
+            src={record.image}
+            style={{ width: 32, height: 32, objectFit: 'cover' }}
+            alt="image"
+          />
           <Link
             to={`/item-details/${record.mint}`}
             style={{ cursor: 'pointer', marginLeft: 16 }}
@@ -231,12 +247,12 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
       key: 'action',
       render: (text, record) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Button
-            style={{ marginLeft: 8, background: '#009999' }}
+          <button
+            className="offer-button"
             onClick={() => props.onAccept(record)}
           >
             Accept offer
-          </Button>
+          </button>
         </div>
       ),
     },

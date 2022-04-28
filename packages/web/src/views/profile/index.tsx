@@ -119,8 +119,7 @@ export const ProfileView = () => {
         setTransactions(res);
       });
 
-      loadOffersMade()
-        .then(res => setOffersMade(res));
+      loadOffersMade().then(res => setOffersMade(res));
 
       getOffersReceived(wallet.publicKey.toBase58())
         // @ts-ignore
