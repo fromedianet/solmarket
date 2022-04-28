@@ -265,12 +265,35 @@ export const useInstructionsAPI = () => {
   }
 
   /**
+   * Get instructions to list on MagicEden
+   *
+   * @param props
+   * @returns
+   */
+  async function listME(props: {
+    seller: string;
+    auctionHouseAddress: string;
+    tokenAccount: string;
+    tokenMint: string;
+    price: number;
+    expiry: number;
+  }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/instructions/listME',
+      JSON.stringify(props),
+    );
+    return result;
+  }
+
+  /**
    * Get instructions to cancelList on MagicEden
    *
    * @param props
    * @returns
    */
-   async function cancelListME(props: {
+  async function cancelListME(props: {
     seller: string;
     auctionHouseAddress: string;
     tokenMint: string;
@@ -314,7 +337,7 @@ export const useInstructionsAPI = () => {
    * @param props
    * @returns
    */
-   async function cancelBidME(props: {
+  async function cancelBidME(props: {
     buyer: string;
     auctionHouseAddress: string;
     tokenMint: string;
@@ -335,7 +358,7 @@ export const useInstructionsAPI = () => {
    * @param props
    * @returns
    */
-   async function depositME(props: {
+  async function depositME(props: {
     pubkey: string;
     auctionHouseAddress: string;
     amount: number;
@@ -355,7 +378,7 @@ export const useInstructionsAPI = () => {
    * @param props
    * @returns
    */
-   async function withdrawME(props: {
+  async function withdrawME(props: {
     pubkey: string;
     auctionHouseAddress: string;
     amount: number;
@@ -382,6 +405,7 @@ export const useInstructionsAPI = () => {
     withdrawFromFee,
     withdrawFromTreasury,
     buyNowME,
+    listME,
     cancelListME,
     placeBidME,
     cancelBidME,

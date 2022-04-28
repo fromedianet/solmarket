@@ -2,7 +2,6 @@ import {
   AUCTION_HOUSE_ID,
   ConnectButton,
   MetaplexModal,
-  notify,
   sendTransactionWithRetry,
   useConnection,
   useNativeAccount,
@@ -16,6 +15,7 @@ import { LAMPORTS_PER_SOL, Message, Transaction } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
 import { useSocket } from '../../contexts/socketProvider';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
+import { ME_AUCTION_HOUSE_ID } from '../../constants';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
@@ -24,8 +24,16 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const { socket } = useSocket();
   const { account } = useNativeAccount();
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
-  const { buyNow, list, cancelList, placeBid, buyNowME, placeBidME, cancelListME } =
-    useInstructionsAPI();
+  const {
+    buyNow,
+    list,
+    cancelList,
+    placeBid,
+    buyNowME,
+    placeBidME,
+    listME,
+    cancelListME,
+  } = useInstructionsAPI();
 
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
@@ -76,34 +84,52 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
 
   const onListNow = async values => {
     if (!wallet.publicKey) return;
-    if (props.nft.market) {
-      notify({
-        message: 'Commint soon!',
-        type: 'info',
-      });
-      return;
-    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        const result: any = await list({
-          seller: wallet.publicKey!.toBase58(),
-          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-          tokenMint: props.nft.mint,
-          price: values.price.number,
-        });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', { mint: props.nft.mint });
-              resolve('');
-              return;
+        if (props.nft.market) {
+          const result: any = await listME({
+            seller: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: ME_AUCTION_HOUSE_ID,
+            tokenAccount: props.nft.tokenAddress,
+            tokenMint: props.nft.mint,
+            price: values.price.number,
+            expiry: -1,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data);
+              if (!status['err']) {
+                setTimeout(() => {
+                  props.onRefresh();
+                }, 30000);
+                resolve('');
+                return;
+              }
+            }
+          }
+        } else {
+          const result: any = await list({
+            seller: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+            tokenMint: props.nft.mint,
+            price: values.price.number,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data);
+              if (!status['err']) {
+                socket.emit('syncAuctionHouse', { mint: props.nft.mint });
+                resolve('');
+                return;
+              }
             }
           }
         }
+
         reject();
       } catch (e) {
         reject(e);
@@ -115,9 +141,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Listing now...',
-        error: 'Listing rejected.',
-        success: 'Listing successed. NFT data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success: 'Success!. Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -152,7 +179,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                 if (!status['err']) {
                   setTimeout(() => {
                     props.onRefresh();
-                  }, 20000);
+                  }, 30000);
                   resolve('');
                   return;
                 }
@@ -178,7 +205,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             }
           }
         }
-        
+
         reject();
       } catch (e) {
         reject(e);
@@ -190,9 +217,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Cancel listing now...',
-        error: 'Cancel listing rejected.',
-        success: 'Cancel listing successed. NFT data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success: 'Success! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -228,7 +256,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                 if (!status['err']) {
                   setTimeout(() => {
                     props.onRefresh();
-                  }, 20000);
+                  }, 30000);
                   resolve('');
                   return;
                 }
@@ -267,9 +295,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Purchase now...',
-        error: 'Purchase rejected.',
-        success: 'Purchase successed. NFT data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success: 'Success!. Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -302,7 +331,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
                 if (!status['err']) {
                   setTimeout(() => {
                     props.onRefresh();
-                  }, 20000);
+                  }, 30000);
                   resolve('');
                   return;
                 }
@@ -342,9 +371,10 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Place bid now...',
-        error: 'Bid rejected.',
-        success: 'Bid successed. NFT data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success: 'Success!. Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -354,415 +384,6 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         pauseOnFocusLoss: false,
       },
     );
-  };
-
-  const test = async () => {
-    // list transaction
-    const data = Buffer.from([
-      1,
-      0,
-      6,
-      10,
-      0,
-      242,
-      50,
-      216,
-      41,
-      113,
-      116,
-      219,
-      187,
-      235,
-      159,
-      102,
-      25,
-      228,
-      22,
-      218,
-      103,
-      162,
-      254,
-      64,
-      126,
-      219,
-      145,
-      83,
-      249,
-      241,
-      145,
-      252,
-      50,
-      101,
-      25,
-      152,
-      96,
-      161,
-      106,
-      20,
-      65,
-      54,
-      46,
-      124,
-      125,
-      26,
-      88,
-      179,
-      114,
-      181,
-      236,
-      167,
-      152,
-      202,
-      65,
-      246,
-      14,
-      135,
-      115,
-      233,
-      40,
-      112,
-      226,
-      156,
-      1,
-      194,
-      12,
-      53,
-      123,
-      21,
-      101,
-      120,
-      70,
-      68,
-      137,
-      4,
-      26,
-      150,
-      92,
-      243,
-      193,
-      45,
-      39,
-      31,
-      101,
-      169,
-      70,
-      132,
-      187,
-      164,
-      103,
-      51,
-      81,
-      4,
-      173,
-      205,
-      136,
-      208,
-      224,
-      116,
-      0,
-      11,
-      227,
-      225,
-      235,
-      161,
-      122,
-      71,
-      63,
-      137,
-      176,
-      247,
-      232,
-      226,
-      73,
-      64,
-      242,
-      10,
-      235,
-      142,
-      188,
-      167,
-      26,
-      136,
-      253,
-      233,
-      93,
-      75,
-      131,
-      183,
-      26,
-      9,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      255,
-      154,
-      107,
-      30,
-      246,
-      129,
-      5,
-      75,
-      187,
-      144,
-      223,
-      211,
-      119,
-      126,
-      158,
-      160,
-      255,
-      64,
-      70,
-      244,
-      251,
-      105,
-      236,
-      116,
-      122,
-      138,
-      129,
-      240,
-      154,
-      81,
-      91,
-      43,
-      8,
-      175,
-      246,
-      228,
-      16,
-      89,
-      36,
-      102,
-      175,
-      155,
-      72,
-      107,
-      229,
-      118,
-      121,
-      242,
-      246,
-      139,
-      65,
-      205,
-      220,
-      49,
-      224,
-      32,
-      146,
-      119,
-      74,
-      143,
-      99,
-      98,
-      237,
-      19,
-      195,
-      27,
-      24,
-      204,
-      62,
-      20,
-      138,
-      10,
-      82,
-      147,
-      129,
-      137,
-      32,
-      237,
-      250,
-      237,
-      171,
-      57,
-      30,
-      73,
-      51,
-      108,
-      11,
-      116,
-      219,
-      102,
-      157,
-      16,
-      71,
-      3,
-      66,
-      75,
-      6,
-      221,
-      246,
-      225,
-      215,
-      101,
-      161,
-      147,
-      217,
-      203,
-      225,
-      70,
-      206,
-      235,
-      121,
-      172,
-      28,
-      180,
-      133,
-      237,
-      95,
-      91,
-      55,
-      145,
-      58,
-      140,
-      245,
-      133,
-      126,
-      255,
-      0,
-      169,
-      5,
-      33,
-      159,
-      137,
-      154,
-      129,
-      212,
-      255,
-      132,
-      251,
-      89,
-      61,
-      46,
-      223,
-      138,
-      144,
-      172,
-      27,
-      58,
-      179,
-      66,
-      88,
-      247,
-      223,
-      35,
-      62,
-      165,
-      3,
-      2,
-      177,
-      189,
-      46,
-      52,
-      174,
-      229,
-      2,
-      10,
-      88,
-      120,
-      35,
-      244,
-      73,
-      58,
-      161,
-      126,
-      94,
-      29,
-      49,
-      106,
-      108,
-      195,
-      6,
-      47,
-      149,
-      135,
-      116,
-      105,
-      226,
-      250,
-      201,
-      130,
-      214,
-      113,
-      27,
-      1,
-      9,
-      10,
-      0,
-      4,
-      1,
-      5,
-      6,
-      7,
-      2,
-      6,
-      8,
-      3,
-      32,
-      198,
-      198,
-      130,
-      203,
-      163,
-      95,
-      175,
-      75,
-      0,
-      232,
-      118,
-      72,
-      23,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-  ]);
-    await runInstructions(data);
   };
 
   async function runInstructions(data: Buffer) {
