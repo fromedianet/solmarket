@@ -1,13 +1,14 @@
 import {
   AUCTION_HOUSE_ID,
   ConnectButton,
+  formatAmount,
   MetaplexModal,
   sendTransactionWithRetry,
   useConnection,
   useNativeAccount,
 } from '@oyster/common';
 import React, { useEffect, useState } from 'react';
-import { Button, Row, Col, Form, Spin } from 'antd';
+import { Button, Row, Col, Form, Spin, Divider } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
@@ -20,7 +21,10 @@ import {
 import { PriceInput } from '../../components/PriceInput';
 import { useSocket } from '../../contexts/socketProvider';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
-import { meConnection, ME_AUCTION_HOUSE_ID } from '../../constants';
+import { MarketType, meConnection, ME_AUCTION_HOUSE_ID } from '../../constants';
+import { Link } from 'react-router-dom';
+import { showEscrow } from '../../actions/showEscrow';
+import { useExNftAPI } from '../../hooks/useExNftAPI';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
@@ -28,7 +32,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const connection = useConnection();
   const { socket } = useSocket();
   const { account } = useNativeAccount();
-  const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
+  const mainBalance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const {
     buyNow,
     list,
@@ -39,7 +43,9 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     listME,
     cancelListME,
   } = useInstructionsAPI();
+  const { getExEscrowBalance } = useExNftAPI();
 
+  const [biddingBalance, setBiddingBalance] = useState(0);
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
   const isOwner = props.nft.owner === wallet.publicKey?.toBase58();
@@ -70,6 +76,22 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     }
   }, [socket]);
 
+  useEffect(() => {
+    if (wallet.publicKey) {
+      if (!props.nft.market) {
+        showEscrow(connection, wallet.publicKey).then(val =>
+          setBiddingBalance(val),
+        );
+      } else {
+        getExEscrowBalance({
+          wallet: wallet.publicKey.toBase58(),
+          auctionHouse: ME_AUCTION_HOUSE_ID,
+          market: MarketType.MagicEden,
+        }).then(val => setBiddingBalance(val));
+      }
+    }
+  }, [props.nft, wallet]);
+
   const onChangeOffer = (value: number) => {
     let err = '';
     if (value < props.nft.price / 2) {
@@ -78,7 +100,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
       err = 'Price must be lower than listing price';
     }
 
-    if (value > balance) {
+    if (value > mainBalance) {
       setBalanceError('Not enough balance in the wallet');
     } else {
       setBalanceError('');
@@ -510,39 +532,123 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         )}
       </div>
       <MetaplexModal
-        title="Make an Offer"
+        className="make-offer-modal"
         visible={showOfferModal}
-        closable
         onCancel={() => setShowOfferModal(false)}
-        centered={true}
       >
         <div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              marginBottom: 16,
-            }}
-          >
-            <PriceInput
-              value={{ number: offerPrice }}
-              placeholder="Price"
-              addonAfter="SOL"
-              onChange={value => onChangeOffer(value.number!)}
-            />
-            {error && <span className="warning">{error}</span>}
-            {balanceError && <span className="warning">{balanceError}</span>}
+          <span className="header-text">Make an offer</span>
+          <div className="body-container">
+            <p className="description">
+              When you make an offer, the funds are kept in your bidding wallet
+              to allow you to make multiple offers using the same funds. To
+              view, deposit, or withdraw from your bidding wallet, please visit
+              the &apos;Offers Made&apos; page of your profile.
+            </p>
+            <button className="option-button">
+              <span>Fund the offer</span>
+              <span className="sub-title">
+                Transfer money from your main wallet to the bidding wallet
+                account.
+              </span>
+            </button>
+            <Row style={{ width: '100%', marginTop: 24, marginBottom: 24 }}>
+              <Col span={16}>
+                <PriceInput
+                  value={{ number: offerPrice }}
+                  placeholder="Price"
+                  addonAfter="SOL"
+                  onChange={value => onChangeOffer(value.number!)}
+                />
+                {error && <span className="warning">{error}</span>}
+                {balanceError && (
+                  <span className="warning">{balanceError}</span>
+                )}
+              </Col>
+              <Col span={7} style={{ marginLeft: 16 }}>
+                <Button
+                  className="button"
+                  onClick={() => {
+                    setShowOfferModal(false);
+                    onPlaceBid();
+                  }}
+                  disabled={error !== '' || balanceError !== ''}
+                >
+                  Make offer
+                </Button>
+              </Col>
+            </Row>
+            <span className="nft-name">{props.nft.name}</span>
+            <span className="nft-symbol">
+              {props.nft.symbol}
+              <img
+                src="/icons/check.svg"
+                style={{ width: 14, height: 14, marginLeft: 8 }}
+              />
+            </span>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label text-gray">Buy now price</span>
+              <span className="wallet-label text-gray">{`${parseFloat(
+                props.nft.price.toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Minimum offer (50%)</span>
+              <span className="wallet-label">{`${parseFloat(
+                (props.nft.price * 0.5).toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Main wallet balance</span>
+              <span className="wallet-label">{`${parseFloat(
+                mainBalance.toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Bidding wallet balance</span>
+              <span className="wallet-label">{`${parseFloat(
+                biddingBalance.toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label">
+                New main wallet balance{' '}
+                {offerPrice > 0 ? (
+                  <span style={{ color: '#ffaa00' }}>{` -${formatAmount(
+                    offerPrice,
+                  )} SOL`}</span>
+                ) : (
+                  ''
+                )}
+              </span>
+              <span className="wallet-label">{`${parseFloat(
+                (mainBalance - offerPrice).toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">
+                New bidding wallet balance{' '}
+                {offerPrice > 0 ? (
+                  <span style={{ color: '#00db80' }}>{` +${formatAmount(
+                    offerPrice,
+                  )} SOL`}</span>
+                ) : (
+                  ''
+                )}
+              </span>
+              <span className="wallet-label">{`${parseFloat(
+                (biddingBalance + offerPrice).toFixed(5),
+              )} SOL`}</span>
+            </div>
+            <span className="bottom-label">
+              By selecting &quot;Deposit&quot;, you agree to{' '}
+              <Link to="" style={{ fontWeight: 600 }}>
+                Terms of Service
+              </Link>
+            </span>
           </div>
-          <Button
-            className="button"
-            onClick={() => {
-              setShowOfferModal(false);
-              onPlaceBid();
-            }}
-            disabled={error !== '' || balanceError !== ''}
-          >
-            Make offer
-          </Button>
         </div>
       </MetaplexModal>
     </div>
