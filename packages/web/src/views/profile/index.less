@@ -406,3 +406,43 @@
     }
   }
 }
+
+.group-item-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .collection-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid @border-primary-color;
+    margin-top: 24px;
+    margin-bottom: 8px;
+
+    .icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .link {
+      font-size: 16px;
+      color: @text-primary-color;
+      margin-right: 8px;
+    }
+
+    .tooltip {
+      background: @bg-secondary-color;
+      padding: 4px 8px;
+      margin-right: 8px;
+      font-size: 14px;
+      line-height: 20px;
+      color: @text-secondary-color;
+    }
+  }
+}
