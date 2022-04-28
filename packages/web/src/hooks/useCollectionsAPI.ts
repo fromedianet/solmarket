@@ -297,12 +297,32 @@ export const useCollectionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get collection stats by symbol
+   * @param symbol
+   * @returns
+   */
   async function getCollectionStatsBySymbol(symbol: string) {
     const result = await runAPI(
       false,
       'post',
       '/collections/getCollectionStatsBySymbol',
       JSON.stringify({ symbol }),
+    );
+    return result;
+  }
+
+  /**
+   * Get multi collection escrow stats by symbols
+   * @param symbols
+   * @returns
+   */
+  async function getMultiCollectionEscrowStats(symbols: string[]) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/collections/getMultiCollectionEscrowStats',
+      JSON.stringify({ symbols }),
     );
     return result;
   }
@@ -325,5 +345,6 @@ export const useCollectionsAPI = () => {
     getCollectionBySymbol,
     getCollectionStatsBySymbol,
     updateCandyMachineStatus,
+    getMultiCollectionEscrowStats,
   };
 };

@@ -5,6 +5,11 @@ import { ApiUtils } from '../utils/apiUtils';
 export const useMECollectionsAPI = () => {
   const { runOthersAPI } = ApiUtils();
 
+  /**
+   * Get new collections
+   * @param params
+   * @returns
+   */
   async function getNewCollections(params: { market: string; more?: boolean }) {
     try {
       const result: any = await runOthersAPI(
@@ -21,6 +26,11 @@ export const useMECollectionsAPI = () => {
     return [];
   }
 
+  /**
+   * Get popular collections
+   * @param params
+   * @returns
+   */
   async function getPopularCollections(params: {
     market: string;
     timeRange: string;
@@ -41,6 +51,11 @@ export const useMECollectionsAPI = () => {
     return [];
   }
 
+  /**
+   * Get all collections
+   * @param market
+   * @returns
+   */
   async function getAllCollections(market: string) {
     try {
       const result: any = await runOthersAPI('get', `/excollections/${market}`);
@@ -53,6 +68,12 @@ export const useMECollectionsAPI = () => {
     return [];
   }
 
+  /**
+   * get collection by symbol
+   * @param market
+   * @param symbol
+   * @returns
+   */
   async function getMECollectionBySymbol(market: string, symbol: string) {
     try {
       const result = await runOthersAPI(
@@ -66,6 +87,11 @@ export const useMECollectionsAPI = () => {
     return {};
   }
 
+  /**
+   * Get listedNFTs by collection
+   * @param param
+   * @returns
+   */
   async function getMEListedNFTsByCollection(param: QUERIES) {
     const queryBody = getParamsForMagicEden(param);
     try {
@@ -147,6 +173,11 @@ export const useMECollectionsAPI = () => {
     return result;
   }
 
+  /**
+   * Get transactions by symbol
+   * @param param
+   * @returns
+   */
   async function getMETransactionsBySymbol(param: QUERIES) {
     const query = {
       $match: { collection_symbol: param.symbol },
@@ -173,6 +204,30 @@ export const useMECollectionsAPI = () => {
     return [];
   }
 
+  /**
+   * Get multi collection escrow stats by symbols
+   * @param params
+   * @returns
+   */
+  async function getMultiCollectionEscrowStats(params: {
+    market: string;
+    symbols: string[];
+  }) {
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/getMultiCollectionEscrowStats',
+        JSON.stringify(params),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  }
+
   return {
     getAllCollections,
     getPopularCollections,
@@ -180,5 +235,6 @@ export const useMECollectionsAPI = () => {
     getMECollectionBySymbol,
     getMEListedNFTsByCollection,
     getMETransactionsBySymbol,
+    getMultiCollectionEscrowStats,
   };
 };
