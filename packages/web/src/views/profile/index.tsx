@@ -27,10 +27,7 @@ import { useAuthToken } from '../../contexts/authProvider';
 import { useAuthAPI } from '../../hooks/useAuthAPI';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
-import {
-  NFT,
-  Transaction as TransactionModel,
-} from '../../models/exCollection';
+import { Transaction as TransactionModel } from '../../models/exCollection';
 import { ActivityColumns, OffersReceivedColumns } from './tableColumns';
 import { showEscrow } from '../../actions/showEscrow';
 import { Offer } from '../../models/offer';
@@ -39,10 +36,12 @@ import { useSocket } from '../../contexts/socketProvider';
 import { Message, Transaction } from '@solana/web3.js';
 import { useExNftAPI } from '../../hooks/useExNftAPI';
 import { MarketType } from '../../constants';
-import { MyItems } from './components/myItems';
-import { ListedItems } from './components/listedItems';
 import { OffersMade } from './components/offersMade';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
+import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { useMECollectionsAPI } from '../../hooks/useMECollectionsAPI';
+import { groupBy } from '../../utils/utils';
+import { GroupItem } from './components/groupItem';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -51,13 +50,9 @@ export const ProfileView = () => {
   const wallet = useWallet();
   const { socket } = useSocket();
   const { authToken, user } = useAuthToken();
-  const { authentication, updateUser } = useAuthAPI();
-  const { getNFTsByWallet } = useNFTsAPI();
-  const { cancelBid, cancelBidAndWithdraw, acceptOffer, deposit, withdraw } =
-    useInstructionsAPI();
   const [visible, setVisible] = useState(false);
-  const [myItems, setMyItems] = useState<NFT[]>([]);
-  const [listedItems, setListedItems] = useState<NFT[]>([]);
+  const [myItems, setMyItems] = useState<any[]>([]);
+  const [listedItems, setListedItems] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<TransactionModel[]>([]);
   const [offersMade, setOffersMade] = useState<Offer[]>([]);
   const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
@@ -71,6 +66,10 @@ export const ProfileView = () => {
   const connection = useConnection();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
+  const { authentication, updateUser } = useAuthAPI();
+  const { getNFTsByWallet } = useNFTsAPI();
+  const { cancelBid, cancelBidAndWithdraw, acceptOffer, deposit, withdraw } =
+    useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const {
@@ -79,6 +78,8 @@ export const ProfileView = () => {
     getExGlobalActivities,
     getExEscrowBalance,
   } = useExNftAPI();
+  const { getMultiCollectionEscrowStats } = useCollectionsAPI();
+  const { getMEMultiCollectionEscrowStats } = useMECollectionsAPI();
 
   const activityColumns = ActivityColumns(network);
 
@@ -137,14 +138,6 @@ export const ProfileView = () => {
   }, [wallet.publicKey, refresh]);
 
   useEffect(() => {
-    let total = 0;
-    listedItems.forEach(item => {
-      total += item.price;
-    });
-    setTotalFloorPrice(total);
-  }, [listedItems]);
-
-  useEffect(() => {
     if (user) {
       form.setFieldsValue({
         displayName: user.displayName,
@@ -156,11 +149,18 @@ export const ProfileView = () => {
   }, [user]);
 
   async function loadNFTs() {
-    let items1: any[] = [];
-    let items2: any[] = [];
+    const result1: any[] = [];
+    const result2: any[] = [];
+    let total = 0;
     if (wallet.publicKey) {
+      let items1: any[] = [];
+      let items2: any[] = [];
+      let symbols1: string[] = [];
+      let symbols2: string[] = [];
       const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
       if ('data' in res) {
+        symbols1 = res['data'].map(k => k.symbol);
+        symbols1 = [...new Set(symbols1)];
         items1 = res['data'].filter(k => k.price === 0);
         items2 = res['data'].filter(k => k.price > 0);
       }
@@ -169,12 +169,33 @@ export const ProfileView = () => {
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
+      symbols2 = exRes1.map(k => k.symbol);
       items1 = items1.concat(exRes1);
       const exRes2 = await getExNFTsByEscrowOwner(
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
+      symbols2 = symbols2.concat(exRes2.map(k => k.symbol));
+      symbols2 = [...new Set(symbols2)];
       items2 = items2.concat(exRes2);
+
+      let tempCols: any = {};
+      if (symbols1.length > 0) {
+        const colRes: any = await getMultiCollectionEscrowStats(symbols1);
+        if ('data' in colRes) {
+          tempCols = colRes['data'];
+        }
+      }
+      if (symbols2.length > 0) {
+        const colRes = await getMEMultiCollectionEscrowStats({
+          market: MarketType.MagicEden,
+          symbols: symbols2,
+        });
+        tempCols = {
+          ...tempCols,
+          ...colRes,
+        };
+      }
 
       items1 = items1.map(item => ({
         ...item,
@@ -187,11 +208,64 @@ export const ProfileView = () => {
         symbol: item.symbol || 'undefined',
         collectionName: item.collectionName || 'undefined',
       }));
-    }
 
+      const group1 = groupBy(items1, k => k.symbol);
+      const group2 = groupBy(items2, k => k.symbol);
+
+      group1.forEach((val, key) => {
+        let col: any = {};
+        if (key in tempCols) {
+          col = tempCols[key];
+          col['items'] = val.length;
+          col['totalFloorPrice'] = col['floorPrice'] * val.length;
+        } else {
+          col = {
+            symbol: val[0].symbol,
+            name: val[0].collectionName,
+            image: val[0].image,
+            items: val.length,
+            floorPrice: 0,
+            totalFloorPrice: 0,
+          };
+        }
+
+        total += col['totalFloorPrice'];
+
+        result1.push({
+          collection: col,
+          nfts: val,
+        });
+      });
+
+      group2.forEach((val, key) => {
+        let col: any = {};
+
+        if (key in tempCols) {
+          col = tempCols[key];
+          col['items'] = val.length;
+          col['totalFloorPrice'] = col['floorPrice'] * val.length;
+        } else {
+          col = {
+            symbol: val[0].symbol,
+            name: val[0].collectionName,
+            image: val[0].image,
+            items: val.length,
+            floorPrice: 0,
+            totalFloorPrice: 0,
+          };
+        }
+
+        total += col['totalFloorPrice'];
+        result2.push({
+          collection: col,
+          nfts: val,
+        });
+      });
+    }
+    setTotalFloorPrice(total);
     return {
-      myItems: items1,
-      listedItems: items2,
+      myItems: result1,
+      listedItems: result2,
     };
   }
 
@@ -621,10 +695,18 @@ export const ProfileView = () => {
           ) : (
             <Tabs defaultActiveKey="2" className="profile-tabs">
               <TabPane tab="My items" key="1">
-                <MyItems items={myItems} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {myItems.map((item, index) => (
+                    <GroupItem key={index} item={item} />
+                  ))}
+                </div>
               </TabPane>
               <TabPane tab="Listed items" key="2">
-                <ListedItems items={listedItems} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {listedItems.map((item, index) => (
+                    <GroupItem key={index} item={item} />
+                  ))}
+                </div>
               </TabPane>
               <TabPane tab="Offers made" key="3">
                 <OffersMade
