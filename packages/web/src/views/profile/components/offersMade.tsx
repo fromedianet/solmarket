@@ -249,39 +249,51 @@ export const OffersMade = ({
         </div>
       </MetaplexModal>
       <MetaplexModal
-        className='cancel-modal'
+        className="cancel-modal"
         visible={cancelVisible}
         onCancel={() => setCancelVisible(false)}
       >
         <div>
-          <span className='header-text'>Cancel the offer</span>
+          <span className="header-text">Cancel the offer</span>
           <div className="body-container">
             <span className="description">
-            When your offer is canceled, the funds will remain in your bidding wallet until you withdraw them. This is to allow your other bids to remain open and prevent them from becoming invalid. When you&apos;re ready to withdraw the funds from your bidding wallet, you can do so from the &apos;Offers Made&apos; page of your profile.
+              When your offer is canceled, the funds will remain in your bidding
+              wallet until you withdraw them. This is to allow your other bids
+              to remain open and prevent them from becoming invalid. When
+              you&apos;re ready to withdraw the funds from your bidding wallet,
+              you can do so from the &apos;Offers Made&apos; page of your
+              profile.
             </span>
-            <Button className='button' onClick={() => {
-              setCancelVisible(false);
-              onCancelBid(selectedOffer!);
-            }}>Cancel offer</Button>
-            <span className="nft-name">{selectedOffer!.name}</span>
+            <Button
+              className="button"
+              onClick={() => {
+                setCancelVisible(false);
+                onCancelBid(selectedOffer!);
+              }}
+            >
+              Cancel offer
+            </Button>
+            <span className="nft-name" style={{ marginTop: 24 }}>
+              {selectedOffer?.name}
+            </span>
             <span className="nft-symbol">
-              {selectedOffer!.symbol}
+              {selectedOffer?.symbol}
               <img
                 src="/icons/check.svg"
                 style={{ width: 14, height: 14, marginLeft: 8 }}
               />
             </span>
-            <Divider/>
+            <Divider />
             <div className="wallet-info">
               <span className="wallet-label text-gray">Buy now price</span>
               <span className="wallet-label text-gray">{`${parseFloat(
-                selectedOffer!.listingPrice.toFixed(5),
+                (selectedOffer?.listingPrice || 0).toFixed(5),
               )} SOL`}</span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Your offer</span>
               <span className="wallet-label">{`${parseFloat(
-                selectedOffer!.bidPrice.toFixed(5),
+                (selectedOffer?.bidPrice || 0).toFixed(5),
               )} SOL`}</span>
             </div>
             <span className="bottom-label">
