@@ -138,7 +138,9 @@ export const OffersMadeColumns = (props: {
           >
             {record.name}
           </Link>
-          {record.market && <span style={{ color: '#e93a88', marginLeft: 8 }}>(ME)</span>}
+          {record.market && (
+            <span style={{ color: '#e93a88', marginLeft: 8 }}>(ME)</span>
+          )}
         </div>
       ),
     },
@@ -213,7 +215,9 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
           >
             {record.name}
           </Link>
-          {record.market && <span style={{ color: '#e93a88', marginLeft: 8 }}>(ME)</span>}
+          {record.market && (
+            <span style={{ color: '#e93a88', marginLeft: 8 }}>(ME)</span>
+          )}
         </div>
       ),
     },

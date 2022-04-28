@@ -667,10 +667,28 @@ export const ProfileView = () => {
                 } SOL`}
               />
             </Col>
+            <Col span={6} style={{ alignSelf: 'center' }}>
+              <button
+                onClick={() => setRefresh(Date.now())}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  marginLeft: 24,
+                }}
+                disabled={loading}
+              >
+                {loading ? (
+                  <Spin />
+                ) : (
+                  <img
+                    src="/icons/refresh.svg"
+                    style={{ width: 24, height: 24 }}
+                  />
+                )}
+              </button>
+            </Col>
           </Row>
-          {loading ? (
-            <Spin size="large" />
-          ) : (
+          {!loading && (
             <Tabs defaultActiveKey="2" className="profile-tabs">
               <TabPane tab="My items" key="1">
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
