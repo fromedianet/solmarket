@@ -11,11 +11,16 @@ import { Button, Row, Col, Form, Spin } from 'antd';
 import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { toast } from 'react-toastify';
-import { LAMPORTS_PER_SOL, Message, Transaction } from '@solana/web3.js';
+import {
+  Connection,
+  LAMPORTS_PER_SOL,
+  Message,
+  Transaction,
+} from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
 import { useSocket } from '../../contexts/socketProvider';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
-import { ME_AUCTION_HOUSE_ID } from '../../constants';
+import { meConnection, ME_AUCTION_HOUSE_ID } from '../../constants';
 
 export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
   const [form] = Form.useForm();
@@ -100,7 +105,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           if ('data' in result) {
             const data = result['data']['data'];
             if (data) {
-              const status = await runInstructions(data);
+              const status = await runInstructions(data, meConnection);
               if (!status['err']) {
                 setTimeout(() => {
                   props.onRefresh();
@@ -120,7 +125,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           if ('data' in result) {
             const data = result['data']['data'];
             if (data) {
-              const status = await runInstructions(data);
+              const status = await runInstructions(data, connection);
               if (!status['err']) {
                 socket.emit('syncAuctionHouse', { mint: props.nft.mint });
                 resolve('');
@@ -175,7 +180,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             if ('data' in result) {
               const data = result['data']['data'];
               if (data) {
-                const status = await runInstructions(data);
+                const status = await runInstructions(data, meConnection);
                 if (!status['err']) {
                   setTimeout(() => {
                     props.onRefresh();
@@ -196,7 +201,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           if ('data' in result) {
             const data = result['data']['data'];
             if (data) {
-              const status = await runInstructions(data);
+              const status = await runInstructions(data, connection);
               if (!status['err']) {
                 socket.emit('syncAuctionHouse', { mint: props.nft.mint });
                 resolve('');
@@ -252,7 +257,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             if ('data' in result) {
               const data = result['data']['data'];
               if (data) {
-                const status = await runInstructions(data);
+                const status = await runInstructions(data, meConnection);
                 if (!status['err']) {
                   setTimeout(() => {
                     props.onRefresh();
@@ -274,7 +279,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           if ('data' in result) {
             const data = result['data']['data'];
             if (data) {
-              const status = await runInstructions(data);
+              const status = await runInstructions(data, connection);
               if (!status['err']) {
                 socket.emit('syncAuctionHouse', { mint: props.nft.mint });
                 resolve('');
@@ -327,7 +332,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             if ('data' in result) {
               const data = result['data']['data'];
               if (data) {
-                const status = await runInstructions(data);
+                const status = await runInstructions(data, meConnection);
                 if (!status['err']) {
                   setTimeout(() => {
                     props.onRefresh();
@@ -350,7 +355,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
           if ('data' in result) {
             const data = result['data']['data'];
             if (data) {
-              const status = await runInstructions(data);
+              const status = await runInstructions(data, connection);
               if (!status['err']) {
                 socket.emit('syncAuctionHouse', { mint: props.nft.mint });
                 resolve('');
@@ -386,20 +391,20 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
     );
   };
 
-  async function runInstructions(data: Buffer) {
+  async function runInstructions(data: Buffer, _connection: Connection) {
     let status: any = { err: true };
     try {
       const transaction = Transaction.populate(Message.from(data));
       console.log('---- transaction ---', transaction);
       const { txid } = await sendTransactionWithRetry(
-        connection,
+        _connection,
         wallet,
         transaction.instructions,
         [],
       );
 
       if (txid) {
-        status = await connection.confirmTransaction(txid, 'confirmed');
+        status = await _connection.confirmTransaction(txid, 'confirmed');
       }
     } catch (e) {
       console.error('----- runInstructions error ------------', e);

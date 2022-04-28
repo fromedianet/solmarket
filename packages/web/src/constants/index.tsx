@@ -1,4 +1,5 @@
 import { WRAPPED_SOL_MINT } from '@oyster/common';
+import { clusterApiUrl, Connection } from '@solana/web3.js';
 
 export * from './labels';
 export * from './apis';
@@ -17,3 +18,8 @@ export enum MarketType {
   DigitalEyes = 'digital_eyes',
   AlphaArt = 'alpha_art',
 }
+
+export const meConnection = new Connection(
+  clusterApiUrl('mainnet-beta'),
+  'finalized',
+);
