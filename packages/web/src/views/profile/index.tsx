@@ -150,12 +150,15 @@ export const ProfileView = () => {
     if (wallet.publicKey) {
       let items1: any[] = [];
       let items2: any[] = [];
-      let symbols1: string[] = [];
-      let symbols2: string[] = [];
+      const symbols1: string[] = [];
+      const symbols2: string[] = [];
       const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
       if ('data' in res) {
-        symbols1 = res['data'].map(k => k.symbol);
-        symbols1 = [...new Set(symbols1)];
+        res['data'].forEach(k => {
+          if (k && !symbols1.includes(k)) {
+            symbols1.push(k);
+          }
+        });
         items1 = res['data'].filter(k => k.price === 0);
         items2 = res['data'].filter(k => k.price > 0);
       }
@@ -164,15 +167,19 @@ export const ProfileView = () => {
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
-      symbols2 = exRes1.map(k => k.symbol);
       items1 = items1.concat(exRes1);
       const exRes2 = await getExNFTsByEscrowOwner(
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
-      symbols2 = symbols2.concat(exRes2.map(k => k.symbol));
-      symbols2 = [...new Set(symbols2)];
       items2 = items2.concat(exRes2);
+
+      const exTemp = exRes1.concat(exRes2);
+      exTemp.forEach(k => {
+        if (k.symbol && !symbols2.includes(k.symbol)) {
+          symbols2.push(k.symbol);
+        }
+      });
 
       let tempCols: any = {};
       if (symbols1.length > 0) {
