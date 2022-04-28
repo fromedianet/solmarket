@@ -126,9 +126,17 @@ export const OffersMadeColumns = (props: {
       key: 'name',
       render: (text, record) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src={record.image} width={40} alt="image" />
+          <img
+            src={record.image}
+            style={{ width: 32, height: 32, objectFit: 'cover' }}
+            alt="image"
+          />
           <Link
-            to={`/item-details/${record.mint}`}
+            to={
+              record.market
+                ? `/item-details/${record.mint}?market=${record.market}`
+                : `/item-details/${record.mint}`
+            }
             style={{ cursor: 'pointer', marginLeft: 16 }}
           >
             {record.name}
