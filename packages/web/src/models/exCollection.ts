@@ -60,6 +60,7 @@ export type NFT = {
   price: number;
   collectionName: string;
   bookKeeper?: string | null;
+  escrowPubkey?: string | null;
   txType?: string | null;
   market?: string | null;
   v2?: V2 | null;
