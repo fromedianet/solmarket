@@ -17,6 +17,7 @@ import { OffersMadeColumns } from '../tableColumns';
 import { Offer } from '../../../models/offer';
 import { PriceInput } from '../../../components/PriceInput';
 import { Link } from 'react-router-dom';
+import { MarketType } from '../../../constants';
 
 export const OffersMade = ({
   offers,
@@ -34,8 +35,8 @@ export const OffersMade = ({
   loadingBalance: boolean;
   callShowEscrow: () => void;
   onCancelBid: (a) => void;
-  onDeposit: (a) => void;
-  onWithdraw: (a) => void;
+  onDeposit: (a, b) => void;
+  onWithdraw: (a, b) => void;
 }) => {
   const [form] = Form.useForm();
   const { account } = useNativeAccount();
@@ -43,6 +44,7 @@ export const OffersMade = ({
   const [cancelVisible, setCancelVisible] = useState(false);
   const [depositVisible, setDepositVisible] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer>();
+  const [selectedMarket, setSelectedMarket] = useState<string | undefined>();
   const [depositValue, setDepositValue] = useState(0);
   const [offersColumns, setOffersColumns] = useState<any>();
 
@@ -54,10 +56,29 @@ export const OffersMade = ({
         setSelectedOffer(data);
         setCancelVisible(true);
       },
-      onDeposit: () => setDepositVisible(true),
+      onDeposit: (data: Offer) => {
+        let val = 0;
+        if (data.market) {
+          val = data.bidPrice - exBalance;
+        } else {
+          val = data.bidPrice - balance;
+        }
+        setDepositValue(val);
+        setSelectedMarket(data.market);
+        form.setFieldsValue({
+          price: { number: val },
+        });
+        setDepositVisible(true);
+      },
     });
     setOffersColumns(columns);
   }, [balance, exBalance, loadingBalance]);
+
+  const onFinish = values => {
+    const val = values.price.number;
+    setDepositVisible(false);
+    onDeposit(val, selectedOffer);
+  };
 
   const menu = (
     <Menu
@@ -66,23 +87,50 @@ export const OffersMade = ({
           label: 'Deposit from main wallet',
           key: '0',
           disabled: mainBalance === 0,
-          onClick: () => setDepositVisible(true),
+          onClick: () => {
+            setSelectedMarket(undefined);
+            setDepositValue(0);
+            form.setFieldsValue({
+              price: { number: 0 },
+            });
+            setDepositVisible(true);
+          },
         },
         {
           label: 'Withdraw all to main wallet',
           key: '1',
           disabled: balance === 0,
-          onClick: () => onWithdraw(balance),
+          onClick: () => onWithdraw(balance, undefined),
         },
       ]}
     />
   );
 
-  const onFinish = values => {
-    const val = values.price.number;
-    setDepositVisible(false);
-    onDeposit(val);
-  };
+  const exMenu = (
+    <Menu
+      items={[
+        {
+          label: 'Deposit from main wallet (ME)',
+          key: '0',
+          disabled: mainBalance === 0,
+          onClick: () => {
+            setSelectedMarket(MarketType.MagicEden);
+            setDepositValue(0);
+            form.setFieldsValue({
+              price: { number: 0 },
+            });
+            setDepositVisible(true);
+          },
+        },
+        {
+          label: 'Withdraw all to main wallet (ME)',
+          key: '1',
+          disabled: exBalance === 0,
+          onClick: () => onWithdraw(balance, MarketType.MagicEden),
+        },
+      ]}
+    />
+  );
 
   const checkPrice = (_: any, value: { number: number }) => {
     if (value && value.number > 0) {
@@ -114,7 +162,7 @@ export const OffersMade = ({
           </div>
           <Dropdown overlay={menu} trigger={['click']}>
             <a onClick={e => e.preventDefault()}>
-              <MoreOutlined style={{ color: 'white', fontSize: 32 }} />
+              <MoreOutlined style={{ color: 'white', fontSize: 24 }} />
             </a>
           </Dropdown>
         </div>
@@ -130,6 +178,11 @@ export const OffersMade = ({
               true,
             )} ◎`}</span>
           </div>
+          <Dropdown overlay={exMenu} trigger={['click']}>
+            <a onClick={e => e.preventDefault()}>
+              <MoreOutlined style={{ color: 'white', fontSize: 24 }} />
+            </a>
+          </Dropdown>
         </div>
         <div className="wallet-content">
           <div className="wallet-icon">
@@ -170,7 +223,9 @@ export const OffersMade = ({
         onCancel={() => setDepositVisible(false)}
       >
         <div>
-          <span className="header-text">Deposit</span>
+          <span className="header-text">
+            {selectedMarket ? 'Deposit (ME)' : 'Deposit'}
+          </span>
           <div className="body-container">
             <span className="description">
               You&apos;re about to deposit SOL from your main wallet into the
@@ -188,7 +243,11 @@ export const OffersMade = ({
                 </Col>
                 <Col span={6}>
                   <Form.Item>
-                    <Button className="button" htmlType="submit">
+                    <Button
+                      className="button"
+                      htmlType="submit"
+                      disabled={depositValue === 0}
+                    >
                       Deposit
                     </Button>
                   </Form.Item>
@@ -205,7 +264,7 @@ export const OffersMade = ({
             <div className="wallet-info">
               <span className="wallet-label">Bidding wallet balance</span>
               <span className="wallet-label">{`${parseFloat(
-                balance.toFixed(5),
+                (selectedMarket ? exBalance : balance).toFixed(5),
               )} SOL`}</span>
             </div>
             <Divider />
@@ -236,7 +295,9 @@ export const OffersMade = ({
                 )}
               </span>
               <span className="wallet-label">{`${parseFloat(
-                (balance + depositValue).toFixed(5),
+                ((selectedMarket ? exBalance : balance) + depositValue).toFixed(
+                  5,
+                ),
               )} SOL`}</span>
             </div>
             <span className="bottom-label">
@@ -254,7 +315,11 @@ export const OffersMade = ({
         onCancel={() => setCancelVisible(false)}
       >
         <div>
-          <span className="header-text">Cancel the offer</span>
+          <span className="header-text">
+            {selectedOffer?.market
+              ? 'Cancel the offer (ME)'
+              : 'Cancel the offer'}
+          </span>
           <div className="body-container">
             <span className="description">
               When your offer is canceled, the funds will remain in your bidding

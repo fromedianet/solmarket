@@ -128,7 +128,7 @@ export const OffersMadeColumns = (props: {
   balance: number;
   exBalance: number;
   onCancel: (p) => void;
-  onDeposit: () => void;
+  onDeposit: (b) => void;
 }) => {
   return [
     {
@@ -167,8 +167,8 @@ export const OffersMadeColumns = (props: {
       title: 'Status',
       dataIndex: 'bidPrice',
       key: 'bidPrice',
-      render: price =>
-        price <= props.balance ? (
+      render: (text, record) =>
+        record.bidPrice <= (record.market ? props.exBalance : props.balance) ? (
           <span>
             <CheckCircleFilled
               style={{ color: '#52c41a', fontSize: 20, marginRight: 8 }}
@@ -188,7 +188,22 @@ export const OffersMadeColumns = (props: {
       title: 'Your offer price',
       dataIndex: 'bidPrice',
       key: 'bidPrice',
-      render: price => `${price} SOL`,
+      render: (text, record) =>
+        record.bidPrice <= (record.market ? props.exBalance : props.balance) ? (
+          <span>{`${record.bidPrice} SOL`}</span>
+        ) : (
+          <>
+            <span
+              style={{ color: '#ffffff', fontSize: 14 }}
+            >{`${record.bidPrice} SOL`}</span>
+            <span
+              style={{ color: '#ffaa00', fontSize: 12, marginLeft: 8 }}
+            >{`- ${
+              record.bidPrice -
+              (record.market ? props.exBalance : props.balance)
+            } SOL`}</span>
+          </>
+        ),
     },
     {
       title: 'Current price',
@@ -201,7 +216,7 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'mint',
       key: 'mint',
       render: (text, record) =>
-        record.bidPrice <= props.balance ? (
+        record.bidPrice <= (record.market ? props.exBalance : props.balance) ? (
           <button
             className="offer-button"
             onClick={() => props.onCancel(record)}
@@ -216,8 +231,11 @@ export const OffersMadeColumns = (props: {
             >
               Cancel
             </button>
-            <button className="offer-button" onClick={() => props.onDeposit()}>
-              Fund
+            <button
+              className="offer-button"
+              onClick={() => props.onDeposit(record)}
+            >
+              Deposit
             </button>
           </>
         ),

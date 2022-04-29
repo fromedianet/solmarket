@@ -497,7 +497,7 @@ export const ProfileView = () => {
     );
   };
 
-  const onDeposit = (amount: number) => {
+  const onDeposit = (amount: number, market: string | undefined) => {
     if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
@@ -543,7 +543,7 @@ export const ProfileView = () => {
     );
   };
 
-  const onWithdraw = (amount: number) => {
+  const onWithdraw = (amount: number, market: string | undefined) => {
     if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
