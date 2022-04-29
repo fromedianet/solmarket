@@ -171,7 +171,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         pending:
           'After wallet approval, your transaction will be finished in a few seconds',
         error: 'Something wrong. Please refresh the page and try again.',
-        success: 'Success!. Your data will be updated in a minute',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -247,7 +248,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         pending:
           'After wallet approval, your transaction will be finished in a few seconds',
         error: 'Something wrong. Please refresh the page and try again.',
-        success: 'Success! Your data will be updated in a minute',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -325,7 +327,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         pending:
           'After wallet approval, your transaction will be finished in a few seconds',
         error: 'Something wrong. Please refresh the page and try again.',
-        success: 'Success!. Your data will be updated in a minute',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -401,7 +404,8 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         pending:
           'After wallet approval, your transaction will be finished in a few seconds',
         error: 'Something wrong. Please refresh the page and try again.',
-        success: 'Success!. Your data will be updated in a minute',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -643,7 +647,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
               )} SOL`}</span>
             </div>
             <span className="bottom-label">
-              By selecting &quot;Deposit&quot;, you agree to{' '}
+              By selecting &quot;Make offer&quot;, you agree to{' '}
               <Link to="" style={{ fontWeight: 600 }}>
                 Terms of Service
               </Link>

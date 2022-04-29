@@ -17,6 +17,7 @@ import { OffersMadeColumns } from '../tableColumns';
 import { Offer } from '../../../models/offer';
 import { PriceInput } from '../../../components/PriceInput';
 import { Link } from 'react-router-dom';
+import { MarketType } from '../../../constants';
 
 export const OffersMade = ({
   offers,
@@ -25,7 +26,6 @@ export const OffersMade = ({
   loadingBalance,
   callShowEscrow,
   onCancelBid,
-  onCancelBidAndWithdraw,
   onDeposit,
   onWithdraw,
 }: {
@@ -35,16 +35,17 @@ export const OffersMade = ({
   loadingBalance: boolean;
   callShowEscrow: () => void;
   onCancelBid: (a) => void;
-  onCancelBidAndWithdraw: (a) => void;
-  onDeposit: (a) => void;
-  onWithdraw: (a) => void;
+  onDeposit: (a, b) => void;
+  onWithdraw: (a, b) => void;
 }) => {
   const [form] = Form.useForm();
   const { account } = useNativeAccount();
   const mainBalance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const [cancelVisible, setCancelVisible] = useState(false);
   const [depositVisible, setDepositVisible] = useState(false);
+  const [withdrawVisible, setWithdrawVisible] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer>();
+  const [selectedMarket, setSelectedMarket] = useState<string | undefined>();
   const [depositValue, setDepositValue] = useState(0);
   const [offersColumns, setOffersColumns] = useState<any>();
 
@@ -56,10 +57,29 @@ export const OffersMade = ({
         setSelectedOffer(data);
         setCancelVisible(true);
       },
-      onDeposit: () => setDepositVisible(true),
+      onDeposit: (data: Offer) => {
+        let val = 0;
+        if (data.market) {
+          val = data.bidPrice - exBalance;
+        } else {
+          val = data.bidPrice - balance;
+        }
+        setDepositValue(val);
+        setSelectedMarket(data.market);
+        form.setFieldsValue({
+          price: { number: val },
+        });
+        setDepositVisible(true);
+      },
     });
     setOffersColumns(columns);
   }, [balance, exBalance, loadingBalance]);
+
+  const onFinish = values => {
+    const val = values.price.number;
+    setDepositVisible(false);
+    onDeposit(val, selectedMarket);
+  };
 
   const menu = (
     <Menu
@@ -68,23 +88,56 @@ export const OffersMade = ({
           label: 'Deposit from main wallet',
           key: '0',
           disabled: mainBalance === 0,
-          onClick: () => setDepositVisible(true),
+          onClick: () => {
+            setSelectedMarket(undefined);
+            setDepositValue(0);
+            form.setFieldsValue({
+              price: { number: 0 },
+            });
+            setDepositVisible(true);
+          },
         },
         {
           label: 'Withdraw all to main wallet',
           key: '1',
           disabled: balance === 0,
-          onClick: () => onWithdraw(balance),
+          onClick: () => {
+            setSelectedMarket(undefined);
+            setWithdrawVisible(true);
+          },
         },
       ]}
     />
   );
 
-  const onFinish = values => {
-    const val = values.price.number;
-    setDepositVisible(false);
-    onDeposit(val);
-  };
+  const exMenu = (
+    <Menu
+      items={[
+        {
+          label: 'Deposit from main wallet (ME)',
+          key: '0',
+          disabled: mainBalance === 0,
+          onClick: () => {
+            setSelectedMarket(MarketType.MagicEden);
+            setDepositValue(0);
+            form.setFieldsValue({
+              price: { number: 0 },
+            });
+            setDepositVisible(true);
+          },
+        },
+        {
+          label: 'Withdraw all to main wallet (ME)',
+          key: '1',
+          disabled: exBalance === 0,
+          onClick: () => {
+            setSelectedMarket(MarketType.MagicEden);
+            setWithdrawVisible(true);
+          },
+        },
+      ]}
+    />
+  );
 
   const checkPrice = (_: any, value: { number: number }) => {
     if (value && value.number > 0) {
@@ -108,15 +161,13 @@ export const OffersMade = ({
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Bidding Wallet</span>
-            <span className="wallet-price">{`${formatAmount(
-              balance,
-              2,
-              true,
-            )} ◎`}</span>
+            <span className="wallet-price">
+              {`${formatAmount(balance, 2, true)} ◎`}
+            </span>
           </div>
           <Dropdown overlay={menu} trigger={['click']}>
             <a onClick={e => e.preventDefault()}>
-              <MoreOutlined style={{ color: 'white', fontSize: 32 }} />
+              <MoreOutlined style={{ color: 'white', fontSize: 24 }} />
             </a>
           </Dropdown>
         </div>
@@ -126,12 +177,15 @@ export const OffersMade = ({
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Bidding Wallet (ME)</span>
-            <span className="wallet-price">{`${formatAmount(
-              exBalance,
-              2,
-              true,
-            )} ◎`}</span>
+            <span className="wallet-price">
+              {`${formatAmount(exBalance, 2, true)} ◎`}
+            </span>
           </div>
+          <Dropdown overlay={exMenu} trigger={['click']}>
+            <a onClick={e => e.preventDefault()}>
+              <MoreOutlined style={{ color: 'white', fontSize: 24 }} />
+            </a>
+          </Dropdown>
         </div>
         <div className="wallet-content">
           <div className="wallet-icon">
@@ -139,11 +193,9 @@ export const OffersMade = ({
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Main Wallet</span>
-            <span className="wallet-price">{`${formatAmount(
-              mainBalance,
-              2,
-              true,
-            )} ◎`}</span>
+            <span className="wallet-price">
+              {`${formatAmount(mainBalance, 2, true)} ◎`}
+            </span>
           </div>
         </div>
         <button
@@ -172,7 +224,9 @@ export const OffersMade = ({
         onCancel={() => setDepositVisible(false)}
       >
         <div>
-          <span className="header-text">Deposit</span>
+          <span className="header-text">
+            {selectedMarket ? 'Deposit (ME)' : 'Deposit'}
+          </span>
           <div className="body-container">
             <span className="description">
               You&apos;re about to deposit SOL from your main wallet into the
@@ -190,7 +244,11 @@ export const OffersMade = ({
                 </Col>
                 <Col span={6}>
                   <Form.Item>
-                    <Button className="button" htmlType="submit">
+                    <Button
+                      className="button"
+                      htmlType="submit"
+                      disabled={depositValue === 0}
+                    >
                       Deposit
                     </Button>
                   </Form.Item>
@@ -200,24 +258,26 @@ export const OffersMade = ({
             <Divider />
             <div className="wallet-info">
               <span className="wallet-label">Main wallet balance</span>
-              <span className="wallet-label">{`${parseFloat(
-                mainBalance.toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat(mainBalance.toFixed(5))} SOL`}
+              </span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Bidding wallet balance</span>
-              <span className="wallet-label">{`${parseFloat(
-                balance.toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (selectedMarket ? exBalance : balance).toFixed(5),
+                )} SOL`}
+              </span>
             </div>
             <Divider />
             <div className="wallet-info">
               <span className="wallet-label">
                 New main wallet balance{' '}
                 {depositValue > 0 ? (
-                  <span style={{ color: '#ffaa00' }}>{` -${formatAmount(
-                    depositValue,
-                  )} SOL`}</span>
+                  <span style={{ color: '#ffaa00' }}>
+                    {` -${depositValue} SOL`}
+                  </span>
                 ) : (
                   ''
                 )}
@@ -230,16 +290,20 @@ export const OffersMade = ({
               <span className="wallet-label">
                 New bidding wallet balance{' '}
                 {depositValue > 0 ? (
-                  <span style={{ color: '#00db80' }}>{` +${formatAmount(
-                    depositValue,
-                  )} SOL`}</span>
+                  <span style={{ color: '#00db80' }}>
+                    {` +${depositValue} SOL`}
+                  </span>
                 ) : (
                   ''
                 )}
               </span>
-              <span className="wallet-label">{`${parseFloat(
-                (balance + depositValue).toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (
+                    (selectedMarket ? exBalance : balance) + depositValue
+                  ).toFixed(5),
+                )} SOL`}
+              </span>
             </div>
             <span className="bottom-label">
               By selecting &quot;Deposit&quot;, you agree to{' '}
@@ -251,48 +315,147 @@ export const OffersMade = ({
         </div>
       </MetaplexModal>
       <MetaplexModal
+        className="cancel-modal"
         visible={cancelVisible}
         onCancel={() => setCancelVisible(false)}
       >
-        <div className="cancel-modal">
-          <div className="header-container">
-            <img src="/icons/wallet.png" className="header-icon" alt="wallet" />
-            <span className="header-text">
-              After cancelling your offer, do you want to withdraw funds back to
-              your wallet?
-            </span>
-          </div>
+        <div>
+          <span className="header-text">
+            {selectedOffer?.market
+              ? 'Cancel the offer (ME)'
+              : 'Cancel the offer'}
+          </span>
           <div className="body-container">
-            <span className="main-text">
-              The funds for your offer is held in an escrow account as collatral
-              to support multiple offers. If you choose &quot;Keep funds in
-              escrow&quot;, you will be able to make offers faster and more
-              easily.
+            <span className="description">
+              When your offer is canceled, the funds will remain in your bidding
+              wallet until you withdraw them. This is to allow your other bids
+              to remain open and prevent them from becoming invalid. When
+              you&apos;re ready to withdraw the funds from your bidding wallet,
+              you can do so from the &apos;Offers Made&apos; page of your
+              profile.
+            </span>
+            <Button
+              className="button"
+              onClick={() => {
+                setCancelVisible(false);
+                onCancelBid(selectedOffer!);
+              }}
+            >
+              Cancel offer
+            </Button>
+            <span className="nft-name" style={{ marginTop: 24 }}>
+              {`${selectedOffer?.name} ${selectedOffer?.market ? `(ME)` : ''}`}
+            </span>
+            <span className="nft-symbol">
+              {selectedOffer?.symbol}
+              <img
+                src="/icons/check.svg"
+                style={{ width: 14, height: 14, marginLeft: 8 }}
+              />
+            </span>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label text-gray">Buy now price</span>
+              <span className="wallet-label text-gray">
+                {`${parseFloat(
+                  (selectedOffer?.listingPrice || 0).toFixed(5),
+                )} SOL`}
+              </span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Your offer</span>
+              <span className="wallet-label">
+                {`${parseFloat((selectedOffer?.bidPrice || 0).toFixed(5))} SOL`}
+              </span>
+            </div>
+            <span className="bottom-label">
+              By selecting &quot;Cancel offer&quot;, you agree to{' '}
+              <Link to="" style={{ fontWeight: 600 }}>
+                Terms of Service
+              </Link>
             </span>
           </div>
-          <Row>
-            <Col span={9}>
-              <Button
-                onClick={() => {
-                  setCancelVisible(false);
-                  onCancelBidAndWithdraw(selectedOffer!);
-                }}
-              >
-                Withdraw
-              </Button>
-            </Col>
-            <Col span={12}>
-              <Button
-                style={{ marginLeft: 8, background: '#009999' }}
-                onClick={() => {
-                  setCancelVisible(false);
-                  onCancelBid(selectedOffer!);
-                }}
-              >
-                Keep funds in escrow
-              </Button>
-            </Col>
-          </Row>
+        </div>
+      </MetaplexModal>
+      <MetaplexModal
+        className="withdraw-modal"
+        visible={withdrawVisible}
+        onCancel={() => setWithdrawVisible(false)}
+      >
+        <div>
+          <span className="header-text">
+            {selectedMarket
+              ? 'Withdraw all to main wallet (ME)'
+              : 'Withdraw all to main wallet'}
+          </span>
+          <div className="body-container">
+            <span className="description">
+              You&apos;re about to withdraw all SOL from the bidding wallet back
+              into your main wallet. Please review and confirm:
+            </span>
+            <Button
+              className="button"
+              onClick={() => {
+                setWithdrawVisible(false);
+                onWithdraw(
+                  selectedMarket ? exBalance : balance,
+                  selectedMarket,
+                );
+              }}
+            >
+              Withdraw all to main wallet
+            </Button>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label">Main wallet balance</span>
+              <span className="wallet-label">
+                {`${parseFloat(mainBalance.toFixed(5))} SOL`}
+              </span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Bidding wallet balance</span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (selectedMarket ? exBalance : balance).toFixed(5),
+                )} SOL`}
+              </span>
+            </div>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label">
+                new main wallet balance{' '}
+                <span style={{ color: '#00db80' }}>
+                  {`+ ${parseFloat(
+                    (selectedMarket ? exBalance : balance).toFixed(5),
+                  )} SOL`}
+                </span>
+              </span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (
+                    mainBalance + (selectedMarket ? exBalance : balance)
+                  ).toFixed(5),
+                )} SOL`}
+              </span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">
+                New bidding wallet balance{' '}
+                <span style={{ color: '#ffaa00' }}>
+                  {`- ${parseFloat(
+                    (selectedMarket ? exBalance : balance).toFixed(5),
+                  )} SOL`}
+                </span>
+              </span>
+              <span className="wallet-label">0 SOL</span>
+            </div>
+            <span className="bottom-label">
+              By selecting &quot;Cancel offer&quot;, you agree to{' '}
+              <Link to="" style={{ fontWeight: 600 }}>
+                Terms of Service
+              </Link>
+            </span>
+          </div>
         </div>
       </MetaplexModal>
     </div>
