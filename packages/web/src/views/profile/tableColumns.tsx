@@ -1,7 +1,7 @@
 import React from 'react';
 import { CopySpan, ENDPOINT_NAME, shortenAddress } from '@oyster/common';
 import { Link } from 'react-router-dom';
-import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+import { CheckCircleFilled, ExclamationCircleFilled } from '@ant-design/icons';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
 
@@ -31,7 +31,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       render: uri => (
         <img
           src={uri}
-          style={{ width: 32, height: 32, objectFit: 'cover' }}
+          style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4 }}
           alt="image"
         />
       ),
@@ -107,6 +107,20 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       key: 'mint',
       render: mint => <CopySpan value={shortenAddress(mint)} copyText={mint} />,
     },
+    {
+      title: 'BUYER',
+      dataIndex: 'buyer',
+      key: 'buyer',
+      render: text =>
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
+    },
+    {
+      title: 'SELLER',
+      dataIndex: 'seller',
+      key: 'seller',
+      render: text =>
+        text ? <CopySpan value={shortenAddress(text)} copyText={text} /> : '',
+    },
   ];
 };
 
@@ -125,7 +139,12 @@ export const OffersMadeColumns = (props: {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src={record.image}
-            style={{ width: 32, height: 32, objectFit: 'cover' }}
+            style={{
+              width: 32,
+              height: 32,
+              objectFit: 'cover',
+              borderRadius: 4,
+            }}
             alt="image"
           />
           <Link
@@ -147,12 +166,22 @@ export const OffersMadeColumns = (props: {
     {
       title: 'Status',
       dataIndex: 'bidPrice',
-      key: 'status',
+      key: 'bidPrice',
       render: price =>
         price <= props.balance ? (
-          <CheckCircleFilled style={{ color: '#52c41a', fontSize: 24 }} />
+          <span>
+            <CheckCircleFilled
+              style={{ color: '#52c41a', fontSize: 20, marginRight: 8 }}
+            />
+            Pending
+          </span>
         ) : (
-          <CloseCircleFilled style={{ color: '#eb2f96', fontSize: 24 }} />
+          <span>
+            <ExclamationCircleFilled
+              style={{ color: '#ffaa00', fontSize: 20, marginRight: 8 }}
+            />
+            Insufficiant funds
+          </span>
         ),
     },
     {
@@ -170,7 +199,7 @@ export const OffersMadeColumns = (props: {
     {
       title: 'Action',
       dataIndex: 'mint',
-      key: 'action',
+      key: 'mint',
       render: (text, record) =>
         record.bidPrice <= props.balance ? (
           <button
@@ -188,7 +217,7 @@ export const OffersMadeColumns = (props: {
               Cancel
             </button>
             <button className="offer-button" onClick={() => props.onDeposit()}>
-              Deposit
+              Fund
             </button>
           </>
         ),
@@ -206,7 +235,12 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src={record.image}
-            style={{ width: 32, height: 32, objectFit: 'cover' }}
+            style={{
+              width: 32,
+              height: 32,
+              objectFit: 'cover',
+              borderRadius: 4,
+            }}
             alt="image"
           />
           <Link
@@ -250,7 +284,7 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
     {
       title: 'Action',
       dataIndex: 'mint',
-      key: 'action',
+      key: 'mint',
       render: (text, record) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <button

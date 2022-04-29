@@ -293,6 +293,10 @@ export const ProfileView = () => {
       });
 
       list = list.concat(res2);
+      list = list.map((item, index) => ({
+        ...item,
+        key: index,
+      }));
     }
     return list;
   }
@@ -688,52 +692,50 @@ export const ProfileView = () => {
               </button>
             </Col>
           </Row>
-          {!loading && (
-            <Tabs defaultActiveKey="2" className="profile-tabs">
-              <TabPane tab="My items" key="1">
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {myItems.map((item, index) => (
-                    <GroupItem key={index} item={item} />
-                  ))}
-                </div>
-              </TabPane>
-              <TabPane tab="Listed items" key="2">
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {listedItems.map((item, index) => (
-                    <GroupItem key={index} item={item} />
-                  ))}
-                </div>
-              </TabPane>
-              <TabPane tab="Offers made" key="3">
-                <OffersMade
-                  offers={offersMade}
-                  balance={balance}
-                  exBalance={exBalance}
-                  loadingBalance={loadingBalance}
-                  callShowEscrow={callShowEscrow}
-                  onCancelBid={onCancelBid}
-                  onDeposit={onDeposit}
-                  onWithdraw={onWithdraw}
-                />
-              </TabPane>
-              <TabPane tab="Offers received" key="4">
-                <Table
-                  columns={offersReceivedColumns}
-                  dataSource={offersReceived}
-                  style={{ overflowX: 'auto' }}
-                  pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-                />
-              </TabPane>
-              <TabPane tab="Activites" key="5">
-                <Table
-                  columns={activityColumns}
-                  dataSource={transactions}
-                  style={{ overflowX: 'auto' }}
-                  pagination={{ position: ['bottomLeft'], pageSize: 10 }}
-                />
-              </TabPane>
-            </Tabs>
-          )}
+          <Tabs defaultActiveKey="2" className="profile-tabs">
+            <TabPane tab="My items" key="1">
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {myItems.map((item, index) => (
+                  <GroupItem key={index} item={item} />
+                ))}
+              </div>
+            </TabPane>
+            <TabPane tab="Listed items" key="2">
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {listedItems.map((item, index) => (
+                  <GroupItem key={index} item={item} />
+                ))}
+              </div>
+            </TabPane>
+            <TabPane tab="Offers made" key="3">
+              <OffersMade
+                offers={offersMade}
+                balance={balance}
+                exBalance={exBalance}
+                loadingBalance={loadingBalance}
+                callShowEscrow={callShowEscrow}
+                onCancelBid={onCancelBid}
+                onDeposit={onDeposit}
+                onWithdraw={onWithdraw}
+              />
+            </TabPane>
+            <TabPane tab="Offers received" key="4">
+              <Table
+                columns={offersReceivedColumns}
+                dataSource={offersReceived}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
+            </TabPane>
+            <TabPane tab="Activites" key="5">
+              <Table
+                columns={activityColumns}
+                dataSource={transactions}
+                style={{ overflowX: 'auto' }}
+                pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+              />
+            </TabPane>
+          </Tabs>
         </div>
       </div>
       <MetaplexModal visible={visible} onCancel={() => setVisible(false)}>
