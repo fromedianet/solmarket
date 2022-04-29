@@ -33,9 +33,9 @@ import { showEscrow } from '../../actions/showEscrow';
 import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
-import { Message, Transaction } from '@solana/web3.js';
+import { Connection, Message, Transaction } from '@solana/web3.js';
 import { useExNftAPI } from '../../hooks/useExNftAPI';
-import { MarketType } from '../../constants';
+import { MarketType, meConnection, ME_AUCTION_HOUSE_ID } from '../../constants';
 import { OffersMade } from './components/offersMade';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -68,7 +68,15 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
-  const { cancelBid, acceptOffer, deposit, withdraw } = useInstructionsAPI();
+  const {
+    cancelBid,
+    acceptOffer,
+    deposit,
+    withdraw,
+    cancelBidME,
+    depositME,
+    withdrawME,
+  } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const {
@@ -403,27 +411,54 @@ export const ProfileView = () => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result: any = await cancelBid({
-          buyer: wallet.publicKey!.toBase58(),
-          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-          tokenMint: offer.mint,
-          tokenAccount: offer.tokenAccount,
-          tradeState: offer.tradeState!,
-          price: offer.bidPrice,
-        });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', {
-                wallet: wallet.publicKey!.toBase58(),
-              });
-              resolve('');
-              return;
+        if (offer.market) {
+          if (!offer.auctionHouseKey) {
+            reject();
+            return;
+          }
+          const result: any = await cancelBidME({
+            buyer: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: offer.auctionHouseKey!,
+            tokenMint: offer.mint,
+            price: offer.bidPrice,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data, meConnection);
+              if (!status['err']) {
+                setTimeout(() => {
+                  setRefresh(Date.now());
+                }, 30000);
+                resolve('');
+                return;
+              }
+            }
+          }
+        } else {
+          const result: any = await cancelBid({
+            buyer: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+            tokenMint: offer.mint,
+            tokenAccount: offer.tokenAccount,
+            tradeState: offer.tradeState!,
+            price: offer.bidPrice,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data, connection);
+              if (!status['err']) {
+                socket.emit('syncAuctionHouse', {
+                  wallet: wallet.publicKey!.toBase58(),
+                });
+                resolve('');
+                return;
+              }
             }
           }
         }
+
         reject();
       } catch (e) {
         reject(e);
@@ -433,9 +468,11 @@ export const ProfileView = () => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Cancel bid now...',
-        error: 'Cancel bid rejected.',
-        success: 'Cancel bid successed. Your data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -464,7 +501,7 @@ export const ProfileView = () => {
         if ('data' in result) {
           const data = result['data']['data'];
           if (data) {
-            const status = await runInstructions(data);
+            const status = await runInstructions(data, connection);
             if (!status['err']) {
               socket.emit('syncAuctionHouse', {
                 wallet: wallet.publicKey!.toBase58(),
@@ -483,9 +520,11 @@ export const ProfileView = () => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Accept offer now...',
-        error: 'Accept offer rejected.',
-        success: 'Accept offer successed. Your data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -502,24 +541,46 @@ export const ProfileView = () => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result: any = await deposit({
-          pubkey: wallet.publicKey!.toBase58(),
-          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-          amount: amount,
-        });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              setTimeout(() => {
-                callShowEscrow();
-              }, 15000);
-              resolve('');
-              return;
+        if (market) {
+          const result: any = await depositME({
+            pubkey: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: ME_AUCTION_HOUSE_ID,
+            amount: amount,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data, meConnection);
+              if (!status['err']) {
+                setTimeout(() => {
+                  setRefresh(Date.now());
+                }, 30000);
+                resolve('');
+                return;
+              }
+            }
+          }
+        } else {
+          const result: any = await deposit({
+            pubkey: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+            amount: amount,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data, connection);
+              if (!status['err']) {
+                setTimeout(() => {
+                  callShowEscrow();
+                }, 20000);
+                resolve('');
+                return;
+              }
             }
           }
         }
+
         reject();
       } catch (e) {
         reject(e);
@@ -548,24 +609,46 @@ export const ProfileView = () => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        const result: any = await withdraw({
-          pubkey: wallet.publicKey!.toBase58(),
-          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-          amount: amount,
-        });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              setTimeout(() => {
-                callShowEscrow();
-              }, 15000);
-              resolve('');
-              return;
+        if (market) {
+          const result: any = await withdrawME({
+            pubkey: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: ME_AUCTION_HOUSE_ID,
+            amount: amount,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data, meConnection);
+              if (!status['err']) {
+                setTimeout(() => {
+                  setRefresh(Date.now());
+                }, 30000);
+                resolve('');
+                return;
+              }
+            }
+          }
+        } else {
+          const result: any = await withdraw({
+            pubkey: wallet.publicKey!.toBase58(),
+            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+            amount: amount,
+          });
+          if ('data' in result) {
+            const data = result['data']['data'];
+            if (data) {
+              const status = await runInstructions(data, connection);
+              if (!status['err']) {
+                setTimeout(() => {
+                  callShowEscrow();
+                }, 20000);
+                resolve('');
+                return;
+              }
             }
           }
         }
+
         reject();
       } catch (e) {
         reject(e);
@@ -575,9 +658,11 @@ export const ProfileView = () => {
     toast.promise(
       resolveWithData,
       {
-        pending: 'Withdraw now...',
-        error: 'Withdraw rejected.',
-        success: 'Withdraw successed. Your data maybe updated in a minute',
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
       },
       {
         position: 'top-center',
@@ -589,19 +674,281 @@ export const ProfileView = () => {
     );
   };
 
-  async function runInstructions(data: Buffer) {
+  async function test() {
+    const data: Buffer = Buffer.from([
+      1,
+      0,
+      4,
+      6,
+      0,
+      242,
+      50,
+      216,
+      41,
+      113,
+      116,
+      219,
+      187,
+      235,
+      159,
+      102,
+      25,
+      228,
+      22,
+      218,
+      103,
+      162,
+      254,
+      64,
+      126,
+      219,
+      145,
+      83,
+      249,
+      241,
+      145,
+      252,
+      50,
+      101,
+      25,
+      152,
+      212,
+      76,
+      137,
+      215,
+      140,
+      133,
+      185,
+      82,
+      49,
+      202,
+      79,
+      164,
+      64,
+      102,
+      62,
+      121,
+      109,
+      108,
+      250,
+      52,
+      84,
+      171,
+      42,
+      87,
+      94,
+      139,
+      153,
+      9,
+      158,
+      242,
+      79,
+      140,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      8,
+      175,
+      246,
+      228,
+      16,
+      89,
+      36,
+      102,
+      175,
+      155,
+      72,
+      107,
+      229,
+      118,
+      121,
+      242,
+      246,
+      139,
+      65,
+      205,
+      220,
+      49,
+      224,
+      32,
+      146,
+      119,
+      74,
+      143,
+      99,
+      98,
+      237,
+      19,
+      195,
+      27,
+      24,
+      204,
+      62,
+      20,
+      138,
+      10,
+      82,
+      147,
+      129,
+      137,
+      32,
+      237,
+      250,
+      237,
+      171,
+      57,
+      30,
+      73,
+      51,
+      108,
+      11,
+      116,
+      219,
+      102,
+      157,
+      16,
+      71,
+      3,
+      66,
+      75,
+      5,
+      33,
+      159,
+      137,
+      154,
+      129,
+      212,
+      255,
+      132,
+      251,
+      89,
+      61,
+      46,
+      223,
+      138,
+      144,
+      172,
+      27,
+      58,
+      179,
+      66,
+      88,
+      247,
+      223,
+      35,
+      62,
+      165,
+      3,
+      2,
+      177,
+      189,
+      46,
+      223,
+      106,
+      155,
+      88,
+      21,
+      234,
+      37,
+      90,
+      54,
+      204,
+      106,
+      89,
+      228,
+      166,
+      206,
+      197,
+      169,
+      80,
+      203,
+      60,
+      91,
+      253,
+      234,
+      75,
+      155,
+      6,
+      9,
+      57,
+      22,
+      255,
+      226,
+      249,
+      1,
+      5,
+      6,
+      0,
+      2,
+      1,
+      3,
+      4,
+      2,
+      17,
+      242,
+      35,
+      198,
+      137,
+      82,
+      225,
+      242,
+      182,
+      255,
+      0,
+      163,
+      225,
+      17,
+      0,
+      0,
+      0,
+      0
+  ]);
+    await runInstructions(data, meConnection);
+  }
+
+  async function runInstructions(data: Buffer, _connection: Connection) {
     let status: any = { err: true };
     try {
       const transaction = Transaction.populate(Message.from(data));
+      console.log('----- transaction -----', transaction);
       const { txid } = await sendTransactionWithRetry(
-        connection,
+        _connection,
         wallet,
         transaction.instructions,
         [],
       );
 
       if (txid) {
-        status = await connection.confirmTransaction(txid, 'confirmed');
+        status = await _connection.confirmTransaction(txid, 'confirmed');
       }
     } catch (e) {
       console.error('----- runInstructions error ------------', e);
@@ -698,7 +1045,8 @@ export const ProfileView = () => {
             </Col>
             <Col span={6} style={{ alignSelf: 'center' }}>
               <button
-                onClick={() => setRefresh(Date.now())}
+                // onClick={() => setRefresh(Date.now())}
+                onClick={() => test()}
                 style={{
                   background: 'transparent',
                   border: 'none',

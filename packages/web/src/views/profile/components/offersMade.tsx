@@ -126,7 +126,7 @@ export const OffersMade = ({
           label: 'Withdraw all to main wallet (ME)',
           key: '1',
           disabled: exBalance === 0,
-          onClick: () => onWithdraw(balance, MarketType.MagicEden),
+          onClick: () => onWithdraw(exBalance, MarketType.MagicEden),
         },
       ]}
     />
