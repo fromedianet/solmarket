@@ -121,13 +121,7 @@ export const ProfileView = () => {
 
       loadOffersMade().then(res => setOffersMade(res));
 
-      getOffersReceived(wallet.publicKey.toBase58())
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setOffersReceived(res['data']);
-          }
-        });
+      loadOffersReceived().then(res => setOffersReceived(res));
     }
   }, [wallet.publicKey, refresh]);
 
@@ -281,6 +275,37 @@ export const ProfileView = () => {
       const query = {
         $match: {
           bidderPubkey: wallet.publicKey.toBase58(),
+        },
+        $sort: { createdAt: -1 },
+      };
+
+      const params = `?q=${encodeURI(JSON.stringify(query))}`;
+
+      const res2 = await getMEBiddingQuery({
+        market: MarketType.MagicEden,
+        params: params,
+      });
+
+      list = list.concat(res2);
+      list = list.map((item, index) => ({
+        ...item,
+        key: index,
+      }));
+    }
+    return list;
+  }
+
+  async function loadOffersReceived() {
+    let list: Offer[] = [];
+    if (wallet.publicKey) {
+      const res1: any = await getOffersReceived(wallet.publicKey.toBase58());
+      if ('data' in res1) {
+        list = res1['data'];
+      }
+
+      const query = {
+        $match: {
+          initializerKey: wallet.publicKey.toBase58(),
         },
         $sort: { createdAt: -1 },
       };
