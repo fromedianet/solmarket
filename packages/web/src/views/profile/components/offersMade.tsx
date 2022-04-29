@@ -43,6 +43,7 @@ export const OffersMade = ({
   const mainBalance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
   const [cancelVisible, setCancelVisible] = useState(false);
   const [depositVisible, setDepositVisible] = useState(false);
+  const [withdrawVisible, setWithdrawVisible] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer>();
   const [selectedMarket, setSelectedMarket] = useState<string | undefined>();
   const [depositValue, setDepositValue] = useState(0);
@@ -100,7 +101,10 @@ export const OffersMade = ({
           label: 'Withdraw all to main wallet',
           key: '1',
           disabled: balance === 0,
-          onClick: () => onWithdraw(balance, undefined),
+          onClick: () => {
+            setSelectedMarket(undefined);
+            setWithdrawVisible(true);
+          },
         },
       ]}
     />
@@ -126,7 +130,10 @@ export const OffersMade = ({
           label: 'Withdraw all to main wallet (ME)',
           key: '1',
           disabled: exBalance === 0,
-          onClick: () => onWithdraw(exBalance, MarketType.MagicEden),
+          onClick: () => {
+            setSelectedMarket(MarketType.MagicEden);
+            setWithdrawVisible(true);
+          },
         },
       ]}
     />
@@ -154,11 +161,9 @@ export const OffersMade = ({
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Bidding Wallet</span>
-            <span className="wallet-price">{`${formatAmount(
-              balance,
-              2,
-              true,
-            )} ◎`}</span>
+            <span className="wallet-price">
+              {`${formatAmount(balance, 2, true)} ◎`}
+            </span>
           </div>
           <Dropdown overlay={menu} trigger={['click']}>
             <a onClick={e => e.preventDefault()}>
@@ -172,11 +177,9 @@ export const OffersMade = ({
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Bidding Wallet (ME)</span>
-            <span className="wallet-price">{`${formatAmount(
-              exBalance,
-              2,
-              true,
-            )} ◎`}</span>
+            <span className="wallet-price">
+              {`${formatAmount(exBalance, 2, true)} ◎`}
+            </span>
           </div>
           <Dropdown overlay={exMenu} trigger={['click']}>
             <a onClick={e => e.preventDefault()}>
@@ -190,11 +193,9 @@ export const OffersMade = ({
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Main Wallet</span>
-            <span className="wallet-price">{`${formatAmount(
-              mainBalance,
-              2,
-              true,
-            )} ◎`}</span>
+            <span className="wallet-price">
+              {`${formatAmount(mainBalance, 2, true)} ◎`}
+            </span>
           </div>
         </div>
         <button
@@ -257,24 +258,26 @@ export const OffersMade = ({
             <Divider />
             <div className="wallet-info">
               <span className="wallet-label">Main wallet balance</span>
-              <span className="wallet-label">{`${parseFloat(
-                mainBalance.toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat(mainBalance.toFixed(5))} SOL`}
+              </span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Bidding wallet balance</span>
-              <span className="wallet-label">{`${parseFloat(
-                (selectedMarket ? exBalance : balance).toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (selectedMarket ? exBalance : balance).toFixed(5),
+                )} SOL`}
+              </span>
             </div>
             <Divider />
             <div className="wallet-info">
               <span className="wallet-label">
                 New main wallet balance{' '}
                 {depositValue > 0 ? (
-                  <span style={{ color: '#ffaa00' }}>{` -${formatAmount(
-                    depositValue,
-                  )} SOL`}</span>
+                  <span style={{ color: '#ffaa00' }}>
+                    {` -${depositValue} SOL`}
+                  </span>
                 ) : (
                   ''
                 )}
@@ -287,18 +290,20 @@ export const OffersMade = ({
               <span className="wallet-label">
                 New bidding wallet balance{' '}
                 {depositValue > 0 ? (
-                  <span style={{ color: '#00db80' }}>{` +${formatAmount(
-                    depositValue,
-                  )} SOL`}</span>
+                  <span style={{ color: '#00db80' }}>
+                    {` +${depositValue} SOL`}
+                  </span>
                 ) : (
                   ''
                 )}
               </span>
-              <span className="wallet-label">{`${parseFloat(
-                ((selectedMarket ? exBalance : balance) + depositValue).toFixed(
-                  5,
-                ),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (
+                    (selectedMarket ? exBalance : balance) + depositValue
+                  ).toFixed(5),
+                )} SOL`}
+              </span>
             </div>
             <span className="bottom-label">
               By selecting &quot;Deposit&quot;, you agree to{' '}
@@ -351,15 +356,98 @@ export const OffersMade = ({
             <Divider />
             <div className="wallet-info">
               <span className="wallet-label text-gray">Buy now price</span>
-              <span className="wallet-label text-gray">{`${parseFloat(
-                (selectedOffer?.listingPrice || 0).toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label text-gray">
+                {`${parseFloat(
+                  (selectedOffer?.listingPrice || 0).toFixed(5),
+                )} SOL`}
+              </span>
             </div>
             <div className="wallet-info">
               <span className="wallet-label">Your offer</span>
-              <span className="wallet-label">{`${parseFloat(
-                (selectedOffer?.bidPrice || 0).toFixed(5),
-              )} SOL`}</span>
+              <span className="wallet-label">
+                {`${parseFloat((selectedOffer?.bidPrice || 0).toFixed(5))} SOL`}
+              </span>
+            </div>
+            <span className="bottom-label">
+              By selecting &quot;Cancel offer&quot;, you agree to{' '}
+              <Link to="" style={{ fontWeight: 600 }}>
+                Terms of Service
+              </Link>
+            </span>
+          </div>
+        </div>
+      </MetaplexModal>
+      <MetaplexModal
+        className="withdraw-modal"
+        visible={withdrawVisible}
+        onCancel={() => setWithdrawVisible(false)}
+      >
+        <div>
+          <span className="header-text">
+            {selectedMarket
+              ? 'Withdraw all to main wallet (ME)'
+              : 'Withdraw all to main wallet'}
+          </span>
+          <div className="body-container">
+            <span className="description">
+              You&apos;re about to withdraw all SOL from the bidding wallet back
+              into your main wallet. Please review and confirm:
+            </span>
+            <Button
+              className="button"
+              onClick={() => {
+                setWithdrawVisible(false);
+                onWithdraw(
+                  selectedMarket ? exBalance : balance,
+                  selectedMarket,
+                );
+              }}
+            >
+              Withdraw all to main wallet
+            </Button>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label">Main wallet balance</span>
+              <span className="wallet-label">
+                {`${parseFloat(mainBalance.toFixed(5))} SOL`}
+              </span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">Bidding wallet balance</span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (selectedMarket ? exBalance : balance).toFixed(5),
+                )} SOL`}
+              </span>
+            </div>
+            <Divider />
+            <div className="wallet-info">
+              <span className="wallet-label">
+                new main wallet balance{' '}
+                <span style={{ color: '#00db80' }}>
+                  {`+ ${parseFloat(
+                    (selectedMarket ? exBalance : balance).toFixed(5),
+                  )} SOL`}
+                </span>
+              </span>
+              <span className="wallet-label">
+                {`${parseFloat(
+                  (
+                    mainBalance + (selectedMarket ? exBalance : balance)
+                  ).toFixed(5),
+                )} SOL`}
+              </span>
+            </div>
+            <div className="wallet-info">
+              <span className="wallet-label">
+                New bidding wallet balance{' '}
+                <span style={{ color: '#ffaa00' }}>
+                  {`- ${parseFloat(
+                    (selectedMarket ? exBalance : balance).toFixed(5),
+                  )} SOL`}
+                </span>
+              </span>
+              <span className="wallet-label">0 SOL</span>
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{' '}
