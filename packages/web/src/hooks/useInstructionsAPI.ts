@@ -147,7 +147,6 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     tokenMint: string;
     tokenAccount: string;
-    metadata: string;
     bidPrice: number;
     listPrice: number;
   }) {

@@ -1,14 +1,16 @@
 export interface Offer {
+  name: string;
+  image: string;
+  symbol: string;
   mint: string;
-  metadata: string;
-  tradeState: string;
   tokenAccount: string;
-  buyer: string;
   bidPrice: number;
   listingPrice: number;
-  tokenSize: number;
-  txType: string;
+  buyer: string;
+  seller?: string;
+  tradeState?: string;
+  escrowPubkey?: string;
+  auctionHouseKey?: string;
   createdAt: string;
-  nftCreators: any[];
   market?: string;
 }
