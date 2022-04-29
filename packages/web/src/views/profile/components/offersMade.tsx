@@ -77,7 +77,7 @@ export const OffersMade = ({
   const onFinish = values => {
     const val = values.price.number;
     setDepositVisible(false);
-    onDeposit(val, selectedOffer);
+    onDeposit(val, selectedMarket);
   };
 
   const menu = (
