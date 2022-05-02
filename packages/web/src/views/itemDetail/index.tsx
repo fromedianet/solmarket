@@ -36,6 +36,7 @@ export const ItemDetailView = () => {
   const { socket } = useSocket();
   const [nft, setNFT] = useState<NFT>();
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
+  const [loadingPage, setLoadingPage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [priceData, setPriceData] = useState<any[]>([]);
   const [nftList, setNFTList] = useState<NFT[]>([]);
@@ -114,8 +115,8 @@ export const ItemDetailView = () => {
 
   async function getNFT() {
     if (!mint) return undefined;
-    if (loading) return;
-    setLoading(true);
+    if (loadingPage) return;
+    setLoadingPage(true);
 
     let result: any = {};
     if (market) {
@@ -134,7 +135,7 @@ export const ItemDetailView = () => {
       }
     }
 
-    setLoading(false);
+    setLoadingPage(false);
     return result;
   }
 
@@ -641,7 +642,7 @@ export const ItemDetailView = () => {
     <div className="main-area">
       <div className="main-page">
         <div className="container art-container">
-          {loading ? (
+          {loadingPage ? (
             <Spin />
           ) : nft ? (
             <>
