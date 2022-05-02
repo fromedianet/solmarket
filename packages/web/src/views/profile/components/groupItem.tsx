@@ -32,7 +32,7 @@ export const GroupItem = ({
         ) : (
           <span className="link">{item.collection.name}</span>
         )}
-        
+
         <Tooltip title="Floor price" className="tooltip">
           <span>{`FLOOR: ${
             item.collection.floorPrice === 0 ? '--' : item.collection.floorPrice

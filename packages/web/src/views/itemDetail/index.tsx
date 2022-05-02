@@ -27,7 +27,6 @@ export const ItemDetailView = () => {
   const { getTransactionsByMint } = useTransactionsAPI();
   const { getExNFTByMintAddress, getExTransactions } = useExNftAPI();
   const { getMEListedNFTsByCollection } = useMECollectionsAPI();
-  // const { nft, loading, transactions } = useNFT(mint, refresh);
 
   useEffect(() => {
     getNFT().then(res => {

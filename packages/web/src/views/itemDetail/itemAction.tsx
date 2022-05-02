@@ -453,88 +453,94 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
         )}
       </div>
       {!showCurrentPrice && <span className="value">Not listed</span>}
-      <div className="btn-container">
-        {!wallet.connected ? (
-          <ConnectButton className="button" />
-        ) : isOwner ? (
-          alreadyListed ? (
-            isOfferAccepted ? (
-              <span className="value">Offer is already accepted</span>
+      {props.nft.symbol && (
+        <div className="btn-container">
+          {!wallet.connected ? (
+            <ConnectButton className="button" />
+          ) : isOwner ? (
+            alreadyListed ? (
+              isOfferAccepted ? (
+                <span className="value">Offer is already accepted</span>
+              ) : (
+                <Button
+                  className="button"
+                  onClick={onCancelList}
+                  disabled={loading}
+                >
+                  {loading ? <Spin /> : 'Cancel Listing'}
+                </Button>
+              )
             ) : (
-              <Button
-                className="button"
-                onClick={onCancelList}
-                disabled={loading}
+              <Form
+                form={form}
+                name="price-control"
+                layout="inline"
+                onFinish={onListNow}
               >
-                {loading ? <Spin /> : 'Cancel Listing'}
-              </Button>
+                <Row style={{ width: '100%' }}>
+                  <Col span={12}>
+                    <Form.Item name="price" rules={[{ validator: checkPrice }]}>
+                      <PriceInput
+                        value={{ number: props.nft.price }}
+                        placeholder="Price"
+                        addonAfter="SOL"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item>
+                      <Button
+                        className="button"
+                        htmlType="submit"
+                        disabled={loading}
+                      >
+                        {loading ? <Spin /> : 'List Now'}
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
             )
           ) : (
-            <Form
-              form={form}
-              name="price-control"
-              layout="inline"
-              onFinish={onListNow}
-            >
-              <Row style={{ width: '100%' }}>
-                <Col span={12}>
-                  <Form.Item name="price" rules={[{ validator: checkPrice }]}>
-                    <PriceInput
-                      value={{ number: props.nft.price }}
-                      placeholder="Price"
-                      addonAfter="SOL"
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item>
-                    <Button
-                      className="button"
-                      htmlType="submit"
-                      disabled={loading}
-                    >
-                      {loading ? <Spin /> : 'List Now'}
-                    </Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          )
-        ) : (
-          alreadyListed &&
-          (isOfferAccepted ? (
-            isWinner && (
-              <Button className="button" onClick={onBuyNow} disabled={loading}>
-                Claim
-              </Button>
-            )
-          ) : (
-            <Row gutter={16}>
-              <Col span={10}>
+            alreadyListed &&
+            (isOfferAccepted ? (
+              isWinner && (
                 <Button
                   className="button"
                   onClick={onBuyNow}
                   disabled={loading}
                 >
-                  Buy Now
+                  Claim
                 </Button>
-              </Col>
-              <Col span={14}>
-                <Button
-                  className="button"
-                  onClick={() => {
-                    setShowOfferModal(true);
-                    onChangeOffer(offerPrice);
-                  }}
-                  disabled={loading}
-                >
-                  Make an Offer
-                </Button>
-              </Col>
-            </Row>
-          ))
-        )}
-      </div>
+              )
+            ) : (
+              <Row gutter={16}>
+                <Col span={10}>
+                  <Button
+                    className="button"
+                    onClick={onBuyNow}
+                    disabled={loading}
+                  >
+                    Buy Now
+                  </Button>
+                </Col>
+                <Col span={14}>
+                  <Button
+                    className="button"
+                    onClick={() => {
+                      setShowOfferModal(true);
+                      onChangeOffer(offerPrice);
+                    }}
+                    disabled={loading}
+                  >
+                    Make an Offer
+                  </Button>
+                </Col>
+              </Row>
+            ))
+          )}
+        </div>
+      )}
       <MetaplexModal
         className="make-offer-modal"
         visible={showOfferModal}
