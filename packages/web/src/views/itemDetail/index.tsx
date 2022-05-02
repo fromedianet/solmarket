@@ -45,7 +45,7 @@ export const ItemDetailView = () => {
   const [biddingBalance, setBiddingBalance] = useState(0);
   const [cancelVisible, setCancelVisible] = useState(false);
   const { getNftByMint, getListedNftsByQuery } = useNFTsAPI();
-  const { getTransactionsByMint } = useTransactionsAPI();
+  const { getTransactionsByMint, getOffersByMints } = useTransactionsAPI();
   const { getExNFTByMintAddress, getExTransactions, getExEscrowBalance } =
     useExNftAPI();
   const { getMEListedNFTsByCollection, getMEBiddingQuery } =
@@ -80,10 +80,6 @@ export const ItemDetailView = () => {
       if (res) setNFT(res);
     });
 
-    getOffers(mint).then(res => {
-      setOffers(res);
-    });
-
     getTransactions().then(res => setTransactions(res));
   }, [mint, market, refresh]);
 
@@ -101,6 +97,9 @@ export const ItemDetailView = () => {
     if (nft) {
       getListedNFTs(nft).then(res => setNFTList(res));
       getEscrowBalance().then(val => setBiddingBalance(val));
+      getOffers(mint, nft.owner, nft.market).then(res => {
+        setOffers(res);
+      });
     }
   }, [nft, wallet]);
 
@@ -177,27 +176,41 @@ export const ItemDetailView = () => {
     return result;
   }
 
-  async function getOffers(mintAddress: string) {
+  async function getOffers(
+    mintAddress: string,
+    owner: string,
+    market: string | undefined | null,
+  ) {
     let list: Offer[] = [];
-    const query = {
-      $match: {
-        initializerDepositTokenMintAccount: {
-          $in: [mintAddress],
+    if (market) {
+      const query = {
+        $match: {
+          initializerDepositTokenMintAccount: {
+            $in: [mintAddress],
+          },
         },
-      },
-      $sort: { createdAt: -1 },
-    };
-    const params = `?q=${encodeURI(JSON.stringify(query))}`;
-    const res = await getMEBiddingQuery({
-      market: MarketType.MagicEden,
-      params: params,
-    });
-    list = list.concat(res);
+        $sort: { createdAt: -1 },
+      };
+      const params = `?q=${encodeURI(JSON.stringify(query))}`;
+      const res = await getMEBiddingQuery({
+        market: MarketType.MagicEden,
+        params: params,
+      });
+      list = res;
+    } else {
+      const res: any = await getOffersByMints({
+        mints: [mintAddress],
+        owner: owner,
+      });
+      if ('data' in res) {
+        list = res['data'];
+      }
+    }
+
     list = list.map((item, index) => ({
       ...item,
       key: index,
     }));
-    console.log('offers -------------', list);
     return list;
   }
 
