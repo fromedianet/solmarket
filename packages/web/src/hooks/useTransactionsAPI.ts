@@ -78,11 +78,22 @@ export const useTransactionsAPI = () => {
     return result;
   }
 
+  async function getOffersByMints(params: { mints: string[]; owner: string }) {
+    const result = await runAPI(
+      false,
+      'post',
+      '/audits/getOffersByMints',
+      JSON.stringify(params),
+    );
+    return result;
+  }
+
   return {
     getTransactionsBySymbol,
     getTransactionsByMint,
     getTransactionsByWallet,
     getOffersMade,
     getOffersReceived,
+    getOffersByMints,
   };
 };

@@ -1,4 +1,5 @@
 export interface Offer {
+  key?: number;
   name: string;
   image: string;
   symbol: string;
