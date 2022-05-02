@@ -14,14 +14,23 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { ItemAction } from './itemAction';
+import { Offer } from '../../models/offer';
 
 const { Panel } = Collapse;
 
 export const InfoSection = (props: {
   nft: NFT;
   market: string | null;
+  biddingBalance: number;
   priceData: any[];
+  loading: boolean;
+  myOffer: Offer | undefined;
   onRefresh: () => void;
+  onListNow: (a) => void;
+  onCancelList: () => void;
+  onBuyNow: () => void;
+  onPlaceBid: (a) => void;
+  onCancelVisible: () => void;
 }) => {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
@@ -107,7 +116,17 @@ export const InfoSection = (props: {
             <img width={20} src={'/icons/refresh.svg'} />
           </div>
         </div>
-        <ItemAction nft={props.nft} onRefresh={props.onRefresh} />
+        <ItemAction
+          nft={props.nft}
+          loading={props.loading}
+          myOffer={props.myOffer}
+          biddingBalance={props.biddingBalance}
+          onListNow={props.onListNow}
+          onCancelList={props.onCancelList}
+          onBuyNow={props.onBuyNow}
+          onPlaceBid={props.onPlaceBid}
+          onCancelVisible={props.onCancelVisible}
+        />
         <Collapse
           expandIconPosition="right"
           className="art-info"
