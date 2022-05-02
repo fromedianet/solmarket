@@ -87,15 +87,19 @@ export const InfoSection = (props: {
           {props.nft.name || <Skeleton paragraph={{ rows: 0 }} />}
         </div>
         <div className="collection-container">
-          <Link
-            to={`/marketplace/${props.nft.symbol}${
-              props.market ? '?market=' + props.market : ''
-            }`}
-            className="collection-name"
-          >
-            <img width={20} src={'/icons/check.svg'} />
-            <span>{props.nft.collectionName}</span>
-          </Link>
+          {props.nft.symbol ? (
+            <Link
+              to={`/marketplace/${props.nft.symbol}${
+                props.market ? '?market=' + props.market : ''
+              }`}
+              className="collection-name"
+            >
+              <img width={20} src={'/icons/check.svg'} />
+              <span>{props.nft.collectionName}</span>
+            </Link>
+          ) : (
+            <span className='collection-name'>Unverified</span>
+          )}
           <div
             onClick={props.onRefresh}
             style={{ cursor: 'pointer', marginLeft: 'auto' }}
