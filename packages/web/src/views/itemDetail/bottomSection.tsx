@@ -6,6 +6,8 @@ import TimeAgo from 'javascript-time-ago';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import en from 'javascript-time-ago/locale/en.json';
 import { NFTCard } from '../marketplace/components/Items';
+import { Offer } from '../../models/offer';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
@@ -19,9 +21,13 @@ export const BottomSection = (props: {
   nft: NFT;
   market: string | null;
   nftList: NFT[];
+  offers: Offer[];
+  setMyOffer: (a) => void;
+  onCancelVisible: () => void;
 }) => {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
+  const wallet = useWallet();
 
   const getColor = txType => {
     if (txType === 'SALE') {
@@ -98,6 +104,40 @@ export const BottomSection = (props: {
     },
   ];
 
+  const offerColumns = [
+    {
+      title: 'Price',
+      dataIndex: 'bidPrice',
+      key: 'bidPrice',
+      render: bidPrice => <span>{`${bidPrice} SOL`}</span>,
+    },
+    {
+      title: 'From',
+      dataIndex: 'buyer',
+      key: 'buyer',
+      render: buyer => <span>{buyer}</span>,
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      render: (text, record) =>
+        record.buyer === wallet.publicKey?.toBase58() ? (
+          <button
+            className="cancel-button"
+            onClick={() => {
+              props.setMyOffer(record);
+              props.onCancelVisible();
+            }}
+          >
+            Cancel
+          </button>
+        ) : (
+          <></>
+        ),
+    },
+  ];
+
   return (
     <Collapse
       expandIconPosition="right"
@@ -105,9 +145,26 @@ export const BottomSection = (props: {
       defaultActiveKey={['activities', 'more']}
     >
       <Panel
+        header={`Offers ${
+          props.offers.length > 0 ? ` (${props.offers.length})` : ''
+        }`}
+        key="offers"
+        className="bg-secondary no-padding"
+        extra={<img src="/icons/zap.svg" width={24} alt="offers" />}
+      >
+        {props.offers.length > 0 && (
+          <Table
+            columns={offerColumns}
+            dataSource={props.offers}
+            style={{ overflowX: 'auto' }}
+            pagination={{ position: ['bottomLeft'], pageSize: 10 }}
+          />
+        )}
+      </Panel>
+      <Panel
         header="Activities"
         key="activities"
-        className="bg-secondary"
+        className="bg-secondary no-padding"
         extra={<img src="/icons/price.svg" width={24} alt="activites" />}
       >
         {props.transactions.length > 0 && (

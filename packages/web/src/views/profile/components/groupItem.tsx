@@ -18,16 +18,21 @@ export const GroupItem = ({
           className="icon"
           alt={item.collection.symbol}
         />
-        <Link
-          className="link"
-          to={
-            item.collection.market
-              ? `/marketplace/${item.collection.symbol}?market=${item.collection.market}`
-              : `/marketplace/${item.collection.symbol}`
-          }
-        >
-          {item.collection.name}
-        </Link>
+        {item.collection.symbol && item.collection.symbol !== 'undefined' ? (
+          <Link
+            className="link"
+            to={
+              item.collection.market
+                ? `/marketplace/${item.collection.symbol}?market=${item.collection.market}`
+                : `/marketplace/${item.collection.symbol}`
+            }
+          >
+            {item.collection.name}
+          </Link>
+        ) : (
+          <span className="link">{item.collection.name}</span>
+        )}
+
         <Tooltip title="Floor price" className="tooltip">
           <span>{`FLOOR: ${
             item.collection.floorPrice === 0 ? '--' : item.collection.floorPrice

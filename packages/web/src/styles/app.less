@@ -712,41 +712,60 @@ model-viewer {
   }
 }
 
-.ant-table {
-  background: transparent;
-  color: @text-primary-color;
+.ant-table-wrapper {
+  padding: 16px;
+  border: 1px solid @border-primary-color;
+  border-radius: 8px;
 
-  th.ant-table-cell {
-    background: @bg-secondary-color;
-    color: @text-pink;
-    border: none;
-  }
-  .ant-table-tbody {
-    tr:nth-child(odd) {
-      background: @bg-table-odd;
+  .ant-table {
+    background: transparent;
+    color: @text-primary-color;
+  
+    th.ant-table-cell {
+      background: transparent;
+      color: @text-pink;
+      border: none;
     }
-    tr:nth-child(even) {
-      background: @bg-table-even;
-    }
-    & > tr {
-      td {
-        border: none;
+    .ant-table-tbody {
 
-        a {
-          color: @text-primary-color;
+      tr:nth-child(odd) {
+        background: @bg-table-odd;
+      }
+      tr:nth-child(even) {
+        background: @bg-table-even;
+      }
+      tr:first-child td:first-child {
+        border-top-left-radius: 8px;
+      }
+      tr:first-child td:last-child {
+        border-top-right-radius: 8px;
+      }
+      tr:last-child td:first-child {
+        border-bottom-left-radius: 8px;
+      }
+      tr:last-child td:last-child {
+        border-bottom-right-radius: 8px;
+      }
+      & > tr {
+        td {
+          border: none;
+  
+          a {
+            color: @text-primary-color;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
         }
-        a:hover {
-          text-decoration: underline;
+        &.ant-table-row:hover > td,
+        & > td.ant-table-cell-row-hover {
+          background: transparent;
         }
       }
-      &.ant-table-row:hover > td,
-      & > td.ant-table-cell-row-hover {
+  
+      tr.ant-table-placeholder:hover > td {
         background: transparent;
       }
-    }
-
-    tr.ant-table-placeholder:hover > td {
-      background: transparent;
     }
   }
 }
