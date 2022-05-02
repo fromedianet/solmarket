@@ -144,6 +144,14 @@
       .bg-secondary .ant-collapse-content {
         background: @bg-secondary-color;
       }
+
+      .no-padding .ant-collapse-content {
+        border: none;
+
+        .ant-collapse-content-box {
+          padding: 0;
+        }
+      }
     }
 
     .ant-statistic {
@@ -201,6 +209,16 @@
   .bottom-section {
     width: 100%;
     margin: 24px auto;
+
+    .cancel-button {
+      background: transparent;
+      color: @text-pink;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      margin-right: 8px;
+      cursor: pointer;
+    }
   }
 }
 
