@@ -5,7 +5,7 @@ import {
   formatAmount,
   MetaplexModal,
   notify,
-  sendTransactionWithRetry,
+  sendTransaction,
   shortenAddress,
   useConnection,
   useConnectionConfig,
@@ -680,7 +680,7 @@ export const ProfileView = () => {
     try {
       const transaction = Transaction.populate(Message.from(data));
       console.log('----- transaction -----', transaction);
-      const { txid } = await sendTransactionWithRetry(
+      const { txid } = await sendTransaction(
         _connection,
         wallet,
         transaction.instructions,
