@@ -505,7 +505,11 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             alreadyListed &&
             (isOfferAccepted ? (
               isWinner && (
-                <Button className="button" onClick={onBuyNow} disabled={loading}>
+                <Button
+                  className="button"
+                  onClick={onBuyNow}
+                  disabled={loading}
+                >
                   Claim
                 </Button>
               )
@@ -536,7 +540,7 @@ export const ItemAction = (props: { nft: NFT; onRefresh: () => void }) => {
             ))
           )}
         </div>
-      )}    
+      )}
       <MetaplexModal
         className="make-offer-modal"
         visible={showOfferModal}

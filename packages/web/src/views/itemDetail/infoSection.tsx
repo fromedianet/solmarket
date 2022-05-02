@@ -98,7 +98,7 @@ export const InfoSection = (props: {
               <span>{props.nft.collectionName}</span>
             </Link>
           ) : (
-            <span className='collection-name'>Unverified</span>
+            <span className="collection-name">Unverified</span>
           )}
           <div
             onClick={props.onRefresh}

@@ -310,7 +310,7 @@ export const ProfileView = () => {
       if ('data' in res1) {
         list = res1['data'];
       }
-
+      /*
       const query = {
         $match: {
           initializerKey: wallet.publicKey.toBase58(),
@@ -326,6 +326,7 @@ export const ProfileView = () => {
       });
 
       list = list.concat(res2);
+      */
       list = list.map((item, index) => ({
         ...item,
         key: index,
