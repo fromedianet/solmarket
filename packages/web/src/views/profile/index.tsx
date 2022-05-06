@@ -80,13 +80,12 @@ export const ProfileView = () => {
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const {
-    getExNFTsByOwner,
     getExNFTsByEscrowOwner,
     getExGlobalActivities,
     getExEscrowBalance,
   } = useExNftAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
-  const { getMEMultiCollectionEscrowStats, getMEBiddingQuery } =
+  const { getMEBiddingQuery } =
     useMECollectionsAPI();
 
   const activityColumns = ActivityColumns(network);
@@ -161,53 +160,36 @@ export const ProfileView = () => {
     if (wallet.publicKey) {
       let items1: any[] = [];
       let items2: any[] = [];
-      const symbols1: string[] = [];
-      const symbols2: string[] = [];
+      const symbols: string[] = [];
       const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
       if ('data' in res) {
         res['data'].forEach(k => {
-          if (k && !symbols1.includes(k)) {
-            symbols1.push(k);
+          if (k && !symbols.includes(k)) {
+            symbols.push(k);
           }
         });
         items1 = res['data'].filter(k => k.price === 0);
         items2 = res['data'].filter(k => k.price > 0);
       }
 
-      const exRes1 = await getExNFTsByOwner(
+      const exRes = await getExNFTsByEscrowOwner(
         wallet.publicKey.toBase58(),
         MarketType.MagicEden,
       );
-      items1 = items1.concat(exRes1);
-      const exRes2 = await getExNFTsByEscrowOwner(
-        wallet.publicKey.toBase58(),
-        MarketType.MagicEden,
-      );
-      items2 = items2.concat(exRes2);
+      items2 = items2.concat(exRes);
 
-      const exTemp = exRes1.concat(exRes2);
-      exTemp.forEach(k => {
-        if (k.symbol && !symbols2.includes(k.symbol)) {
-          symbols2.push(k.symbol);
+      exRes.forEach(k => {
+        if (k.symbol && !symbols.includes(k.symbol)) {
+          symbols.push(k.symbol);
         }
       });
 
       let tempCols: any = {};
-      if (symbols1.length > 0) {
-        const colRes: any = await getMultiCollectionEscrowStats(symbols1);
+      if (symbols.length > 0) {
+        const colRes: any = await getMultiCollectionEscrowStats(symbols);
         if ('data' in colRes) {
           tempCols = colRes['data'];
         }
-      }
-      if (symbols2.length > 0) {
-        const colRes = await getMEMultiCollectionEscrowStats({
-          market: MarketType.MagicEden,
-          symbols: symbols2,
-        });
-        tempCols = {
-          ...tempCols,
-          ...colRes,
-        };
       }
 
       items1 = items1.map(item => ({
