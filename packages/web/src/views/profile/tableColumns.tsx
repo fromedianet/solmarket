@@ -42,11 +42,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       key: 'name',
       render: (text, record) => (
         <a
-          href={
-            record.market
-              ? `/exnft/${record.mint}?market=${record.market}`
-              : `/item-details/${record.mint}`
-          }
+          href={`/item-details/${record.mint}`}
           style={{ cursor: 'pointer' }}
         >
           {record.name}
@@ -85,7 +81,6 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
           <span style={{ color: getColor(record.txType) }}>
             {record.txType}
           </span>
-          {record.market && <span style={{ color: '#e93a88' }}>(ME)</span>}
         </div>
       ),
     },

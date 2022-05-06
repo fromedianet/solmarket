@@ -81,7 +81,6 @@ export const ProfileView = () => {
     useTransactionsAPI();
   const {
     getExNFTsByEscrowOwner,
-    getExGlobalActivities,
     getExEscrowBalance,
   } = useExNftAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
@@ -132,8 +131,10 @@ export const ProfileView = () => {
         })
         .finally(() => setLoading(false));
 
-      loadGlobalActivities().then(res => {
-        setTransactions(res);
+      getTransactionsByWallet(wallet.publicKey.toBase58()).then((res: any) => {
+        if ('data' in res) {
+          setTransactions(res['data']);
+        }
       });
 
       loadOffersMade().then(res => setOffersMade(res));
@@ -325,25 +326,6 @@ export const ProfileView = () => {
       }));
     }
     return list;
-  }
-
-  async function loadGlobalActivities() {
-    let data: TransactionModel[] = [];
-    if (wallet.publicKey) {
-      const res: any = await getTransactionsByWallet(
-        wallet.publicKey.toBase58(),
-      );
-      if ('data' in res) {
-        data = res['data'];
-      }
-      const exData: TransactionModel[] = await getExGlobalActivities(
-        wallet.publicKey.toBase58(),
-        MarketType.MagicEden,
-      );
-      data = data.concat(exData);
-      data.sort((a, b) => b.blockTime - a.blockTime);
-    }
-    return data;
   }
 
   const onSubmit = values => {
