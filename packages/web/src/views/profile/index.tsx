@@ -33,13 +33,12 @@ import { showEscrow } from '../../actions/showEscrow';
 import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
-import { Connection, Message, Transaction } from '@solana/web3.js';
+import { Message, Transaction } from '@solana/web3.js';
 import { useExNftAPI } from '../../hooks/useExNftAPI';
-import { MarketType, meConnection, ME_AUCTION_HOUSE_ID } from '../../constants';
+import { MarketType } from '../../constants';
 import { OffersMade } from './components/offersMade';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
-import { useMECollectionsAPI } from '../../hooks/useMECollectionsAPI';
 import { groupBy } from '../../utils/utils';
 import { GroupItem } from './components/groupItem';
 
@@ -58,7 +57,6 @@ export const ProfileView = () => {
   const [offersReceived, setOffersReceived] = useState<Offer[]>([]);
   const [totalFloorPrice, setTotalFloorPrice] = useState(0);
   const [balance, setBalance] = useState(0);
-  const [exBalance, setExBalance] = useState(0);
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
@@ -73,19 +71,13 @@ export const ProfileView = () => {
     acceptOffer,
     deposit,
     withdraw,
-    cancelBidME,
-    depositME,
-    withdrawME,
   } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const {
     getExNFTsByEscrowOwner,
-    getExEscrowBalance,
   } = useExNftAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
-  const { getMEBiddingQuery } =
-    useMECollectionsAPI();
 
   const activityColumns = ActivityColumns(network);
 
@@ -272,22 +264,6 @@ export const ProfileView = () => {
       if ('data' in res1) {
         list = res1['data'];
       }
-
-      const query = {
-        $match: {
-          bidderPubkey: wallet.publicKey.toBase58(),
-        },
-        $sort: { createdAt: -1 },
-      };
-
-      const params = `?q=${encodeURI(JSON.stringify(query))}`;
-
-      const res2 = await getMEBiddingQuery({
-        market: MarketType.MagicEden,
-        params: params,
-      });
-
-      list = list.concat(res2);
       list = list.map((item, index) => ({
         ...item,
         key: index,
@@ -303,23 +279,6 @@ export const ProfileView = () => {
       if ('data' in res1) {
         list = res1['data'];
       }
-      /*
-      const query = {
-        $match: {
-          initializerKey: wallet.publicKey.toBase58(),
-        },
-        $sort: { createdAt: -1 },
-      };
-
-      const params = `?q=${encodeURI(JSON.stringify(query))}`;
-
-      const res2 = await getMEBiddingQuery({
-        market: MarketType.MagicEden,
-        params: params,
-      });
-
-      list = list.concat(res2);
-      */
       list = list.map((item, index) => ({
         ...item,
         key: index,
@@ -370,13 +329,6 @@ export const ProfileView = () => {
       setLoadingBalance(true);
       const val = await showEscrow(connection, wallet.publicKey);
       setBalance(val);
-
-      const val1 = await getExEscrowBalance({
-        wallet: wallet.publicKey.toBase58(),
-        auctionHouse: '',
-        market: MarketType.MagicEden,
-      });
-      setExBalance(val1);
       setLoadingBalance(false);
     }
   };
@@ -386,54 +338,27 @@ export const ProfileView = () => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        if (offer.market) {
-          if (!offer.auctionHouseKey) {
-            reject();
-            return;
-          }
-          const result: any = await cancelBidME({
-            buyer: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: offer.auctionHouseKey!,
-            tokenMint: offer.mint,
-            price: offer.bidPrice,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, meConnection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  setRefresh(Date.now());
-                }, 30000);
-                resolve('');
-                return;
-              }
-            }
-          }
-        } else {
-          const result: any = await cancelBid({
-            buyer: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            tokenMint: offer.mint,
-            tokenAccount: offer.tokenAccount,
-            tradeState: offer.tradeState!,
-            price: offer.bidPrice,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                socket.emit('syncAuctionHouse', {
-                  wallet: wallet.publicKey!.toBase58(),
-                });
-                resolve('');
-                return;
-              }
+        const result: any = await cancelBid({
+          buyer: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: offer.mint,
+          tokenAccount: offer.tokenAccount,
+          tradeState: offer.tradeState!,
+          price: offer.bidPrice,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', {
+                wallet: wallet.publicKey!.toBase58(),
+              });
+              resolve('');
+              return;
             }
           }
         }
-
         reject();
       } catch (e) {
         reject(e);
@@ -476,7 +401,7 @@ export const ProfileView = () => {
         if ('data' in result) {
           const data = result['data']['data'];
           if (data) {
-            const status = await runInstructions(data, connection);
+            const status = await runInstructions(data);
             if (!status['err']) {
               socket.emit('syncAuctionHouse', {
                 wallet: wallet.publicKey!.toBase58(),
@@ -511,51 +436,29 @@ export const ProfileView = () => {
     );
   };
 
-  const onDeposit = (amount: number, market: string | undefined) => {
+  const onDeposit = (amount: number) => {
     if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        if (market) {
-          const result: any = await depositME({
-            pubkey: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: ME_AUCTION_HOUSE_ID,
-            amount: amount,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, meConnection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  setRefresh(Date.now());
-                }, 30000);
-                resolve('');
-                return;
-              }
-            }
-          }
-        } else {
-          const result: any = await deposit({
-            pubkey: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            amount: amount,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  callShowEscrow();
-                }, 20000);
-                resolve('');
-                return;
-              }
+        const result: any = await deposit({
+          pubkey: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          amount: amount,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              setTimeout(() => {
+                callShowEscrow();
+              }, 20000);
+              resolve('');
+              return;
             }
           }
         }
-
         reject();
       } catch (e) {
         reject(e);
@@ -579,51 +482,29 @@ export const ProfileView = () => {
     );
   };
 
-  const onWithdraw = (amount: number, market: string | undefined) => {
+  const onWithdraw = (amount: number) => {
     if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        if (market) {
-          const result: any = await withdrawME({
-            pubkey: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: ME_AUCTION_HOUSE_ID,
-            amount: amount,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, meConnection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  setRefresh(Date.now());
-                }, 30000);
-                resolve('');
-                return;
-              }
-            }
-          }
-        } else {
-          const result: any = await withdraw({
-            pubkey: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            amount: amount,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  callShowEscrow();
-                }, 20000);
-                resolve('');
-                return;
-              }
+        const result: any = await withdraw({
+          pubkey: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          amount: amount,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data);
+            if (!status['err']) {
+              setTimeout(() => {
+                callShowEscrow();
+              }, 20000);
+              resolve('');
+              return;
             }
           }
         }
-
         reject();
       } catch (e) {
         reject(e);
@@ -649,20 +530,20 @@ export const ProfileView = () => {
     );
   };
 
-  async function runInstructions(data: Buffer, _connection: Connection) {
+  async function runInstructions(data: Buffer) {
     let status: any = { err: true };
     try {
       const transaction = Transaction.populate(Message.from(data));
       console.log('----- transaction -----', transaction);
       const { txid } = await sendTransaction(
-        _connection,
+        connection,
         wallet,
         transaction.instructions,
         [],
       );
 
       if (txid) {
-        status = await _connection.confirmTransaction(txid, 'confirmed');
+        status = await connection.confirmTransaction(txid, 'confirmed');
       }
     } catch (e) {
       console.error('----- runInstructions error ------------', e);
@@ -797,7 +678,6 @@ export const ProfileView = () => {
               <OffersMade
                 offers={offersMade}
                 balance={balance}
-                exBalance={exBalance}
                 loadingBalance={loadingBalance}
                 callShowEscrow={callShowEscrow}
                 onCancelBid={onCancelBid}
