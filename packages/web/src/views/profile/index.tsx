@@ -66,17 +66,10 @@ export const ProfileView = () => {
   const network = endpoint.endpoint.name;
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
-  const {
-    cancelBid,
-    acceptOffer,
-    deposit,
-    withdraw,
-  } = useInstructionsAPI();
+  const { cancelBid, acceptOffer, deposit, withdraw } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
-  const {
-    getExNFTsByEscrowOwner,
-  } = useExNftAPI();
+  const { getExNFTsByEscrowOwner } = useExNftAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
 
   const activityColumns = ActivityColumns(network);

@@ -41,10 +41,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a
-          href={`/item-details/${record.mint}`}
-          style={{ cursor: 'pointer' }}
-        >
+        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
           {record.name}
         </a>
       ),
@@ -180,10 +177,10 @@ export const OffersMadeColumns = (props: {
           <span>{`${record.bidPrice} SOL`}</span>
         ) : (
           <>
-            <span style={{ color: '#ffffff', fontSize: 14 }} >
+            <span style={{ color: '#ffffff', fontSize: 14 }}>
               {`${record.bidPrice} SOL`}
             </span>
-            <span style={{ color: '#ffaa00', fontSize: 12, marginLeft: 8 }} >
+            <span style={{ color: '#ffaa00', fontSize: 12, marginLeft: 8 }}>
               {`- ${record.bidPrice - props.balance} SOL`}
             </span>
           </>

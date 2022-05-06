@@ -166,9 +166,7 @@ export const OffersMade = ({
         onCancel={() => setDepositVisible(false)}
       >
         <div>
-          <span className="header-text">
-            Deposit
-          </span>
+          <span className="header-text">Deposit</span>
           <div className="body-container">
             <span className="description">
               You&apos;re about to deposit SOL from your main wallet into the
@@ -256,9 +254,7 @@ export const OffersMade = ({
         onCancel={() => setCancelVisible(false)}
       >
         <div>
-          <span className="header-text">
-            Cancel the offer
-          </span>
+          <span className="header-text">Cancel the offer</span>
           <div className="body-container">
             <span className="description">
               When your offer is canceled, the funds will remain in your bidding
@@ -317,9 +313,7 @@ export const OffersMade = ({
         onCancel={() => setWithdrawVisible(false)}
       >
         <div>
-          <span className="header-text">
-            Withdraw all to main wallet
-          </span>
+          <span className="header-text">Withdraw all to main wallet</span>
           <div className="body-container">
             <span className="description">
               You&apos;re about to withdraw all SOL from the bidding wallet back
