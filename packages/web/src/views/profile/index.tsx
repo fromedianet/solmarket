@@ -108,6 +108,16 @@ export const ProfileView = () => {
           setRefresh(Date.now());
         }
       });
+
+      socket.emit('syncGetNFTsByOwner', {
+        wallet: wallet.publicKey.toBase58(),
+      });
+
+      socket.on('syncedNFTsByOwner', (params: any[]) => {
+        if (params.some(k => k.wallet === wallet.publicKey?.toBase58())) {
+          setRefresh(Date.now());
+        }
+      });
     }
   }, [socket, wallet]);
 
