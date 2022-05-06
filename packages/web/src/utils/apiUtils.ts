@@ -6,7 +6,7 @@ import { useAuthToken } from '../contexts/authProvider';
 export const ApiUtils = () => {
   const { authToken, removeAuthToken } = useAuthToken();
   const axiosInstance = axios.create({
-    timeout: 30000,
+    timeout: 60000,
     headers: { 'Content-Type': 'application/json' },
   });
 
