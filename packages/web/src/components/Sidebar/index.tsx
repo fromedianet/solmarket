@@ -61,16 +61,16 @@ export const Sidebar = () => {
   const SidebarMenu = () => {
     return (
       <Menu
-        theme='dark'
-        mode='inline'
-        className='sidebar-menu'
+        theme="dark"
+        mode="inline"
+        className="sidebar-menu"
         onClick={onCollapse}
         items={[
           {
             key: 'home',
             label: 'Home',
             icon: <HomeOutlined style={{ fontSize: 20 }} />,
-            onClick: () => navigate('/')
+            onClick: () => navigate('/'),
           },
           {
             key: 'collections',
@@ -80,25 +80,25 @@ export const Sidebar = () => {
               {
                 key: 'all-collections',
                 label: 'All',
-                onClick: () => navigate('/collections')
+                onClick: () => navigate('/collections'),
               },
               {
                 key: 'popular-collections',
                 label: 'Popular',
-                onClick: () => navigate('/collections?type=popular')
+                onClick: () => navigate('/collections?type=popular'),
               },
               {
                 key: 'new-collections',
                 label: 'New',
-                onClick: () => navigate('/collections?type=new')
-              }
-            ]
+                onClick: () => navigate('/collections?type=new'),
+              },
+            ],
           },
           {
             key: 'launchpad',
             label: 'Launchpad',
             icon: <TagOutlined style={{ fontSize: 20 }} />,
-            onClick: () => navigate('/launchpad')
+            onClick: () => navigate('/launchpad'),
           },
           {
             key: 'creators',
@@ -108,9 +108,9 @@ export const Sidebar = () => {
               {
                 key: 'dashboard',
                 label: 'Apply for listing',
-                onClick: () => window.open('/dashboard','_blank')
-              }
-            ]
+                onClick: () => window.open('/dashboard', '_blank'),
+              },
+            ],
           },
           {
             key: 'community',
@@ -120,19 +120,19 @@ export const Sidebar = () => {
               {
                 key: 'twitter',
                 label: 'Twitter',
-                onClick: () => {}
+                onClick: () => {},
               },
               {
                 key: 'discord',
                 label: 'Discord',
-                onClick: () => {}
+                onClick: () => {},
               },
               {
                 key: 'blog',
                 label: 'Blog',
-                onClick: () => {}
-              }
-            ]
+                onClick: () => {},
+              },
+            ],
           },
           {
             key: 'more',
@@ -142,14 +142,14 @@ export const Sidebar = () => {
               {
                 key: 'faq',
                 label: 'FAQ',
-                onClick: () => {}
-              }
-            ]
-          }
+                onClick: () => {},
+              },
+            ],
+          },
         ]}
       />
-    )
-  }
+    );
+  };
 
   return (
     <Sider
