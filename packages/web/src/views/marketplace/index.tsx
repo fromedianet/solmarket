@@ -8,16 +8,14 @@ import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useParams } from 'react-router-dom';
 import { useCollection } from '../../hooks/useCollection';
-import { useQuerySearch } from '@oyster/common';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
 
 export const MarketplaceView = () => {
-  const params = useParams<{ symbol: string }>();
+  const params = useParams<{ id: string, symbol: string }>();
+  const id = params.id || '1';
   const symbol = params.symbol || '';
-  const searchParams = useQuerySearch();
-  const market = searchParams.get('market');
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
   const [list, setList] = useState<any[]>([]);
@@ -44,7 +42,7 @@ export const MarketplaceView = () => {
     hasMore,
     loading,
     getListedNFTs,
-  } = useCollection(symbol, market);
+  } = useCollection(id, symbol);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);

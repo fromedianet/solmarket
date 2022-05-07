@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MarketType } from '../constants';
 import {
   ExAttribute,
   ExAttrValue,
@@ -14,7 +15,7 @@ import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
-export const useCollection = (symbol: string, market: string | null) => {
+export const useCollection = (id: string, symbol: string) => {
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
@@ -31,13 +32,12 @@ export const useCollection = (symbol: string, market: string | null) => {
   const {
     getMECollectionBySymbol,
     getMEListedNFTsByCollection,
-    getMETransactionsBySymbol,
   } = useMECollectionsAPI();
 
   useEffect(() => {
-    if (market) {
+    if (id === '2') {
       // For MagicEden
-      getMECollectionBySymbol(market, symbol)
+      getMECollectionBySymbol(MarketType.MagicEden, symbol)
         // @ts-ignore
         .then((result: {}) => {
           if ('collection' in result) {
@@ -50,14 +50,6 @@ export const useCollection = (symbol: string, market: string | null) => {
             setCollectionStats(result['stats']);
           }
         });
-
-      getMETransactionsBySymbol({
-        market: market,
-        symbol: symbol,
-        sort: 1,
-      }).then((data: []) => {
-        setTransactions(data);
-      });
     } else {
       // For own marketplace
       getCollectionBySymbol(symbol)
@@ -88,16 +80,15 @@ export const useCollection = (symbol: string, market: string | null) => {
             });
           }
         });
-
-      getTransactionsBySymbol(symbol)
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setTransactions(res['data']);
-          }
-        });
     }
-  }, [symbol, market]);
+    getTransactionsBySymbol(symbol)
+      // @ts-ignore
+      .then((res: {}) => {
+        if ('data' in res) {
+          setTransactions(res['data']);
+        }
+      });
+  }, [id, symbol]);
 
   const getListedNFTs = (param: QUERIES) => {
     if (loading) return;
