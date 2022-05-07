@@ -154,9 +154,7 @@ export const CollectionsView = () => {
               >
                 <CollectionCard
                   item={item}
-                  link={`/marketplace/${item.symbol}${
-                    item.market ? '?market=' + item.market : ''
-                  }`}
+                  link={`/marketplace/${item.market ? '2' : '1'}/${item.symbol}`}
                 />
               </Col>
             ))}
