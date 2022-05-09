@@ -15,9 +15,7 @@ import {
   useQuerySearch,
 } from '@oyster/common';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
-import { useExNftAPI } from '../../hooks/useExNftAPI';
-import { useMECollectionsAPI } from '../../hooks/useMECollectionsAPI';
-import { MarketType, meConnection, ME_AUCTION_HOUSE_ID } from '../../constants';
+import { meConnection } from '../../constants';
 import { Offer } from '../../models/offer';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
@@ -47,10 +45,6 @@ export const ItemDetailView = () => {
   const [cancelVisible, setCancelVisible] = useState(false);
   const { getNftByMint, getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsByMint, getOffersByMints } = useTransactionsAPI();
-  const { getExNFTByMintAddress, getExTransactions, getExEscrowBalance } =
-    useExNftAPI();
-  const { getMEListedNFTsByCollection, getMEBiddingQuery } =
-    useMECollectionsAPI();
   const {
     buyNow,
     list,
@@ -85,7 +79,7 @@ export const ItemDetailView = () => {
   }, [mint, market, refresh]);
 
   useEffect(() => {
-    const filters = transactions.filter(item => item.txType === 'SALE');
+    const filters = transactions.filter(item => item.txType === 'SALE' || item.txType === 'Auction Settled');
     const data = filters.map(item => ({
       date: getDateStringFromUnixTimestamp(item.blockTime),
       price: item.price || 0,
@@ -98,7 +92,7 @@ export const ItemDetailView = () => {
     if (nft) {
       getListedNFTs(nft).then(res => setNFTList(res));
       getEscrowBalance().then(val => setBiddingBalance(val));
-      getOffers(mint, nft.owner, nft.market).then(res => {
+      getOffers(mint, nft.owner).then(res => {
         setOffers(res);
       });
     }
@@ -119,20 +113,9 @@ export const ItemDetailView = () => {
     setLoadingPage(true);
 
     let result: any = {};
-    if (market) {
-      const res: any = await getExNFTByMintAddress({
-        market: market,
-        mint: mint,
-        price: undefined,
-      });
-      if (res) {
-        result = res;
-      }
-    } else {
-      const res: any = await getNftByMint(mint);
-      if ('data' in res) {
-        result = res['data'];
-      }
+    const res: any = await getNftByMint(mint);
+    if ('data' in res) {
+      result = res['data'];
     }
 
     setLoadingPage(false);
@@ -141,17 +124,9 @@ export const ItemDetailView = () => {
 
   async function getTransactions() {
     let result: any[] = [];
-    if (!mint) return result;
-    if (market) {
-      const res = await getExTransactions(mint, market);
-      if (res) {
-        result = res;
-      }
-    } else {
-      const res: any = await getTransactionsByMint(mint);
-      if ('data' in res) {
-        result = res['data'];
-      }
+    const res: any = await getTransactionsByMint(mint);
+    if ('data' in res) {
+      result = res['data'];
     }
     return result;
   }
@@ -160,18 +135,12 @@ export const ItemDetailView = () => {
     let result: any[] = [];
     const param = {
       symbol: nftItem.symbol,
-      market: nftItem.market,
       sort: 1,
       status: false,
     };
-    if (nftItem.market) {
-      const res: any = await getMEListedNFTsByCollection(param);
-      if (res) result = res;
-    } else {
-      const res: any = await getListedNftsByQuery(param);
-      if ('data' in res) {
-        result = res['data'];
-      }
+    const res: any = await getListedNftsByQuery(param);
+    if ('data' in res) {
+      result = res['data'];
     }
     result = result.filter(item => item.mint != nftItem.mint);
     return result;
@@ -180,32 +149,14 @@ export const ItemDetailView = () => {
   async function getOffers(
     mintAddress: string,
     owner: string,
-    market: string | undefined | null,
   ) {
     let list: Offer[] = [];
-    if (market) {
-      const query = {
-        $match: {
-          initializerDepositTokenMintAccount: {
-            $in: [mintAddress],
-          },
-        },
-        $sort: { createdAt: -1 },
-      };
-      const params = `?q=${encodeURI(JSON.stringify(query))}`;
-      const res = await getMEBiddingQuery({
-        market: MarketType.MagicEden,
-        params: params,
-      });
-      list = res;
-    } else {
-      const res: any = await getOffersByMints({
-        mints: [mintAddress],
-        owner: owner,
-      });
-      if ('data' in res) {
-        list = res['data'];
-      }
+    const res: any = await getOffersByMints({
+      mints: [mintAddress],
+      owner: owner,
+    });
+    if ('data' in res) {
+      list = res['data'];
     }
 
     list = list.map((item, index) => ({
@@ -217,6 +168,11 @@ export const ItemDetailView = () => {
 
   const onListNow = async (price: number) => {
     if (!wallet.publicKey || !nft) return;
+    if (nft.market && !nft.v2) {
+      // For ME v1 it redirects to the MagicEden site
+      window.open(`https://magiceden.io/item-details/${nft.mint}`, '_blank');
+      return;
+    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -224,7 +180,7 @@ export const ItemDetailView = () => {
         if (nft.market) {
           const result: any = await listME({
             seller: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: ME_AUCTION_HOUSE_ID,
+            auctionHouseAddress: nft.v2!.auctionHouseKey,
             tokenAccount: nft.tokenAddress,
             tokenMint: nft.mint,
             price: price,
@@ -604,15 +560,7 @@ export const ItemDetailView = () => {
   async function getEscrowBalance() {
     let result = 0;
     if (wallet.publicKey && nft) {
-      if (!nft.market) {
-        result = await showEscrow(connection, wallet.publicKey);
-      } else {
-        result = await getExEscrowBalance({
-          wallet: wallet.publicKey.toBase58(),
-          auctionHouse: ME_AUCTION_HOUSE_ID,
-          market: MarketType.MagicEden,
-        });
-      }
+      result = await showEscrow(connection, wallet.publicKey);
     }
     return result;
   }
