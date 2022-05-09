@@ -34,8 +34,6 @@ import { Offer } from '../../models/offer';
 import { toast } from 'react-toastify';
 import { useSocket } from '../../contexts/socketProvider';
 import { Message, Transaction } from '@solana/web3.js';
-import { useExNftAPI } from '../../hooks/useExNftAPI';
-import { MarketType } from '../../constants';
 import { OffersMade } from './components/offersMade';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -69,7 +67,6 @@ export const ProfileView = () => {
   const { cancelBid, acceptOffer, deposit, withdraw } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
-  const { getExNFTsByEscrowOwner } = useExNftAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
 
   const activityColumns = ActivityColumns(network);
@@ -149,22 +146,17 @@ export const ProfileView = () => {
       const symbols: string[] = [];
       const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
       if ('data' in res) {
-        res['data'].forEach(k => {
-          if (k && !symbols.includes(k)) {
-            symbols.push(k);
-          }
-        });
-        items1 = res['data'].filter(k => k.price === 0);
-        items2 = res['data'].filter(k => k.price > 0);
+        items1 = res['data']['myItems'];
+        items2 = res['data']['listedItems'];
       }
 
-      const exRes = await getExNFTsByEscrowOwner(
-        wallet.publicKey.toBase58(),
-        MarketType.MagicEden,
-      );
-      items2 = items2.concat(exRes);
+      items1.forEach(k => {
+        if (k.symbol && !symbols.includes(k.symbol)) {
+          symbols.push(k.symbol);
+        }
+      });
 
-      exRes.forEach(k => {
+      items2.forEach(k => {
         if (k.symbol && !symbols.includes(k.symbol)) {
           symbols.push(k.symbol);
         }
@@ -253,9 +245,9 @@ export const ProfileView = () => {
   async function loadOffersMade() {
     let list: Offer[] = [];
     if (wallet.publicKey) {
-      const res1: any = await getOffersMade(wallet.publicKey.toBase58());
-      if ('data' in res1) {
-        list = res1['data'];
+      const res: any = await getOffersMade(wallet.publicKey.toBase58());
+      if ('data' in res) {
+        list = res['data'];
       }
       list = list.map((item, index) => ({
         ...item,
@@ -268,9 +260,9 @@ export const ProfileView = () => {
   async function loadOffersReceived() {
     let list: Offer[] = [];
     if (wallet.publicKey) {
-      const res1: any = await getOffersReceived(wallet.publicKey.toBase58());
-      if ('data' in res1) {
-        list = res1['data'];
+      const res: any = await getOffersReceived(wallet.publicKey.toBase58());
+      if ('data' in res) {
+        list = res['data'];
       }
       list = list.map((item, index) => ({
         ...item,
