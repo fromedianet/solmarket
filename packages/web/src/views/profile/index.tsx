@@ -69,6 +69,7 @@ export const ProfileView = () => {
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
+  const meApis = useMEApis();
 
   const activityColumns = ActivityColumns(network);
 
@@ -147,7 +148,7 @@ export const ProfileView = () => {
       items1 = res.filter(k => k.price === 0);
       items2 = res.filter(k => k.price > 0);
 
-      const exRes = await useMEApis().getNFTsByEscrowOwner(
+      const exRes = await meApis.getNFTsByEscrowOwner(
         wallet.publicKey.toBase58(),
       );
       items2 = items2.concat(exRes);
@@ -167,7 +168,7 @@ export const ProfileView = () => {
       const tempCols: any = {};
       if (symbols.length > 0) {
         const colRes = await getMultiCollectionEscrowStats(symbols);
-        const tempCols = await useMEApis().getMultiCollectionEscrowStats(
+        const tempCols = await meApis.getMultiCollectionEscrowStats(
           symbols,
         );
         for (const [key, value] of Object.entries(colRes)) {

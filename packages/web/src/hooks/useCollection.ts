@@ -28,6 +28,7 @@ export const useCollection = (id: string, symbol: string) => {
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsBySymbol } = useTransactionsAPI();
+  const meApis = useMEApis();
 
   useEffect(() => {
     // For own marketplace
@@ -65,7 +66,7 @@ export const useCollection = (id: string, symbol: string) => {
     if (id === '1') {
       return await getCollectionBySymbol(symbol);
     } else {
-      return await useMEApis().getCollectionBySymbol(symbol);
+      return await meApis.getCollectionBySymbol(symbol);
     }
   }
 
@@ -73,13 +74,13 @@ export const useCollection = (id: string, symbol: string) => {
     if (id === '1') {
       return await getCollectionStatsBySymbol(symbol);
     } else {
-      return await useMEApis().getCollectionEscrowStats(symbol);
+      return await meApis.getCollectionEscrowStats(symbol);
     }
   }
 
   async function loadTransactionsBySymbol(symbol: string) {
     let data = await getTransactionsBySymbol(symbol);
-    const exData = await useMEApis().getTransactionsBySymbol(symbol);
+    const exData = await meApis.getTransactionsBySymbol(symbol);
     data = data.concat(exData);
     data.sort((a, b) => {
       if (b.blockTime > a.blockTime) {

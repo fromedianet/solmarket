@@ -15,6 +15,7 @@ export const CollectionsView = () => {
   const searchParams = useQuerySearch();
   const type = searchParams.get('type') || 'all';
   const { getAllCollections, getNewCollections } = useCollectionsAPI();
+  const meApis = useMEApis();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -53,16 +54,16 @@ export const CollectionsView = () => {
     let data: ExCollection[] = [];
     if (type === 'new') {
       data = await getNewCollections(true);
-      const exData = await useMEApis().getNewCollections(true);
+      const exData = await meApis.getNewCollections(true);
       data = data.concat(exData);
     } else if (type === 'popular') {
-      data = await useMEApis().getPopularCollections({
+      data = await meApis.getPopularCollections({
         more: true,
         timeRange: timeRange,
       });
     } else {
       data = await getAllCollections();
-      const exData = await useMEApis().getAllCollections();
+      const exData = await meApis.getAllCollections();
       data = data.concat(exData);
     }
     return data;

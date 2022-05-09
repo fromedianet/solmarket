@@ -48,6 +48,7 @@ export const ItemDetailView = () => {
   const { getTransactionsByMint, getOffersByMints } = useTransactionsAPI();
   const { buyNow, list, cancelList, placeBid, cancelBid, buyNowME } =
     useInstructionsAPI();
+  const meApis = useMEApis();
 
   useEffect(() => {
     if (nft) {
@@ -113,7 +114,7 @@ export const ItemDetailView = () => {
 
     let result = await getNftByMint(mint);
     if (!result) {
-      result = await useMEApis().getNFTByMintAddress(mint);
+      result = await meApis.getNFTByMintAddress(mint);
     }
 
     setLoadingPage(false);
@@ -122,7 +123,7 @@ export const ItemDetailView = () => {
 
   async function getTransactions(): Promise<any[]> {
     let data = await getTransactionsByMint(mint);
-    const exData = await useMEApis().getTransactionsByMint(mint);
+    const exData = await meApis.getTransactionsByMint(mint);
     data = data.concat(exData);
     data.sort((a, b) => {
       if (b.blockTime > a.blockTime) {

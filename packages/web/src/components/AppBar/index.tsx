@@ -52,6 +52,7 @@ export const AppBar = () => {
   const { getAllCollections } = useCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [filters, setFilters] = useState<ExCollection[]>([]);
+  const meApis = useMEApis();
 
   useEffect(() => {
     loadCollections().then(res => {
@@ -65,7 +66,7 @@ export const AppBar = () => {
 
   async function loadCollections() {
     let data = await getAllCollections();
-    const exData = await useMEApis().getAllCollections();
+    const exData = await meApis.getAllCollections();
     data = data.concat(exData);
     return data;
   }
