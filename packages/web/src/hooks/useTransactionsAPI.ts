@@ -8,14 +8,17 @@ export const useTransactionsAPI = () => {
    * @param params
    * @returns
    */
-  async function getTransactionsBySymbol(symbol: string) {
-    const result = await runAPI(
+  async function getTransactionsBySymbol(symbol: string): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/transactions/getTransactionsBySymbol',
       JSON.stringify({ symbol }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   /**
@@ -23,29 +26,35 @@ export const useTransactionsAPI = () => {
    * @param params
    * @returns
    */
-  async function getTransactionsByMint(mint: string) {
-    const result = await runAPI(
+  async function getTransactionsByMint(mint: string): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/transactions/getTransactionsByMint',
       JSON.stringify({ mint }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   /**
-   * Get transactions by mint
+   * Get transactions by wallet
    * @param params
    * @returns
    */
-  async function getTransactionsByWallet(wallet: string) {
-    const result = await runAPI(
+  async function getTransactionsByWallet(wallet: string): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/transactions/getTransactionsByWallet',
       JSON.stringify({ wallet }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   /**
@@ -53,14 +62,17 @@ export const useTransactionsAPI = () => {
    * @param params
    * @returns
    */
-  async function getOffersMade(wallet: string) {
-    const result = await runAPI(
+  async function getOffersMade(wallet: string): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/audits/getOffersMade',
       JSON.stringify({ wallet }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   /**
@@ -68,24 +80,30 @@ export const useTransactionsAPI = () => {
    * @param params
    * @returns
    */
-  async function getOffersReceived(wallet: string) {
-    const result = await runAPI(
+  async function getOffersReceived(wallet: string): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/audits/getOffersReceived',
       JSON.stringify({ wallet }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
-  async function getOffersByMints(params: { mints: string[]; owner: string }) {
-    const result = await runAPI(
+  async function getOffersByMints(params: { mints: string[]; owner: string }): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/audits/getOffersByMints',
       JSON.stringify(params),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   return {

@@ -8,6 +8,7 @@ import {
   Transaction,
 } from '../models/exCollection';
 import { useCollectionsAPI } from './useCollectionsAPI';
+import { useMEApis } from './useMEApis';
 import { useNFTsAPI } from './useNFTsAPI';
 import { useTransactionsAPI } from './useTransactionsAPI';
 
@@ -30,22 +31,14 @@ export const useCollection = (id: string, symbol: string) => {
 
   useEffect(() => {
     // For own marketplace
-    getCollectionBySymbol({
-      symbol: symbol,
-      type: parseInt(id),
-    })
-      // @ts-ignore
-      .then((res: any) => {
+    loadCollectionBySymbol(symbol, id)
+      .then((res) => {
         if (res) {
           setCollection(res);
         }
       });
 
-    getCollectionStatsBySymbol({
-      symbol: symbol,
-      type: parseInt(id),
-    })
-      // @ts-ignore
+    loadCollectionEscrowStatsBySymbol(symbol, id)
       .then((res) => {
         if (res) {
           const {
@@ -65,14 +58,49 @@ export const useCollection = (id: string, symbol: string) => {
         }
       });
 
-    getTransactionsBySymbol(symbol)
-      // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setTransactions(res['data']);
-        }
+    loadTransactionsBySymbol(symbol)
+      .then((res) => {
+        setTransactions(res);
       });
   }, [id, symbol]);
+
+  async function loadCollectionBySymbol(symbol: string, id: string) {
+    if (id === '1') {
+      return await getCollectionBySymbol(symbol);
+    } else {
+      return await useMEApis().getCollectionBySymbol(symbol);
+    }
+  }
+
+  async function loadCollectionEscrowStatsBySymbol(symbol: string, id: string) {
+    if (id === '1') {
+      return await getCollectionStatsBySymbol(symbol);
+    } else {
+      return await useMEApis().getCollectionEscrowStats(symbol);
+    }
+  }
+
+  async function loadTransactionsBySymbol(symbol: string) {
+    let data = await getTransactionsBySymbol(symbol);
+    const exData = await useMEApis().getTransactionsBySymbol(symbol);
+    data = data.concat(exData);
+    data.sort((a, b) => {
+      if (b.blockTime > a.blockTime) {
+        return 1;
+      } else if (b.blockTime < a.blockTime) {
+        return -1;
+      } else {
+        if (b.id > a.id) {
+          return 1;
+        } else if (b.id < a.id) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    });
+    return data;
+  }
 
   const getListedNFTs = (param: QUERIES) => {
     if (loading) return;

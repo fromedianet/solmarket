@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import { Connection, Message, Transaction } from '@solana/web3.js';
 import { useSocket } from '../../contexts';
 import { showEscrow } from '../../actions/showEscrow';
+import { useMEApis } from '../../hooks/useMEApis';
 
 export const ItemDetailView = () => {
   const params = useParams<{ mint: string }>();
@@ -120,13 +121,26 @@ export const ItemDetailView = () => {
     return result;
   }
 
-  async function getTransactions() {
-    let result: any[] = [];
-    const res: any = await getTransactionsByMint(mint);
-    if ('data' in res) {
-      result = res['data'];
-    }
-    return result;
+  async function getTransactions(): Promise<any[]> {
+    let data = await getTransactionsByMint(mint);
+    const exData = await useMEApis().getTransactionsByMint(mint);
+    data = data.concat(exData);
+    data.sort((a, b) => {
+      if (b.blockTime > a.blockTime) {
+        return 1;
+      } else if (b.blockTime < a.blockTime) {
+        return -1;
+      } else {
+        if (b.id > a.id) {
+          return 1;
+        } else if (b.id < a.id) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    });
+    return data;
   }
 
   async function getListedNFTs(nftItem: NFT) {
@@ -146,14 +160,10 @@ export const ItemDetailView = () => {
   }
 
   async function getOffers(mintAddress: string, owner: string) {
-    let list: Offer[] = [];
-    const res: any = await getOffersByMints({
+    let list: Offer[] = await getOffersByMints({
       mints: [mintAddress],
       owner: owner,
     });
-    if ('data' in res) {
-      list = res['data'];
-    }
 
     list = list.map((item, index) => ({
       ...item,

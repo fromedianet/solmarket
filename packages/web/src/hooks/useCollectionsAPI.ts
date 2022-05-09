@@ -302,15 +302,12 @@ export const useCollectionsAPI = () => {
   /**
    * Get collection by symbol
    */
-  async function getCollectionBySymbol(params: {
-    symbol: string;
-    type: number;
-  }): Promise<any> {
+  async function getCollectionBySymbol(symbol: string): Promise<any> {
     const result: any = await runAPI(
       false,
       'post',
       '/collections/getCollectionBySymbol',
-      JSON.stringify(params),
+      JSON.stringify({ symbol }),
     );
     if ('data' in result) {
       return result['data'];
@@ -339,15 +336,12 @@ export const useCollectionsAPI = () => {
    * @param symbol
    * @returns
    */
-  async function getCollectionStatsBySymbol(params: {
-    symbol: string;
-    type: number;
-  }): Promise<any> {
+  async function getCollectionStatsBySymbol(symbol: string): Promise<any> {
     const result: any = await runAPI(
       false,
       'post',
       '/collections/getCollectionStatsBySymbol',
-      JSON.stringify(params),
+      JSON.stringify({ symbol }),
     );
     if ('data' in result) {
       return result['data'];

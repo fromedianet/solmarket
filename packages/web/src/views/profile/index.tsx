@@ -113,10 +113,8 @@ export const ProfileView = () => {
         })
         .finally(() => setLoading(false));
 
-      getTransactionsByWallet(wallet.publicKey.toBase58()).then((res: any) => {
-        if ('data' in res) {
-          setTransactions(res['data']);
-        }
+      getTransactionsByWallet(wallet.publicKey.toBase58()).then((res) => {
+        setTransactions(res);
       });
 
       loadOffersMade().then(res => setOffersMade(res));
@@ -245,10 +243,7 @@ export const ProfileView = () => {
   async function loadOffersMade() {
     let list: Offer[] = [];
     if (wallet.publicKey) {
-      const res: any = await getOffersMade(wallet.publicKey.toBase58());
-      if ('data' in res) {
-        list = res['data'];
-      }
+      list = await getOffersMade(wallet.publicKey.toBase58());
       list = list.map((item, index) => ({
         ...item,
         key: index,
@@ -260,10 +255,7 @@ export const ProfileView = () => {
   async function loadOffersReceived() {
     let list: Offer[] = [];
     if (wallet.publicKey) {
-      const res: any = await getOffersReceived(wallet.publicKey.toBase58());
-      if ('data' in res) {
-        list = res['data'];
-      }
+      list = await getOffersReceived(wallet.publicKey.toBase58());
       list = list.map((item, index) => ({
         ...item,
         key: index,
