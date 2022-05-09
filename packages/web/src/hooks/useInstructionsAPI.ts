@@ -15,14 +15,17 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     tokenMint: string;
     price: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/buyNow',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -36,14 +39,17 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     tokenMint: string;
     price: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/list',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -57,14 +63,17 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     tokenMint: string;
     price: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/cancelList',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -79,14 +88,17 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     tokenMint: string;
     price: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/placeBid',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -102,37 +114,17 @@ export const useInstructionsAPI = () => {
     tokenAccount: string;
     tradeState: string;
     price: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/cancelBid',
       JSON.stringify(props),
     );
-    return result;
-  }
-
-  /**
-   * Get instructions to cancelBidAndWithdraw on a NFT
-   *
-   * @param props
-   * @returns
-   */
-  async function cancelBidAndWithdraw(props: {
-    buyer: string;
-    auctionHouseAddress: string;
-    tokenMint: string;
-    tokenAccount: string;
-    tradeState: string;
-    price: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/cancelBidAndWithdraw',
-      JSON.stringify(props),
-    );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -149,14 +141,17 @@ export const useInstructionsAPI = () => {
     tokenAccount: string;
     bidPrice: number;
     listPrice: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/acceptOffer',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -169,14 +164,17 @@ export const useInstructionsAPI = () => {
     pubkey: string;
     auctionHouseAddress: string;
     amount: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/deposit',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -189,14 +187,17 @@ export const useInstructionsAPI = () => {
     pubkey: string;
     auctionHouseAddress: string;
     amount: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/withdraw',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -209,14 +210,17 @@ export const useInstructionsAPI = () => {
     pubkey: string;
     auctionHouseAddress: string;
     amount: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/withdrawFromFee',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -229,14 +233,17 @@ export const useInstructionsAPI = () => {
     pubkey: string;
     auctionHouseAddress: string;
     amount: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/withdrawFromTreasury',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -253,143 +260,19 @@ export const useInstructionsAPI = () => {
     escrowPubkey: string;
     expiry: number;
     price: number;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/instructions/buyNowME',
       JSON.stringify(props),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
-  /**
-   * Get instructions to list on MagicEden
-   *
-   * @param props
-   * @returns
-   */
-  async function listME(props: {
-    seller: string;
-    auctionHouseAddress: string;
-    tokenAccount: string;
-    tokenMint: string;
-    price: number;
-    expiry: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/listME',
-      JSON.stringify(props),
-    );
-    return result;
-  }
-
-  /**
-   * Get instructions to cancelList on MagicEden
-   *
-   * @param props
-   * @returns
-   */
-  async function cancelListME(props: {
-    seller: string;
-    auctionHouseAddress: string;
-    tokenMint: string;
-    escrowPayment: string;
-    price: number;
-    expiry: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/cancelListME',
-      JSON.stringify(props),
-    );
-    return result;
-  }
-
-  /**
-   * Get instructions to placeBid on MagicEden
-   *
-   * @param props
-   * @returns
-   */
-  async function placeBidME(props: {
-    buyer: string;
-    auctionHouseAddress: string;
-    tokenMint: string;
-    price: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/placeBidME',
-      JSON.stringify(props),
-    );
-    return result;
-  }
-
-  /**
-   * Get instructions to cancelBid on MagicEden
-   *
-   * @param props
-   * @returns
-   */
-  async function cancelBidME(props: {
-    buyer: string;
-    auctionHouseAddress: string;
-    tokenMint: string;
-    price: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/cancelBidME',
-      JSON.stringify(props),
-    );
-    return result;
-  }
-
-  /**
-   * Get instructions to deposit on MagicEden
-   *
-   * @param props
-   * @returns
-   */
-  async function depositME(props: {
-    pubkey: string;
-    auctionHouseAddress: string;
-    amount: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/depositME',
-      JSON.stringify(props),
-    );
-    return result;
-  }
-
-  /**
-   * Get instructions to withdraw on MagicEden
-   *
-   * @param props
-   * @returns
-   */
-  async function withdrawME(props: {
-    pubkey: string;
-    auctionHouseAddress: string;
-    amount: number;
-  }) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/instructions/withdrawME',
-      JSON.stringify(props),
-    );
-    return result;
-  }
 
   return {
     buyNow,
@@ -397,18 +280,11 @@ export const useInstructionsAPI = () => {
     cancelList,
     placeBid,
     cancelBid,
-    cancelBidAndWithdraw,
     acceptOffer,
     deposit,
     withdraw,
     withdrawFromFee,
     withdrawFromTreasury,
     buyNowME,
-    listME,
-    cancelListME,
-    placeBidME,
-    cancelBidME,
-    depositME,
-    withdrawME,
   };
 };

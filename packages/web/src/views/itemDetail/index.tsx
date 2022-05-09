@@ -111,10 +111,9 @@ export const ItemDetailView = () => {
     if (loadingPage) return;
     setLoadingPage(true);
 
-    let result: any = {};
-    const res: any = await getNftByMint(mint);
-    if ('data' in res) {
-      result = res['data'];
+    let result = await getNftByMint(mint);
+    if (!result) {
+      result = await useMEApis().getNFTByMintAddress(mint);
     }
 
     setLoadingPage(false);
@@ -185,15 +184,12 @@ export const ItemDetailView = () => {
           tokenMint: nft.mint,
           price: price,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data, connection);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', { mint: nft.mint });
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data'], connection);
+          if (!status['err']) {
+            socket.emit('syncAuctionHouse', { mint: nft.mint });
+            resolve('');
+            return;
           }
         }
 
@@ -236,15 +232,12 @@ export const ItemDetailView = () => {
           tokenMint: nft.mint,
           price: nft.price,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data, connection);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', { mint: nft.mint });
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data'], connection);
+          if (!status['err']) {
+            socket.emit('syncAuctionHouse', { mint: nft.mint });
+            resolve('');
+            return;
           }
         }
 
@@ -297,17 +290,14 @@ export const ItemDetailView = () => {
               expiry: nft.v2.expiry,
               price: nft.price,
             });
-            if ('data' in result) {
-              const data = result['data']['data'];
-              if (data) {
-                const status = await runInstructions(data, meConnection);
-                if (!status['err']) {
-                  setTimeout(() => {
-                    socket.emit('syncGetNFTsByOwner', { wallet: wallet.publicKey?.toBase58() });
-                  }, 20000);
-                  resolve('');
-                  return;
-                }
+            if (result && 'data' in result) {
+              const status = await runInstructions(result['data'], meConnection);
+              if (!status['err']) {
+                setTimeout(() => {
+                  socket.emit('syncGetNFTsByOwner', { wallet: wallet.publicKey?.toBase58() });
+                }, 20000);
+                resolve('');
+                return;
               }
             }
           }
@@ -319,15 +309,12 @@ export const ItemDetailView = () => {
             tokenMint: nft.mint,
             price: nft.price,
           });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                socket.emit('syncAuctionHouse', { mint: nft.mint });
-                resolve('');
-                return;
-              }
+          if (result && 'data' in result) {
+            const status = await runInstructions(result['data'], connection);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: nft.mint });
+              resolve('');
+              return;
             }
           }
         }
@@ -373,15 +360,12 @@ export const ItemDetailView = () => {
           tokenMint: nft.mint,
           price: price,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data, connection);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', { mint: nft.mint });
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data'], connection);
+          if (!status['err']) {
+            socket.emit('syncAuctionHouse', { mint: nft.mint });
+            resolve('');
+            return;
           }
         }
 
@@ -425,17 +409,14 @@ export const ItemDetailView = () => {
           tradeState: offer.tradeState!,
           price: offer.bidPrice,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data, connection);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', {
-                wallet: wallet.publicKey!.toBase58(),
-              });
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data'], connection);
+          if (!status['err']) {
+            socket.emit('syncAuctionHouse', {
+              wallet: wallet.publicKey!.toBase58(),
+            });
+            resolve('');
+            return;
           }
         }
 

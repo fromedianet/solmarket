@@ -9,14 +9,17 @@ export const useNFTsAPI = () => {
    * Create new NFT when mint NFT manually
    * @param props
    */
-  async function createNft(metadataAddress: string) {
-    const result = await runAPI(
+  async function createNft(metadataAddress: string): Promise<any> {
+    const result: any = await runAPI(
       true,
       'post',
       '/nfts/create',
       JSON.stringify({ metadataAddress }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -156,42 +159,51 @@ export const useNFTsAPI = () => {
    * @param mint
    * @returns
    */
-  async function getNftByMint(mint: string) {
-    const result = await runAPI(
+  async function getNftByMint(mint: string): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/nfts/getNftByMint',
       JSON.stringify({ mint }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
    * Get NFTs by wallet
    * @returns
    */
-  async function getNFTsByWallet(wallet: string) {
-    const result = await runAPI(
+  async function getNFTsByWallet(wallet: string): Promise<any[]> {
+    const result: any = await runAPI(
       false,
       'post',
       '/nfts/getNFTsByWallet',
       JSON.stringify({ wallet }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
   }
 
   async function updateInfo(params: {
     mint: string;
     tokenAddress: string;
     owner: string;
-  }) {
-    const result = await runAPI(
+  }): Promise<any> {
+    const result: any = await runAPI(
       false,
       'post',
       '/nfts/updateInfo',
       JSON.stringify(params),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   return {

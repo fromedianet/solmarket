@@ -142,11 +142,9 @@ export const ProfileView = () => {
       let items1: any[] = [];
       let items2: any[] = [];
       const symbols: string[] = [];
-      const res: any = await getNFTsByWallet(wallet.publicKey.toBase58());
-      if ('data' in res) {
-        items1 = res['data']['myItems'];
-        items2 = res['data']['listedItems'];
-      }
+      const res = await getNFTsByWallet(wallet.publicKey.toBase58());
+      items1 = res.filter(k => k.price === 0);
+      items2 = res.filter(k => k.price > 0);
 
       items1.forEach(k => {
         if (k.symbol && !symbols.includes(k.symbol)) {
