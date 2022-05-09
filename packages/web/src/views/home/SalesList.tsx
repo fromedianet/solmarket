@@ -5,8 +5,6 @@ import { CardLoader } from '../../components/MyLoader';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { HomeCard } from '../../components/HomeCard';
-import { useExCollectionsAPI } from '../../hooks/useExCollections';
-import { MarketType } from '../../constants';
 import { ExCollection } from '../../models/exCollection';
 import { CarouselView } from './components/carousel';
 
@@ -23,7 +21,7 @@ export const SalesListView = () => {
   const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
   const [popularStatus, setPopularStatus] = useState('7d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
-  const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
+  const { getPopularCollections, getNewCollections } = useCollectionsAPI();
 
   useEffect(() => {
     if (loading) return;
@@ -44,18 +42,18 @@ export const SalesListView = () => {
 
     // MagicEden
     const popular1 = await getPopularCollections({
-      market: MarketType.MagicEden,
+      more: false,
       timeRange: '1d',
     });
     const popular7 = await getPopularCollections({
-      market: MarketType.MagicEden,
+      more: false,
       timeRange: '7d',
     });
     const popular30 = await getPopularCollections({
-      market: MarketType.MagicEden,
+      more: false,
       timeRange: '30d',
     });
-    const exNews = await getNewCollections({ market: MarketType.MagicEden });
+    const exNews = await getNewCollections(false);
 
     result['launchpad'] = featuredData['launchpad'] || [];
     result['upcoming'] = featuredData['upcoming'] || [];
