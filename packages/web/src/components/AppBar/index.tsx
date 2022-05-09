@@ -8,6 +8,7 @@ import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { ExCollection } from '../../models/exCollection';
+import { useMEApis } from '../../hooks/useMEApis';
 
 const { Option } = Select;
 
@@ -63,7 +64,9 @@ export const AppBar = () => {
   }, [collections]);
 
   async function loadCollections() {
-    const data = await getAllCollections();
+    let data = await getAllCollections();
+    const exData = await useMEApis().getAllCollections();
+    data = data.concat(exData);
     return data;
   }
 

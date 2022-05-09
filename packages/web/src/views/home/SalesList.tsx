@@ -7,6 +7,7 @@ import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { HomeCard } from '../../components/HomeCard';
 import { ExCollection } from '../../models/exCollection';
 import { CarouselView } from './components/carousel';
+import { useMEApis } from '../../hooks/useMEApis';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ export const SalesListView = () => {
   });
   const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
   const [popularStatus, setPopularStatus] = useState('7d');
-  const { featuredCollectionsCarousel, getFeaturedCollections, getPopularCollections, getNewCollections } = useCollectionsAPI();
+  const { featuredCollectionsCarousel } = useCollectionsAPI();
 
   useEffect(() => {
     if (loading) return;
@@ -36,26 +37,23 @@ export const SalesListView = () => {
 
   async function loadAllData() {
     const result = {};
-    const carousels = await getFeaturedCollections();
+    const carousels = await useMEApis().getFeaturedCollections();
     setCarouselData(carousels);
 
     // Own marketplace
     const featuredData = await featuredCollectionsCarousel();
 
     // MagicEden
-    const popular1 = await getPopularCollections({
-      more: false,
+    const popular1 = await useMEApis().getPopularCollections({
       timeRange: '1d',
     });
-    const popular7 = await getPopularCollections({
-      more: false,
+    const popular7 = await useMEApis().getPopularCollections({
       timeRange: '7d',
     });
-    const popular30 = await getPopularCollections({
-      more: false,
+    const popular30 = await useMEApis().getPopularCollections({
       timeRange: '30d',
     });
-    const exNews = await getNewCollections(false);
+    const exNews = await useMEApis().getNewCollections();
 
     result['launchpad'] = featuredData['launchpad'] || [];
     result['upcoming'] = featuredData['upcoming'] || [];

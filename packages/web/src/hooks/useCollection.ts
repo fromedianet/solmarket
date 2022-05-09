@@ -35,9 +35,9 @@ export const useCollection = (id: string, symbol: string) => {
       type: parseInt(id),
     })
       // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setCollection(res['data']);
+      .then((res: any) => {
+        if (res) {
+          setCollection(res);
         }
       });
 
@@ -46,15 +46,15 @@ export const useCollection = (id: string, symbol: string) => {
       type: parseInt(id),
     })
       // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
+      .then((res) => {
+        if (res) {
           const {
             availableAttributes,
             floorPrice,
             listedCount,
             listedTotalValue,
             totalVolume,
-          } = res['data'];
+          } = res;
           setAttributes(_parseAttributes(availableAttributes));
           setCollectionStats({
             floorPrice: parseInt(floorPrice),

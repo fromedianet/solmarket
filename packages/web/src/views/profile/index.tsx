@@ -165,7 +165,7 @@ export const ProfileView = () => {
       let tempCols: any = {};
       if (symbols.length > 0) {
         const colRes: any = await getMultiCollectionEscrowStats(symbols);
-        if ('data' in colRes) {
+        if (colRes) {
           tempCols = colRes['data'];
         }
       }

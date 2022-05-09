@@ -21,14 +21,14 @@ export const DashboardView = () => {
 
   useEffect(() => {
     // @ts-ignore
-    getMyCollections().then((res: {}) => {
-      if (res) {
+    getMyCollections().then((res: []) => {
+      if (res.length > 0) {
         setLists({
-          drafts: res['data'].filter(item => item.status === 'draft'),
-          submissions: res['data'].filter(item => item.status === 'submitted'),
-          // reviewed: res['data'].filter(item => item.status === 'reviewed'),
-          listed: res['data'].filter(item => item.status === 'listed'),
-          rejected: res['data'].filter(item => item.status === 'rejected'),
+          drafts: res.filter((item: any) => item.status === 'draft'),
+          submissions: res.filter((item: any) => item.status === 'submitted'),
+          // reviewed: res.filter((item: any) => item.status === 'reviewed'),
+          listed: res.filter((item: any) => item.status === 'listed'),
+          rejected: res.filter((item: any) => item.status === 'rejected'),
         });
       }
     });

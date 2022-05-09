@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Input, Button, Spin, Form } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MetaplexModal, notify, useQuerySearch } from '@oyster/common';
+import { MetaplexModal, useQuerySearch } from '@oyster/common';
 import moment from 'moment';
 import { useCollectionsAPI } from '../../../../hooks/useCollectionsAPI';
 
@@ -19,10 +19,9 @@ export const DashboardAdminDetails = () => {
 
   useEffect(() => {
     setLoading(true);
-    // @ts-ignore
-    getCollectionById(id).then((res: {}) => {
-      if ('data' in res) {
-        setCollection(res['data']);
+    getCollectionById(id).then((res) => {
+      if (res) {
+        setCollection(res);
       } else {
         navigate(-1);
       }
@@ -36,22 +35,10 @@ export const DashboardAdminDetails = () => {
     processStep5({
       _id: id,
       status: status,
-    }) // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
+    }).then((res) => {
+        if (res) {
           navigate(-1);
-        } else {
-          notify({
-            description: res['message'],
-            type: 'error',
-          });
         }
-      })
-      .catch(err => {
-        notify({
-          message: err.message,
-          type: 'error',
-        });
       });
   };
 
@@ -60,22 +47,10 @@ export const DashboardAdminDetails = () => {
       _id: id,
       status: 'rejected',
       reject_info: values.reject_info,
-    }) // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
+    }).then((res) => {
+        if (res) {
           navigate(-1);
-        } else {
-          notify({
-            description: res['message'],
-            type: 'error',
-          });
         }
-      })
-      .catch(err => {
-        notify({
-          message: err.message,
-          type: 'error',
-        });
       });
 
     setShowRejectModal(false);

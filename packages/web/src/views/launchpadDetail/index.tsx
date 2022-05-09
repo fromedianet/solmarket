@@ -78,10 +78,10 @@ export const LaunchpadDetailView = () => {
     setLoading(true);
     getCollectionBySymbol({ symbol, type: 1 })
       // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setCollection(res['data']);
-          const candyMachineId = res['data']['candymachine_id'];
+      .then((res: any) => {
+        if (res) {
+          setCollection(res);
+          const candyMachineId = res['candymachine_id'];
           if (candyMachineId) {
             setCandyMachineId(toPublicKey(candyMachineId));
           }

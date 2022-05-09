@@ -82,11 +82,8 @@ export const ArtCreateView = () => {
     if (authToken) {
       getMyListedCollections()
         // @ts-ignore
-        .then((res: {}) => {
-          setCollections(res['data'] || []);
-        })
-        .catch(() => {
-          setCollections([]);
+        .then((res: []) => {
+          setCollections(res);
         });
     }
   }, [authToken]);

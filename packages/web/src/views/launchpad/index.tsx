@@ -18,9 +18,9 @@ export const LaunchPadView = () => {
     setLoading(true);
     getLaunchpadCollections()
       // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          parseData(res['data']);
+      .then((res: []) => {
+        if (res.length > 0) {
+          parseData(res);
         }
       })
       .finally(() => setLoading(false));

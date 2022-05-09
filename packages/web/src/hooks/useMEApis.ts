@@ -27,7 +27,7 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getPoularCollections(params: {more: boolean, timeRange: string}) : Promise<any[]> {
+  async function getPopularCollections(params: {more?: boolean, timeRange: string}) : Promise<any[]> {
     const result: any = await runOthersAPI(
       'post',
       '/getPopularCollections',
@@ -39,7 +39,7 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getNewCollections(more: boolean): Promise<any[]> {
+  async function getNewCollections(more?: boolean): Promise<any[]> {
     const result: any = await runOthersAPI(
       'post',
       '/getNewCollections',
@@ -82,7 +82,7 @@ export const useMEApis = () => {
     if ('data' in result) {
       return result['data'];
     }
-    return {};
+    return null;
   }
 
   async function getListedNftsByQuery(queries: QUERIES): Promise<any[]> {
@@ -164,7 +164,7 @@ export const useMEApis = () => {
   return {
     getFeaturedCollections,
     getAllCollections,
-    getPoularCollections,
+    getPopularCollections,
     getNewCollections,
     getCollectionBySymbol,
     getCollectionEscrowStats,
