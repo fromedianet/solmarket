@@ -56,7 +56,10 @@ export const CollectionsView = () => {
       const exData = await useMEApis().getNewCollections(true);
       data = data.concat(exData);
     } else if (type === 'popular') {
-      data = await useMEApis().getPopularCollections({ more: true, timeRange: timeRange });
+      data = await useMEApis().getPopularCollections({
+        more: true,
+        timeRange: timeRange,
+      });
     } else {
       data = await getAllCollections();
       const exData = await useMEApis().getAllCollections();

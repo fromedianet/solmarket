@@ -29,7 +29,11 @@ const CarouselCard = (props: { collection: ExCollection }) => {
       <Col span={24} md={24} lg={10} className="card-content">
         <h2>{props.collection.name}</h2>
         <p>{props.collection.description}</p>
-        <Link to={`/marketplace/${props.collection.market ? '2' : '1'}/${props.collection.symbol}`}>
+        <Link
+          to={`/marketplace/${props.collection.market ? '2' : '1'}/${
+            props.collection.symbol
+          }`}
+        >
           <Button className="button">Explore collection</Button>
         </Link>
       </Col>

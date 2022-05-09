@@ -114,7 +114,7 @@ export const ProfileView = () => {
         })
         .finally(() => setLoading(false));
 
-      getTransactionsByWallet(wallet.publicKey.toBase58()).then((res) => {
+      getTransactionsByWallet(wallet.publicKey.toBase58()).then(res => {
         setTransactions(res);
       });
 
@@ -147,7 +147,9 @@ export const ProfileView = () => {
       items1 = res.filter(k => k.price === 0);
       items2 = res.filter(k => k.price > 0);
 
-      const exRes = await useMEApis().getNFTsByEscrowOwner(wallet.publicKey.toBase58());
+      const exRes = await useMEApis().getNFTsByEscrowOwner(
+        wallet.publicKey.toBase58(),
+      );
       items2 = items2.concat(exRes);
 
       items1.forEach(k => {
@@ -162,11 +164,17 @@ export const ProfileView = () => {
         }
       });
 
-      let tempCols: any = {};
+      const tempCols: any = {};
       if (symbols.length > 0) {
         const colRes = await getMultiCollectionEscrowStats(symbols);
-        const exColRes = await useMEApis().getMultiCollectionEscrowStats(symbols);
-        tempCols = { ...colRes, ...exColRes };
+        const tempCols = await useMEApis().getMultiCollectionEscrowStats(
+          symbols,
+        );
+        for (const [key, value] of Object.entries(colRes)) {
+          if (!(key in tempCols)) {
+            tempCols[key] = value;
+          }
+        }
       }
 
       items1 = items1.map(item => ({

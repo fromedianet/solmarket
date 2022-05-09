@@ -32,7 +32,7 @@ export const DashboardListingView = () => {
   useEffect(() => {
     setLoading(true);
     getCollectionById(id)
-      .then((res) => {
+      .then(res => {
         if (res) {
           setCollection(res);
         }

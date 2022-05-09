@@ -62,7 +62,7 @@ export const ItemDetailView = () => {
           if (params.wallet === wallet.publicKey?.toBase58()) {
             setRefresh(Date.now());
           }
-        })
+        });
       }
     }
   }, [socket, nft]);
@@ -291,10 +291,15 @@ export const ItemDetailView = () => {
               price: nft.price,
             });
             if (result && 'data' in result) {
-              const status = await runInstructions(result['data'], meConnection);
+              const status = await runInstructions(
+                result['data'],
+                meConnection,
+              );
               if (!status['err']) {
                 setTimeout(() => {
-                  socket.emit('syncGetNFTsByOwner', { wallet: wallet.publicKey?.toBase58() });
+                  socket.emit('syncGetNFTsByOwner', {
+                    wallet: wallet.publicKey?.toBase58(),
+                  });
                 }, 20000);
                 resolve('');
                 return;

@@ -19,7 +19,7 @@ export const DashboardAdminDetails = () => {
 
   useEffect(() => {
     setLoading(true);
-    getCollectionById(id).then((res) => {
+    getCollectionById(id).then(res => {
       if (res) {
         setCollection(res);
       } else {
@@ -35,11 +35,11 @@ export const DashboardAdminDetails = () => {
     processStep5({
       _id: id,
       status: status,
-    }).then((res) => {
-        if (res) {
-          navigate(-1);
-        }
-      });
+    }).then(res => {
+      if (res) {
+        navigate(-1);
+      }
+    });
   };
 
   const handleReject = values => {
@@ -47,11 +47,11 @@ export const DashboardAdminDetails = () => {
       _id: id,
       status: 'rejected',
       reject_info: values.reject_info,
-    }).then((res) => {
-        if (res) {
-          navigate(-1);
-        }
-      });
+    }).then(res => {
+      if (res) {
+        navigate(-1);
+      }
+    });
 
     setShowRejectModal(false);
   };

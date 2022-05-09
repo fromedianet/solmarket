@@ -24,7 +24,11 @@ export const useCollectionsAPI = () => {
    * @returns
    */
   async function getMyCollections(): Promise<any[]> {
-    const result: any = await runAPI(true, 'get', '/collections/getMyCollections');
+    const result: any = await runAPI(
+      true,
+      'get',
+      '/collections/getMyCollections',
+    );
     if ('data' in result) {
       return result['data'];
     }
@@ -73,7 +77,10 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  async function processStep1(props: { _id: string; permission: string }): Promise<any> {
+  async function processStep1(props: {
+    _id: string;
+    permission: string;
+  }): Promise<any> {
     const result: any = await runAPI(
       true,
       'post',
@@ -249,7 +256,7 @@ export const useCollectionsAPI = () => {
   /**
    * Get all live new collections
    */
-  async function getNewCollections(more?: boolean): Promise<any[]> {
+  async function getNewCollections(more: boolean): Promise<any[]> {
     const result: any = await runAPI(
       false,
       'post',
@@ -354,7 +361,9 @@ export const useCollectionsAPI = () => {
    * @param symbols
    * @returns
    */
-  async function getMultiCollectionEscrowStats(symbols: string[]): Promise<any> {
+  async function getMultiCollectionEscrowStats(
+    symbols: string[],
+  ): Promise<any> {
     const result: any = await runAPI(
       false,
       'post',

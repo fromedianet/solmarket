@@ -93,7 +93,10 @@ export const useTransactionsAPI = () => {
     return [];
   }
 
-  async function getOffersByMints(params: { mints: string[]; owner: string }): Promise<any[]> {
+  async function getOffersByMints(params: {
+    mints: string[];
+    owner: string;
+  }): Promise<any[]> {
     const result: any = await runAPI(
       false,
       'post',

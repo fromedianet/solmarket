@@ -1,33 +1,30 @@
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { QUERIES } from "../models/exCollection";
-import { ApiUtils } from "../utils/apiUtils"
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { QUERIES } from '../models/exCollection';
+import { ApiUtils } from '../utils/apiUtils';
 
 export const useMEApis = () => {
   const { runOthersAPI } = ApiUtils();
 
   async function getFeaturedCollections(): Promise<any[]> {
-    const result: any = await runOthersAPI(
-      'get',
-      '/getFeaturedCollections',
-    );
+    const result: any = await runOthersAPI('get', '/getFeaturedCollections');
     if ('data' in result) {
       return result['data'];
     }
     return [];
   }
 
-  async function getAllCollections() : Promise<any[]> {
-    const result: any = await runOthersAPI(
-      'get',
-      '/getAllCollections',
-    );
+  async function getAllCollections(): Promise<any[]> {
+    const result: any = await runOthersAPI('get', '/getAllCollections');
     if ('data' in result) {
       return result['data'];
     }
     return [];
   }
 
-  async function getPopularCollections(params: {more?: boolean, timeRange: string}) : Promise<any[]> {
+  async function getPopularCollections(params: {
+    more?: boolean;
+    timeRange: string;
+  }): Promise<any[]> {
     const result: any = await runOthersAPI(
       'post',
       '/getPopularCollections',
@@ -52,10 +49,7 @@ export const useMEApis = () => {
   }
 
   async function getCollectionBySymbol(symbol: string): Promise<any> {
-    const result: any = await runOthersAPI(
-      'get',
-      `/collections/${symbol}`,
-    );
+    const result: any = await runOthersAPI('get', `/collections/${symbol}`);
     if ('data' in result) {
       return result['data'];
     }
@@ -73,7 +67,9 @@ export const useMEApis = () => {
     return null;
   }
 
-  async function getMultiCollectionEscrowStats(symbols: string[]): Promise<any> {
+  async function getMultiCollectionEscrowStats(
+    symbols: string[],
+  ): Promise<any> {
     const result: any = await runOthersAPI(
       'post',
       '/getMultiCollectionEscrowStats',
@@ -174,8 +170,8 @@ export const useMEApis = () => {
     getNFTsByEscrowOwner,
     getTransactionsByMint,
     getTransactionsBySymbol,
-  }
-}
+  };
+};
 
 function getQueryParameterForMagicEden(param: QUERIES) {
   if (param.type === 1) return null;

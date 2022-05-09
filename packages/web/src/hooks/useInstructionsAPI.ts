@@ -273,7 +273,6 @@ export const useInstructionsAPI = () => {
     return null;
   }
 
-
   return {
     buyNow,
     list,

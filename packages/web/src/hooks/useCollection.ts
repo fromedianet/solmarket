@@ -31,37 +31,34 @@ export const useCollection = (id: string, symbol: string) => {
 
   useEffect(() => {
     // For own marketplace
-    loadCollectionBySymbol(symbol, id)
-      .then((res) => {
-        if (res) {
-          setCollection(res);
-        }
-      });
+    loadCollectionBySymbol(symbol, id).then(res => {
+      if (res) {
+        setCollection(res);
+      }
+    });
 
-    loadCollectionEscrowStatsBySymbol(symbol, id)
-      .then((res) => {
-        if (res) {
-          const {
-            availableAttributes,
-            floorPrice,
-            listedCount,
-            listedTotalValue,
-            totalVolume,
-          } = res;
-          setAttributes(_parseAttributes(availableAttributes));
-          setCollectionStats({
-            floorPrice: parseInt(floorPrice),
-            listedCount: parseInt(listedCount),
-            listedTotalValue: parseInt(listedTotalValue),
-            totalVolume: parseInt(totalVolume),
-          });
-        }
-      });
+    loadCollectionEscrowStatsBySymbol(symbol, id).then(res => {
+      if (res) {
+        const {
+          availableAttributes,
+          floorPrice,
+          listedCount,
+          listedTotalValue,
+          totalVolume,
+        } = res;
+        setAttributes(_parseAttributes(availableAttributes));
+        setCollectionStats({
+          floorPrice: parseInt(floorPrice),
+          listedCount: parseInt(listedCount),
+          listedTotalValue: parseInt(listedTotalValue),
+          totalVolume: parseInt(totalVolume),
+        });
+      }
+    });
 
-    loadTransactionsBySymbol(symbol)
-      .then((res) => {
-        setTransactions(res);
-      });
+    loadTransactionsBySymbol(symbol).then(res => {
+      setTransactions(res);
+    });
   }, [id, symbol]);
 
   async function loadCollectionBySymbol(symbol: string, id: string) {
