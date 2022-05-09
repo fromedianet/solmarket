@@ -56,7 +56,6 @@ export const GroupItem = ({
             key={index}
             item={item}
             itemId={index.toString()}
-            market={item.market}
             collection={item.collectionName}
           />
         ))}

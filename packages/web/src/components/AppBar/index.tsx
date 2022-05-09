@@ -8,8 +8,6 @@ import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { ExCollection } from '../../models/exCollection';
-import { useExCollectionsAPI } from '../../hooks/useExCollections';
-import { MarketType } from '../../constants';
 
 const { Option } = Select;
 
@@ -51,7 +49,6 @@ export const AppBar = () => {
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
   const { getAllCollections } = useCollectionsAPI();
-  const exAPI = useExCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [filters, setFilters] = useState<ExCollection[]>([]);
 
@@ -66,10 +63,7 @@ export const AppBar = () => {
   }, [collections]);
 
   async function loadCollections() {
-    let data = [];
-    data = await getAllCollections();
-    const exData = await exAPI.getAllCollections(MarketType.MagicEden);
-    data = data.concat(exData);
+    const data = await getAllCollections();
     return data;
   }
 

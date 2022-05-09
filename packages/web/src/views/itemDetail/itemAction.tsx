@@ -68,16 +68,14 @@ export const ItemAction = (props: {
           alt="price"
           style={{ marginRight: '8px' }}
         />
-        {alreadyListed && (
-          <span className="value">{props.nft.price} SOL</span>
-        )}
+        {alreadyListed && <span className="value">{props.nft.price} SOL</span>}
       </div>
       {!alreadyListed && <span className="value">Not listed</span>}
       {props.nft.symbol && (
         <div className="btn-container">
           {!wallet.connected ? (
             <ConnectButton className="button" />
-          ) : (props.nft.market) ? (
+          ) : props.nft.market ? (
             isOwner && (
               <Button
                 className="button"

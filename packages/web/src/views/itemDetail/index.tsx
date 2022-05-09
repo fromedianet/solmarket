@@ -45,14 +45,8 @@ export const ItemDetailView = () => {
   const [cancelVisible, setCancelVisible] = useState(false);
   const { getNftByMint, getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsByMint, getOffersByMints } = useTransactionsAPI();
-  const {
-    buyNow,
-    list,
-    cancelList,
-    placeBid,
-    cancelBid,
-    buyNowME,
-  } = useInstructionsAPI();
+  const { buyNow, list, cancelList, placeBid, cancelBid, buyNowME } =
+    useInstructionsAPI();
 
   useEffect(() => {
     if (nft) {
@@ -75,7 +69,9 @@ export const ItemDetailView = () => {
   }, [mint, market, refresh]);
 
   useEffect(() => {
-    const filters = transactions.filter(item => item.txType === 'SALE' || item.txType === 'Auction Settled');
+    const filters = transactions.filter(
+      item => item.txType === 'SALE' || item.txType === 'Auction Settled',
+    );
     const data = filters.map(item => ({
       date: getDateStringFromUnixTimestamp(item.blockTime),
       price: item.price || 0,
@@ -142,10 +138,7 @@ export const ItemDetailView = () => {
     return result;
   }
 
-  async function getOffers(
-    mintAddress: string,
-    owner: string,
-  ) {
+  async function getOffers(mintAddress: string, owner: string) {
     let list: Offer[] = [];
     const res: any = await getOffersByMints({
       mints: [mintAddress],
@@ -164,7 +157,7 @@ export const ItemDetailView = () => {
 
   const onListNow = async (price: number) => {
     if (!wallet.publicKey || !nft) return;
-    
+
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
