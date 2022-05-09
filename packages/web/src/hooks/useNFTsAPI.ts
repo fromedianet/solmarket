@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { QUERIES } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
@@ -10,15 +11,18 @@ export const useNFTsAPI = () => {
    * @param props
    */
   async function createNft(metadataAddress: string): Promise<any> {
-    const result: any = await runAPI(
-      true,
-      'post',
-      '/nfts/create',
-      JSON.stringify({ metadataAddress }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/nfts/create',
+        JSON.stringify({ metadataAddress }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -28,20 +32,26 @@ export const useNFTsAPI = () => {
    * @returns
    */
   async function getListedNftsByQuery(param: QUERIES) {
-    const pcQuery = getQueryPrameter(param);
-    const meQuery = getQueryParameterForMagicEden(param);
-    const queryBody = {
-      pcQuery: pcQuery,
-      meQuery: meQuery,
-      sort: param.sort,
-    };
-    const result = await runAPI(
-      false,
-      'post',
-      '/nfts/getListedNftsByQuery',
-      JSON.stringify(queryBody),
-    );
-    return result;
+    try {
+      const pcQuery = getQueryPrameter(param);
+      const meQuery = getQueryParameterForMagicEden(param);
+      const queryBody = {
+        pcQuery: pcQuery,
+        meQuery: meQuery,
+        sort: param.sort,
+      };
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/nfts/getListedNftsByQuery',
+        JSON.stringify(queryBody),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return [];
   }
 
   function getQueryPrameter(param: QUERIES) {
@@ -160,15 +170,19 @@ export const useNFTsAPI = () => {
    * @returns
    */
   async function getNftByMint(mint: string): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/nfts/getNftByMint',
-      JSON.stringify({ mint }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/nfts/getNftByMint',
+        JSON.stringify({ mint }),
+        true,
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -177,15 +191,18 @@ export const useNFTsAPI = () => {
    * @returns
    */
   async function getNFTsByWallet(wallet: string): Promise<any[]> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/nfts/getNFTsByWallet',
-      JSON.stringify({ wallet }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/nfts/getNFTsByWallet',
+        JSON.stringify({ wallet }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
@@ -194,15 +211,18 @@ export const useNFTsAPI = () => {
     tokenAddress: string;
     owner: string;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/nfts/updateInfo',
-      JSON.stringify(params),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/nfts/updateInfo',
+        JSON.stringify(params),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 

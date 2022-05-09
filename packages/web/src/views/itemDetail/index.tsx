@@ -144,17 +144,14 @@ export const ItemDetailView = () => {
   }
 
   async function getListedNFTs(nftItem: NFT) {
-    let result: any[] = [];
     const param = {
       symbol: nftItem.symbol,
       sort: 1,
       type: 0,
       status: false,
     };
-    const res: any = await getListedNftsByQuery(param);
-    if ('data' in res) {
-      result = res['data'];
-    }
+    let result: any[] = await getListedNftsByQuery(param);
+
     result = result.filter(item => item.mint != nftItem.mint);
     return result;
   }

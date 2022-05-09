@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { ApiUtils } from '../utils/apiUtils';
 
 export const useInstructionsAPI = () => {
@@ -16,15 +17,18 @@ export const useInstructionsAPI = () => {
     tokenMint: string;
     price: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/buyNow',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/buyNow',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -40,15 +44,18 @@ export const useInstructionsAPI = () => {
     tokenMint: string;
     price: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/list',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/list',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -64,15 +71,18 @@ export const useInstructionsAPI = () => {
     tokenMint: string;
     price: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/cancelList',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/cancelList',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -89,15 +99,18 @@ export const useInstructionsAPI = () => {
     tokenMint: string;
     price: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/placeBid',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/placeBid',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -115,15 +128,18 @@ export const useInstructionsAPI = () => {
     tradeState: string;
     price: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/cancelBid',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/cancelBid',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -142,15 +158,18 @@ export const useInstructionsAPI = () => {
     bidPrice: number;
     listPrice: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/acceptOffer',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/acceptOffer',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -165,15 +184,18 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     amount: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/deposit',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/deposit',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -188,15 +210,18 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     amount: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/withdraw',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/withdraw',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -211,15 +236,18 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     amount: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/withdrawFromFee',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/withdrawFromFee',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -234,15 +262,18 @@ export const useInstructionsAPI = () => {
     auctionHouseAddress: string;
     amount: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/withdrawFromTreasury',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/withdrawFromTreasury',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
@@ -261,15 +292,18 @@ export const useInstructionsAPI = () => {
     expiry: number;
     price: number;
   }): Promise<any> {
-    const result: any = await runAPI(
-      false,
-      'post',
-      '/instructions/buyNowME',
-      JSON.stringify(props),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/instructions/buyNowME',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 

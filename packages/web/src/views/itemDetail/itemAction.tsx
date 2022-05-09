@@ -76,7 +76,8 @@ export const ItemAction = (props: {
           {!wallet.connected ? (
             <ConnectButton className="button" />
           ) : props.nft.market ? (
-            !isOwner && (
+            !isOwner &&
+            alreadyListed && (
               <Button
                 className="button"
                 onClick={props.onBuyNow}

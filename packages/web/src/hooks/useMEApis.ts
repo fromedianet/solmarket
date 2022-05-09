@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { QUERIES } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
@@ -6,18 +7,24 @@ export const useMEApis = () => {
   const { runOthersAPI } = ApiUtils();
 
   async function getFeaturedCollections(): Promise<any[]> {
-    const result: any = await runOthersAPI('get', '/getFeaturedCollections');
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI('get', '/getFeaturedCollections');
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
   async function getAllCollections(): Promise<any[]> {
-    const result: any = await runOthersAPI('get', '/getAllCollections');
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI('get', '/getAllCollections');
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
@@ -25,138 +32,167 @@ export const useMEApis = () => {
     more?: boolean;
     timeRange: string;
   }): Promise<any[]> {
-    const result: any = await runOthersAPI(
-      'post',
-      '/getPopularCollections',
-      JSON.stringify(params),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/getPopularCollections',
+        JSON.stringify(params),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
   async function getNewCollections(more?: boolean): Promise<any[]> {
-    const result: any = await runOthersAPI(
-      'post',
-      '/getNewCollections',
-      JSON.stringify({ more }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/getNewCollections',
+        JSON.stringify({ more }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
   async function getCollectionBySymbol(symbol: string): Promise<any> {
-    const result: any = await runOthersAPI(
-      'get',
-      `/getCollectionBySymbol/${symbol}`,
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getCollectionBySymbol/${symbol}`,
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
   async function getCollectionEscrowStats(symbol: string): Promise<any> {
-    const result: any = await runOthersAPI(
-      'get',
-      `/getCollectionEscrowStats/${symbol}`,
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getCollectionEscrowStats/${symbol}`,
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
   async function getMultiCollectionEscrowStats(
     symbols: string[],
   ): Promise<any> {
-    const result: any = await runOthersAPI(
-      'post',
-      '/getMultiCollectionEscrowStats',
-      JSON.stringify({ symbols }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'post',
+        '/getMultiCollectionEscrowStats',
+        JSON.stringify({ symbols }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return {};
   }
 
   async function getListedNftsByQuery(queries: QUERIES): Promise<any[]> {
     const params = getQueryParameterForMagicEden(queries);
     if (params) {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getListedNftsByQuery',
-        JSON.stringify({ params }),
-      );
-      if ('data' in result) {
-        return result['data'];
-      }
+      try {
+        const result: any = await runOthersAPI(
+          'post',
+          '/getListedNftsByQuery',
+          JSON.stringify({ params }),
+        );
+        if ('data' in result) {
+          return result['data'];
+        }
+      } catch {}
     }
     return [];
   }
 
   async function getNFTByMintAddress(mint: string): Promise<any> {
-    const result: any = await runOthersAPI(
-      'get',
-      `/getNFTByMintAddress/${mint}`,
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getNFTByMintAddress/${mint}`,
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return null;
   }
 
   async function getNFTsByEscrowOwner(wallet: string): Promise<any[]> {
-    const result: any = await runOthersAPI(
-      'get',
-      `/getNFTsByEscrowOwner/${wallet}`,
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const result: any = await runOthersAPI(
+        'get',
+        `/getNFTsByEscrowOwner/${wallet}`,
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
   async function getTransactionsBySymbol(symbol: string): Promise<any[]> {
-    const queryData = {
-      txType: {
-        $in: ['exchange'],
-      },
-      $match: { collection_symbol: symbol },
-      $sort: { blockTime: -1, createdAt: -1 },
-      $skip: 0,
-    };
-    const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-    const result: any = await runOthersAPI(
-      'post',
-      '/getGlobalActivitiesByQuery',
-      JSON.stringify({ params }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const queryData = {
+        txType: {
+          $in: ['exchange'],
+        },
+        $match: { collection_symbol: symbol },
+        $sort: { blockTime: -1, createdAt: -1 },
+        $skip: 0,
+      };
+      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      const result: any = await runOthersAPI(
+        'post',
+        '/getGlobalActivitiesByQuery',
+        JSON.stringify({ params }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
   async function getTransactionsByMint(mint: string): Promise<any[]> {
-    const queryData = {
-      $match: { mint: mint },
-      $sort: { blockTime: -1, createdAt: -1 },
-      $skip: 0,
-    };
-    const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-    const result: any = await runOthersAPI(
-      'post',
-      '/getGlobalActivitiesByQuery',
-      JSON.stringify({ params }),
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+    try {
+      const queryData = {
+        $match: { mint: mint },
+        $sort: { blockTime: -1, createdAt: -1 },
+        $skip: 0,
+      };
+      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      const result: any = await runOthersAPI(
+        'post',
+        '/getGlobalActivitiesByQuery',
+        JSON.stringify({ params }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
