@@ -49,7 +49,10 @@ export const useMEApis = () => {
   }
 
   async function getCollectionBySymbol(symbol: string): Promise<any> {
-    const result: any = await runOthersAPI('get', `/collections/${symbol}`);
+    const result: any = await runOthersAPI(
+      'get',
+      `/getCollectionBySymbol/${symbol}`,
+    );
     if ('data' in result) {
       return result['data'];
     }
