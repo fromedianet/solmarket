@@ -28,7 +28,7 @@ export const useNFTsAPI = () => {
     const pcQuery = getQueryPrameter(param);
     const meQuery = getQueryParameterForMagicEden(param);
     const queryBody = {
-      pc:  pcQuery,
+      pc: pcQuery,
       me: meQuery,
       sort: param.sort,
     };

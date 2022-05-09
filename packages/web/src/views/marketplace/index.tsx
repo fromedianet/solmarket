@@ -13,7 +13,7 @@ const { Content } = Layout;
 const { TabPane } = Tabs;
 
 export const MarketplaceView = () => {
-  const params = useParams<{ id: string, symbol: string }>();
+  const params = useParams<{ id: string; symbol: string }>();
   const id = params.id || '1';
   const symbol = params.symbol || '';
   const { width } = useWindowDimensions();

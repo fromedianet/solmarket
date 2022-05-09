@@ -31,7 +31,9 @@ const CarouselCard = (props: { collection: ExCollection }) => {
   const url =
     props.collection.type === 'launchpad'
       ? `/launchpad/${props.collection.symbol}`
-      : `/marketplace/${props.collection.market ? '2' : '1'}/${props.collection.symbol}`;
+      : `/marketplace/${props.collection.market ? '2' : '1'}/${
+          props.collection.symbol
+        }`;
 
   return (
     <Row className="card-container">

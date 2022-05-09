@@ -147,7 +147,9 @@ export const SalesListView = () => {
                 key={index}
                 item={item}
                 itemId={item['_id']}
-                link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                  item['symbol']
+                }`}
               />
             ))}
           />
@@ -158,7 +160,9 @@ export const SalesListView = () => {
                 key={index}
                 item={item}
                 itemId={item['_id']}
-                link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                  item['symbol']
+                }`}
               />
             ))}
           />
@@ -169,7 +173,9 @@ export const SalesListView = () => {
                 key={index}
                 item={item}
                 itemId={item['_id']}
-                link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                  item['symbol']
+                }`}
               />
             ))}
           />
@@ -210,7 +216,9 @@ export const SalesListView = () => {
                     key={index}
                     item={item}
                     itemId={item['_id']}
-                    link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                    link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                      item['symbol']
+                    }`}
                   />
                 ))}
               />

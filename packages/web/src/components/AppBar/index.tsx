@@ -107,7 +107,9 @@ export const AppBar = () => {
               {filters.map((item, index) => (
                 <Option
                   key={index}
-                  value={`/marketplace/${item.market ? '2' : '1'}/${item.symbol}`}
+                  value={`/marketplace/${item.market ? '2' : '1'}/${
+                    item.symbol
+                  }`}
                 >
                   <img
                     src={item.image}
