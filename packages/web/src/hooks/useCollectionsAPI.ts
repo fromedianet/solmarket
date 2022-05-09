@@ -254,6 +254,18 @@ export const useCollectionsAPI = () => {
     return [];
   }
 
+  async function getFeaturedCollections() {
+    const result: any = await runAPI(
+      false,
+      'get',
+      '/collections/getFeaturedCollections',
+    );
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
+  }
+
   /**
    * Get featured collections
    *
@@ -364,6 +376,7 @@ export const useCollectionsAPI = () => {
     processStep4,
     processStep5,
     getCollectionsWithoutDraft,
+    getFeaturedCollections,
     getAllCollections,
     getPopularCollections,
     getNewCollections,

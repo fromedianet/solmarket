@@ -20,8 +20,7 @@ export const SalesListView = () => {
   });
   const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
   const [popularStatus, setPopularStatus] = useState('7d');
-  const { featuredCollectionsCarousel } = useCollectionsAPI();
-  const { getPopularCollections, getNewCollections } = useCollectionsAPI();
+  const { featuredCollectionsCarousel, getFeaturedCollections, getPopularCollections, getNewCollections } = useCollectionsAPI();
 
   useEffect(() => {
     if (loading) return;
@@ -37,6 +36,9 @@ export const SalesListView = () => {
 
   async function loadAllData() {
     const result = {};
+    const carousels = await getFeaturedCollections();
+    setCarouselData(carousels);
+
     // Own marketplace
     const featuredData = await featuredCollectionsCarousel();
 
@@ -63,30 +65,6 @@ export const SalesListView = () => {
     result['popular1'] = popular1;
     result['popular7'] = popular7;
     result['popular30'] = popular30;
-
-    const data: ExCollection[] = [];
-    if (result['launchpad'].length > 0) {
-      data.push({
-        ...result['launchpad'][0],
-        type: 'launchpad',
-      });
-    }
-
-    if (result['new'].length > 0) {
-      data.push({
-        ...result['new'][0],
-        type: 'collection',
-      });
-    }
-
-    if (result['popular7'].length > 0) {
-      data.push({
-        ...result['popular7'][0],
-        type: 'collection',
-      });
-    }
-
-    setCarouselData(data);
 
     return result;
   }

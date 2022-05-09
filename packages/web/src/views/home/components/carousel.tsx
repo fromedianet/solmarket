@@ -24,24 +24,13 @@ export const CarouselView = (props: { data: ExCollection[] }) => {
 };
 
 const CarouselCard = (props: { collection: ExCollection }) => {
-  const buttonName =
-    props.collection.type === 'launchpad'
-      ? 'Go to Launchpad'
-      : 'Explore collection';
-  const url =
-    props.collection.type === 'launchpad'
-      ? `/launchpad/${props.collection.symbol}`
-      : `/marketplace/${props.collection.market ? '2' : '1'}/${
-          props.collection.symbol
-        }`;
-
   return (
     <Row className="card-container">
       <Col span={24} md={24} lg={10} className="card-content">
         <h2>{props.collection.name}</h2>
         <p>{props.collection.description}</p>
-        <Link to={url}>
-          <Button className="button">{buttonName}</Button>
+        <Link to={`/marketplace/${props.collection.market ? '2' : '1'}/${props.collection.symbol}`}>
+          <Button className="button">Explore collection</Button>
         </Link>
       </Col>
       <Col
