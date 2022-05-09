@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { MarketType } from '../constants';
 import {
   ExAttribute,
   ExAttrValue,
@@ -9,7 +8,6 @@ import {
   Transaction,
 } from '../models/exCollection';
 import { useCollectionsAPI } from './useCollectionsAPI';
-import { useMECollectionsAPI } from './useMECollectionsAPI';
 import { useNFTsAPI } from './useNFTsAPI';
 import { useTransactionsAPI } from './useTransactionsAPI';
 
@@ -29,58 +27,44 @@ export const useCollection = (id: string, symbol: string) => {
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsBySymbol } = useTransactionsAPI();
-  const {
-    getMECollectionBySymbol,
-    getMEListedNFTsByCollection,
-  } = useMECollectionsAPI();
 
   useEffect(() => {
-    if (id === '2') {
-      // For MagicEden
-      getMECollectionBySymbol(MarketType.MagicEden, symbol)
-        // @ts-ignore
-        .then((result: {}) => {
-          if ('collection' in result) {
-            setCollection(result['collection']);
-          }
-          if ('attributes' in result) {
-            setAttributes(result['attributes']);
-          }
-          if ('stats' in result) {
-            setCollectionStats(result['stats']);
-          }
-        });
-    } else {
-      // For own marketplace
-      getCollectionBySymbol(symbol)
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setCollection(res['data']);
-          }
-        });
+    // For own marketplace
+    getCollectionBySymbol({
+      symbol: symbol,
+      type: parseInt(id),
+    })
+      // @ts-ignore
+      .then((res: {}) => {
+        if ('data' in res) {
+          setCollection(res['data']);
+        }
+      });
 
-      getCollectionStatsBySymbol(symbol)
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            const {
-              availableAttributes,
-              floorPrice,
-              listedCount,
-              listedTotalValue,
-              totalVolume,
-            } = res['data'];
-            setAttributes(_parseAttributes(availableAttributes));
-            setCollectionStats({
-              floorPrice: parseInt(floorPrice),
-              listedCount: parseInt(listedCount),
-              listedTotalValue: parseInt(listedTotalValue),
-              totalVolume: parseInt(totalVolume),
-            });
-          }
-        });
-    }
+    getCollectionStatsBySymbol({
+      symbol: symbol,
+      type: parseInt(id),
+    })
+      // @ts-ignore
+      .then((res: {}) => {
+        if ('data' in res) {
+          const {
+            availableAttributes,
+            floorPrice,
+            listedCount,
+            listedTotalValue,
+            totalVolume,
+          } = res['data'];
+          setAttributes(_parseAttributes(availableAttributes));
+          setCollectionStats({
+            floorPrice: parseInt(floorPrice),
+            listedCount: parseInt(listedCount),
+            listedTotalValue: parseInt(listedTotalValue),
+            totalVolume: parseInt(totalVolume),
+          });
+        }
+      });
+
     getTransactionsBySymbol(symbol)
       // @ts-ignore
       .then((res: {}) => {
@@ -94,9 +78,11 @@ export const useCollection = (id: string, symbol: string) => {
     if (loading) return;
     setLoading(true);
 
-    if (param.market) {
-      getMEListedNFTsByCollection(param)
-        .then((data: []) => {
+    getListedNftsByQuery(param)
+      // @ts-ignore
+      .then((res: {}) => {
+        const data = res['data'];
+        if (data) {
           setNFTs(data);
           if (data.length < PER_PAGE) {
             setSkip(0);
@@ -105,26 +91,9 @@ export const useCollection = (id: string, symbol: string) => {
             setSkip(prev => prev + PER_PAGE);
             setHasMore(true);
           }
-        })
-        .finally(() => setLoading(false));
-    } else {
-      getListedNftsByQuery(param)
-        // @ts-ignore
-        .then((res: {}) => {
-          const data = res['data'];
-          if (data) {
-            setNFTs(data);
-            if (data.length < PER_PAGE) {
-              setSkip(0);
-              setHasMore(false);
-            } else {
-              setSkip(prev => prev + PER_PAGE);
-              setHasMore(true);
-            }
-          }
-        })
-        .finally(() => setLoading(false));
-    }
+        }
+      })
+      .finally(() => setLoading(false));
   };
 
   function _parseAttributes(data: any[] | null): ExAttribute[] {

@@ -271,12 +271,15 @@ export const useCollectionsAPI = () => {
   /**
    * Get collection by symbol
    */
-  async function getCollectionBySymbol(symbol: string) {
+  async function getCollectionBySymbol(params: {
+    symbol: string,
+    type: number,
+  }) {
     const result = await runAPI(
       false,
       'post',
       '/collections/getCollectionBySymbol',
-      JSON.stringify({ symbol }),
+      JSON.stringify(params),
     );
     return result;
   }
@@ -302,12 +305,15 @@ export const useCollectionsAPI = () => {
    * @param symbol
    * @returns
    */
-  async function getCollectionStatsBySymbol(symbol: string) {
+  async function getCollectionStatsBySymbol(params: {
+    symbol: string,
+    type: number,
+  }) {
     const result = await runAPI(
       false,
       'post',
       '/collections/getCollectionStatsBySymbol',
-      JSON.stringify({ symbol }),
+      JSON.stringify(params),
     );
     return result;
   }
