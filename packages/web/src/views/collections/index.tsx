@@ -7,14 +7,14 @@ import { CardLoader } from '../../components/MyLoader';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../components/EmptyView';
 import { ExCollection } from '../../models/exCollection';
+import { useMEApis } from '../../hooks/useMEApis';
 
 const { Search } = Input;
 
 export const CollectionsView = () => {
   const searchParams = useQuerySearch();
   const type = searchParams.get('type') || 'all';
-  const { getAllCollections, getPopularCollections, getNewCollections } =
-    useCollectionsAPI();
+  const { getAllCollections, getNewCollections } = useCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -53,10 +53,14 @@ export const CollectionsView = () => {
     let data: ExCollection[] = [];
     if (type === 'new') {
       data = await getNewCollections(true);
+      const exData = await useMEApis().getNewCollections(true);
+      data = data.concat(exData);
     } else if (type === 'popular') {
-      data = await getPopularCollections({ more: true, timeRange: timeRange });
+      data = await useMEApis().getPopularCollections({ more: true, timeRange: timeRange });
     } else {
       data = await getAllCollections();
+      const exData = await useMEApis().getAllCollections();
+      data = data.concat(exData);
     }
     return data;
   }
