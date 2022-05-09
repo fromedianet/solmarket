@@ -220,13 +220,33 @@ export const useCollectionsAPI = () => {
   }
 
   /**
-   * Get all live new collections
+   * Get popular collections
    */
-  async function getNewCollections() {
+  async function getPopularCollections(params: {
+    more: boolean;
+    timeRange: string;
+  }) {
     const result: any = await runAPI(
       false,
-      'get',
+      'post',
+      '/collections/getPopularCollections',
+      JSON.stringify(params),
+    );
+    if ('data' in result) {
+      return result['data'];
+    }
+    return [];
+  }
+
+  /**
+   * Get all live new collections
+   */
+  async function getNewCollections(more: boolean) {
+    const result: any = await runAPI(
+      false,
+      'post',
       '/collections/getNewCollections',
+      JSON.stringify({ more }),
     );
     if ('data' in result) {
       return result['data'];
@@ -272,8 +292,8 @@ export const useCollectionsAPI = () => {
    * Get collection by symbol
    */
   async function getCollectionBySymbol(params: {
-    symbol: string,
-    type: number,
+    symbol: string;
+    type: number;
   }) {
     const result = await runAPI(
       false,
@@ -306,8 +326,8 @@ export const useCollectionsAPI = () => {
    * @returns
    */
   async function getCollectionStatsBySymbol(params: {
-    symbol: string,
-    type: number,
+    symbol: string;
+    type: number;
   }) {
     const result = await runAPI(
       false,
@@ -345,6 +365,7 @@ export const useCollectionsAPI = () => {
     processStep5,
     getCollectionsWithoutDraft,
     getAllCollections,
+    getPopularCollections,
     getNewCollections,
     featuredCollectionsCarousel,
     getLaunchpadCollections,
