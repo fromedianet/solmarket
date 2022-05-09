@@ -7,7 +7,6 @@ import {
   Space,
   Select,
   Button,
-  Checkbox,
 } from 'antd';
 import {
   ArrowLeftOutlined,
@@ -22,7 +21,6 @@ const { Sider } = Layout;
 const { Panel } = Collapse;
 
 export const FilterSidebar = (props: {
-  market: string | null;
   attributes: ExAttribute[];
   filter: {
     price: {
@@ -47,15 +45,6 @@ export const FilterSidebar = (props: {
     setAttributeFilter(props.filter.attributes);
     setStatus(props.filter.status);
   }, [props.filter]);
-
-  const onStatusChange = e => {
-    setStatus(e.target.checked);
-    props.updateFilters(
-      form.getFieldsValue(),
-      attributeFilter,
-      e.target.checked,
-    );
-  };
 
   const onFinish = values => {
     if (values.min && values.max) {
@@ -118,19 +107,6 @@ export const FilterSidebar = (props: {
               )
             }
           >
-            {!props.market && (
-              <Panel
-                key="status"
-                header="Status"
-                extra={<UnorderedListOutlined className="filter-icon" />}
-              >
-                <div className="status-container">
-                  <Checkbox onChange={onStatusChange} checked={status}>
-                    All items
-                  </Checkbox>
-                </div>
-              </Panel>
-            )}
             <Panel
               key="price"
               header="Price filter"

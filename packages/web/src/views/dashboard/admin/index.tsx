@@ -17,15 +17,13 @@ export const DashboardAdmin = () => {
 
   useEffect(() => {
     // @ts-ignore
-    getCollectionsWithoutDraft().then((res: {}) => {
-      if ('data' in res) {
-        setLists({
-          submitted: res['data'].filter(item => item.status === 'submitted'),
-          // reviewed: res['data'].filter(item => item.status === 'reviewed'),
-          listed: res['data'].filter(item => item.status === 'listed'),
-          rejected: res['data'].filter(item => item.status === 'rejected'),
-        });
-      }
+    getCollectionsWithoutDraft().then((res: []) => {
+      setLists({
+        submitted: res.filter((item: any) => item.status === 'submitted'),
+        // reviewed: res['data'].filter(item => item.status === 'reviewed'),
+        listed: res.filter((item: any) => item.status === 'listed'),
+        rejected: res.filter((item: any) => item.status === 'rejected'),
+      });
     });
   }, []);
 

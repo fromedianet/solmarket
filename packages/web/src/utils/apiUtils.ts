@@ -45,6 +45,7 @@ export const ApiUtils = () => {
     method: Method,
     url: string,
     data?: string | FormData,
+    hideError?: boolean,
   ) {
     return new Promise((resolve, reject) => {
       axiosInstance.defaults.baseURL = APIS.base_api_url;
@@ -72,10 +73,13 @@ export const ApiUtils = () => {
             if (res.status === 401) {
               removeAuthToken();
             }
-            notify({
-              message: res.data.error.message,
-              type: 'error',
-            });
+            if (!hideError) {
+              notify({
+                message: res.data.error.message,
+                type: 'error',
+              });
+            }
+
             reject();
           }
         })
@@ -83,50 +87,18 @@ export const ApiUtils = () => {
           if (err.response && err.response.status === 401) {
             removeAuthToken();
           }
-          let errMessage = err.message;
-          if (err.response && err.response.data) {
-            errMessage = err.response.data.error
-              ? err.response.data.error.message
-              : err.response.data.details;
-          }
-          notify({
-            message: errMessage,
-            type: 'error',
-          });
-          reject();
-        });
-    });
-  }
-
-  function runMagicEdenAPI(
-    method: Method,
-    url: string,
-    data?: string | FormData | {},
-  ) {
-    axiosInstance.defaults.baseURL = APIS.magiceden_base_url;
-    return new Promise((resolve, reject) => {
-      axiosInstance
-        .request({
-          method: method,
-          url: url,
-          data: data,
-        })
-        .then(res => {
-          if (res.status === 200) {
-            resolve(res.data);
-          } else {
+          if (!hideError) {
+            let errMessage = err.message;
+            if (err.response && err.response.data) {
+              errMessage = err.response.data.error
+                ? err.response.data.error.message
+                : err.response.data.details;
+            }
             notify({
-              message: res.data.message,
+              message: errMessage,
               type: 'error',
             });
-            reject();
           }
-        })
-        .catch(err => {
-          notify({
-            message: err.message,
-            type: 'error',
-          });
           reject();
         });
     });
@@ -135,6 +107,5 @@ export const ApiUtils = () => {
   return {
     runAPI,
     runOthersAPI,
-    runMagicEdenAPI,
   };
 };

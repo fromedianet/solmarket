@@ -13,7 +13,7 @@ const { Content } = Layout;
 const { TabPane } = Tabs;
 
 export const MarketplaceView = () => {
-  const params = useParams<{ id: string, symbol: string }>();
+  const params = useParams<{ id: string; symbol: string }>();
   const id = params.id || '1';
   const symbol = params.symbol || '';
   const { width } = useWindowDimensions();
@@ -30,6 +30,7 @@ export const MarketplaceView = () => {
   });
   const [searchKey, setSearchKey] = useState('');
   const [sort, setSort] = useState(1);
+  const [type, setType] = useState(0);
   const [refresh, setRefresh] = useState(false);
 
   const {
@@ -80,7 +81,7 @@ export const MarketplaceView = () => {
     setRefresh(true);
     getListedNFTs({
       symbol: symbol,
-      market: market,
+      type: type,
       sort: sort,
       searchKey: searchKey,
       attributes: filter.attributes,
@@ -103,7 +104,7 @@ export const MarketplaceView = () => {
       setRefresh(false);
       getListedNFTs({
         symbol: symbol,
-        market: market,
+        type: type,
         sort: sort,
         searchKey: searchKey,
         attributes: filter.attributes,
@@ -138,7 +139,6 @@ export const MarketplaceView = () => {
         >
           <Layout hasSider>
             <FilterSidebar
-              market={market}
               updateFilters={onUpdateFilters}
               filter={filter}
               attributes={attributes}
@@ -148,12 +148,13 @@ export const MarketplaceView = () => {
                 collection={collection}
                 list={list}
                 sort={sort}
+                type={type}
                 searchKey={searchKey}
                 loading={loading}
-                market={market}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
+                onTypeChange={val => setType(val)}
                 onRefresh={onRefresh}
                 filter={filter}
                 hasMore={hasMore}

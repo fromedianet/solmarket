@@ -31,13 +31,7 @@ export const ItemAction = (props: {
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
   const isOwner = props.nft.owner === wallet.publicKey?.toBase58();
-  const isOfferAccepted = props.nft.txType === 'ACCEPT OFFER';
-  const isWinner = props.nft.bookKeeper === wallet.publicKey?.toBase58();
   const alreadyListed = props.nft.price || 0 > 0;
-  const showCurrentPrice =
-    (alreadyListed && !isOfferAccepted) ||
-    (alreadyListed && isOwner) ||
-    (alreadyListed && isOfferAccepted && isWinner);
   const checkPrice = (_: any, value: { number: number }) => {
     if (value && value.number > 0) {
       return Promise.resolve();
@@ -66,7 +60,7 @@ export const ItemAction = (props: {
 
   return (
     <div className="action-view">
-      {showCurrentPrice && <span className="label">Current Price</span>}
+      {alreadyListed && <span className="label">Current Price</span>}
       <div className="price-container">
         <img
           src="/icons/price.svg"
@@ -74,28 +68,33 @@ export const ItemAction = (props: {
           alt="price"
           style={{ marginRight: '8px' }}
         />
-        {showCurrentPrice && (
-          <span className="value">{props.nft.price} SOL</span>
-        )}
+        {alreadyListed && <span className="value">{props.nft.price} SOL</span>}
       </div>
-      {!showCurrentPrice && <span className="value">Not listed</span>}
+      {!alreadyListed && <span className="value">Not listed</span>}
       {props.nft.symbol && (
         <div className="btn-container">
           {!wallet.connected ? (
             <ConnectButton className="button" />
+          ) : props.nft.market ? (
+            !isOwner &&
+            alreadyListed && (
+              <Button
+                className="button"
+                onClick={props.onBuyNow}
+                disabled={props.loading}
+              >
+                Buy Now
+              </Button>
+            )
           ) : isOwner ? (
             alreadyListed ? (
-              isOfferAccepted ? (
-                <span className="value">Offer is already accepted</span>
-              ) : (
-                <Button
-                  className="button"
-                  onClick={props.onCancelList}
-                  disabled={props.loading}
-                >
-                  {props.loading ? <Spin /> : 'Cancel Listing'}
-                </Button>
-              )
+              <Button
+                className="button"
+                onClick={props.onCancelList}
+                disabled={props.loading}
+              >
+                {props.loading ? <Spin /> : 'Cancel Listing'}
+              </Button>
             ) : (
               <Form
                 form={form}
@@ -128,18 +127,7 @@ export const ItemAction = (props: {
               </Form>
             )
           ) : (
-            alreadyListed &&
-            (isOfferAccepted ? (
-              isWinner && (
-                <Button
-                  className="button"
-                  onClick={props.onBuyNow}
-                  disabled={props.loading}
-                >
-                  Claim
-                </Button>
-              )
-            ) : (
+            alreadyListed && (
               <Row gutter={16}>
                 <Col span={10}>
                   <Button
@@ -175,7 +163,7 @@ export const ItemAction = (props: {
                   )}
                 </Col>
               </Row>
-            ))
+            )
           )}
         </div>
       )}

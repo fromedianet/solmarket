@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { ApiUtils } from '../utils/apiUtils';
 
 export const useCollectionsAPI = () => {
@@ -8,14 +9,20 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  async function createCollection(props: { _id: string }) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/create',
-      JSON.stringify(props),
-    );
-    return result;
+  async function createCollection(props: { _id: string }): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/create',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -23,9 +30,19 @@ export const useCollectionsAPI = () => {
    *
    * @returns
    */
-  async function getMyCollections() {
-    const result = await runAPI(true, 'get', '/collections/getMyCollections');
-    return result;
+  async function getMyCollections(): Promise<any[]> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'get',
+        '/collections/getMyCollections',
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return [];
   }
 
   /**
@@ -33,13 +50,19 @@ export const useCollectionsAPI = () => {
    *
    * @returns
    */
-  async function getMyListedCollections() {
-    const result = await runAPI(
-      true,
-      'get',
-      '/collections/getMyListedCollections',
-    );
-    return result;
+  async function getMyListedCollections(): Promise<any[]> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'get',
+        '/collections/getMyListedCollections',
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return [];
   }
 
   /**
@@ -48,14 +71,20 @@ export const useCollectionsAPI = () => {
    * @param _id
    * @returns
    */
-  async function getCollectionById(id: string) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/getCollectionById',
-      JSON.stringify({ _id: id }),
-    );
-    return result;
+  async function getCollectionById(id: string): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/getCollectionById',
+        JSON.stringify({ _id: id }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -64,14 +93,23 @@ export const useCollectionsAPI = () => {
    * @param props
    * @returns
    */
-  async function processStep1(props: { _id: string; permission: string }) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/processStep1',
-      JSON.stringify(props),
-    );
-    return result;
+  async function processStep1(props: {
+    _id: string;
+    permission: string;
+  }): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/processStep1',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -85,14 +123,20 @@ export const useCollectionsAPI = () => {
     name: string;
     symbol: string;
     email: string;
-  }) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/processStep2',
-      JSON.stringify(props),
-    );
-    return result;
+  }): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/processStep2',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -114,38 +158,44 @@ export const useCollectionsAPI = () => {
     twitter: string;
     discord: string;
     website: string | null;
-  }) {
-    const formData = new FormData();
-    formData.append('_id', props._id);
-    if (props.description) formData.append('description', props.description);
-    if (props.image) formData.append('image', props.image);
-    if (props.banner) formData.append('banner', props.banner);
-    formData.append('is_derivative', props.is_derivative.toString());
-    if (props.derivative_original_link)
-      formData.append(
-        'original_derivative_link',
-        props.derivative_original_link,
-      );
-    if (props.derivative_original_name)
-      formData.append(
-        'original_derivative_name',
-        props.derivative_original_name,
-      );
-    if (props.primary_category)
-      formData.append('primary_category', props.primary_category);
-    if (props.secondary_category)
-      formData.append('secondary_category', props.secondary_category);
-    formData.append('twitter', props.twitter);
-    formData.append('discord', props.discord);
-    if (props.website) formData.append('website', props.website);
+  }): Promise<any> {
+    try {
+      const formData = new FormData();
+      formData.append('_id', props._id);
+      if (props.description) formData.append('description', props.description);
+      if (props.image) formData.append('image', props.image);
+      if (props.banner) formData.append('banner', props.banner);
+      formData.append('is_derivative', props.is_derivative.toString());
+      if (props.derivative_original_link)
+        formData.append(
+          'original_derivative_link',
+          props.derivative_original_link,
+        );
+      if (props.derivative_original_name)
+        formData.append(
+          'original_derivative_name',
+          props.derivative_original_name,
+        );
+      if (props.primary_category)
+        formData.append('primary_category', props.primary_category);
+      if (props.secondary_category)
+        formData.append('secondary_category', props.secondary_category);
+      formData.append('twitter', props.twitter);
+      formData.append('discord', props.discord);
+      if (props.website) formData.append('website', props.website);
 
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/processStep3',
-      formData,
-    );
-    return result;
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/processStep3',
+        formData,
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -160,14 +210,20 @@ export const useCollectionsAPI = () => {
     mint_supply: number;
     mint_price: number;
     launch_time: number;
-  }) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/processStep4',
-      JSON.stringify(props),
-    );
-    return result;
+  }): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/processStep4',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -181,56 +237,75 @@ export const useCollectionsAPI = () => {
     status: string;
     extra_info?: string | null;
     reject_info?: string | null;
-  }) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/processStep5',
-      JSON.stringify(props),
-    );
-    return result;
+  }): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/processStep5',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
    * Get all collections for review (without draft)
    *
    */
-  async function getCollectionsWithoutDraft() {
-    const result = await runAPI(
-      true,
-      'get',
-      '/collections/getCollectionsWithoutDraft',
-    );
-    return result;
+  async function getCollectionsWithoutDraft(): Promise<any[]> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'get',
+        '/collections/getCollectionsWithoutDraft',
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return [];
   }
 
   /**
    * Get all live collections
    */
-  async function getAllCollections() {
-    const result: any = await runAPI(
-      false,
-      'get',
-      '/collections/getAllCollections',
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+  async function getAllCollections(): Promise<any[]> {
+    try {
+      const result: any = await runAPI(
+        false,
+        'get',
+        '/collections/getAllCollections',
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
   /**
    * Get all live new collections
    */
-  async function getNewCollections() {
-    const result: any = await runAPI(
-      false,
-      'get',
-      '/collections/getNewCollections',
-    );
-    if ('data' in result) {
-      return result['data'];
-    }
+  async function getNewCollections(more: boolean): Promise<any[]> {
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/collections/getNewCollections',
+        JSON.stringify({ more }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
     return [];
   }
 
@@ -243,42 +318,55 @@ export const useCollectionsAPI = () => {
    * - new-collecitons : mint_ended is true and updatedAt is less than 7 days
    * - collections : mint_ended is tru and updatedAt is greater than 7 days
    */
-  async function featuredCollectionsCarousel() {
-    const result: any = await runAPI(
-      false,
-      'get',
-      '/collections/featuredCollectionsCarousel',
-    );
-    if ('data' in result) {
-      return result['data'];
-    } else {
-      return {};
-    }
+  async function featuredCollectionsCarousel(): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        false,
+        'get',
+        '/collections/featuredCollectionsCarousel',
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return {};
   }
 
   /**
    * Get launchpad collections
    */
-  async function getLaunchpadCollections() {
-    const result = await runAPI(
-      false,
-      'get',
-      '/collections/getLaunchpadCollections',
-    );
-    return result;
+  async function getLaunchpadCollections(): Promise<any[]> {
+    try {
+      const result: any = await runAPI(
+        false,
+        'get',
+        '/collections/getLaunchpadCollections',
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return [];
   }
 
   /**
    * Get collection by symbol
    */
-  async function getCollectionBySymbol(symbol: string) {
-    const result = await runAPI(
+  async function getCollectionBySymbol(symbol: string): Promise<any> {
+    try {
+    } catch {}
+    const result: any = await runAPI(
       false,
       'post',
       '/collections/getCollectionBySymbol',
       JSON.stringify({ symbol }),
     );
-    return result;
+    if ('data' in result) {
+      return result['data'];
+    }
+    return null;
   }
 
   /**
@@ -287,14 +375,20 @@ export const useCollectionsAPI = () => {
   async function updateCandyMachineStatus(props: {
     candymachine_id: string;
     mint_ended: boolean;
-  }) {
-    const result = await runAPI(
-      true,
-      'post',
-      '/collections/updateCandyMachineStatus',
-      JSON.stringify(props),
-    );
-    return result;
+  }): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        true,
+        'post',
+        '/collections/updateCandyMachineStatus',
+        JSON.stringify(props),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -302,14 +396,20 @@ export const useCollectionsAPI = () => {
    * @param symbol
    * @returns
    */
-  async function getCollectionStatsBySymbol(symbol: string) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/collections/getCollectionStatsBySymbol',
-      JSON.stringify({ symbol }),
-    );
-    return result;
+  async function getCollectionStatsBySymbol(symbol: string): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/collections/getCollectionStatsBySymbol',
+        JSON.stringify({ symbol }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return null;
   }
 
   /**
@@ -317,14 +417,22 @@ export const useCollectionsAPI = () => {
    * @param symbols
    * @returns
    */
-  async function getMultiCollectionEscrowStats(symbols: string[]) {
-    const result = await runAPI(
-      false,
-      'post',
-      '/collections/getMultiCollectionEscrowStats',
-      JSON.stringify({ symbols }),
-    );
-    return result;
+  async function getMultiCollectionEscrowStats(
+    symbols: string[],
+  ): Promise<any> {
+    try {
+      const result: any = await runAPI(
+        false,
+        'post',
+        '/collections/getMultiCollectionEscrowStats',
+        JSON.stringify({ symbols }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return {};
   }
 
   return {

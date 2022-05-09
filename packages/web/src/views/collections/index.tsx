@@ -7,8 +7,7 @@ import { CardLoader } from '../../components/MyLoader';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../components/EmptyView';
 import { ExCollection } from '../../models/exCollection';
-import { useExCollectionsAPI } from '../../hooks/useExCollections';
-import { MarketType } from '../../constants';
+import { useMEApis } from '../../hooks/useMEApis';
 
 const { Search } = Input;
 
@@ -16,7 +15,7 @@ export const CollectionsView = () => {
   const searchParams = useQuerySearch();
   const type = searchParams.get('type') || 'all';
   const { getAllCollections, getNewCollections } = useCollectionsAPI();
-  const exAPI = useExCollectionsAPI();
+  const meApis = useMEApis();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -54,21 +53,17 @@ export const CollectionsView = () => {
   async function loadCollections(type: string) {
     let data: ExCollection[] = [];
     if (type === 'new') {
-      data = await getNewCollections();
-      const exData = await exAPI.getNewCollections({
-        market: MarketType.MagicEden,
-        more: true,
-      });
+      data = await getNewCollections(true);
+      const exData = await meApis.getNewCollections(true);
       data = data.concat(exData);
     } else if (type === 'popular') {
-      data = await exAPI.getPopularCollections({
-        market: MarketType.MagicEden,
-        timeRange: timeRange,
+      data = await meApis.getPopularCollections({
         more: true,
+        timeRange: timeRange,
       });
     } else {
       data = await getAllCollections();
-      const exData = await exAPI.getAllCollections(MarketType.MagicEden);
+      const exData = await meApis.getAllCollections();
       data = data.concat(exData);
     }
     return data;
@@ -154,7 +149,9 @@ export const CollectionsView = () => {
               >
                 <CollectionCard
                   item={item}
-                  link={`/marketplace/${item.market ? '2' : '1'}/${item.symbol}`}
+                  link={`/marketplace/${item.market ? '2' : '1'}/${
+                    item.symbol
+                  }`}
                 />
               </Col>
             ))}

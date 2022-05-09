@@ -5,10 +5,9 @@ import { CardLoader } from '../../components/MyLoader';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { HomeCard } from '../../components/HomeCard';
-import { useExCollectionsAPI } from '../../hooks/useExCollections';
-import { MarketType } from '../../constants';
 import { ExCollection } from '../../models/exCollection';
 import { CarouselView } from './components/carousel';
+import { useMEApis } from '../../hooks/useMEApis';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,7 @@ export const SalesListView = () => {
   const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
   const [popularStatus, setPopularStatus] = useState('7d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
-  const { getPopularCollections, getNewCollections } = useExCollectionsAPI();
+  const meApis = useMEApis();
 
   useEffect(() => {
     if (loading) return;
@@ -39,23 +38,23 @@ export const SalesListView = () => {
 
   async function loadAllData() {
     const result = {};
+    const carousels = await meApis.getFeaturedCollections();
+    setCarouselData(carousels);
+
     // Own marketplace
     const featuredData = await featuredCollectionsCarousel();
 
     // MagicEden
-    const popular1 = await getPopularCollections({
-      market: MarketType.MagicEden,
+    const popular1 = await meApis.getPopularCollections({
       timeRange: '1d',
     });
-    const popular7 = await getPopularCollections({
-      market: MarketType.MagicEden,
+    const popular7 = await meApis.getPopularCollections({
       timeRange: '7d',
     });
-    const popular30 = await getPopularCollections({
-      market: MarketType.MagicEden,
+    const popular30 = await meApis.getPopularCollections({
       timeRange: '30d',
     });
-    const exNews = await getNewCollections({ market: MarketType.MagicEden });
+    const exNews = await meApis.getNewCollections(false);
 
     result['launchpad'] = featuredData['launchpad'] || [];
     result['upcoming'] = featuredData['upcoming'] || [];
@@ -65,30 +64,6 @@ export const SalesListView = () => {
     result['popular1'] = popular1;
     result['popular7'] = popular7;
     result['popular30'] = popular30;
-
-    const data: ExCollection[] = [];
-    if (result['launchpad'].length > 0) {
-      data.push({
-        ...result['launchpad'][0],
-        type: 'launchpad',
-      });
-    }
-
-    if (result['new'].length > 0) {
-      data.push({
-        ...result['new'][0],
-        type: 'collection',
-      });
-    }
-
-    if (result['popular7'].length > 0) {
-      data.push({
-        ...result['popular7'][0],
-        type: 'collection',
-      });
-    }
-
-    setCarouselData(data);
 
     return result;
   }
@@ -147,7 +122,9 @@ export const SalesListView = () => {
                 key={index}
                 item={item}
                 itemId={item['_id']}
-                link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                  item['symbol']
+                }`}
               />
             ))}
           />
@@ -158,7 +135,9 @@ export const SalesListView = () => {
                 key={index}
                 item={item}
                 itemId={item['_id']}
-                link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                  item['symbol']
+                }`}
               />
             ))}
           />
@@ -169,7 +148,9 @@ export const SalesListView = () => {
                 key={index}
                 item={item}
                 itemId={item['_id']}
-                link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                  item['symbol']
+                }`}
               />
             ))}
           />
@@ -210,7 +191,9 @@ export const SalesListView = () => {
                     key={index}
                     item={item}
                     itemId={item['_id']}
-                    link={`/marketplace/${item['market'] ? '2' : '1'}/${item['symbol']}`}
+                    link={`/marketplace/${item['market'] ? '2' : '1'}/${
+                      item['symbol']
+                    }`}
                   />
                 ))}
               />

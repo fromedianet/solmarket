@@ -13,8 +13,8 @@ export const Items = (props: {
   collection: ExCollection | undefined;
   list: any[];
   loading: boolean;
-  market: string | null;
   sort: number;
+  type: number;
   searchKey: string;
   hasMore: boolean;
   filter: {
@@ -28,6 +28,7 @@ export const Items = (props: {
   };
   onSearch: (a: string) => void;
   onSortChange: (a: number) => void;
+  onTypeChange: (a: number) => void;
   updateFilters: (p, a, s) => void;
   fetchMore: () => void;
   onRefresh: () => void;
@@ -115,7 +116,7 @@ export const Items = (props: {
   return (
     <div className="items-container">
       <Row>
-        <Col span={24} md={12} className="control-container">
+        <Col span={24} md={8} className="control-container">
           <div className="refresh-btn" onClick={props.onRefresh}>
             {props.loading ? (
               <Spin />
@@ -132,7 +133,7 @@ export const Items = (props: {
             allowClear
           />
         </Col>
-        <Col span={24} md={12} className="control-container">
+        <Col span={24} md={8} className="control-container">
           <div className="filter-btn" onClick={props.onRefresh}>
             <img src="/icons/filter.svg" alt="filter" />
           </div>
@@ -144,6 +145,17 @@ export const Items = (props: {
             <Select.Option value={1}>Recently Listed</Select.Option>
             <Select.Option value={2}>Price: Low to high</Select.Option>
             <Select.Option value={3}>Price: High to low</Select.Option>
+          </Select>
+        </Col>
+        <Col span={24} md={8} className="control-container">
+          <Select
+            className="select-container"
+            value={props.type}
+            onSelect={val => props.onTypeChange(val)}
+          >
+            <Select.Option value={0}>All</Select.Option>
+            <Select.Option value={1}>PaperCity</Select.Option>
+            <Select.Option value={2}>MagicEden</Select.Option>
           </Select>
         </Col>
       </Row>
@@ -202,7 +214,6 @@ export const Items = (props: {
               >
                 <NFTCard
                   item={item}
-                  market={props.market}
                   collection={props.collection?.name || item.symbol}
                 />
               </Col>
@@ -219,13 +230,10 @@ export const Items = (props: {
 export const NFTCard = (props: {
   item: any;
   collection: string;
-  market?: string | null;
   itemId?: string;
   className?: string;
 }) => {
-  const url = props.market
-    ? `/item-details/${props.item.mint}?market=${props.market}`
-    : `/item-details/${props.item.mint}`;
+  const url = `/item-details/${props.item.mint}`;
   return (
     <Card
       hoverable={true}
