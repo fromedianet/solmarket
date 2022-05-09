@@ -39,6 +39,7 @@ import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { groupBy } from '../../utils/utils';
 import { GroupItem } from './components/groupItem';
+import { useMEApis } from '../../hooks/useMEApis';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -146,6 +147,9 @@ export const ProfileView = () => {
       items1 = res.filter(k => k.price === 0);
       items2 = res.filter(k => k.price > 0);
 
+      const exRes = await useMEApis().getNFTsByEscrowOwner(wallet.publicKey.toBase58());
+      items2 = items2.concat(exRes);
+
       items1.forEach(k => {
         if (k.symbol && !symbols.includes(k.symbol)) {
           symbols.push(k.symbol);
@@ -160,10 +164,9 @@ export const ProfileView = () => {
 
       let tempCols: any = {};
       if (symbols.length > 0) {
-        const colRes: any = await getMultiCollectionEscrowStats(symbols);
-        if (colRes) {
-          tempCols = colRes['data'];
-        }
+        const colRes = await getMultiCollectionEscrowStats(symbols);
+        const exColRes = await useMEApis().getMultiCollectionEscrowStats(symbols);
+        tempCols = { ...colRes, ...exColRes };
       }
 
       items1 = items1.map(item => ({
@@ -321,17 +324,14 @@ export const ProfileView = () => {
           tradeState: offer.tradeState!,
           price: offer.bidPrice,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', {
-                wallet: wallet.publicKey!.toBase58(),
-              });
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data']);
+          if (!status['err']) {
+            socket.emit('syncAuctionHouse', {
+              wallet: wallet.publicKey!.toBase58(),
+            });
+            resolve('');
+            return;
           }
         }
         reject();
@@ -373,17 +373,14 @@ export const ProfileView = () => {
           bidPrice: offer.bidPrice,
           listPrice: offer.listingPrice,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              socket.emit('syncAuctionHouse', {
-                wallet: wallet.publicKey!.toBase58(),
-              });
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data']);
+          if (!status['err']) {
+            socket.emit('syncAuctionHouse', {
+              wallet: wallet.publicKey!.toBase58(),
+            });
+            resolve('');
+            return;
           }
         }
         reject();
@@ -421,17 +418,14 @@ export const ProfileView = () => {
           auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
           amount: amount,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              setTimeout(() => {
-                callShowEscrow();
-              }, 20000);
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data']);
+          if (!status['err']) {
+            setTimeout(() => {
+              callShowEscrow();
+            }, 20000);
+            resolve('');
+            return;
           }
         }
         reject();
@@ -467,17 +461,14 @@ export const ProfileView = () => {
           auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
           amount: amount,
         });
-        if ('data' in result) {
-          const data = result['data']['data'];
-          if (data) {
-            const status = await runInstructions(data);
-            if (!status['err']) {
-              setTimeout(() => {
-                callShowEscrow();
-              }, 20000);
-              resolve('');
-              return;
-            }
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data']);
+          if (!status['err']) {
+            setTimeout(() => {
+              callShowEscrow();
+            }, 20000);
+            resolve('');
+            return;
           }
         }
         reject();

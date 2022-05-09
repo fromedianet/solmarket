@@ -364,7 +364,7 @@ export const useCollectionsAPI = () => {
     if ('data' in result) {
       return result['data'];
     }
-    return null;
+    return {};
   }
 
   return {

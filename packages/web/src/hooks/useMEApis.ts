@@ -82,7 +82,7 @@ export const useMEApis = () => {
     if ('data' in result) {
       return result['data'];
     }
-    return null;
+    return {};
   }
 
   async function getListedNftsByQuery(queries: QUERIES): Promise<any[]> {
