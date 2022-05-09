@@ -128,6 +128,7 @@ export const ItemDetailView = () => {
     const param = {
       symbol: nftItem.symbol,
       sort: 1,
+      type: 0,
       status: false,
     };
     const res: any = await getListedNftsByQuery(param);

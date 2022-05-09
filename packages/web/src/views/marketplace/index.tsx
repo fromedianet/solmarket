@@ -30,6 +30,7 @@ export const MarketplaceView = () => {
   });
   const [searchKey, setSearchKey] = useState('');
   const [sort, setSort] = useState(1);
+  const [type, setType] = useState(0);
   const [refresh, setRefresh] = useState(false);
 
   const {
@@ -80,6 +81,7 @@ export const MarketplaceView = () => {
     setRefresh(true);
     getListedNFTs({
       symbol: symbol,
+      type: type,
       sort: sort,
       searchKey: searchKey,
       attributes: filter.attributes,
@@ -102,6 +104,7 @@ export const MarketplaceView = () => {
       setRefresh(false);
       getListedNFTs({
         symbol: symbol,
+        type: type,
         sort: sort,
         searchKey: searchKey,
         attributes: filter.attributes,
@@ -145,11 +148,13 @@ export const MarketplaceView = () => {
                 collection={collection}
                 list={list}
                 sort={sort}
+                type={type}
                 searchKey={searchKey}
                 loading={loading}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
+                onTypeChange={val => setType(val)}
                 onRefresh={onRefresh}
                 filter={filter}
                 hasMore={hasMore}

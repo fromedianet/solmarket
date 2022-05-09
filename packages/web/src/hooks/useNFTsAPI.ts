@@ -28,8 +28,8 @@ export const useNFTsAPI = () => {
     const pcQuery = getQueryPrameter(param);
     const meQuery = getQueryParameterForMagicEden(param);
     const queryBody = {
-      pc: pcQuery,
-      me: meQuery,
+      pcQuery: pcQuery,
+      meQuery: meQuery,
       sort: param.sort,
     };
     const result = await runAPI(
@@ -42,6 +42,7 @@ export const useNFTsAPI = () => {
   }
 
   function getQueryPrameter(param: QUERIES) {
+    if (param.type === 2) return null;
     const queries = {
       skip: param.skip ? param.skip : 0,
       limit: 20,
@@ -92,6 +93,7 @@ export const useNFTsAPI = () => {
   }
 
   function getQueryParameterForMagicEden(param: QUERIES) {
+    if (param.type === 1) return null;
     const queries = {
       $skip: param.skip ? param.skip : 0,
       $limit: 20,
