@@ -52,10 +52,6 @@ export const ItemDetailView = () => {
     placeBid,
     cancelBid,
     buyNowME,
-    placeBidME,
-    listME,
-    cancelListME,
-    cancelBidME,
   } = useInstructionsAPI();
 
   useEffect(() => {
@@ -168,53 +164,25 @@ export const ItemDetailView = () => {
 
   const onListNow = async (price: number) => {
     if (!wallet.publicKey || !nft) return;
-    if (nft.market && !nft.v2) {
-      // For ME v1 it redirects to the MagicEden site
-      window.open(`https://magiceden.io/item-details/${nft.mint}`, '_blank');
-      return;
-    }
+    
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        if (nft.market) {
-          const result: any = await listME({
-            seller: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: nft.v2!.auctionHouseKey,
-            tokenAccount: nft.tokenAddress,
-            tokenMint: nft.mint,
-            price: price,
-            expiry: -1,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, meConnection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  setRefresh(Date.now());
-                }, 30000);
-                resolve('');
-                return;
-              }
-            }
-          }
-        } else {
-          const result: any = await list({
-            seller: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            tokenMint: nft.mint,
-            price: price,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                socket.emit('syncAuctionHouse', { mint: nft.mint });
-                resolve('');
-                return;
-              }
+        const result: any = await list({
+          seller: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: nft.mint,
+          price: price,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data, connection);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: nft.mint });
+              resolve('');
+              return;
             }
           }
         }
@@ -252,46 +220,20 @@ export const ItemDetailView = () => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        if (nft.market) {
-          if (nft.v2 && nft.escrowPubkey) {
-            const result: any = await cancelListME({
-              seller: wallet.publicKey!.toBase58(),
-              auctionHouseAddress: nft.v2.auctionHouseKey,
-              tokenMint: nft.mint,
-              escrowPayment: nft.escrowPubkey,
-              price: nft.price,
-              expiry: nft.v2.expiry,
-            });
-            if ('data' in result) {
-              const data = result['data']['data'];
-              if (data) {
-                const status = await runInstructions(data, meConnection);
-                if (!status['err']) {
-                  setTimeout(() => {
-                    setRefresh(Date.now());
-                  }, 30000);
-                  resolve('');
-                  return;
-                }
-              }
-            }
-          }
-        } else {
-          const result: any = await cancelList({
-            seller: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            tokenMint: nft.mint,
-            price: nft.price,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                socket.emit('syncAuctionHouse', { mint: nft.mint });
-                resolve('');
-                return;
-              }
+        const result: any = await cancelList({
+          seller: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: nft.mint,
+          price: nft.price,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data, connection);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: nft.mint });
+              resolve('');
+              return;
             }
           }
         }
@@ -325,6 +267,11 @@ export const ItemDetailView = () => {
 
   const onBuyNow = async () => {
     if (!wallet.publicKey || !nft) return;
+    if (nft.market && !nft.v2) {
+      // For ME v1 it redirects to the MagicEden site
+      window.open(`https://magiceden.io/item-details/${nft.mint}`, '_blank');
+      return;
+    }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
@@ -408,46 +355,22 @@ export const ItemDetailView = () => {
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        if (nft.market) {
-          if (nft.v2) {
-            const result: any = await placeBidME({
-              buyer: wallet.publicKey!.toBase58(),
-              auctionHouseAddress: nft.v2.auctionHouseKey,
-              tokenMint: nft.mint,
-              price: price,
-            });
-            if ('data' in result) {
-              const data = result['data']['data'];
-              if (data) {
-                const status = await runInstructions(data, meConnection);
-                if (!status['err']) {
-                  setTimeout(() => {
-                    setRefresh(Date.now());
-                  }, 30000);
-                  resolve('');
-                  return;
-                }
-              }
-            }
-          }
-        } else {
-          // Own marketplace placeBid
-          const result: any = await placeBid({
-            buyer: wallet.publicKey!.toBase58(),
-            seller: nft.owner,
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            tokenMint: nft.mint,
-            price: price,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                socket.emit('syncAuctionHouse', { mint: nft.mint });
-                resolve('');
-                return;
-              }
+        // Own marketplace placeBid
+        const result: any = await placeBid({
+          buyer: wallet.publicKey!.toBase58(),
+          seller: nft.owner,
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: nft.mint,
+          price: price,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data, connection);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', { mint: nft.mint });
+              resolve('');
+              return;
             }
           }
         }
@@ -484,50 +407,24 @@ export const ItemDetailView = () => {
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       try {
-        if (offer.market) {
-          if (!offer.auctionHouseKey) {
-            reject();
-            return;
-          }
-          const result: any = await cancelBidME({
-            buyer: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: offer.auctionHouseKey!,
-            tokenMint: offer.mint,
-            price: offer.bidPrice,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, meConnection);
-              if (!status['err']) {
-                setTimeout(() => {
-                  setRefresh(Date.now());
-                }, 30000);
-                resolve('');
-                return;
-              }
-            }
-          }
-        } else {
-          const result: any = await cancelBid({
-            buyer: wallet.publicKey!.toBase58(),
-            auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
-            tokenMint: offer.mint,
-            tokenAccount: offer.tokenAccount,
-            tradeState: offer.tradeState!,
-            price: offer.bidPrice,
-          });
-          if ('data' in result) {
-            const data = result['data']['data'];
-            if (data) {
-              const status = await runInstructions(data, connection);
-              if (!status['err']) {
-                socket.emit('syncAuctionHouse', {
-                  wallet: wallet.publicKey!.toBase58(),
-                });
-                resolve('');
-                return;
-              }
+        const result: any = await cancelBid({
+          buyer: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          tokenMint: offer.mint,
+          tokenAccount: offer.tokenAccount,
+          tradeState: offer.tradeState!,
+          price: offer.bidPrice,
+        });
+        if ('data' in result) {
+          const data = result['data']['data'];
+          if (data) {
+            const status = await runInstructions(data, connection);
+            if (!status['err']) {
+              socket.emit('syncAuctionHouse', {
+                wallet: wallet.publicKey!.toBase58(),
+              });
+              resolve('');
+              return;
             }
           }
         }
