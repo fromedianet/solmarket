@@ -109,7 +109,7 @@ export function ConnectionProvider({ children }: { children: any }) {
     }
 
     updateNetworkInLocalStorageIfNeeded();
-  }, []);
+  }, [endpoint.name, networkStorage, setNetworkStorage]);
 
   // solana/web3.js closes its websocket connection when the subscription list
   // is empty after opening for the first time, preventing subsequent
@@ -120,24 +120,26 @@ export function ConnectionProvider({ children }: { children: any }) {
       Keypair.generate().publicKey,
       () => {},
     );
+    const soltId = connection.onSlotChange(() => null);
     return () => {
       connection.removeAccountChangeListener(id);
+      connection.removeSlotChangeListener(soltId);
     };
-  }, []);
+  }, [connection]);
 
-  useEffect(() => {
-    const id = connection.onSlotChange(() => null);
-    return () => {
-      connection.removeSlotChangeListener(id);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const id = connection.onSlotChange(() => null);
+  //   return () => {
+  //     connection.removeSlotChangeListener(id);
+  //   };
+  // }, [connection]);
 
   const contextValue = React.useMemo(() => {
     return {
       endpoint,
       connection,
     };
-  }, []);
+  }, [connection, endpoint]);
 
   return (
     <ConnectionContext.Provider value={contextValue}>

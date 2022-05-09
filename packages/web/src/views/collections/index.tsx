@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Input, Radio, Select } from 'antd';
+import { Row, Col, Input, Radio } from 'antd';
 import { CollectionCard } from '../../components/CollectionCard';
 import { useQuerySearch } from '@oyster/common';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -7,22 +7,15 @@ import { CardLoader } from '../../components/MyLoader';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../components/EmptyView';
 import { ExCollection } from '../../models/exCollection';
-import { useExCollectionsAPI } from '../../hooks/useExCollections';
-import { MarketType } from '../../constants';
+import { useMEApis } from '../../hooks/useMEApis';
 
 const { Search } = Input;
-
-const MARKETPLACES = [
-  MarketType.All,
-  MarketType.PaperCity,
-  MarketType.MagicEden,
-];
 
 export const CollectionsView = () => {
   const searchParams = useQuerySearch();
   const type = searchParams.get('type') || 'all';
   const { getAllCollections, getNewCollections } = useCollectionsAPI();
-  const exAPI = useExCollectionsAPI();
+  const meApis = useMEApis();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -60,21 +53,17 @@ export const CollectionsView = () => {
   async function loadCollections(type: string) {
     let data: ExCollection[] = [];
     if (type === 'new') {
-      data = await getNewCollections();
-      const exData = await exAPI.getNewCollections({
-        market: MarketType.MagicEden,
-        more: true,
-      });
+      data = await getNewCollections(true);
+      const exData = await meApis.getNewCollections(true);
       data = data.concat(exData);
     } else if (type === 'popular') {
-      data = await exAPI.getPopularCollections({
-        market: MarketType.MagicEden,
-        timeRange: timeRange,
+      data = await meApis.getPopularCollections({
         more: true,
+        timeRange: timeRange,
       });
     } else {
       data = await getAllCollections();
-      const exData = await exAPI.getAllCollections(MarketType.MagicEden);
+      const exData = await meApis.getAllCollections();
       data = data.concat(exData);
     }
     return data;
@@ -102,32 +91,11 @@ export const CollectionsView = () => {
     );
   };
 
-  const onChangeMarketType = (val: MarketType) => {
-    if (val === MarketType.All) {
-      setFilters(collections);
-    } else if (val === MarketType.PaperCity) {
-      setFilters(collections.filter(item => !item.market));
-    } else {
-      setFilters(collections.filter(item => item.market == val));
-    }
-  };
-
   return (
     <div className="main-area">
       <div className="collections-page">
         <div className="title-container">
           <h1>{title}</h1>
-          <Select
-            style={{ width: 120 }}
-            defaultValue={MarketType.All}
-            onChange={onChangeMarketType}
-          >
-            {MARKETPLACES.map((item, index) => (
-              <Select.Option key={index} value={item}>
-                {item}
-              </Select.Option>
-            ))}
-          </Select>
         </div>
         <Row className="search-container">
           <Col span={24} md={24} lg={14}>
@@ -181,8 +149,8 @@ export const CollectionsView = () => {
               >
                 <CollectionCard
                   item={item}
-                  link={`/marketplace/${item.symbol}${
-                    item.market ? '?market=' + item.market : ''
+                  link={`/marketplace/${item.market ? '2' : '1'}/${
+                    item.symbol
                   }`}
                 />
               </Col>

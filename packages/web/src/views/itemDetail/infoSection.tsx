@@ -98,8 +98,8 @@ export const InfoSection = (props: {
         <div className="collection-container">
           {props.nft.symbol ? (
             <Link
-              to={`/marketplace/${props.nft.symbol}${
-                props.market ? '?market=' + props.market : ''
+              to={`/marketplace/${props.market ? '2' : '1'}/${
+                props.nft.symbol
               }`}
               className="collection-name"
             >

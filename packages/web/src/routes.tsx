@@ -17,9 +17,6 @@ import { FAQView } from './views/faq';
 import { CollectionsView } from './views/collections';
 import { MarketplaceView } from './views/marketplace';
 import { ItemDetailView } from './views/itemDetail';
-import { InventoryView } from './views/inventory';
-import { ExCollectionView } from './views/ExCollection';
-import { ExNFTView } from './views/ExNFT';
 import { DashboardListingView } from './views/dashboard/listing';
 import { DashboardView } from './views/dashboard/dashboard';
 import { DashboardAdmin } from './views/dashboard/admin';
@@ -40,10 +37,10 @@ export function AppRoutes() {
           />
           <Route path="/auction/:id" element={<AuctionView />} />
           <Route path="/collections" element={<CollectionsView />} />
-          <Route path="/marketplace/:symbol" element={<MarketplaceView />} />
-          <Route path="/inventory/:id" element={<InventoryView />} />
-          <Route path="/excollection/:id" element={<ExCollectionView />} />
-          <Route path="/exnft/:id" element={<ExNFTView />} />
+          <Route
+            path="/marketplace/:id/:symbol"
+            element={<MarketplaceView />}
+          />
           <Route path="/launchpad" element={<LaunchPadView />} />
           <Route path="/launchpad/:symbol" element={<LaunchpadDetailView />} />
           <Route path="/faq" element={<FAQView />} />

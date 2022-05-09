@@ -8,13 +8,13 @@ import {
   Transaction,
 } from '../models/exCollection';
 import { useCollectionsAPI } from './useCollectionsAPI';
-import { useMECollectionsAPI } from './useMECollectionsAPI';
+import { useMEApis } from './useMEApis';
 import { useNFTsAPI } from './useNFTsAPI';
 import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
-export const useCollection = (symbol: string, market: string | null) => {
+export const useCollection = (id: string, symbol: string) => {
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
@@ -28,84 +28,87 @@ export const useCollection = (symbol: string, market: string | null) => {
     useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsBySymbol } = useTransactionsAPI();
-  const {
-    getMECollectionBySymbol,
-    getMEListedNFTsByCollection,
-    getMETransactionsBySymbol,
-  } = useMECollectionsAPI();
+  const meApis = useMEApis();
 
   useEffect(() => {
-    if (market) {
-      // For MagicEden
-      getMECollectionBySymbol(market, symbol)
-        // @ts-ignore
-        .then((result: {}) => {
-          if ('collection' in result) {
-            setCollection(result['collection']);
-          }
-          if ('attributes' in result) {
-            setAttributes(result['attributes']);
-          }
-          if ('stats' in result) {
-            setCollectionStats(result['stats']);
-          }
-        });
+    // For own marketplace
+    loadCollectionBySymbol(symbol, id).then(res => {
+      if (res) {
+        setCollection(res);
+      }
+    });
 
-      getMETransactionsBySymbol({
-        market: market,
-        symbol: symbol,
-        sort: 1,
-      }).then((data: []) => {
-        setTransactions(data);
-      });
+    loadCollectionEscrowStatsBySymbol(symbol, id).then(res => {
+      if (res) {
+        const {
+          availableAttributes,
+          floorPrice,
+          listedCount,
+          listedTotalValue,
+          totalVolume,
+        } = res;
+        setAttributes(_parseAttributes(availableAttributes));
+        setCollectionStats({
+          floorPrice: parseInt(floorPrice),
+          listedCount: parseInt(listedCount),
+          listedTotalValue: parseInt(listedTotalValue),
+          totalVolume: parseInt(totalVolume),
+        });
+      }
+    });
+
+    loadTransactionsBySymbol(symbol).then(res => {
+      setTransactions(res);
+    });
+  }, [id, symbol]);
+
+  async function loadCollectionBySymbol(symbol: string, id: string) {
+    if (id === '1') {
+      return await getCollectionBySymbol(symbol);
     } else {
-      // For own marketplace
-      getCollectionBySymbol(symbol)
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setCollection(res['data']);
-          }
-        });
-
-      getCollectionStatsBySymbol(symbol)
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            const {
-              availableAttributes,
-              floorPrice,
-              listedCount,
-              listedTotalValue,
-              totalVolume,
-            } = res['data'];
-            setAttributes(_parseAttributes(availableAttributes));
-            setCollectionStats({
-              floorPrice: parseInt(floorPrice),
-              listedCount: parseInt(listedCount),
-              listedTotalValue: parseInt(listedTotalValue),
-              totalVolume: parseInt(totalVolume),
-            });
-          }
-        });
-
-      getTransactionsBySymbol(symbol)
-        // @ts-ignore
-        .then((res: {}) => {
-          if ('data' in res) {
-            setTransactions(res['data']);
-          }
-        });
+      return await meApis.getCollectionBySymbol(symbol);
     }
-  }, [symbol, market]);
+  }
+
+  async function loadCollectionEscrowStatsBySymbol(symbol: string, id: string) {
+    if (id === '1') {
+      return await getCollectionStatsBySymbol(symbol);
+    } else {
+      return await meApis.getCollectionEscrowStats(symbol);
+    }
+  }
+
+  async function loadTransactionsBySymbol(symbol: string) {
+    let data = await getTransactionsBySymbol(symbol);
+    const exData = await meApis.getTransactionsBySymbol(symbol);
+    data = data.concat(exData);
+    data.sort((a, b) => {
+      if (b.blockTime > a.blockTime) {
+        return 1;
+      } else if (b.blockTime < a.blockTime) {
+        return -1;
+      } else {
+        if (b.id > a.id) {
+          return 1;
+        } else if (b.id < a.id) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    });
+    return data;
+  }
 
   const getListedNFTs = (param: QUERIES) => {
     if (loading) return;
     setLoading(true);
 
-    if (param.market) {
-      getMEListedNFTsByCollection(param)
-        .then((data: []) => {
+    getListedNftsByQuery(param)
+      // @ts-ignore
+      .then((res: {}) => {
+        const data = res['data'];
+        if (data) {
           setNFTs(data);
           if (data.length < PER_PAGE) {
             setSkip(0);
@@ -114,26 +117,9 @@ export const useCollection = (symbol: string, market: string | null) => {
             setSkip(prev => prev + PER_PAGE);
             setHasMore(true);
           }
-        })
-        .finally(() => setLoading(false));
-    } else {
-      getListedNftsByQuery(param)
-        // @ts-ignore
-        .then((res: {}) => {
-          const data = res['data'];
-          if (data) {
-            setNFTs(data);
-            if (data.length < PER_PAGE) {
-              setSkip(0);
-              setHasMore(false);
-            } else {
-              setSkip(prev => prev + PER_PAGE);
-              setHasMore(true);
-            }
-          }
-        })
-        .finally(() => setLoading(false));
-    }
+        }
+      })
+      .finally(() => setLoading(false));
   };
 
   function _parseAttributes(data: any[] | null): ExAttribute[] {

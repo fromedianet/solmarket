@@ -17,101 +17,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { ConnectButton } from '@oyster/common';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import useWindowDimensions from '../../utils/layout';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const { Sider } = Layout;
-const { SubMenu } = Menu;
-const SidebarMenu = (props: { onCollapse: () => void }) => {
-  return (
-    <Menu
-      className="sidebar-menu"
-      theme="dark"
-      mode={'inline'}
-      onClick={props.onCollapse}
-    >
-      <Menu.Item key="home" icon={<HomeOutlined style={{ fontSize: 20 }} />}>
-        <Link to={'/'}>Home</Link>
-      </Menu.Item>
-      <SubMenu
-        key="collections"
-        title="Collections"
-        icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
-      >
-        <Menu.Item key="all-collections">
-          <Link to="/collections">All</Link>
-        </Menu.Item>
-        <Menu.Item key="popular-collections">
-          <Link to="/collections?type=popular">Popular</Link>
-        </Menu.Item>
-        <Menu.Item key="new-collections">
-          <Link to="/collections?type=new">new</Link>
-        </Menu.Item>
-      </SubMenu>
-      <Menu.Item
-        key="launchpad"
-        icon={<TagOutlined style={{ fontSize: 20 }} />}
-      >
-        <Link to="/launchpad">Launchpad</Link>
-      </Menu.Item>
-      {/* <Menu.Item
-        key="auctions"
-        icon={<BellOutlined style={{ fontSize: 20 }} />}
-      >
-        <Link to="/auctions">Auctions</Link>
-      </Menu.Item> */}
-      <SubMenu
-        key="creators"
-        title="Creators"
-        icon={<CopyrightOutlined style={{ fontSize: 20 }} />}
-      >
-        <Menu.Item key="dashboard">
-          <Link to="/dashboard" target="_blank" rel="noopener noreferrer">
-            Apply for listing
-          </Link>
-        </Menu.Item>
-        {/* <Menu.Item key="apply:2">Apply for Launchpad</Menu.Item> */}
-      </SubMenu>
-      <SubMenu
-        key="community"
-        title="Community"
-        icon={<UsergroupAddOutlined style={{ fontSize: 20 }} />}
-      >
-        <Menu.Item key="twitter">Twitter</Menu.Item>
-        <Menu.Item key="discord">Discord</Menu.Item>
-        <Menu.Item key="podcast">Podcast</Menu.Item>
-        <Menu.Item key="blog">Blog</Menu.Item>
-        <Menu.Item key="shop">Shop</Menu.Item>
-      </SubMenu>
-      <SubMenu
-        key="more"
-        title="More"
-        icon={<BarsOutlined style={{ fontSize: 20 }} />}
-      >
-        <Menu.Item key="faq">
-          <Link to="/faq">FAQ</Link>
-        </Menu.Item>
-      </SubMenu>
-      {/* <SubMenu
-        key="inventory"
-        title="Inventory"
-        icon={<ShoppingOutlined style={{ fontSize: 20 }} />}
-      >
-        <Menu.Item key="magiceden">
-          <Link to="/inventory/magiceden">Magic Eden</Link>
-        </Menu.Item>
-        <Menu.Item key="solanart">
-          <Link to="/inventory/solanart">Solanart</Link>
-        </Menu.Item>
-        <Menu.Item key="digital_eyes">
-          <Link to="/inventory/digital_eyes">Digital Eyes</Link>
-        </Menu.Item>
-        <Menu.Item key="alpha_art">
-          <Link to="/inventory/alpha_art">Alpha Art</Link>
-        </Menu.Item>
-      </SubMenu> */}
-    </Menu>
-  );
-};
 
 const WalletInfo = () => {
   const { connected } = useWallet();
@@ -140,6 +48,7 @@ export const Sidebar = () => {
   const { width } = useWindowDimensions();
   const { collapsed } = useGetSidebarState();
   const { handleToggle } = useSetSidebarState();
+  const navigate = useNavigate();
 
   const onCollapse = () => {
     if (width < 992) {
@@ -147,6 +56,99 @@ export const Sidebar = () => {
     } else {
       handleToggle(false);
     }
+  };
+
+  const SidebarMenu = () => {
+    return (
+      <Menu
+        theme="dark"
+        mode="inline"
+        className="sidebar-menu"
+        onClick={onCollapse}
+        items={[
+          {
+            key: 'home',
+            label: 'Home',
+            icon: <HomeOutlined style={{ fontSize: 20 }} />,
+            onClick: () => navigate('/'),
+          },
+          {
+            key: 'collections',
+            label: 'Collections',
+            icon: <ShoppingCartOutlined style={{ fontSize: 20 }} />,
+            children: [
+              {
+                key: 'all-collections',
+                label: 'All',
+                onClick: () => navigate('/collections'),
+              },
+              {
+                key: 'popular-collections',
+                label: 'Popular',
+                onClick: () => navigate('/collections?type=popular'),
+              },
+              {
+                key: 'new-collections',
+                label: 'New',
+                onClick: () => navigate('/collections?type=new'),
+              },
+            ],
+          },
+          {
+            key: 'launchpad',
+            label: 'Launchpad',
+            icon: <TagOutlined style={{ fontSize: 20 }} />,
+            onClick: () => navigate('/launchpad'),
+          },
+          {
+            key: 'creators',
+            label: 'Creators',
+            icon: <CopyrightOutlined style={{ fontSize: 20 }} />,
+            children: [
+              {
+                key: 'dashboard',
+                label: 'Apply for listing',
+                onClick: () => window.open('/dashboard', '_blank'),
+              },
+            ],
+          },
+          {
+            key: 'community',
+            label: 'Community',
+            icon: <UsergroupAddOutlined style={{ fontSize: 20 }} />,
+            children: [
+              {
+                key: 'twitter',
+                label: 'Twitter',
+                onClick: () => {},
+              },
+              {
+                key: 'discord',
+                label: 'Discord',
+                onClick: () => {},
+              },
+              {
+                key: 'blog',
+                label: 'Blog',
+                onClick: () => {},
+              },
+            ],
+          },
+          {
+            key: 'more',
+            label: 'More',
+            icon: <BarsOutlined style={{ fontSize: 20 }} />,
+            children: [
+              {
+                key: 'faq',
+                label: 'FAQ',
+                onClick: () => {},
+              },
+            ],
+          },
+        ]}
+      />
+    );
   };
 
   return (
@@ -161,7 +163,7 @@ export const Sidebar = () => {
       className="my-sider"
     >
       <WalletInfo />
-      <SidebarMenu onCollapse={onCollapse} />
+      <SidebarMenu />
     </Sider>
   );
 };

@@ -12,11 +12,11 @@ const timeAgo = new TimeAgo('en-US');
 
 export const ActivityColumns = (network: ENDPOINT_NAME) => {
   const getColor = txType => {
-    if (txType === 'SALE') {
+    if (txType === 'SALE' || txType === 'Auction Settled') {
       return '#2fc27d';
-    } else if (txType === 'PLACE BID') {
+    } else if (txType === 'PLACE BID' || txType === 'Auction Place Bid') {
       return '#6d79c9';
-    } else if (txType === 'LISTING') {
+    } else if (txType === 'LISTING' || txType === 'Auction Created') {
       return '#f8f7f8';
     } else {
       return '#9c93a5';
@@ -41,14 +41,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a
-          href={
-            record.market
-              ? `/exnft/${record.mint}?market=${record.market}`
-              : `/item-details/${record.mint}`
-          }
-          style={{ cursor: 'pointer' }}
-        >
+        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
           {record.name}
         </a>
       ),
@@ -85,7 +78,6 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
           <span style={{ color: getColor(record.txType) }}>
             {record.txType}
           </span>
-          {record.market && <span style={{ color: '#e93a88' }}>(ME)</span>}
         </div>
       ),
     },
@@ -126,7 +118,6 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
 
 export const OffersMadeColumns = (props: {
   balance: number;
-  exBalance: number;
   onCancel: (p) => void;
   onDeposit: (b) => void;
 }) => {
@@ -148,18 +139,11 @@ export const OffersMadeColumns = (props: {
             alt="image"
           />
           <Link
-            to={
-              record.market
-                ? `/item-details/${record.mint}?market=${record.market}`
-                : `/item-details/${record.mint}`
-            }
+            to={`/item-details/${record.mint}`}
             style={{ cursor: 'pointer', marginLeft: 16 }}
           >
             {record.name}
           </Link>
-          {record.market && (
-            <span style={{ color: '#e93a88', marginLeft: 8 }}>(ME)</span>
-          )}
         </div>
       ),
     },
@@ -168,7 +152,7 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'bidPrice',
       key: 'bidPrice',
       render: (text, record) =>
-        record.bidPrice <= (record.market ? props.exBalance : props.balance) ? (
+        record.bidPrice <= props.balance ? (
           <span>
             <CheckCircleFilled
               style={{ color: '#52c41a', fontSize: 20, marginRight: 8 }}
@@ -189,19 +173,16 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'bidPrice',
       key: 'bidPrice',
       render: (text, record) =>
-        record.bidPrice <= (record.market ? props.exBalance : props.balance) ? (
+        record.bidPrice <= props.balance ? (
           <span>{`${record.bidPrice} SOL`}</span>
         ) : (
           <>
-            <span
-              style={{ color: '#ffffff', fontSize: 14 }}
-            >{`${record.bidPrice} SOL`}</span>
-            <span
-              style={{ color: '#ffaa00', fontSize: 12, marginLeft: 8 }}
-            >{`- ${
-              record.bidPrice -
-              (record.market ? props.exBalance : props.balance)
-            } SOL`}</span>
+            <span style={{ color: '#ffffff', fontSize: 14 }}>
+              {`${record.bidPrice} SOL`}
+            </span>
+            <span style={{ color: '#ffaa00', fontSize: 12, marginLeft: 8 }}>
+              {`- ${record.bidPrice - props.balance} SOL`}
+            </span>
           </>
         ),
     },
@@ -216,7 +197,7 @@ export const OffersMadeColumns = (props: {
       dataIndex: 'mint',
       key: 'mint',
       render: (text, record) =>
-        record.bidPrice <= (record.market ? props.exBalance : props.balance) ? (
+        record.bidPrice <= props.balance ? (
           <button
             className="offer-button"
             onClick={() => props.onCancel(record)}
@@ -267,9 +248,6 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
           >
             {record.name}
           </Link>
-          {record.market && (
-            <span style={{ color: '#e93a88', marginLeft: 8 }}>(ME)</span>
-          )}
         </div>
       ),
     },

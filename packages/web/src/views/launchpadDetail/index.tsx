@@ -77,11 +77,10 @@ export const LaunchpadDetailView = () => {
   useEffect(() => {
     setLoading(true);
     getCollectionBySymbol(symbol)
-      // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setCollection(res['data']);
-          const candyMachineId = res['data']['candymachine_id'];
+      .then((res: any) => {
+        if (res) {
+          setCollection(res);
+          const candyMachineId = res['candymachine_id'];
           if (candyMachineId) {
             setCandyMachineId(toPublicKey(candyMachineId));
           }
@@ -543,7 +542,7 @@ export const LaunchpadDetailView = () => {
                       <Button
                         className="mint-btn"
                         onClick={() => {
-                          navigate(`/marketplace/${symbol}`);
+                          navigate(`/marketplace/1/${symbol}`);
                         }}
                       >
                         Visit Collection

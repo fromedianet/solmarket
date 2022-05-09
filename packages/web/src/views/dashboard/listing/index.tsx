@@ -32,15 +32,9 @@ export const DashboardListingView = () => {
   useEffect(() => {
     setLoading(true);
     getCollectionById(id)
-      // @ts-ignore
-      .then((res: {}) => {
-        if ('data' in res) {
-          setCollection(res['data']);
-        } else {
-          notify({
-            message: res['message'],
-            type: 'error',
-          });
+      .then(res => {
+        if (res) {
+          setCollection(res);
         }
       })
       .finally(() => {
@@ -52,10 +46,8 @@ export const DashboardListingView = () => {
     setSaving(true);
     processStep1({ _id: id, permission: permission })
       .then(result => {
-        // @ts-ignore
-        if (result['data']) {
-          // @ts-ignore
-          setCollection(result['data']);
+        if (result) {
+          setCollection(result);
           setStep(2);
         }
       })
@@ -72,10 +64,8 @@ export const DashboardListingView = () => {
     setSaving(true);
     processStep2({ _id: id, ...params })
       .then(result => {
-        // @ts-ignore
-        if (result['data']) {
-          // @ts-ignore
-          setCollection(result['data']);
+        if (result) {
+          setCollection(result);
           setStep(3);
         }
       })
@@ -88,10 +78,8 @@ export const DashboardListingView = () => {
     setSaving(true);
     processStep3({ _id: id, ...params })
       .then(result => {
-        // @ts-ignore
-        if (result['data']) {
-          // @ts-ignore
-          setCollection(result['data']);
+        if (result) {
+          setCollection(result);
           setStep(4);
         }
       })
@@ -104,10 +92,8 @@ export const DashboardListingView = () => {
     setSaving(true);
     processStep4({ _id: id, ...params })
       .then(result => {
-        // @ts-ignore
-        if (result['data']) {
-          // @ts-ignore
-          setCollection(result['data']);
+        if (result) {
+          setCollection(result);
           setStep(5);
         }
       })
@@ -124,10 +110,8 @@ export const DashboardListingView = () => {
       ...params,
     })
       .then(result => {
-        // @ts-ignore
-        if (result['data']) {
-          // @ts-ignore
-          setCollection(result['data']);
+        if (result) {
+          setCollection(result);
           notify({
             message: 'Submit has successed!',
             type: 'success',

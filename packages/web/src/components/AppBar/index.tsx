@@ -8,8 +8,7 @@ import { useSetSidebarState } from '../../contexts';
 import { CurrentUserBadge } from '../CurrentUserBadge';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { ExCollection } from '../../models/exCollection';
-import { useExCollectionsAPI } from '../../hooks/useExCollections';
-import { MarketType } from '../../constants';
+import { useMEApis } from '../../hooks/useMEApis';
 
 const { Option } = Select;
 
@@ -51,9 +50,9 @@ export const AppBar = () => {
   const { handleToggle } = useSetSidebarState();
   const [showSearchBar, toggleSearchBar] = useState(false);
   const { getAllCollections } = useCollectionsAPI();
-  const exAPI = useExCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [filters, setFilters] = useState<ExCollection[]>([]);
+  const meApis = useMEApis();
 
   useEffect(() => {
     loadCollections().then(res => {
@@ -66,9 +65,8 @@ export const AppBar = () => {
   }, [collections]);
 
   async function loadCollections() {
-    let data = [];
-    data = await getAllCollections();
-    const exData = await exAPI.getAllCollections(MarketType.MagicEden);
+    let data = await getAllCollections();
+    const exData = await meApis.getAllCollections();
     data = data.concat(exData);
     return data;
   }
@@ -107,11 +105,9 @@ export const AppBar = () => {
               {filters.map((item, index) => (
                 <Option
                   key={index}
-                  value={
-                    item.market
-                      ? `/marketplace/${item.symbol}?market=${item.market}`
-                      : `/marketplace/${item.symbol}`
-                  }
+                  value={`/marketplace/${item.market ? '2' : '1'}/${
+                    item.symbol
+                  }`}
                 >
                   <img
                     src={item.image}

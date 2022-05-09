@@ -21,11 +21,9 @@ export const GroupItem = ({
         {item.collection.symbol && item.collection.symbol !== 'undefined' ? (
           <Link
             className="link"
-            to={
-              item.collection.market
-                ? `/marketplace/${item.collection.symbol}?market=${item.collection.market}`
-                : `/marketplace/${item.collection.symbol}`
-            }
+            to={`/marketplace/${item.collection.symbol ? '2' : '1'}/${
+              item.collection.symbol
+            }`}
           >
             {item.collection.name}
           </Link>
@@ -58,7 +56,6 @@ export const GroupItem = ({
             key={index}
             item={item}
             itemId={index.toString()}
-            market={item.market}
             collection={item.collectionName}
           />
         ))}
