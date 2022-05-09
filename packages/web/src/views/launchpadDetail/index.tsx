@@ -76,8 +76,7 @@ export const LaunchpadDetailView = () => {
 
   useEffect(() => {
     setLoading(true);
-    getCollectionBySymbol({ symbol, type: 1 })
-      // @ts-ignore
+    getCollectionBySymbol(symbol)
       .then((res: any) => {
         if (res) {
           setCollection(res);

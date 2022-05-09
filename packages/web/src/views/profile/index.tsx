@@ -134,7 +134,7 @@ export const ProfileView = () => {
         bio: user.bio,
       });
     }
-  }, [user]);
+  }, [form, user]);
 
   async function loadNFTs() {
     const result1: any[] = [];
