@@ -12,11 +12,11 @@ const timeAgo = new TimeAgo('en-US');
 
 export const ActivityColumns = (network: ENDPOINT_NAME) => {
   const getColor = txType => {
-    if (txType === 'SALE') {
+    if (txType === 'SALE' || txType === 'Auction Settled') {
       return '#2fc27d';
-    } else if (txType === 'PLACE BID') {
+    } else if (txType === 'PLACE BID' || txType === 'Auction Place Bid') {
       return '#6d79c9';
-    } else if (txType === 'LISTING') {
+    } else if (txType === 'LISTING' || txType === 'Auction Created') {
       return '#f8f7f8';
     } else {
       return '#9c93a5';

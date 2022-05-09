@@ -80,7 +80,6 @@ export const MarketplaceView = () => {
     setRefresh(true);
     getListedNFTs({
       symbol: symbol,
-      market: market,
       sort: sort,
       searchKey: searchKey,
       attributes: filter.attributes,
@@ -103,7 +102,6 @@ export const MarketplaceView = () => {
       setRefresh(false);
       getListedNFTs({
         symbol: symbol,
-        market: market,
         sort: sort,
         searchKey: searchKey,
         attributes: filter.attributes,
@@ -138,7 +136,6 @@ export const MarketplaceView = () => {
         >
           <Layout hasSider>
             <FilterSidebar
-              market={market}
               updateFilters={onUpdateFilters}
               filter={filter}
               attributes={attributes}
@@ -150,7 +147,6 @@ export const MarketplaceView = () => {
                 sort={sort}
                 searchKey={searchKey}
                 loading={loading}
-                market={market}
                 updateFilters={onUpdateFilters}
                 onSearch={val => setSearchKey(val)}
                 onSortChange={val => setSort(val)}
