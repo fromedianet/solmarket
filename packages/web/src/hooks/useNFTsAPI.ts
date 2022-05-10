@@ -46,12 +46,9 @@ export const useNFTsAPI = () => {
         '/nfts/getListedNftsByQuery',
         JSON.stringify(queryBody),
       );
-      if ('data' in result) {
-        return result['data'];
-      }
+      return result;
     } catch {}
-
-    return [];
+    return null;
   }
 
   function getQueryPrameter(param: QUERIES) {
