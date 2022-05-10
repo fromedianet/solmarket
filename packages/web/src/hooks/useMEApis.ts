@@ -196,6 +196,29 @@ export const useMEApis = () => {
     return [];
   }
 
+  async function getTransactionsByWallet(wallet: string): Promise<any[]> {
+    try {
+      const queryData = {
+        $match: {
+          $or: [{ seller_address: wallet }, { buyer_address: wallet }],
+        },
+        $sort: { blockTime: -1, createdAt: -1 },
+        $skip: 0,
+      };
+      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      const result: any = await runOthersAPI(
+        'post',
+        '/getGlobalActivitiesByQuery',
+        JSON.stringify({ params }),
+      );
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+
+    return [];
+  }
+
   return {
     getFeaturedCollections,
     getAllCollections,
@@ -209,6 +232,7 @@ export const useMEApis = () => {
     getNFTsByEscrowOwner,
     getTransactionsByMint,
     getTransactionsBySymbol,
+    getTransactionsByWallet,
   };
 };
 

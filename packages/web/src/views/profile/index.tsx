@@ -97,7 +97,10 @@ export const ProfileView = () => {
 
       socket.on('syncedNFTsByOwner', (params: any) => {
         if (params.wallet === wallet.publicKey?.toBase58()) {
-          setRefresh(Date.now());
+          loadNFTs().then(res => {
+            setMyItems(res.myItems);
+            setListedItems(res.listedItems);
+          });
         }
       });
     }
@@ -115,7 +118,7 @@ export const ProfileView = () => {
         })
         .finally(() => setLoading(false));
 
-      getTransactionsByWallet(wallet.publicKey.toBase58()).then(res => {
+      loadTransactions(wallet.publicKey.toBase58()).then(res => {
         setTransactions(res);
       });
 
@@ -246,6 +249,28 @@ export const ProfileView = () => {
       myItems: result1,
       listedItems: result2,
     };
+  }
+
+  async function loadTransactions(wallet: string): Promise<any[]> {
+    let data = await getTransactionsByWallet(wallet);
+    const exData = await meApis.getTransactionsByWallet(wallet);
+    data = data.concat(exData);
+    data.sort((a, b) => {
+      if (b.blockTime > a.blockTime) {
+        return 1;
+      } else if (b.blockTime < a.blockTime) {
+        return -1;
+      } else {
+        if (b.id > a.id) {
+          return 1;
+        } else if (b.id < a.id) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    });
+    return data;
   }
 
   async function loadOffersMade() {
