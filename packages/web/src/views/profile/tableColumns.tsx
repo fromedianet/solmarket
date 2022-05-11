@@ -41,9 +41,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a href={`/item-details/${record.mint}`} style={{ cursor: 'pointer' }}>
-          {record.name}
-        </a>
+        <Link to={`/item-details/${record.mint}`}>{record.name}</Link>
       ),
     },
     {

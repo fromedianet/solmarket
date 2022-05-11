@@ -75,7 +75,7 @@ export const MarketplaceView = () => {
 
   useEffect(() => {
     onRefresh();
-  }, [searchKey, sort, filter]);
+  }, [searchKey, sort, type, filter]);
 
   const onRefresh = () => {
     setRefresh(true);
