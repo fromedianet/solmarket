@@ -19,7 +19,6 @@ const { Panel } = Collapse;
 export const BottomSection = (props: {
   transactions: Transaction[];
   nft: NFT;
-  market: string | null;
   nftList: NFT[];
   offers: Offer[];
   setMyOffer: (a) => void;

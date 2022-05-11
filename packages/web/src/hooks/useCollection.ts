@@ -105,10 +105,8 @@ export const useCollection = (id: string, symbol: string) => {
     setLoading(true);
 
     getListedNftsByQuery(param)
-      // @ts-ignore
-      .then((res: {}) => {
-        const data = res['data'];
-        if (data) {
+      .then((data: any[]) => {
+        if (data.length > 0) {
           setNFTs(data);
           if (data.length < PER_PAGE) {
             setSkip(0);
