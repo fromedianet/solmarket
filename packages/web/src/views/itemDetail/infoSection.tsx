@@ -20,7 +20,6 @@ const { Panel } = Collapse;
 
 export const InfoSection = (props: {
   nft: NFT;
-  market: string | null;
   biddingBalance: number;
   priceData: any[];
   loading: boolean;
@@ -98,7 +97,7 @@ export const InfoSection = (props: {
         <div className="collection-container">
           {props.nft.symbol ? (
             <Link
-              to={`/marketplace/${props.market ? '2' : '1'}/${
+              to={`/marketplace/${props.nft.market ? '2' : '1'}/${
                 props.nft.symbol
               }`}
               className="collection-name"

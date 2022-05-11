@@ -1,29 +1,30 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthToken } from '../../contexts/authProvider';
 
 export const DashboardHeader = () => {
   const { user, removeAuthToken } = useAuthToken();
   return (
     <nav className="header container">
-      <a href="/" className="logo">
+      <Link to="/" className="logo">
         <img src="/papercity-logo.png" height={50} />
-      </a>
+      </Link>
       <div>
-        <a href="/dashboard" className="header-menu">
+        <Link to="/dashboard" className="header-menu">
           Dashboard
-        </a>
+        </Link>
         {user?.isAdmin && (
-          <a href="/dashboard/admin" className="header-menu">
+          <Link to="/dashboard/admin" className="header-menu">
             Admin
-          </a>
+          </Link>
         )}
         <a className="header-menu" onClick={removeAuthToken}>
           Log out
         </a>
       </div>
-      {/* <a href="/api/logout" className="signout">
+      {/* <Link to="/api/logout" className="signout">
         Sign out
-      </a> */}
+      </Link> */}
     </nav>
   );
 };

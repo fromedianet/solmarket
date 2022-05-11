@@ -12,7 +12,6 @@ import {
   MetaplexModal,
   sendTransaction,
   useConnection,
-  useQuerySearch,
 } from '@oyster/common';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
 import { meConnection } from '../../constants';
@@ -28,8 +27,6 @@ import { useMEApis } from '../../hooks/useMEApis';
 export const ItemDetailView = () => {
   const params = useParams<{ mint: string }>();
   const mint = params.mint || '';
-  const searchParams = useQuerySearch();
-  const market = searchParams.get('market');
   const wallet = useWallet();
   const connection = useConnection();
   const { socket } = useSocket();
@@ -74,7 +71,7 @@ export const ItemDetailView = () => {
     });
 
     getTransactions().then(res => setTransactions(res));
-  }, [mint, market, refresh]);
+  }, [mint, refresh]);
 
   useEffect(() => {
     const filters = transactions.filter(
@@ -488,7 +485,6 @@ export const ItemDetailView = () => {
               <InfoSection
                 nft={nft}
                 loading={loading}
-                market={market}
                 biddingBalance={biddingBalance}
                 priceData={priceData}
                 myOffer={myOffer}
@@ -503,7 +499,6 @@ export const ItemDetailView = () => {
                 transactions={transactions}
                 nft={nft}
                 nftList={nftList}
-                market={market}
                 offers={offers}
                 setMyOffer={val => setMyOffer(val)}
                 onCancelVisible={() => setCancelVisible(true)}

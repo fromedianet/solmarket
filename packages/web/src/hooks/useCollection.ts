@@ -105,11 +105,9 @@ export const useCollection = (id: string, symbol: string) => {
     setLoading(true);
 
     getListedNftsByQuery(param)
-      // @ts-ignore
-      .then((res: {}) => {
-        const data = res['data'];
-        if (data) {
-          setNFTs(data);
+      .then((data: any[]) => {
+        setNFTs(data);
+        if (data.length > 0) {
           if (data.length < PER_PAGE) {
             setSkip(0);
             setHasMore(false);
@@ -117,6 +115,9 @@ export const useCollection = (id: string, symbol: string) => {
             setSkip(prev => prev + PER_PAGE);
             setHasMore(true);
           }
+        } else {
+          setSkip(0);
+          setHasMore(false);
         }
       })
       .finally(() => setLoading(false));
