@@ -10,7 +10,12 @@ export const useAuthAPI = () => {
 
   function fetchNonce(wallet: string) {
     return new Promise((resolve, reject) => {
-      runAPI(false, 'post', '/nonce/fetch', JSON.stringify({ wallet })) // @ts-ignore
+      runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/nonce/fetch',
+        data: JSON.stringify({ wallet }),
+      }) // @ts-ignore
         .then((res: {}) => {
           if (res['data']['nonce']) {
             resolve(res['data']['nonce']);
@@ -26,12 +31,12 @@ export const useAuthAPI = () => {
 
   function signin(publicKey: string, signature: string) {
     return new Promise((resolve, reject) => {
-      runAPI(
-        false,
-        'post',
-        '/user/login',
-        JSON.stringify({ publicKey, signature }),
-      ) // @ts-ignore
+      runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/user/login',
+        data: JSON.stringify({ publicKey, signature }),
+      }) // @ts-ignore
         .then((res: {}) => {
           if ('data' in res) {
             resolve(res['data']);
@@ -90,7 +95,12 @@ export const useAuthAPI = () => {
     bio: string | null;
   }) {
     return new Promise((resolve, reject) => {
-      runAPI(true, 'post', '/user/updateUser', JSON.stringify(params))
+      runAPI({
+        isAuth: true,
+        method: 'post',
+        url: '/user/updateUser',
+        data: JSON.stringify(params),
+      })
         .then((res: any) => {
           if (res['data']) {
             setAuthToken(authToken, res['data']);

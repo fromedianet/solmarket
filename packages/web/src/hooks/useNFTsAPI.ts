@@ -12,12 +12,12 @@ export const useNFTsAPI = () => {
    */
   async function createNft(metadataAddress: string): Promise<any> {
     try {
-      const result: any = await runAPI(
-        true,
-        'post',
-        '/nfts/create',
-        JSON.stringify({ metadataAddress }),
-      );
+      const result: any = await runAPI({
+        isAuth: true,
+        method: 'post',
+        url: '/nfts/create',
+        data: JSON.stringify({ metadataAddress }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -40,12 +40,12 @@ export const useNFTsAPI = () => {
         meQuery: meQuery,
         sort: param.sort,
       };
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/nfts/getListedNftsByQuery',
-        JSON.stringify(queryBody),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/nfts/getListedNftsByQuery',
+        data: JSON.stringify(queryBody),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -170,13 +170,13 @@ export const useNFTsAPI = () => {
    */
   async function getNftByMint(mint: string): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/nfts/getNftByMint',
-        JSON.stringify({ mint }),
-        true,
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/nfts/getNftByMint',
+        data: JSON.stringify({ mint }),
+        hideError: true,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -191,12 +191,12 @@ export const useNFTsAPI = () => {
    */
   async function getNFTsByWallet(wallet: string): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/nfts/getNFTsByWallet',
-        JSON.stringify({ wallet }),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/nfts/getNFTsByWallet',
+        data: JSON.stringify({ wallet }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -211,12 +211,12 @@ export const useNFTsAPI = () => {
     owner: string;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/nfts/updateInfo',
-        JSON.stringify(params),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/nfts/updateInfo',
+        data: JSON.stringify(params),
+      });
       if ('data' in result) {
         return result['data'];
       }

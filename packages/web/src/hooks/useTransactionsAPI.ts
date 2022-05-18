@@ -11,12 +11,12 @@ export const useTransactionsAPI = () => {
    */
   async function getTransactionsBySymbol(symbol: string): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/transactions/getTransactionsBySymbol',
-        JSON.stringify({ symbol }),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/transactions/getTransactionsBySymbol',
+        data: JSON.stringify({ symbol }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -32,12 +32,12 @@ export const useTransactionsAPI = () => {
    */
   async function getTransactionsByMint(mint: string): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/transactions/getTransactionsByMint',
-        JSON.stringify({ mint }),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/transactions/getTransactionsByMint',
+        data: JSON.stringify({ mint }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -53,12 +53,12 @@ export const useTransactionsAPI = () => {
    */
   async function getTransactionsByWallet(wallet: string): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/transactions/getTransactionsByWallet',
-        JSON.stringify({ wallet }),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/transactions/getTransactionsByWallet',
+        data: JSON.stringify({ wallet }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -74,12 +74,12 @@ export const useTransactionsAPI = () => {
    */
   async function getOffersMade(wallet: string): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/audits/getOffersMade',
-        JSON.stringify({ wallet }),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/audits/getOffersMade',
+        data: JSON.stringify({ wallet }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -95,12 +95,12 @@ export const useTransactionsAPI = () => {
    */
   async function getOffersReceived(wallet: string): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/audits/getOffersReceived',
-        JSON.stringify({ wallet }),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/audits/getOffersReceived',
+        data: JSON.stringify({ wallet }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -114,12 +114,12 @@ export const useTransactionsAPI = () => {
     owner: string;
   }): Promise<any[]> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/audits/getOffersByMints',
-        JSON.stringify(params),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/audits/getOffersByMints',
+        data: JSON.stringify(params),
+      });
       if ('data' in result) {
         return result['data'];
       }

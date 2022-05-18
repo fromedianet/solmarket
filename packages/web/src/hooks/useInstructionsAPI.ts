@@ -18,12 +18,12 @@ export const useInstructionsAPI = () => {
     price: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/buyNow',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/buyNow',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -45,12 +45,12 @@ export const useInstructionsAPI = () => {
     price: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/list',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/list',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -72,12 +72,12 @@ export const useInstructionsAPI = () => {
     price: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/cancelList',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/cancelList',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -100,12 +100,12 @@ export const useInstructionsAPI = () => {
     price: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/placeBid',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/placeBid',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -129,12 +129,12 @@ export const useInstructionsAPI = () => {
     price: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/cancelBid',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/cancelBid',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -159,12 +159,12 @@ export const useInstructionsAPI = () => {
     listPrice: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/acceptOffer',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/acceptOffer',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -185,12 +185,12 @@ export const useInstructionsAPI = () => {
     amount: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/deposit',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/deposit',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -211,12 +211,12 @@ export const useInstructionsAPI = () => {
     amount: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/withdraw',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/withdraw',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -237,12 +237,12 @@ export const useInstructionsAPI = () => {
     amount: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/withdrawFromFee',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/withdrawFromFee',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -263,12 +263,12 @@ export const useInstructionsAPI = () => {
     amount: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/withdrawFromTreasury',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/withdrawFromTreasury',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -293,12 +293,12 @@ export const useInstructionsAPI = () => {
     price: number;
   }): Promise<any> {
     try {
-      const result: any = await runAPI(
-        false,
-        'post',
-        '/instructions/buyNowME',
-        JSON.stringify(props),
-      );
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/buyNowME',
+        data: JSON.stringify(props),
+      });
       if ('data' in result) {
         return result['data'];
       }

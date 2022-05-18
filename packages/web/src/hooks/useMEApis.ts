@@ -8,7 +8,10 @@ export const useMEApis = () => {
 
   async function getFeaturedCollections(): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI('get', '/getFeaturedCollections');
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: '/getFeaturedCollections',
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -19,7 +22,12 @@ export const useMEApis = () => {
 
   async function getAllCollections(): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI('get', '/getAllCollections');
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: '/getAllCollections',
+        useCache: true,
+      });
+      console.log('============ getAllCollections: ==========', result);
       if ('data' in result) {
         return result['data'];
       }
@@ -33,11 +41,11 @@ export const useMEApis = () => {
     timeRange: string;
   }): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getPopularCollections',
-        JSON.stringify(params),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getPopularCollections',
+        data: JSON.stringify(params),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -48,11 +56,11 @@ export const useMEApis = () => {
 
   async function getNewCollections(more?: boolean): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getNewCollections',
-        JSON.stringify({ more }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getNewCollections',
+        data: JSON.stringify({ more }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -63,10 +71,10 @@ export const useMEApis = () => {
 
   async function getCollectionBySymbol(symbol: string): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getCollectionBySymbol/${symbol}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getCollectionBySymbol/${symbol}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -77,10 +85,10 @@ export const useMEApis = () => {
 
   async function getCollectionEscrowStats(symbol: string): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getCollectionEscrowStats/${symbol}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getCollectionEscrowStats/${symbol}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -93,11 +101,11 @@ export const useMEApis = () => {
     symbols: string[],
   ): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getMultiCollectionEscrowStats',
-        JSON.stringify({ symbols }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getMultiCollectionEscrowStats',
+        data: JSON.stringify({ symbols }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -110,11 +118,11 @@ export const useMEApis = () => {
     const params = getQueryParameterForMagicEden(queries);
     if (params) {
       try {
-        const result: any = await runOthersAPI(
-          'post',
-          '/getListedNftsByQuery',
-          JSON.stringify({ params }),
-        );
+        const result: any = await runOthersAPI({
+          method: 'post',
+          url: '/getListedNftsByQuery',
+          data: JSON.stringify({ params }),
+        });
         if ('data' in result) {
           return result['data'];
         }
@@ -125,10 +133,10 @@ export const useMEApis = () => {
 
   async function getNFTByMintAddress(mint: string): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getNFTByMintAddress/${mint}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getNFTByMintAddress/${mint}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -139,10 +147,10 @@ export const useMEApis = () => {
 
   async function getNFTsByEscrowOwner(wallet: string): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getNFTsByEscrowOwner/${wallet}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getNFTsByEscrowOwner/${wallet}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -162,11 +170,11 @@ export const useMEApis = () => {
         $skip: 0,
       };
       const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-      const result: any = await runOthersAPI(
-        'post',
-        '/getGlobalActivitiesByQuery',
-        JSON.stringify({ params }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getGlobalActivitiesByQuery',
+        data: JSON.stringify({ params }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -183,11 +191,11 @@ export const useMEApis = () => {
         $skip: 0,
       };
       const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-      const result: any = await runOthersAPI(
-        'post',
-        '/getGlobalActivitiesByQuery',
-        JSON.stringify({ params }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getGlobalActivitiesByQuery',
+        data: JSON.stringify({ params }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -206,11 +214,11 @@ export const useMEApis = () => {
         $skip: 0,
       };
       const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-      const result: any = await runOthersAPI(
-        'post',
-        '/getGlobalActivitiesByQuery',
-        JSON.stringify({ params }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getGlobalActivitiesByQuery',
+        data: JSON.stringify({ params }),
+      });
       if ('data' in result) {
         return result['data'];
       }
