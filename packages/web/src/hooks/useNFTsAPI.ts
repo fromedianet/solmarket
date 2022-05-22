@@ -55,7 +55,8 @@ export const useNFTsAPI = () => {
   }
 
   function getQueryPrameter(param: QUERIES) {
-    if (param.type !== MarketType.All && param.type !== MarketType.PaperCity) return null;
+    if (param.type !== MarketType.All && param.type !== MarketType.PaperCity)
+      return null;
     const queries = {
       skip: param.skip ? param.skip : 0,
       limit: 20,
@@ -106,7 +107,8 @@ export const useNFTsAPI = () => {
   }
 
   function getQueryParameterForMagicEden(param: QUERIES) {
-    if (param.type !== MarketType.All && param.type !== MarketType.MagicEden) return null;
+    if (param.type !== MarketType.All && param.type !== MarketType.MagicEden)
+      return null;
     const queries = {
       $skip: param.skip ? param.skip : 0,
       $limit: 20,

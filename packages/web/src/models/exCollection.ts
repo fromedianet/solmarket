@@ -30,7 +30,7 @@ export type ExAttrValue = {
 
 export type ExCollectionStats = {
   floorPrice?: number;
-  totalVolume?: number;
+  volumeAll?: number;
   listedCount?: number;
   listedTotalValue?: number;
 };

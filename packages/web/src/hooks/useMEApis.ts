@@ -72,7 +72,7 @@ export const useMEApis = () => {
     try {
       const result: any = await runOthersAPI({
         method: 'get',
-        url: `/getCollection/${market}/${symbol}`
+        url: `/getCollection/${market}/${symbol}`,
       });
       return result;
     } catch {}
@@ -125,7 +125,10 @@ export const useMEApis = () => {
     return {};
   }
 
-  async function getListedNftsByQuery(queries: QUERIES, market: string): Promise<any[]> {
+  async function getListedNftsByQuery(
+    queries: QUERIES,
+    market: string,
+  ): Promise<any[]> {
     const params = getQueryParameter(queries, market);
     if (params) {
       try {
@@ -257,7 +260,10 @@ export const useMEApis = () => {
 };
 
 function getQueryParameter(param: QUERIES, market: string) {
-  if (market === MarketType.Solanart) {
+  if (
+    market === MarketType.Solanart &&
+    (param.type === MarketType.All || param.type === MarketType.Solanart)
+  ) {
     let queries = '?collection=' + param.symbol;
     queries += '&listed=true&fits=any&bid=all';
     queries += '&page=' + (param.skip ? param.skip : 0);
@@ -295,7 +301,10 @@ function getQueryParameter(param: QUERIES, market: string) {
     };
 
     return result;
-  } else if (market === MarketType.DigitalEyes) {
+  } else if (
+    market === MarketType.DigitalEyes &&
+    (param.type === MarketType.All || param.type === MarketType.DigitalEyes)
+  ) {
     let queries = '?collection=' + param.symbol;
     if (param.sort === 1) {
       queries += '&addEpoch=desc';
@@ -322,7 +331,10 @@ function getQueryParameter(param: QUERIES, market: string) {
     };
 
     return result;
-  } else if (market === MarketType.AlphaArt) {
+  } else if (
+    market === MarketType.AlphaArt &&
+    (param.type === MarketType.All || param.type === MarketType.AlphaArt)
+  ) {
     const queries = {};
     queries['collectionId'] = param.symbol;
     queries['status'] = ['BUY_NOW'];

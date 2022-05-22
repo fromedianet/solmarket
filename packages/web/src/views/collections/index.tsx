@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Input, Radio } from 'antd';
+import { Row, Col, Input, Radio, Select } from 'antd';
 import { CollectionCard } from '../../components/CollectionCard';
 import { useQuerySearch } from '@oyster/common';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { EmptyView } from '../../components/EmptyView';
 import { ExCollection } from '../../models/exCollection';
 import { useMEApis } from '../../hooks/useMEApis';
+import { MarketType } from '../../constants';
 
 const { Search } = Input;
 
@@ -16,6 +17,9 @@ export const CollectionsView = () => {
   const type = searchParams.get('type') || 'all';
   const { getAllCollections, getNewCollections } = useCollectionsAPI();
   const meApis = useMEApis();
+  const [selectedMarket, setSelectedMarket] = useState<MarketType>(
+    MarketType.All,
+  );
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -91,6 +95,17 @@ export const CollectionsView = () => {
     );
   };
 
+  const onChangeMarket = val => {
+    setSelectedMarket(val);
+    if (val === MarketType.All) {
+      setFilters(collections);
+    } else if (val === MarketType.PaperCity) {
+      setFilters(collections.filter(item => item.market === undefined));
+    } else {
+      setFilters(collections.filter(item => item.market === val));
+    }
+  };
+
   return (
     <div className="main-area">
       <div className="collections-page">
@@ -111,7 +126,7 @@ export const CollectionsView = () => {
               <Radio.Group
                 defaultValue={timeRange}
                 buttonStyle="solid"
-                className="section-radio "
+                className="section-radio"
               >
                 <Radio.Button value="1d" onClick={() => setTimeRange('1d')}>
                   24 hours
@@ -123,6 +138,32 @@ export const CollectionsView = () => {
                   30 days
                 </Radio.Button>
               </Radio.Group>
+            </Col>
+          )}
+          {type === 'all' && (
+            <Col span={24} md={24} lg={10} className="radio-content">
+              <Select
+                className="select-container"
+                value={selectedMarket}
+                onSelect={val => onChangeMarket(val)}
+              >
+                <Select.Option value={MarketType.All}>All</Select.Option>
+                <Select.Option value={MarketType.PaperCity}>
+                  PaperCity
+                </Select.Option>
+                <Select.Option value={MarketType.MagicEden}>
+                  MagicEden
+                </Select.Option>
+                <Select.Option value={MarketType.Solanart}>
+                  Solanart
+                </Select.Option>
+                <Select.Option value={MarketType.DigitalEyes}>
+                  DigitalEyes
+                </Select.Option>
+                <Select.Option value={MarketType.AlphaArt}>
+                  AlphaArt
+                </Select.Option>
+              </Select>
             </Col>
           )}
         </Row>

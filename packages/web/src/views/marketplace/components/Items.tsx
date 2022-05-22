@@ -155,10 +155,16 @@ export const Items = (props: {
             onSelect={val => props.onTypeChange(val)}
           >
             <Select.Option value={MarketType.All}>All</Select.Option>
-            <Select.Option value={MarketType.PaperCity}>PaperCity</Select.Option>
-            <Select.Option value={MarketType.MagicEden}>MagicEden</Select.Option>
+            <Select.Option value={MarketType.PaperCity}>
+              PaperCity
+            </Select.Option>
+            <Select.Option value={MarketType.MagicEden}>
+              MagicEden
+            </Select.Option>
             <Select.Option value={MarketType.Solanart}>Solanart</Select.Option>
-            <Select.Option value={MarketType.DigitalEyes}>DigitalEyes</Select.Option>
+            <Select.Option value={MarketType.DigitalEyes}>
+              DigitalEyes
+            </Select.Option>
             <Select.Option value={MarketType.AlphaArt}>AlphaArt</Select.Option>
           </Select>
         </Col>

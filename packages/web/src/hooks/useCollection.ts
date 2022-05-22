@@ -44,14 +44,14 @@ export const useCollection = (market: string, symbol: string) => {
             floorPrice,
             listedCount,
             listedTotalValue,
-            totalVolume,
+            volumeAll,
           } = res['stats'];
           setAttributes(_parseAttributes(availableAttributes));
           setCollectionStats({
-            floorPrice: parseInt(floorPrice),
+            floorPrice: parseFloat(floorPrice),
             listedCount: parseInt(listedCount),
-            listedTotalValue: parseInt(listedTotalValue),
-            totalVolume: parseInt(totalVolume),
+            listedTotalValue: parseFloat(listedTotalValue),
+            volumeAll: parseFloat(volumeAll),
           });
         }
       }
@@ -128,7 +128,11 @@ export const useCollection = (market: string, symbol: string) => {
   async function loadListedNFTs(param: QUERIES) {
     let data = await getListedNftsByQuery(param);
 
-    if (market === MarketType.DigitalEyes || market === MarketType.Solanart || market === MarketType.AlphaArt) {
+    if (
+      market === MarketType.DigitalEyes ||
+      market === MarketType.Solanart ||
+      market === MarketType.AlphaArt
+    ) {
       const exData = await meApis.getListedNftsByQuery(param, market);
       data = data.concat(exData);
 
