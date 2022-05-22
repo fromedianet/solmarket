@@ -1,4 +1,5 @@
 import { Attribute, Creator } from '@oyster/common';
+import { MarketType } from '../constants';
 
 export interface ExCollection {
   _id: string;
@@ -89,7 +90,7 @@ export type V2 = {
 
 export type QUERIES = {
   symbol: string;
-  type: number; // 0: All, 1: PaperCity, 2: MagicEden
+  type: MarketType;
   sort: number;
   status?: boolean;
   searchKey?: string;

@@ -8,6 +8,7 @@ import { Items } from './components/Items';
 import { Activities } from './components/Activities';
 import { useParams } from 'react-router-dom';
 import { useCollection } from '../../hooks/useCollection';
+import { MarketType } from '../../constants';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -30,7 +31,7 @@ export const MarketplaceView = () => {
   });
   const [searchKey, setSearchKey] = useState('');
   const [sort, setSort] = useState(1);
-  const [type, setType] = useState(0);
+  const [type, setType] = useState<MarketType>(MarketType.All);
   const [refresh, setRefresh] = useState(false);
 
   const {

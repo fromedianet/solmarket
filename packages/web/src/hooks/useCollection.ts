@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MarketType } from '../constants';
 import {
   ExAttribute,
   ExAttrValue,
@@ -14,7 +15,7 @@ import { useTransactionsAPI } from './useTransactionsAPI';
 
 const PER_PAGE = 20;
 
-export const useCollection = (id: string, symbol: string) => {
+export const useCollection = (market: string, symbol: string) => {
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState<ExCollection>();
   const [attributes, setAttributes] = useState<ExAttribute[]>([]);
@@ -32,51 +33,52 @@ export const useCollection = (id: string, symbol: string) => {
 
   useEffect(() => {
     // For own marketplace
-    loadCollectionBySymbol(symbol, id).then(res => {
+    loadCollectionBySymbol(symbol, market).then(res => {
       if (res) {
-        setCollection(res);
-      }
-    });
-
-    loadCollectionEscrowStatsBySymbol(symbol, id).then(res => {
-      if (res) {
-        const {
-          availableAttributes,
-          floorPrice,
-          listedCount,
-          listedTotalValue,
-          totalVolume,
-        } = res;
-        setAttributes(_parseAttributes(availableAttributes));
-        setCollectionStats({
-          floorPrice: parseInt(floorPrice),
-          listedCount: parseInt(listedCount),
-          listedTotalValue: parseInt(listedTotalValue),
-          totalVolume: parseInt(totalVolume),
-        });
+        if (res['collection']) {
+          setCollection(res['collection']);
+        }
+        if (res['stats']) {
+          const {
+            availableAttributes,
+            floorPrice,
+            listedCount,
+            listedTotalValue,
+            totalVolume,
+          } = res['stats'];
+          setAttributes(_parseAttributes(availableAttributes));
+          setCollectionStats({
+            floorPrice: parseInt(floorPrice),
+            listedCount: parseInt(listedCount),
+            listedTotalValue: parseInt(listedTotalValue),
+            totalVolume: parseInt(totalVolume),
+          });
+        }
       }
     });
 
     loadTransactionsBySymbol(symbol).then(res => {
       setTransactions(res);
     });
-  }, [id, symbol]);
+  }, [market, symbol]);
 
-  async function loadCollectionBySymbol(symbol: string, id: string) {
-    if (id === '1') {
-      return await getCollectionBySymbol(symbol);
+  async function loadCollectionBySymbol(symbol: string, market: string) {
+    if (market === MarketType.PaperCity) {
+      const collection = await getCollectionBySymbol(symbol);
+      const stats = await getCollectionStatsBySymbol(symbol);
+      return { collection, stats };
     } else {
-      return await meApis.getCollectionBySymbol(symbol);
+      return await meApis.getCollection(symbol, market);
     }
   }
 
-  async function loadCollectionEscrowStatsBySymbol(symbol: string, id: string) {
-    if (id === '1') {
-      return await getCollectionStatsBySymbol(symbol);
-    } else {
-      return await meApis.getCollectionEscrowStats(symbol);
-    }
-  }
+  // async function loadCollectionEscrowStatsBySymbol(symbol: string, id: string) {
+  //   if (id === '1') {
+  //     return await getCollectionStatsBySymbol(symbol);
+  //   } else {
+  //     return await meApis.getCollectionEscrowStats(symbol);
+  //   }
+  // }
 
   async function loadTransactionsBySymbol(symbol: string) {
     let data = await getTransactionsBySymbol(symbol);
@@ -104,8 +106,8 @@ export const useCollection = (id: string, symbol: string) => {
     if (loading) return;
     setLoading(true);
 
-    getListedNftsByQuery(param)
-      .then((data: any[]) => {
+    loadListedNFTs(param)
+      .then(data => {
         setNFTs(data);
         if (data.length > 0) {
           if (data.length < PER_PAGE) {
@@ -122,6 +124,39 @@ export const useCollection = (id: string, symbol: string) => {
       })
       .finally(() => setLoading(false));
   };
+
+  async function loadListedNFTs(param: QUERIES) {
+    let data = await getListedNftsByQuery(param);
+
+    if (market === MarketType.DigitalEyes || market === MarketType.Solanart || market === MarketType.AlphaArt) {
+      const exData = await meApis.getListedNftsByQuery(param, market);
+      data = data.concat(exData);
+
+      if (param.sort === 2) {
+        data.sort((a, b) => {
+          if (a.price < b.price) {
+            return -1;
+          }
+          if (a.price > b.price) {
+            return 1;
+          }
+          return 0;
+        });
+      } else if (param.sort === 3) {
+        data.sort((a, b) => {
+          if (a.price > b.price) {
+            return -1;
+          }
+          if (a.price < b.price) {
+            return 1;
+          }
+          return 0;
+        });
+      }
+    }
+
+    return data;
+  }
 
   function _parseAttributes(data: any[] | null): ExAttribute[] {
     const attrs: ExAttribute[] = [];
