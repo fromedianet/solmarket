@@ -21,9 +21,9 @@ export const GroupItem = ({
         {item.collection.symbol && item.collection.symbol !== 'undefined' ? (
           <Link
             className="link"
-            to={`/marketplace/${item.collection.symbol ? '2' : '1'}/${
-              item.collection.symbol
-            }`}
+            to={`/marketplace/${
+              item.collection.symbol ? 'magiceden' : 'papercity'
+            }/${item.collection.symbol}`}
           >
             {item.collection.name}
           </Link>

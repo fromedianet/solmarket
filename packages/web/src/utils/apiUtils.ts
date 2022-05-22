@@ -3,7 +3,7 @@ import axios, { Method } from 'axios';
 import { APIS } from '../constants';
 import { useAuthToken } from '../contexts/authProvider';
 
-const expiry = 10 * 60; // 10 minutes
+const expiry = 60 * 60; // 60 minutes
 
 export const ApiUtils = () => {
   const { authToken, removeAuthToken } = useAuthToken();

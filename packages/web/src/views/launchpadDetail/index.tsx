@@ -542,7 +542,7 @@ export const LaunchpadDetailView = () => {
                       <Button
                         className="mint-btn"
                         onClick={() => {
-                          navigate(`/marketplace/1/${symbol}`);
+                          navigate(`/marketplace/papercity/${symbol}`);
                         }}
                       >
                         Visit Collection

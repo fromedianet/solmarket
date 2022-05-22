@@ -38,7 +38,7 @@ export function AppRoutes() {
           <Route path="/auction/:id" element={<AuctionView />} />
           <Route path="/collections" element={<CollectionsView />} />
           <Route
-            path="/marketplace/:id/:symbol"
+            path="/marketplace/:market/:symbol"
             element={<MarketplaceView />}
           />
           <Route path="/launchpad" element={<LaunchPadView />} />

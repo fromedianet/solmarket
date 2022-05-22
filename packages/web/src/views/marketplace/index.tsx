@@ -13,8 +13,8 @@ const { Content } = Layout;
 const { TabPane } = Tabs;
 
 export const MarketplaceView = () => {
-  const params = useParams<{ id: string; symbol: string }>();
-  const id = params.id || '1';
+  const params = useParams<{ market: string; symbol: string }>();
+  const market = params.market || '1';
   const symbol = params.symbol || '';
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();
@@ -43,7 +43,7 @@ export const MarketplaceView = () => {
     hasMore,
     loading,
     getListedNFTs,
-  } = useCollection(id, symbol);
+  } = useCollection(market, symbol);
 
   function useComponentWillUnmount(cleanupCallback = () => {}) {
     const callbackRef = React.useRef(cleanupCallback);
