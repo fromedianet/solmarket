@@ -173,21 +173,31 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getTransactionsBySymbol(symbol: string): Promise<any[]> {
+  async function getTransactionsBySymbol(symbol: string, market: string): Promise<any[]> {
     try {
-      const queryData = {
-        txType: {
-          $in: ['exchange'],
-        },
-        $match: { collection_symbol: symbol },
-        $sort: { blockTime: -1, createdAt: -1 },
-        $skip: 0,
-      };
-      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      let params;
+      if (market === MarketType.MagicEden) {
+        const queryData = {
+          txType: {
+            $in: ['exchange'],
+          },
+          $match: { collection_symbol: symbol },
+          $sort: { blockTime: -1, createdAt: -1 },
+          $skip: 0,
+        };
+        params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      } else if (market === MarketType.Solanart) {
+        params = `/nft/get-collection-transactions?network=mainnet&solana_nft_collection_api_id=snftcol-LjHSKp6nS627wIm&symbol=${symbol}`;
+      } else if (market === MarketType.DigitalEyes) {
+        params = `?collection=${encodeURI(symbol)}&type=SALE`;
+      } else if (market === MarketType.AlphaArt) {
+        params = `/collection/${symbol}?trading_types=1&no_foreign_listing=true`;
+      }
+      
       const result: any = await runOthersAPI({
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
-        data: JSON.stringify({ params }),
+        data: JSON.stringify({ params, market }),
       });
       if ('data' in result) {
         return result['data'];
@@ -197,18 +207,28 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getTransactionsByMint(mint: string): Promise<any[]> {
+  async function getTransactionsByMint(mint: string, market: string): Promise<any[]> {
     try {
-      const queryData = {
-        $match: { mint: mint },
-        $sort: { blockTime: -1, createdAt: -1 },
-        $skip: 0,
-      };
-      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      let params;
+      if (market === MarketType.MagicEden) {
+        const queryData = {
+          $match: { mint: mint },
+          $sort: { blockTime: -1, createdAt: -1 },
+          $skip: 0,
+        };
+        params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      } else if (market === MarketType.Solanart) {
+        params = `/wallet/get-transactions?address=${mint}&network=mainnet`;
+      } else if (market === MarketType.DigitalEyes) {
+        params = `?mint=${mint}&type=SALE`;
+      } else if (market === MarketType.AlphaArt) {
+        params = `/token/${mint}?trading_types=2%2C1%2C3&no_foreign_listing=true`;
+      }
+      
       const result: any = await runOthersAPI({
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
-        data: JSON.stringify({ params }),
+        data: JSON.stringify({ params, market }),
       });
       if ('data' in result) {
         return result['data'];

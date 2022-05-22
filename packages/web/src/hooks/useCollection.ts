@@ -82,7 +82,7 @@ export const useCollection = (market: string, symbol: string) => {
 
   async function loadTransactionsBySymbol(symbol: string) {
     let data = await getTransactionsBySymbol(symbol);
-    const exData = await meApis.getTransactionsBySymbol(symbol);
+    const exData = await meApis.getTransactionsBySymbol(symbol, market);
     data = data.concat(exData);
     data.sort((a, b) => {
       if (b.blockTime > a.blockTime) {
