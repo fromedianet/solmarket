@@ -243,7 +243,7 @@ export const NFTCard = (props: {
   itemId?: string;
   className?: string;
 }) => {
-  const url = `/item-details/${props.item.mint}`;
+  const url = `/item-details/${props.item.market}/${props.item.mint}`;
   return (
     <Card
       hoverable={true}

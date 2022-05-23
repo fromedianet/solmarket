@@ -14,7 +14,7 @@ import {
   useConnection,
 } from '@oyster/common';
 import { useTransactionsAPI } from '../../hooks/useTransactionsAPI';
-import { meConnection } from '../../constants';
+import { MarketType, meConnection } from '../../constants';
 import { Offer } from '../../models/offer';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useInstructionsAPI } from '../../hooks/useInstructionsAPI';
@@ -25,12 +25,13 @@ import { showEscrow } from '../../actions/showEscrow';
 import { useMEApis } from '../../hooks/useMEApis';
 
 export const ItemDetailView = () => {
-  const params = useParams<{ mint: string }>();
+  const params = useParams<{ market: string; mint: string }>();
+  const market = params.market || MarketType.PaperCity;
   const mint = params.mint || '';
   const wallet = useWallet();
   const connection = useConnection();
   const { socket } = useSocket();
-  const [nft, setNFT] = useState<NFT>();
+  const [nft, setNFT] = useState<any>();
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
   const [loadingPage, setLoadingPage] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -110,8 +111,16 @@ export const ItemDetailView = () => {
     setLoadingPage(true);
 
     let result = await getNftByMint(mint);
-    if (!result) {
-      result = await meApis.getNFTByMintAddress(mint);
+    if (market !== MarketType.PaperCity && result) {
+      const nftData = await meApis.getNFTByMintAddress(mint, market);
+      if (nftData) {
+        result = {
+          ...result,
+          price: nftData.price,
+          v2: nftData.v2,
+          market: market,
+        };
+      }
     }
 
     setLoadingPage(false);
@@ -120,7 +129,7 @@ export const ItemDetailView = () => {
 
   async function getTransactions(): Promise<any[]> {
     let data = await getTransactionsByMint(mint);
-    const exData = await meApis.getTransactionsByMint(mint);
+    const exData = await meApis.getTransactionsByMint(mint, market);
     data = data.concat(exData);
     data.sort((a, b) => {
       if (b.blockTime > a.blockTime) {
@@ -141,13 +150,25 @@ export const ItemDetailView = () => {
   }
 
   async function getListedNFTs(nftItem: NFT) {
+    let result: any[] = [];
     const param = {
       symbol: nftItem.symbol,
       sort: 1,
-      type: 0,
+      type: market,
       status: false,
     };
-    let result: any[] = await getListedNftsByQuery(param);
+
+    if (
+      market === MarketType.DigitalEyes ||
+      market === MarketType.Solanart ||
+      market === MarketType.AlphaArt
+    ) {
+      // @ts-ignore
+      result = await meApis.getListedNftsByQuery(param, market);
+    } else {
+      // @ts-ignore
+      result = await getListedNftsByQuery(param);
+    }
 
     result = result.filter(item => item.mint != nftItem.mint);
     return result;

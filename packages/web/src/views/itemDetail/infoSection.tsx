@@ -97,13 +97,11 @@ export const InfoSection = (props: {
         <div className="collection-container">
           {props.nft.symbol ? (
             <Link
-              to={`/marketplace/${
-                props.nft.market ? props.nft.market : 'papercity'
-              }/${props.nft.symbol}`}
+              to={`/marketplace/${props.nft.market}/${props.nft.symbol}`}
               className="collection-name"
             >
               <img width={20} src={'/icons/check.svg'} />
-              <span>{props.nft.collectionName}</span>
+              <span>{props.nft.symbol}</span>
             </Link>
           ) : (
             <span className="collection-name">Unverified</span>

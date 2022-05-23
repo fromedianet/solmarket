@@ -15,7 +15,7 @@ const { TabPane } = Tabs;
 
 export const MarketplaceView = () => {
   const params = useParams<{ market: string; symbol: string }>();
-  const market = params.market || '1';
+  const market = params.market || MarketType.PaperCity;
   const symbol = params.symbol || '';
   const { width } = useWindowDimensions();
   const { handleToggle } = useSetSidebarState();

@@ -145,11 +145,14 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getNFTByMintAddress(mint: string): Promise<any> {
+  async function getNFTByMintAddress(
+    mint: string,
+    market: string,
+  ): Promise<any> {
     try {
       const result: any = await runOthersAPI({
         method: 'get',
-        url: `/getNFTByMintAddress/${mint}`,
+        url: `/getNFTByMintAddress/${market}/${mint}`,
       });
       if ('data' in result) {
         return result['data'];
@@ -173,7 +176,10 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getTransactionsBySymbol(symbol: string, market: string): Promise<any[]> {
+  async function getTransactionsBySymbol(
+    symbol: string,
+    market: string,
+  ): Promise<any[]> {
     try {
       let params;
       if (market === MarketType.MagicEden) {
@@ -193,7 +199,7 @@ export const useMEApis = () => {
       } else if (market === MarketType.AlphaArt) {
         params = `/collection/${symbol}?trading_types=1&no_foreign_listing=true`;
       }
-      
+
       const result: any = await runOthersAPI({
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
@@ -207,7 +213,10 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getTransactionsByMint(mint: string, market: string): Promise<any[]> {
+  async function getTransactionsByMint(
+    mint: string,
+    market: string,
+  ): Promise<any[]> {
     try {
       let params;
       if (market === MarketType.MagicEden) {
@@ -224,7 +233,7 @@ export const useMEApis = () => {
       } else if (market === MarketType.AlphaArt) {
         params = `/token/${mint}?trading_types=2%2C1%2C3&no_foreign_listing=true`;
       }
-      
+
       const result: any = await runOthersAPI({
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
