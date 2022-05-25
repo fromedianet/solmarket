@@ -119,6 +119,7 @@ export const ItemDetailView = () => {
           symbol: nftData.symbol,
           price: nftData.price,
           v2: nftData.v2,
+          escrowPubkey: nftData.escrowPubkey,
           market: market,
         };
       }
@@ -287,6 +288,7 @@ export const ItemDetailView = () => {
 
   const onBuyNow = async () => {
     if (!wallet.publicKey || !nft) return;
+    console.log('=========== onBuyNow ============', nft);
     if (nft.market !== MarketType.PaperCity && !nft.v2) {
       let url = `https://magiceden.io/item-details/${nft.mint}`;
       if (nft.market === MarketType.Solanart) {
