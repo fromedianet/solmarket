@@ -116,6 +116,7 @@ export const ItemDetailView = () => {
       if (nftData) {
         result = {
           ...result,
+          symbol: nftData.symbol,
           price: nftData.price,
           v2: nftData.v2,
           market: market,

@@ -97,7 +97,9 @@ export const InfoSection = (props: {
         <div className="collection-container">
           {props.nft.symbol ? (
             <Link
-              to={`/marketplace/${props.nft.market}/${props.nft.symbol}`}
+              to={`/marketplace/${props.nft.market}/${encodeURI(
+                props.nft.symbol,
+              )}`}
               className="collection-name"
             >
               <img width={20} src={'/icons/check.svg'} />

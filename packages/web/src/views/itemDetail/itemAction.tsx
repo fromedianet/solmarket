@@ -6,7 +6,6 @@ import {
 } from '@oyster/common';
 import React, { useState } from 'react';
 import { Button, Row, Col, Form, Spin, Divider } from 'antd';
-import { NFT } from '../../models/exCollection';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
@@ -14,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { Offer } from '../../models/offer';
 
 export const ItemAction = (props: {
-  nft: NFT;
+  nft: any;
   loading: boolean;
   myOffer: Offer | undefined;
   biddingBalance: number;
