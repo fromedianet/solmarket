@@ -78,7 +78,8 @@ export const METAPLEX_ID =
   'p1exdMJcjVao65QdewkaZRUnU6VPSXhus9n2GzWfh98' as StringPublicKey;
 
 export const AUCTION_HOUSE_ID = new PublicKey(
-  'GEL1XMuVTEtL88DzpYGjDrFQFCG2V8do4BJo2NMoi6pP',
+  // 'GEL1XMuVTEtL88DzpYGjDrFQFCG2V8do4BJo2NMoi6pP', // devnet
+  '3uMrQYaaUzTy2xAdXokkBdRz4QDTT2jExYatVrpfGbJB', // mainnet-beta
 );
 
 export const AUCTION_HOUSE_PROGRAM_ID = new PublicKey(

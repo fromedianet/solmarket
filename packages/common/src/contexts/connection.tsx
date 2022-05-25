@@ -41,12 +41,12 @@ type Endpoint = {
 };
 
 export const ENDPOINTS: Array<Endpoint> = [
-  {
-    name: 'devnet',
-    label: 'devnet',
-    url: 'https://metaplex.devnet.rpcpool.com/',
-    chainId: ChainId.Devnet,
-  },
+  // {
+  //   name: 'devnet',
+  //   label: 'devnet',
+  //   url: 'https://metaplex.devnet.rpcpool.com/',
+  //   chainId: ChainId.Devnet,
+  // },
   {
     name: 'mainnet-beta',
     label: 'mainnet-beta',
@@ -54,12 +54,12 @@ export const ENDPOINTS: Array<Endpoint> = [
     url: clusterApiUrl('mainnet-beta'),
     chainId: ChainId.MainnetBeta,
   },
-  {
-    name: 'testnet',
-    label: 'testnet',
-    url: clusterApiUrl('testnet'),
-    chainId: ChainId.Testnet,
-  },
+  // {
+  //   name: 'testnet',
+  //   label: 'testnet',
+  //   url: clusterApiUrl('testnet'),
+  //   chainId: ChainId.Testnet,
+  // },
 ];
 
 const DEFAULT_ENDPOINT = ENDPOINTS[0];

@@ -260,7 +260,7 @@ export const useMEApis = () => {
       const result: any = await runOthersAPI({
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
-        data: JSON.stringify({ params }),
+        data: JSON.stringify({ params, market: MarketType.MagicEden }),
       });
       if ('data' in result) {
         return result['data'];
