@@ -287,16 +287,23 @@ export const ItemDetailView = () => {
 
   const onBuyNow = async () => {
     if (!wallet.publicKey || !nft) return;
-    if (nft.market && !nft.v2) {
-      // For ME v1 it redirects to the MagicEden site
-      window.open(`https://magiceden.io/item-details/${nft.mint}`, '_blank');
+    if (nft.market !== MarketType.PaperCity && !nft.v2) {
+      let url = `https://magiceden.io/item-details/${nft.mint}`;
+      if (nft.market === MarketType.Solanart) {
+        url = `https://solanart.io/nft/${nft.mint}`;
+      } else if (nft.market === MarketType.DigitalEyes) {
+        url = `https://digitaleyes.market/item/Solarians/${nft.mint}`;
+      } else if (nft.market === MarketType.AlphaArt) {
+        url = `https://alpha.art/t/${nft.mint}`;
+      }
+      window.open(url, '_blank');
       return;
     }
     // eslint-disable-next-line no-async-promise-executor
     const resolveWithData = new Promise(async (resolve, reject) => {
       setLoading(true);
       try {
-        if (nft.market) {
+        if (nft.market !== MarketType.PaperCity) {
           if (nft.v2 && nft.escrowPubkey) {
             const result: any = await buyNowME({
               buyer: wallet.publicKey!.toBase58(),
