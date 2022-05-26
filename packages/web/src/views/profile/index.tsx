@@ -252,24 +252,24 @@ export const ProfileView = () => {
   }
 
   async function loadTransactions(wallet: string): Promise<any[]> {
-    let data = await getTransactionsByWallet(wallet);
-    const exData = await meApis.getTransactionsByWallet(wallet);
-    data = data.concat(exData);
-    data.sort((a, b) => {
-      if (b.blockTime > a.blockTime) {
-        return 1;
-      } else if (b.blockTime < a.blockTime) {
-        return -1;
-      } else {
-        if (b.id > a.id) {
-          return 1;
-        } else if (b.id < a.id) {
-          return -1;
-        } else {
-          return 0;
-        }
-      }
-    });
+    const data = await getTransactionsByWallet(wallet);
+    // const exData = await meApis.getTransactionsByWallet(wallet);
+    // data = data.concat(exData);
+    // data.sort((a, b) => {
+    //   if (b.blockTime > a.blockTime) {
+    //     return 1;
+    //   } else if (b.blockTime < a.blockTime) {
+    //     return -1;
+    //   } else {
+    //     if (b.id > a.id) {
+    //       return 1;
+    //     } else if (b.id < a.id) {
+    //       return -1;
+    //     } else {
+    //       return 0;
+    //     }
+    //   }
+    // });
     return data;
   }
 

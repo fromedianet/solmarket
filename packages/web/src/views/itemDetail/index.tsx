@@ -26,7 +26,7 @@ import { useMEApis } from '../../hooks/useMEApis';
 
 export const ItemDetailView = () => {
   const params = useParams<{ market: string; mint: string }>();
-  const market = params.market || MarketType.PaperCity;
+  const [market, setMarket] = useState(params.market || MarketType.PaperCity);
   const mint = params.mint || '';
   const wallet = useWallet();
   const connection = useConnection();
@@ -112,17 +112,21 @@ export const ItemDetailView = () => {
 
     let result = await getNftByMint(mint);
     if (market !== MarketType.PaperCity && result) {
-      const nftData = await meApis.getNFTByMintAddress(mint, market);
-      if (nftData) {
-        result = {
-          ...result,
-          symbol: nftData.symbol,
-          price: nftData.price,
-          v2: nftData.v2,
-          owner: nftData.owner || result.owner,
-          escrowPubkey: nftData.escrowPubkey,
-          market: market,
-        };
+      if (result.price > 0) { // When NFT was already listed on PaperCity
+        setMarket(MarketType.PaperCity);
+      } else {
+        const nftData = await meApis.getNFTByMintAddress(mint, market);
+        if (nftData) {
+          result = {
+            ...result,
+            symbol: nftData.symbol,
+            price: nftData.price,
+            v2: nftData.v2,
+            owner: nftData.owner || result.owner,
+            escrowPubkey: nftData.escrowPubkey,
+            market: market,
+          };
+        }
       }
     }
 

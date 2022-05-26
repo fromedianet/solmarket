@@ -3,6 +3,7 @@ import { Row, Col, Statistic } from 'antd';
 import { Image } from 'antd';
 import ReadMore from '../../../components/ReadMore';
 import { ExCollection, ExCollectionStats } from '../../../models/exCollection';
+import { formatAmount } from '@oyster/common';
 
 export const CollectionInfo = (props: {
   collection: ExCollection | undefined;
@@ -77,7 +78,7 @@ export const CollectionInfo = (props: {
           <Statistic
             title="Floor Price"
             value={
-              props.stats.floorPrice ? props.stats.floorPrice.toFixed(2) : '--'
+              props.stats.floorPrice ? formatAmount(props.stats.floorPrice, 2, true) : '--'
             }
             suffix="◎"
             className="info-attribute"
@@ -87,7 +88,7 @@ export const CollectionInfo = (props: {
           <Statistic
             title="Total Volume (ALL Time, ALL Marketplaces)"
             value={
-              props.stats.volumeAll ? props.stats.volumeAll.toFixed(2) : '--'
+              props.stats.volumeAll ? formatAmount(props.stats.volumeAll, 2, true) : '--'
             }
             suffix="◎"
             className="info-attribute"
@@ -96,7 +97,7 @@ export const CollectionInfo = (props: {
         <Col key="count" span={12} lg={8}>
           <Statistic
             title="Total Listed Count"
-            value={props.stats.listedCount}
+            value={props.stats.listedCount ? formatAmount(props.stats.listedCount, 2, true) : '--'}
             className="info-attribute"
           />
         </Col>
