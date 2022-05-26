@@ -182,13 +182,13 @@ export const ProfileView = () => {
       items1 = items1.map(item => ({
         ...item,
         symbol: item.symbol || 'undefined',
-        collectionName: item.collectionName || 'undefined',
+        collectionName: item.collectionName || item.symbol,
       }));
 
       items2 = items2.map(item => ({
         ...item,
         symbol: item.symbol || 'undefined',
-        collectionName: item.collectionName || 'undefined',
+        collectionName: item.collectionName || item.symbol,
       }));
 
       const group1 = groupBy(items1, k => k.symbol);
@@ -252,24 +252,24 @@ export const ProfileView = () => {
   }
 
   async function loadTransactions(wallet: string): Promise<any[]> {
-    let data = await getTransactionsByWallet(wallet);
-    const exData = await meApis.getTransactionsByWallet(wallet);
-    data = data.concat(exData);
-    data.sort((a, b) => {
-      if (b.blockTime > a.blockTime) {
-        return 1;
-      } else if (b.blockTime < a.blockTime) {
-        return -1;
-      } else {
-        if (b.id > a.id) {
-          return 1;
-        } else if (b.id < a.id) {
-          return -1;
-        } else {
-          return 0;
-        }
-      }
-    });
+    const data = await getTransactionsByWallet(wallet);
+    // const exData = await meApis.getTransactionsByWallet(wallet);
+    // data = data.concat(exData);
+    // data.sort((a, b) => {
+    //   if (b.blockTime > a.blockTime) {
+    //     return 1;
+    //   } else if (b.blockTime < a.blockTime) {
+    //     return -1;
+    //   } else {
+    //     if (b.id > a.id) {
+    //       return 1;
+    //     } else if (b.id < a.id) {
+    //       return -1;
+    //     } else {
+    //       return 0;
+    //     }
+    //   }
+    // });
     return data;
   }
 

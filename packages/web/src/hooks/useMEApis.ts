@@ -198,6 +198,8 @@ export const useMEApis = () => {
         params = `?collection=${encodeURI(symbol)}&type=SALE`;
       } else if (market === MarketType.AlphaArt) {
         params = `/collection/${symbol}?trading_types=1&no_foreign_listing=true`;
+      } else {
+        return []
       }
 
       const result: any = await runOthersAPI({
@@ -232,6 +234,8 @@ export const useMEApis = () => {
         params = `?mint=${mint}&type=SALE`;
       } else if (market === MarketType.AlphaArt) {
         params = `/token/${mint}?trading_types=2%2C1%2C3&no_foreign_listing=true`;
+      } else {
+        return [];
       }
 
       const result: any = await runOthersAPI({

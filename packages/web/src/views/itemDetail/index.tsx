@@ -6,7 +6,7 @@ import { InfoSection } from './infoSection';
 import { EmptyView } from '../../components/EmptyView';
 import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
-import { NFT, Transaction as TransactionData } from '../../models/exCollection';
+import { Transaction as TransactionData } from '../../models/exCollection';
 import {
   AUCTION_HOUSE_ID,
   MetaplexModal,
@@ -26,7 +26,7 @@ import { useMEApis } from '../../hooks/useMEApis';
 
 export const ItemDetailView = () => {
   const params = useParams<{ market: string; mint: string }>();
-  const market = params.market || MarketType.PaperCity;
+  const [market, setMarket] = useState(params.market || MarketType.PaperCity);
   const mint = params.mint || '';
   const wallet = useWallet();
   const connection = useConnection();
@@ -36,7 +36,7 @@ export const ItemDetailView = () => {
   const [loadingPage, setLoadingPage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [priceData, setPriceData] = useState<any[]>([]);
-  const [nftList, setNFTList] = useState<NFT[]>([]);
+  const [nftList, setNFTList] = useState<any[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [myOffer, setMyOffer] = useState<Offer>();
   const [refresh, setRefresh] = useState(0);
@@ -112,16 +112,21 @@ export const ItemDetailView = () => {
 
     let result = await getNftByMint(mint);
     if (market !== MarketType.PaperCity && result) {
-      const nftData = await meApis.getNFTByMintAddress(mint, market);
-      if (nftData) {
-        result = {
-          ...result,
-          symbol: nftData.symbol,
-          price: nftData.price,
-          v2: nftData.v2,
-          escrowPubkey: nftData.escrowPubkey,
-          market: market,
-        };
+      if (result.price > 0) { // When NFT was already listed on PaperCity
+        setMarket(MarketType.PaperCity);
+      } else {
+        const nftData = await meApis.getNFTByMintAddress(mint, market);
+        if (nftData) {
+          result = {
+            ...result,
+            symbol: nftData.symbol,
+            price: nftData.price,
+            v2: nftData.v2,
+            owner: nftData.owner || result.owner,
+            escrowPubkey: nftData.escrowPubkey,
+            market: market,
+          };
+        }
       }
     }
 
@@ -151,7 +156,7 @@ export const ItemDetailView = () => {
     return data;
   }
 
-  async function getListedNFTs(nftItem: NFT) {
+  async function getListedNFTs(nftItem: any) {
     let result: any[] = [];
     const param = {
       symbol: nftItem.symbol,
