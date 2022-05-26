@@ -182,13 +182,13 @@ export const ProfileView = () => {
       items1 = items1.map(item => ({
         ...item,
         symbol: item.symbol || 'undefined',
-        collectionName: item.collectionName || 'undefined',
+        collectionName: item.collectionName || item.symbol,
       }));
 
       items2 = items2.map(item => ({
         ...item,
         symbol: item.symbol || 'undefined',
-        collectionName: item.collectionName || 'undefined',
+        collectionName: item.collectionName || item.symbol,
       }));
 
       const group1 = groupBy(items1, k => k.symbol);
