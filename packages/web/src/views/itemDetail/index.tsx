@@ -119,6 +119,7 @@ export const ItemDetailView = () => {
           symbol: nftData.symbol,
           price: nftData.price,
           v2: nftData.v2,
+          owner: nftData.owner || result.owner,
           escrowPubkey: nftData.escrowPubkey,
           market: market,
         };
