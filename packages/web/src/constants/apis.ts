@@ -13,7 +13,7 @@ export const APIS = {
       : 'http://localhost:8000/api',
   socket_url:
     process.env.NEXT_ENV == 'production'
-      ? 'https://api.papercity.io/api'
+      ? 'https://api.papercity.io'
       : process.env.NEXT_ENV == 'development'
       ? 'https://staging.api.papercity.io'
       : 'http://localhost:5000',
