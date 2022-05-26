@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collapse, Table } from 'antd';
 import { CopySpan, shortenAddress, useConnectionConfig } from '@oyster/common';
-import { NFT, Transaction } from '../../models/exCollection';
+import { Transaction } from '../../models/exCollection';
 import TimeAgo from 'javascript-time-ago';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import en from 'javascript-time-ago/locale/en.json';
@@ -18,8 +18,8 @@ const { Panel } = Collapse;
 
 export const BottomSection = (props: {
   transactions: Transaction[];
-  nft: NFT;
-  nftList: NFT[];
+  nft: any;
+  nftList: any[];
   offers: Offer[];
   setMyOffer: (a) => void;
   onCancelVisible: () => void;
@@ -190,7 +190,7 @@ export const BottomSection = (props: {
                 key={index}
                 itemId={`${index}`}
                 item={item}
-                collection={props.nft.collectionName}
+                collection={item.collection}
                 className="w-250"
               />
             ))}

@@ -6,7 +6,7 @@ import { InfoSection } from './infoSection';
 import { EmptyView } from '../../components/EmptyView';
 import { getDateStringFromUnixTimestamp } from '../../utils/utils';
 import { useNFTsAPI } from '../../hooks/useNFTsAPI';
-import { NFT, Transaction as TransactionData } from '../../models/exCollection';
+import { Transaction as TransactionData } from '../../models/exCollection';
 import {
   AUCTION_HOUSE_ID,
   MetaplexModal,
@@ -36,7 +36,7 @@ export const ItemDetailView = () => {
   const [loadingPage, setLoadingPage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [priceData, setPriceData] = useState<any[]>([]);
-  const [nftList, setNFTList] = useState<NFT[]>([]);
+  const [nftList, setNFTList] = useState<any[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [myOffer, setMyOffer] = useState<Offer>();
   const [refresh, setRefresh] = useState(0);
@@ -152,7 +152,7 @@ export const ItemDetailView = () => {
     return data;
   }
 
-  async function getListedNFTs(nftItem: NFT) {
+  async function getListedNFTs(nftItem: any) {
     let result: any[] = [];
     const param = {
       symbol: nftItem.symbol,
