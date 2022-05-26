@@ -78,7 +78,9 @@ export const CollectionInfo = (props: {
           <Statistic
             title="Floor Price"
             value={
-              props.stats.floorPrice ? formatAmount(props.stats.floorPrice, 2, true) : '--'
+              props.stats.floorPrice
+                ? formatAmount(props.stats.floorPrice, 2, true)
+                : '--'
             }
             suffix="◎"
             className="info-attribute"
@@ -88,7 +90,9 @@ export const CollectionInfo = (props: {
           <Statistic
             title="Total Volume (ALL Time, ALL Marketplaces)"
             value={
-              props.stats.volumeAll ? formatAmount(props.stats.volumeAll, 2, true) : '--'
+              props.stats.volumeAll
+                ? formatAmount(props.stats.volumeAll, 2, true)
+                : '--'
             }
             suffix="◎"
             className="info-attribute"
@@ -97,7 +101,11 @@ export const CollectionInfo = (props: {
         <Col key="count" span={12} lg={8}>
           <Statistic
             title="Total Listed Count"
-            value={props.stats.listedCount ? formatAmount(props.stats.listedCount, 2, true) : '--'}
+            value={
+              props.stats.listedCount
+                ? formatAmount(props.stats.listedCount, 2, true)
+                : '--'
+            }
             className="info-attribute"
           />
         </Col>
