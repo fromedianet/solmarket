@@ -414,6 +414,7 @@ export function processAccountsIntoAuctionView(
       myBidRedemption: bidRedemption,
     };
 
+    // @ts-ignore
     view.thumbnail =
       ((view.items || [])[0] || [])[0] ||
       view.participationItem ||

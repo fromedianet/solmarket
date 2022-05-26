@@ -66,7 +66,7 @@ export const useAttributesByCollection = (pubkey: StringPublicKey) => {
     const data: Record<string, Record<string | number, number>> = {};
     attrs.forEach(attr => {
       attr.forEach(sub => {
-        const item = data[sub.trait_type] || [];
+        const item = data[sub.trait_type] || {};
         const subVal = item[sub.value];
         if (isNaN(subVal)) {
           item[sub.value] = 1;

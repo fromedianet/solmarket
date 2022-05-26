@@ -691,7 +691,7 @@ export const AuctionCard = ({
                     autoFocus
                     className="input sol-input-bid"
                     value={value}
-                    onChange={setValue}
+                    onChange={(val) => setValue(val)}
                     precision={4}
                     style={{ fontSize: 16, lineHeight: '16px' }}
                     controls={false}
