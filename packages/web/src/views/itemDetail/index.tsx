@@ -112,7 +112,8 @@ export const ItemDetailView = () => {
 
     let result = await getNftByMint(mint);
     if (market !== MarketType.PaperCity && result) {
-      if (result.price > 0) { // When NFT was already listed on PaperCity
+      if (result.price > 0) {
+        // When NFT was already listed on PaperCity
         setMarket(MarketType.PaperCity);
       } else {
         const nftData = await meApis.getNFTByMintAddress(mint, market);
@@ -501,6 +502,7 @@ export const ItemDetailView = () => {
         [],
       );
 
+      console.log('---------- transaction id --------------', txid);
       if (txid) {
         status = await _connection.confirmTransaction(txid, 'confirmed');
       }

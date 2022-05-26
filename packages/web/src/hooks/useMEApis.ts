@@ -199,7 +199,7 @@ export const useMEApis = () => {
       } else if (market === MarketType.AlphaArt) {
         params = `/collection/${symbol}?trading_types=1&no_foreign_listing=true`;
       } else {
-        return []
+        return [];
       }
 
       const result: any = await runOthersAPI({

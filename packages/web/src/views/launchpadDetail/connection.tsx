@@ -282,15 +282,16 @@ export const sendTransaction = async (
       commitment,
     );
 
-    if (!confirmation)
-      throw new Error('Timed out awaiting confirmation on transaction');
+    if (!confirmation) return;
+    // throw new Error('Timed out awaiting confirmation on transaction');
     slot = confirmation?.slot || 0;
 
     if (confirmation?.err) {
       const errors = await getErrorForTransaction(connection, txid);
 
       console.log(errors);
-      throw new Error(`Raw transaction ${txid} failed`);
+      return;
+      // throw new Error(`Raw transaction ${txid} failed`);
     }
   }
 
@@ -390,40 +391,42 @@ export async function sendSignedTransaction({
       true,
     );
 
-    if (!confirmation)
-      throw new Error('Timed out awaiting confirmation on transaction');
+    if (!confirmation) return;
+    // throw new Error('Timed out awaiting confirmation on transaction');
 
     if (confirmation.err) {
       console.error(confirmation.err);
-      throw new Error('Transaction failed: Custom instruction error');
+      return;
+      // throw new Error('Transaction failed: Custom instruction error');
     }
 
     slot = confirmation?.slot || 0;
   } catch (err: any) {
     console.error('Timeout Error caught', err);
-    if (err.timeout) {
-      throw new Error('Timed out awaiting confirmation on transaction');
-    }
-    let simulateResult: SimulatedTransactionResponse | null = null;
-    try {
-      simulateResult = (
-        await simulateTransaction(connection, signedTransaction, 'single')
-      ).value;
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-    if (simulateResult && simulateResult.err) {
-      if (simulateResult.logs) {
-        for (let i = simulateResult.logs.length - 1; i >= 0; --i) {
-          const line = simulateResult.logs[i];
-          if (line.startsWith('Program log: ')) {
-            throw new Error(
-              'Transaction failed: ' + line.slice('Program log: '.length),
-            );
-          }
-        }
-      }
-      throw new Error(JSON.stringify(simulateResult.err));
-    }
+    return;
+    // if (err.timeout) {
+    //   throw new Error('Timed out awaiting confirmation on transaction');
+    // }
+    // let simulateResult: SimulatedTransactionResponse | null = null;
+    // try {
+    //   simulateResult = (
+    //     await simulateTransaction(connection, signedTransaction, 'single')
+    //   ).value;
+    //   // eslint-disable-next-line no-empty
+    // } catch (e) {}
+    // if (simulateResult && simulateResult.err) {
+    //   if (simulateResult.logs) {
+    //     for (let i = simulateResult.logs.length - 1; i >= 0; --i) {
+    //       const line = simulateResult.logs[i];
+    //       if (line.startsWith('Program log: ')) {
+    //         throw new Error(
+    //           'Transaction failed: ' + line.slice('Program log: '.length),
+    //         );
+    //       }
+    //     }
+    //   }
+    //   throw new Error(JSON.stringify(simulateResult.err));
+    // }
     // throw new Error('Transaction failed');
   } finally {
     done = true;
@@ -480,7 +483,7 @@ async function awaitTransactionSignatureConfirmation(
         return;
       }
       done = true;
-      console.log('Rejecting for timeout...');
+      // console.log('Rejecting for timeout...');
       reject({ timeout: true });
     }, timeout);
     try {

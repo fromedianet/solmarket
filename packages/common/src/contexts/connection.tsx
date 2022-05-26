@@ -557,8 +557,8 @@ export const sendTransaction = async (
       commitment,
     );
 
-    if (!confirmation)
-      throw new Error('Timed out awaiting confirmation on transaction');
+    if (!confirmation) return;
+    // throw new Error('Timed out awaiting confirmation on transaction');
     slot = confirmation?.slot || 0;
 
     if (confirmation?.err) {
@@ -576,9 +576,10 @@ export const sendTransaction = async (
         type: 'error',
       });
 
-      throw new Error(
-        `Raw transaction ${txid} failed (${JSON.stringify(status)})`,
-      );
+      return;
+      // throw new Error(
+      //   `Raw transaction ${txid} failed (${JSON.stringify(status)})`,
+      // );
     }
   }
 
@@ -636,7 +637,7 @@ export const getUnixTs = () => {
   return new Date().getTime() / 1000;
 };
 
-const DEFAULT_TIMEOUT = 60000;
+const DEFAULT_TIMEOUT = 30000;
 
 export async function sendSignedTransaction({
   signedTransaction,
@@ -691,29 +692,30 @@ export async function sendSignedTransaction({
     slot = confirmation?.slot || 0;
   } catch (err: any) {
     console.error('Timeout Error caught', err);
-    if (err.timeout) {
-      throw new Error('Timed out awaiting confirmation on transaction');
-    }
-    let simulateResult: SimulatedTransactionResponse | null = null;
-    try {
-      simulateResult = (
-        await simulateTransaction(connection, signedTransaction, 'single')
-      ).value;
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
-    if (simulateResult && simulateResult.err) {
-      if (simulateResult.logs) {
-        for (let i = simulateResult.logs.length - 1; i >= 0; --i) {
-          const line = simulateResult.logs[i];
-          if (line.startsWith('Program log: ')) {
-            throw new Error(
-              'Transaction failed: ' + line.slice('Program log: '.length),
-            );
-          }
-        }
-      }
-      throw new Error(JSON.stringify(simulateResult.err));
-    }
+    throw new Error('Timed out awaiting confirmation on transaction');
+    // if (err.timeout) {
+    //   throw new Error('Timed out awaiting confirmation on transaction');
+    // }
+    // let simulateResult: SimulatedTransactionResponse | null = null;
+    // try {
+    //   simulateResult = (
+    //     await simulateTransaction(connection, signedTransaction, 'single')
+    //   ).value;
+    //   // eslint-disable-next-line no-empty
+    // } catch (e) {}
+    // if (simulateResult && simulateResult.err) {
+    //   if (simulateResult.logs) {
+    //     for (let i = simulateResult.logs.length - 1; i >= 0; --i) {
+    //       const line = simulateResult.logs[i];
+    //       if (line.startsWith('Program log: ')) {
+    //         throw new Error(
+    //           'Transaction failed: ' + line.slice('Program log: '.length),
+    //         );
+    //       }
+    //     }
+    //   }
+    //   throw new Error(JSON.stringify(simulateResult.err));
+    // }
     // throw new Error('Transaction failed');
   } finally {
     done = true;
@@ -763,68 +765,72 @@ async function awaitTransactionSignatureConfirmation(
     err: null,
   };
   let subId = 0;
-  status = await (async (): Promise<SignatureStatus | null | void> => {
+  // eslint-disable-next-line no-async-promise-executor
+  status = await new Promise(async (resolve, reject) => {
     setTimeout(() => {
       if (done) {
         return;
       }
       done = true;
-      console.log('Rejecting for timeout...');
-      throw { timeout: true };
+      // console.log('Rejecting for timeout...');
+      reject({ timeout: true });
     }, timeout);
     try {
-      return await new Promise((resolve, reject) => {
-        subId = connection.onSignature(
-          txid,
-          (result, context) => {
-            done = true;
-            const nextStatus = {
-              err: result.err,
-              slot: context.slot,
-              confirmations: 0,
-            };
-            if (result.err) {
-              console.log('Rejected via websocket', result.err);
-              reject(nextStatus);
-            } else {
-              console.log('Resolved via websocket', result);
-              resolve(nextStatus);
-            }
-          },
-          commitment,
-        );
-      });
+      subId = connection.onSignature(
+        txid,
+        (result, context) => {
+          done = true;
+          status = {
+            err: result.err,
+            slot: context.slot,
+            confirmations: 0,
+          };
+          if (result.err) {
+            console.log('Rejected via websocket', result.err);
+            reject(status);
+          } else {
+            console.log('Resolved via websocket', result);
+            resolve(status);
+          }
+        },
+        commitment,
+      );
     } catch (e) {
       done = true;
       console.error('WS error in setup', txid, e);
     }
     while (!done && queryStatus) {
-      try {
-        const signatureStatuses = await connection.getSignatureStatuses([txid]);
-        const nextStatus = signatureStatuses && signatureStatuses.value[0];
-        if (!done) {
-          if (!nextStatus) {
-            console.log('REST null result for', txid, nextStatus);
-          } else if (nextStatus.err) {
-            console.log('REST error for', txid, nextStatus);
-            done = true;
-            throw nextStatus.err;
-          } else if (!nextStatus.confirmations) {
-            console.log('REST no confirmations for', txid, nextStatus);
-          } else {
-            console.log('REST confirmation for', txid, nextStatus);
-            done = true;
-            return nextStatus;
+      // eslint-disable-next-line no-loop-func
+      (async () => {
+        try {
+          const signatureStatuses = await connection.getSignatureStatuses([
+            txid,
+          ]);
+          status = signatureStatuses && signatureStatuses.value[0];
+          if (!done) {
+            if (!status) {
+              console.log('REST null result for', txid, status);
+            } else if (status.err) {
+              console.log('REST error for', txid, status);
+              done = true;
+              reject(status.err);
+            } else if (!status.confirmations) {
+              console.log('REST no confirmations for', txid, status);
+            } else {
+              console.log('REST confirmation for', txid, status);
+              done = true;
+              resolve(status);
+            }
+          }
+        } catch (e) {
+          if (!done) {
+            console.log('REST connection error: txid', txid, e);
           }
         }
-      } catch (e) {
-        if (!done) {
-          console.log('REST connection error: txid', txid, e);
-        }
-      }
+      })();
       await sleep(2000);
     }
-  })();
+  });
 
   //@ts-ignore
   if (connection._signatureSubscriptions[subId])
