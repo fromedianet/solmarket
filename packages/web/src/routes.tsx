@@ -29,7 +29,10 @@ export function AppRoutes() {
         <Routes>
           {/* <Route path="/admin" element={<AdminView />} /> */}
           <Route path="/art-create/:step_param" element={<ArtCreateView />} />
-          <Route path="/item-details/:mint" element={<ItemDetailView />} />
+          <Route
+            path="/item-details/:market/:mint"
+            element={<ItemDetailView />}
+          />
           <Route path="/auctions" element={<AuctionsView />} />
           <Route
             path="/auction-create/:step_param"
@@ -38,7 +41,7 @@ export function AppRoutes() {
           <Route path="/auction/:id" element={<AuctionView />} />
           <Route path="/collections" element={<CollectionsView />} />
           <Route
-            path="/marketplace/:id/:symbol"
+            path="/marketplace/:market/:symbol"
             element={<MarketplaceView />}
           />
           <Route path="/launchpad" element={<LaunchPadView />} />

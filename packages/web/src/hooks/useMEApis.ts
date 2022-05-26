@@ -1,5 +1,5 @@
 /* eslint-disable no-empty */
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { MarketType } from '../constants';
 import { QUERIES } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
 
@@ -8,7 +8,10 @@ export const useMEApis = () => {
 
   async function getFeaturedCollections(): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI('get', '/getFeaturedCollections');
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: '/getFeaturedCollections',
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -19,7 +22,11 @@ export const useMEApis = () => {
 
   async function getAllCollections(): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI('get', '/getAllCollections');
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: '/getAllCollections',
+        useCache: true,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -33,11 +40,11 @@ export const useMEApis = () => {
     timeRange: string;
   }): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getPopularCollections',
-        JSON.stringify(params),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getPopularCollections',
+        data: JSON.stringify(params),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -48,11 +55,11 @@ export const useMEApis = () => {
 
   async function getNewCollections(more?: boolean): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getNewCollections',
-        JSON.stringify({ more }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getNewCollections',
+        data: JSON.stringify({ more }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -61,12 +68,24 @@ export const useMEApis = () => {
     return [];
   }
 
+  async function getCollection(symbol: string, market: string): Promise<any> {
+    try {
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getCollection/${market}/${symbol}`,
+      });
+      return result;
+    } catch {}
+
+    return null;
+  }
+
   async function getCollectionBySymbol(symbol: string): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getCollectionBySymbol/${symbol}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getCollectionBySymbol/${symbol}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -77,10 +96,10 @@ export const useMEApis = () => {
 
   async function getCollectionEscrowStats(symbol: string): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getCollectionEscrowStats/${symbol}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getCollectionEscrowStats/${symbol}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -93,11 +112,11 @@ export const useMEApis = () => {
     symbols: string[],
   ): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'post',
-        '/getMultiCollectionEscrowStats',
-        JSON.stringify({ symbols }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getMultiCollectionEscrowStats',
+        data: JSON.stringify({ symbols }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -106,15 +125,18 @@ export const useMEApis = () => {
     return {};
   }
 
-  async function getListedNftsByQuery(queries: QUERIES): Promise<any[]> {
-    const params = getQueryParameterForMagicEden(queries);
+  async function getListedNftsByQuery(
+    queries: QUERIES,
+    market: string,
+  ): Promise<any[]> {
+    const params = getQueryParameter(queries, market);
     if (params) {
       try {
-        const result: any = await runOthersAPI(
-          'post',
-          '/getListedNftsByQuery',
-          JSON.stringify({ params }),
-        );
+        const result: any = await runOthersAPI({
+          method: 'post',
+          url: '/getListedNftsByQuery',
+          data: JSON.stringify(params),
+        });
         if ('data' in result) {
           return result['data'];
         }
@@ -123,12 +145,15 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getNFTByMintAddress(mint: string): Promise<any> {
+  async function getNFTByMintAddress(
+    mint: string,
+    market: string,
+  ): Promise<any> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getNFTByMintAddress/${mint}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getNFTByMintAddress/${market}/${mint}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -139,10 +164,10 @@ export const useMEApis = () => {
 
   async function getNFTsByEscrowOwner(wallet: string): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI(
-        'get',
-        `/getNFTsByEscrowOwner/${wallet}`,
-      );
+      const result: any = await runOthersAPI({
+        method: 'get',
+        url: `/getNFTsByEscrowOwner/${wallet}`,
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -151,22 +176,35 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getTransactionsBySymbol(symbol: string): Promise<any[]> {
+  async function getTransactionsBySymbol(
+    symbol: string,
+    market: string,
+  ): Promise<any[]> {
     try {
-      const queryData = {
-        txType: {
-          $in: ['exchange'],
-        },
-        $match: { collection_symbol: symbol },
-        $sort: { blockTime: -1, createdAt: -1 },
-        $skip: 0,
-      };
-      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-      const result: any = await runOthersAPI(
-        'post',
-        '/getGlobalActivitiesByQuery',
-        JSON.stringify({ params }),
-      );
+      let params;
+      if (market === MarketType.MagicEden) {
+        const queryData = {
+          txType: {
+            $in: ['exchange'],
+          },
+          $match: { collection_symbol: symbol },
+          $sort: { blockTime: -1, createdAt: -1 },
+          $skip: 0,
+        };
+        params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      } else if (market === MarketType.Solanart) {
+        params = `/nft/get-collection-transactions?network=mainnet&solana_nft_collection_api_id=snftcol-LjHSKp6nS627wIm&symbol=${symbol}`;
+      } else if (market === MarketType.DigitalEyes) {
+        params = `?collection=${encodeURI(symbol)}&type=SALE`;
+      } else if (market === MarketType.AlphaArt) {
+        params = `/collection/${symbol}?trading_types=1&no_foreign_listing=true`;
+      }
+
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getGlobalActivitiesByQuery',
+        data: JSON.stringify({ params, market }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -175,19 +213,32 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getTransactionsByMint(mint: string): Promise<any[]> {
+  async function getTransactionsByMint(
+    mint: string,
+    market: string,
+  ): Promise<any[]> {
     try {
-      const queryData = {
-        $match: { mint: mint },
-        $sort: { blockTime: -1, createdAt: -1 },
-        $skip: 0,
-      };
-      const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-      const result: any = await runOthersAPI(
-        'post',
-        '/getGlobalActivitiesByQuery',
-        JSON.stringify({ params }),
-      );
+      let params;
+      if (market === MarketType.MagicEden) {
+        const queryData = {
+          $match: { mint: mint },
+          $sort: { blockTime: -1, createdAt: -1 },
+          $skip: 0,
+        };
+        params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+      } else if (market === MarketType.Solanart) {
+        params = `/wallet/get-transactions?address=${mint}&network=mainnet`;
+      } else if (market === MarketType.DigitalEyes) {
+        params = `?mint=${mint}&type=SALE`;
+      } else if (market === MarketType.AlphaArt) {
+        params = `/token/${mint}?trading_types=2%2C1%2C3&no_foreign_listing=true`;
+      }
+
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getGlobalActivitiesByQuery',
+        data: JSON.stringify({ params, market }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -206,11 +257,11 @@ export const useMEApis = () => {
         $skip: 0,
       };
       const params = `?q=${encodeURI(JSON.stringify(queryData))}`;
-      const result: any = await runOthersAPI(
-        'post',
-        '/getGlobalActivitiesByQuery',
-        JSON.stringify({ params }),
-      );
+      const result: any = await runOthersAPI({
+        method: 'post',
+        url: '/getGlobalActivitiesByQuery',
+        data: JSON.stringify({ params, market: MarketType.MagicEden }),
+      });
       if ('data' in result) {
         return result['data'];
       }
@@ -224,6 +275,7 @@ export const useMEApis = () => {
     getAllCollections,
     getPopularCollections,
     getNewCollections,
+    getCollection,
     getCollectionBySymbol,
     getCollectionEscrowStats,
     getMultiCollectionEscrowStats,
@@ -236,61 +288,107 @@ export const useMEApis = () => {
   };
 };
 
-function getQueryParameterForMagicEden(param: QUERIES) {
-  if (param.type === 1) return null;
-  const queries = {
-    $skip: param.skip ? param.skip : 0,
-    $limit: 20,
-  };
-  const match = {};
-  match['collectionSymbol'] = param.symbol;
-  if (param.searchKey) {
-    match['$text'] = {
-      $search: param.searchKey,
-    };
-  }
-  if (param.min || param.max) {
-    const takerAmount = {};
+function getQueryParameter(param: QUERIES, market: string) {
+  if (
+    market === MarketType.Solanart &&
+    (param.type === MarketType.All || param.type === MarketType.Solanart)
+  ) {
+    let queries = '?collection=' + param.symbol;
+    queries += '&listed=true&fits=any&bid=all';
+    queries += '&page=' + (param.skip ? param.skip : 0);
+    queries += '&limit=20';
     if (param.min) {
-      takerAmount['$gte'] = param.min * LAMPORTS_PER_SOL;
+      queries += '&min=' + param.min;
     }
     if (param.max) {
-      takerAmount['$lte'] = param.max * LAMPORTS_PER_SOL;
+      queries += '&max=' + param.max;
     }
-    match['takerAmount'] = takerAmount;
-  }
+    let order = 'recent';
+    if (param.sort === 2) {
+      order = 'price-ASC';
+    } else if (param.sort === 3) {
+      order = 'price-DESC';
+    }
+    queries += '&order=' + order;
+    if (param.searchKey && param.searchKey.length > 0) {
+      queries += '&search=' + param.searchKey;
+    }
+    if (param.attributes && Object.keys(param.attributes).length > 0) {
+      Object.keys(param.attributes).forEach(key => {
+        // @ts-ignore
+        param.attributes[key].forEach(val => {
+          queries += `&trait[]=${key}: ${val}`;
+        });
+      });
+    }
 
-  if (param.attributes && Object.keys(param.attributes).length > 0) {
-    const attrs: any[] = [];
-    Object.keys(param.attributes).forEach(key => {
-      // @ts-ignore
-      const subAttrs = param.attributes[key].map(val => ({
-        attributes: {
-          $elemMatch: {
-            trait_type: key,
-            value: val,
-          },
-        },
+    queries = queries.replaceAll(' ', '+');
+
+    const result = {
+      market: market,
+      params: encodeURI(queries),
+    };
+
+    return result;
+  } else if (
+    market === MarketType.DigitalEyes &&
+    (param.type === MarketType.All || param.type === MarketType.DigitalEyes)
+  ) {
+    let queries = '?collection=' + param.symbol;
+    if (param.sort === 1) {
+      queries += '&addEpoch=desc';
+    } else if (param.sort === 2) {
+      queries += '&price=asc';
+    } else if (param.sort === 3) {
+      queries += '&price=desc';
+    }
+    if (param.attributes && Object.keys(param.attributes).length > 0) {
+      Object.keys(param.attributes).forEach(key => {
+        // @ts-ignore
+        param.attributes[key].forEach(val => {
+          queries += `&${key}=${val}`;
+        });
+      });
+    }
+    if (param.cursor) {
+      queries += `&cursor=${param.cursor}`;
+    }
+
+    const result = {
+      market: market,
+      params: encodeURI(queries),
+    };
+
+    return result;
+  } else if (
+    market === MarketType.AlphaArt &&
+    (param.type === MarketType.All || param.type === MarketType.AlphaArt)
+  ) {
+    const queries = {};
+    queries['collectionId'] = param.symbol;
+    queries['status'] = ['BUY_NOW'];
+    if (param.sort === 2) {
+      queries['orderBy'] = 'PRICE_LOW_TO_HIGH';
+    } else if (param.sort === 3) {
+      queries['orderBy'] = 'PRICE_HIGH_TO_LOW';
+    } else {
+      queries['orderBy'] = 'RECENTLY_LISTED';
+    }
+
+    if (param.attributes && Object.keys(param.attributes).length > 0) {
+      queries['traits'] = Object.keys(param.attributes).map(key => ({
+        key: key,
+        // @ts-ignore
+        values: param.attributes[key],
       }));
-      attrs.push({ $or: subAttrs });
-    });
+    } else {
+      queries['traits'] = [];
+    }
 
-    match['$and'] = attrs;
+    const result = {
+      market: market,
+      params: queries,
+    };
+    return result;
   }
-
-  queries['$match'] = match;
-
-  const sortQuery = {};
-  if (param.sort === 2) {
-    sortQuery['takerAmount'] = 1;
-  } else if (param.sort === 3) {
-    sortQuery['takerAmount'] = -1;
-  }
-  sortQuery['createdAt'] = -1;
-
-  queries['$sort'] = sortQuery;
-
-  const queryStr = `?q=${JSON.stringify(queries)}`;
-
-  return encodeURI(queryStr);
 }

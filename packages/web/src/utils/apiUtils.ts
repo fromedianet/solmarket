@@ -3,6 +3,8 @@ import axios, { Method } from 'axios';
 import { APIS } from '../constants';
 import { useAuthToken } from '../contexts/authProvider';
 
+const expiry = 60 * 60; // 60 minutes
+
 export const ApiUtils = () => {
   const { authToken, removeAuthToken } = useAuthToken();
   const axiosInstance = axios.create({
@@ -10,17 +12,50 @@ export const ApiUtils = () => {
     headers: { 'Content-Type': 'application/json' },
   });
 
-  function runOthersAPI(method: Method, url: string, data?: string | FormData) {
+  function runOthersAPI(props: {
+    method: Method;
+    url: string;
+    data?: string | FormData;
+    useCache?: boolean;
+  }) {
     axiosInstance.defaults.baseURL = APIS.base_others_api_url;
+    const cacheKey = APIS.base_others_api_url + props.url;
+    if (props.useCache) {
+      const cached = localStorage.getItem(cacheKey);
+      const whenCached = localStorage.getItem(cacheKey + ':ts');
+      if (cached !== null && whenCached !== null) {
+        const age = (Date.now() - parseInt(whenCached)) / 1000;
+        if (age < expiry) {
+          // it was in sessionStorage! Yay!
+          // Even though 'whenCached' is a string, this operation
+          // works because the minus sign converts the
+          // string to an integer and it will work.
+          return Promise.resolve(JSON.parse(cached));
+        } else {
+          // We need to clean up this old key
+          localStorage.removeItem(cacheKey);
+          localStorage.removeItem(cacheKey + ':ts');
+        }
+      }
+    }
     return new Promise((resolve, reject) => {
       axiosInstance
         .request({
-          method: method,
-          url: url,
-          data: data,
+          method: props.method,
+          url: props.url,
+          data: props.data,
         })
         .then(res => {
           if (res.status === 200) {
+            if (props.useCache) {
+              try {
+                localStorage.setItem(cacheKey, JSON.stringify(res.data));
+                localStorage.setItem(cacheKey + ':ts', Date.now().toString());
+              } catch (e) {
+                console.error('localStorage setItem error', e);
+                localStorage.clear();
+              }
+            }
             resolve(res.data);
           } else {
             notify({
@@ -31,6 +66,7 @@ export const ApiUtils = () => {
           }
         })
         .catch(err => {
+          console.error('runOthersAPI error', err);
           notify({
             message: err.message,
             type: 'error',
@@ -40,20 +76,40 @@ export const ApiUtils = () => {
     });
   }
 
-  function runAPI(
-    isAuth: boolean,
-    method: Method,
-    url: string,
-    data?: string | FormData,
-    hideError?: boolean,
-  ) {
+  function runAPI(props: {
+    isAuth: boolean;
+    method: Method;
+    url: string;
+    data?: string | FormData;
+    hideError?: boolean;
+    useCache?: boolean;
+  }) {
     return new Promise((resolve, reject) => {
       axiosInstance.defaults.baseURL = APIS.base_api_url;
-      if (isAuth) {
+      const cacheKey = APIS.base_others_api_url + props.url;
+      if (props.useCache) {
+        const cached = localStorage.getItem(cacheKey);
+        const whenCached = localStorage.getItem(cacheKey + ':ts');
+        if (cached !== null && whenCached !== null) {
+          const age = (Date.now() - parseInt(whenCached)) / 1000;
+          if (age < expiry) {
+            // it was in sessionStorage! Yay!
+            // Even though 'whenCached' is a string, this operation
+            // works because the minus sign converts the
+            // string to an integer and it will work.
+            return Promise.resolve(JSON.parse(cached));
+          } else {
+            // We need to clean up this old key
+            localStorage.removeItem(cacheKey);
+            localStorage.removeItem(cacheKey + ':ts');
+          }
+        }
+      }
+      if (props.isAuth) {
         axiosInstance.defaults.headers.common['x-access-token'] = authToken;
       }
-      if (data) {
-        if (typeof data !== 'string') {
+      if (props.data) {
+        if (typeof props.data !== 'string') {
           axiosInstance.defaults.headers.common[
             'Content-Type'
           ] = `multipart/formdata; boundary=${Date.now()}`;
@@ -62,18 +118,27 @@ export const ApiUtils = () => {
 
       axiosInstance
         .request({
-          method: method,
-          url: url,
-          data: data,
+          method: props.method,
+          url: props.url,
+          data: props.data,
         })
         .then(res => {
           if (res.status === 200) {
+            if (props.useCache) {
+              try {
+                localStorage.setItem(cacheKey, JSON.stringify(res.data));
+                localStorage.setItem(cacheKey + ':ts', Date.now().toString());
+              } catch (e) {
+                console.error('localStorage setItem error', e);
+                localStorage.clear();
+              }
+            }
             resolve(res.data);
           } else {
             if (res.status === 401) {
               removeAuthToken();
             }
-            if (!hideError) {
+            if (!props.hideError) {
               notify({
                 message: res.data.error.message,
                 type: 'error',
@@ -87,7 +152,7 @@ export const ApiUtils = () => {
           if (err.response && err.response.status === 401) {
             removeAuthToken();
           }
-          if (!hideError) {
+          if (!props.hideError) {
             let errMessage = err.message;
             if (err.response && err.response.data) {
               errMessage = err.response.data.error

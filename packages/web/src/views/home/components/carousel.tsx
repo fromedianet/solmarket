@@ -30,9 +30,9 @@ const CarouselCard = (props: { collection: ExCollection }) => {
         <h2>{props.collection.name}</h2>
         <p>{props.collection.description}</p>
         <Link
-          to={`/marketplace/${props.collection.market ? '2' : '1'}/${
-            props.collection.symbol
-          }`}
+          to={`/marketplace/${
+            props.collection.market ? props.collection.market : 'papercity'
+          }/${props.collection.symbol}`}
         >
           <Button className="button">Explore collection</Button>
         </Link>

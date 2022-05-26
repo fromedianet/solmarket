@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 
 import { useWallet } from '@solana/wallet-adapter-react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { Button, Popover, Select } from 'antd';
+import { Button, Popover } from 'antd';
 import {
-  ENDPOINTS,
+  // ENDPOINTS,
   formatNumber,
   Settings,
   shortenAddress,
-  useConnectionConfig,
+  // useConnectionConfig,
   useNativeAccount,
-  useQuerySearch,
+  // useQuerySearch,
 } from '@oyster/common';
 import { TokenCircle } from '../Custom';
 import { useAuthToken } from '../../contexts/authProvider';
@@ -70,8 +70,8 @@ export const CurrentUserBadge = (props: {
 }) => {
   const { wallet, publicKey, disconnect } = useWallet();
   const { removeAuthToken } = useAuthToken();
-  const { endpoint } = useConnectionConfig();
-  const routerSearchParams = useQuerySearch();
+  // const { endpoint } = useConnectionConfig();
+  // const routerSearchParams = useQuerySearch();
   const { account } = useNativeAccount();
   const [show, setShow] = useState(false);
   const balance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
@@ -126,7 +126,7 @@ export const CurrentUserBadge = (props: {
                   </span>
                   &nbsp;
                 </div>
-                <div style={{ width: '100%' }}>
+                {/* <div style={{ width: '100%' }}>
                   <h5>NETWORK</h5>
                   <Select
                     onSelect={network => {
@@ -145,7 +145,7 @@ export const CurrentUserBadge = (props: {
                       </Select.Option>
                     ))}
                   </Select>
-                </div>
+                </div> */}
                 <div
                   style={{
                     display: 'flex',

@@ -5,6 +5,7 @@ import { EmptyView } from '../../../components/EmptyView';
 import { Link } from 'react-router-dom';
 import { ArtContent } from '../../../components/ArtContent';
 import { ExCollection } from '../../../models/exCollection';
+import { MarketType } from '../../../constants';
 
 const { Search } = Input;
 const DELIMITER = '|&=&|';
@@ -14,7 +15,7 @@ export const Items = (props: {
   list: any[];
   loading: boolean;
   sort: number;
-  type: number;
+  type: MarketType;
   searchKey: string;
   hasMore: boolean;
   filter: {
@@ -28,7 +29,7 @@ export const Items = (props: {
   };
   onSearch: (a: string) => void;
   onSortChange: (a: number) => void;
-  onTypeChange: (a: number) => void;
+  onTypeChange: (a: MarketType) => void;
   updateFilters: (p, a, s) => void;
   fetchMore: () => void;
   onRefresh: () => void;
@@ -153,9 +154,18 @@ export const Items = (props: {
             value={props.type}
             onSelect={val => props.onTypeChange(val)}
           >
-            <Select.Option value={0}>All</Select.Option>
-            <Select.Option value={1}>PaperCity</Select.Option>
-            <Select.Option value={2}>MagicEden</Select.Option>
+            <Select.Option value={MarketType.All}>All</Select.Option>
+            <Select.Option value={MarketType.PaperCity}>
+              PaperCity
+            </Select.Option>
+            <Select.Option value={MarketType.MagicEden}>
+              MagicEden
+            </Select.Option>
+            <Select.Option value={MarketType.Solanart}>Solanart</Select.Option>
+            <Select.Option value={MarketType.DigitalEyes}>
+              DigitalEyes
+            </Select.Option>
+            <Select.Option value={MarketType.AlphaArt}>AlphaArt</Select.Option>
           </Select>
         </Col>
       </Row>
@@ -233,7 +243,7 @@ export const NFTCard = (props: {
   itemId?: string;
   className?: string;
 }) => {
-  const url = `/item-details/${props.item.mint}`;
+  const url = `/item-details/${props.item.market}/${props.item.mint}`;
   return (
     <Card
       hoverable={true}

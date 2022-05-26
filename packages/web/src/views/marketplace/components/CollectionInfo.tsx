@@ -87,9 +87,7 @@ export const CollectionInfo = (props: {
           <Statistic
             title="Total Volume (ALL Time, ALL Marketplaces)"
             value={
-              props.stats.totalVolume
-                ? props.stats.totalVolume.toFixed(2)
-                : '--'
+              props.stats.volumeAll ? props.stats.volumeAll.toFixed(2) : '--'
             }
             suffix="◎"
             className="info-attribute"
