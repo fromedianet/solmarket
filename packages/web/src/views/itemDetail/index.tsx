@@ -115,6 +115,10 @@ export const ItemDetailView = () => {
       if (result.price > 0) {
         // When NFT was already listed on PaperCity
         setMarket(MarketType.PaperCity);
+        result = {
+          ...result,
+          market: MarketType.PaperCity,
+        };
       } else {
         const nftData = await meApis.getNFTByMintAddress(mint, market);
         if (nftData) {

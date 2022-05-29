@@ -657,7 +657,7 @@ export const ProfileView = () => {
               </button>
             </Col>
           </Row>
-          <Tabs defaultActiveKey="2" className="profile-tabs">
+          <Tabs defaultActiveKey="1" className="profile-tabs">
             <TabPane tab="My items" key="1">
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {myItems.map((item, index) => (
