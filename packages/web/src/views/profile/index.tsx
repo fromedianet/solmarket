@@ -40,6 +40,7 @@ import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { groupBy } from '../../utils/utils';
 import { GroupItem } from './components/groupItem';
 import { useMEApis } from '../../hooks/useMEApis';
+import { AuctionHouseView } from './components/auctionHouseView';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -59,13 +60,21 @@ export const ProfileView = () => {
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
+  const [auctionHouseObj, setAuctionHouseObj] = useState<any>();
   const [form] = Form.useForm();
   const connection = useConnection();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
   const { authentication, updateUser } = useAuthAPI();
   const { getNFTsByWallet } = useNFTsAPI();
-  const { cancelBid, acceptOffer, deposit, withdraw } = useInstructionsAPI();
+  const {
+    cancelBid,
+    acceptOffer,
+    deposit,
+    withdraw,
+    getAuctionHouse,
+    withdrawFromTreasury,
+  } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
@@ -125,6 +134,8 @@ export const ProfileView = () => {
       loadOffersMade().then(res => setOffersMade(res));
 
       loadOffersReceived().then(res => setOffersReceived(res));
+
+      loadAuctionHouse();
     }
   }, [wallet.publicKey, refresh]);
 
@@ -343,6 +354,16 @@ export const ProfileView = () => {
     }
   };
 
+  const loadAuctionHouse = async () => {
+    getAuctionHouse({ auctionHouseAddress: AUCTION_HOUSE_ID.toBase58() }).then(
+      res => {
+        if (res) {
+          setAuctionHouseObj(res);
+        }
+      },
+    );
+  };
+
   const onCancelBid = (offer: Offer) => {
     if (!wallet.publicKey) return;
     // eslint-disable-next-line no-async-promise-executor
@@ -528,6 +549,51 @@ export const ProfileView = () => {
     );
   };
 
+  async function onWithdrawTreasury(amount: number) {
+    if (!wallet.publicKey) return;
+    // eslint-disable-next-line no-async-promise-executor
+    const resolveWithData = new Promise(async (resolve, reject) => {
+      try {
+        const result: any = await withdrawFromTreasury({
+          pubkey: wallet.publicKey!.toBase58(),
+          auctionHouseAddress: AUCTION_HOUSE_ID.toBase58(),
+          amount: amount,
+        });
+        if (result && 'data' in result) {
+          const status = await runInstructions(result['data']);
+          if (!status['err']) {
+            setTimeout(() => {
+              loadAuctionHouse();
+            }, 20000);
+            resolve('');
+            return;
+          }
+        }
+        reject();
+      } catch (e) {
+        reject(e);
+      }
+    });
+
+    toast.promise(
+      resolveWithData,
+      {
+        pending:
+          'After wallet approval, your transaction will be finished in a few seconds',
+        error: 'Something wrong. Please refresh the page and try again.',
+        success:
+          'Transaction has been successed! Your data will be updated in a minute',
+      },
+      {
+        position: 'top-center',
+        theme: 'dark',
+        autoClose: 6000,
+        hideProgressBar: false,
+        pauseOnFocusLoss: false,
+      },
+    );
+  }
+
   async function runInstructions(data: Buffer) {
     let status: any = { err: true };
     try {
@@ -699,6 +765,16 @@ export const ProfileView = () => {
                 pagination={{ position: ['bottomLeft'], pageSize: 10 }}
               />
             </TabPane>
+            {auctionHouseObj &&
+              wallet.publicKey &&
+              auctionHouseObj.authority === wallet.publicKey.toBase58() && (
+                <TabPane tab="Treasury" key="6">
+                  <AuctionHouseView
+                    auctionHouseObj={auctionHouseObj}
+                    onWithdrawTreasury={onWithdrawTreasury}
+                  />
+                </TabPane>
+              )}
           </Tabs>
         </div>
       </div>

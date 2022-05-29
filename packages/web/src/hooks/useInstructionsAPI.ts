@@ -307,6 +307,29 @@ export const useInstructionsAPI = () => {
     return null;
   }
 
+  /**
+   * Get AuctionHouse object
+   *
+   * @param auctionHouseAddress
+   * @returns
+   */
+  async function getAuctionHouse(props: {
+    auctionHouseAddress: string;
+  }): Promise<any> {
+    try {
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'post',
+        url: '/instructions/getAuctionHouse',
+        data: JSON.stringify(props),
+      });
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+    return null;
+  }
+
   return {
     buyNow,
     list,
@@ -319,5 +342,6 @@ export const useInstructionsAPI = () => {
     withdrawFromFee,
     withdrawFromTreasury,
     buyNowME,
+    getAuctionHouse,
   };
 };
