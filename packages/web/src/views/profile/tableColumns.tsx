@@ -41,7 +41,9 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <Link to={`/item-details/${record.market}/${record.mint}`}>
+        <Link
+          to={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
+        >
           {record.name}
         </Link>
       ),
@@ -139,7 +141,7 @@ export const OffersMadeColumns = (props: {
             alt="image"
           />
           <Link
-            to={`/item-details/${record.market}/${record.mint}`}
+            to={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
             style={{ cursor: 'pointer', marginLeft: 16 }}
           >
             {record.name}
@@ -243,7 +245,7 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
             alt="image"
           />
           <Link
-            to={`/item-details/${record.market}/${record.mint}`}
+            to={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
             style={{ cursor: 'pointer', marginLeft: 16 }}
           >
             {record.name}

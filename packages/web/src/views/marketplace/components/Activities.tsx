@@ -39,7 +39,9 @@ export const Activities = (props: { transactions: Transaction[] }) => {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <Link to={`/item-details/${record.market}/${record.mint}`}>
+        <Link
+          to={`/item-details/${record.market}/${record.collection}/${record.mint}`}
+        >
           {record.name}
         </Link>
       ),

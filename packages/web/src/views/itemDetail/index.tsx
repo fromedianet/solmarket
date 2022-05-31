@@ -25,8 +25,9 @@ import { showEscrow } from '../../actions/showEscrow';
 import { useMEApis } from '../../hooks/useMEApis';
 
 export const ItemDetailView = () => {
-  const params = useParams<{ market: string; mint: string }>();
+  const params = useParams<{ market: string; symbol: string; mint: string }>();
   const [market, setMarket] = useState(params.market || MarketType.PaperCity);
+  const symbol = params.symbol || '';
   const mint = params.mint || '';
   const wallet = useWallet();
   const connection = useConnection();
@@ -124,9 +125,9 @@ export const ItemDetailView = () => {
         if (nftData) {
           result = {
             ...result,
-            symbol: nftData.symbol,
+            symbol: nftData.symbol || symbol,
             price: nftData.price,
-            v2: nftData.v2,
+            auctionHouse: nftData.auctionHouse,
             owner: nftData.owner || result.owner,
             escrowPubkey: nftData.escrowPubkey,
             market: market,
@@ -299,7 +300,7 @@ export const ItemDetailView = () => {
   const onBuyNow = async () => {
     if (!wallet.publicKey || !nft) return;
     console.log('=========== onBuyNow ============', nft);
-    if (nft.market !== MarketType.PaperCity && !nft.v2) {
+    if (nft.market !== MarketType.PaperCity && !nft.auctionHouse) {
       let url = `https://magiceden.io/item-details/${nft.mint}`;
       if (nft.market === MarketType.Solanart) {
         url = `https://solanart.io/nft/${nft.mint}`;
@@ -316,14 +317,14 @@ export const ItemDetailView = () => {
       setLoading(true);
       try {
         if (nft.market !== MarketType.PaperCity) {
-          if (nft.v2 && nft.escrowPubkey) {
+          if (nft.auctionHouse && nft.escrowPubkey) {
             const result: any = await buyNowME({
               buyer: wallet.publicKey!.toBase58(),
               seller: nft.owner,
-              auctionHouseAddress: nft.v2.auctionHouseKey,
+              auctionHouseAddress: nft.auctionHouse,
               tokenMint: nft.mint,
               escrowPubkey: nft.escrowPubkey,
-              expiry: nft.v2.expiry,
+              expiry: -1,
               price: nft.price,
             });
             if (result && 'data' in result) {
