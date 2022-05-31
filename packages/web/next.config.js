@@ -33,6 +33,7 @@ module.exports = withPlugins(plugins, {
     NEXT_SPL_TOKEN_MINTS: process.env.SPL_TOKEN_MINTS,
     NEXT_CG_SPL_TOKEN_IDS: process.env.CG_SPL_TOKEN_IDS,
     NEXT_ENV: process.env.REACT_ENV,
+    NEXT_PUBLIC_GOOGLE_ANALYTICS: process.env.GOOGLE_ANALYTICS,
   },
   async rewrites() {
     return [
