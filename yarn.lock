@@ -4330,9 +4330,9 @@ caseless@~0.12.0:
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
 ccxt@^1.60.81:
-  version "1.84.47"
-  resolved "https://registry.yarnpkg.com/ccxt/-/ccxt-1.84.47.tgz#bdf3478abea6d4b4c9c42e9822130d9db4178c0a"
-  integrity sha512-AWbZpRErfJ6rk4TE5nOZdaPQzlaoVOTY/OGB0yZ6BSmlYutiPFApOJpYGpYRLvgGueHZUNVvB5zG2Np86zSMMg==
+  version "1.84.49"
+  resolved "https://registry.yarnpkg.com/ccxt/-/ccxt-1.84.49.tgz#8f259d3ef92d4c1cfab72b432465a19e8ec9708e"
+  integrity sha512-p8A/Pp8hgMIvmXfqGMkijCG08qKkabXMhf3un6BKpIKG4IuKriw2nxG1fQk3ogCIoBZXla2xu2SwT9XUNsyZHA==
 
 chalk@^2.0.0, chalk@^2.1.0, chalk@^2.4.1:
   version "2.4.2"
@@ -9246,6 +9246,11 @@ next@^12.1.5:
     "@next/swc-win32-arm64-msvc" "12.1.5"
     "@next/swc-win32-ia32-msvc" "12.1.5"
     "@next/swc-win32-x64-msvc" "12.1.5"
+
+nextjs-google-analytics@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/nextjs-google-analytics/-/nextjs-google-analytics-1.2.0.tgz#8c11a5ee31280cb36055eb4579748f6b9a1d8fb1"
+  integrity sha512-+Na5jJz4ygPm2B00ZrwvCLjq3LqDYpEY5DOowzP8nkPpc+nUa1m8aWuPiwvCF5fEwcuT2y6xDhcAxG0CRhybTQ==
 
 nice-try@^1.0.4:
   version "1.0.5"
