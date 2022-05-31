@@ -4,7 +4,7 @@ import { QUERIES } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
 
 export const useMEApis = () => {
-  const { runOthersAPI } = ApiUtils();
+  const { runOthersAPI, runMagicEdenAPI } = ApiUtils();
 
   async function getFeaturedCollections(): Promise<any[]> {
     try {
@@ -149,6 +149,9 @@ export const useMEApis = () => {
     mint: string,
     market: string,
   ): Promise<any> {
+    if (market === MarketType.MagicEden) {
+      return await getNFTByMintForMagicEden(mint);
+    }
     try {
       const result: any = await runOthersAPI({
         method: 'get',
@@ -159,6 +162,27 @@ export const useMEApis = () => {
       }
     } catch {}
 
+    return null;
+  }
+
+  async function getNFTByMintForMagicEden(mint: string): Promise<any> {
+    try {
+      const data: any = await runMagicEdenAPI({
+        method: 'get',
+        url: `/rpc/getNFTByMintAddress/${mint}`,
+      });
+      if ('results' in data) {
+        const result = {
+          symbol: data['results']['collectionName'],
+          price: data['results']['price'],
+          escrowPubkey: data['results']['escrowPubkey'],
+          owner: data['results']['owner'],
+          v2: data['results']['v2'],
+          market: MarketType.MagicEden,
+        };
+        return result;
+      }
+    } catch {}
     return null;
   }
 

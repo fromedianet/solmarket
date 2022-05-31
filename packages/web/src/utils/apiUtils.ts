@@ -169,8 +169,64 @@ export const ApiUtils = () => {
     });
   }
 
+  function runMagicEdenAPI(props: {
+    method: Method;
+    url: string;
+    data?: string | FormData;
+    hideError?: boolean;
+  }) {
+    return new Promise((resolve, reject) => {
+      axiosInstance.defaults.baseURL = APIS.magiceden_base_url;
+
+      if (props.data) {
+        if (typeof props.data !== 'string') {
+          axiosInstance.defaults.headers.common[
+            'Content-Type'
+          ] = `multipart/formdata; boundary=${Date.now()}`;
+        }
+      }
+
+      axiosInstance
+        .request({
+          method: props.method,
+          url: props.url,
+          data: props.data,
+        })
+        .then(res => {
+          if (res.status === 200) {
+            resolve(res.data);
+          } else {
+            if (!props.hideError) {
+              notify({
+                message: res.data.message,
+                type: 'error',
+              });
+            }
+
+            reject();
+          }
+        })
+        .catch(err => {
+          if (!props.hideError) {
+            let errMessage = err.message;
+            if (err.response && err.response.data) {
+              errMessage = err.response.data.error
+                ? err.response.data.error.message
+                : err.response.data.details;
+            }
+            notify({
+              message: errMessage,
+              type: 'error',
+            });
+          }
+          reject();
+        });
+    });
+  }
+
   return {
     runAPI,
     runOthersAPI,
+    runMagicEdenAPI,
   };
 };
