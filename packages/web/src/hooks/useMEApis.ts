@@ -167,20 +167,37 @@ export const useMEApis = () => {
 
   async function getNFTByMintForMagicEden(mint: string): Promise<any> {
     try {
-      const data: any = await runMagicEdenAPI({
+      const result: any = await runMagicEdenAPI({
         method: 'get',
-        url: `/rpc/getNFTByMintAddress/${mint}`,
+        url: `/tokens/${mint}/listings`,
+        hideError: true,
       });
-      if ('results' in data) {
-        const result = {
-          symbol: data['results']['collectionName'],
-          price: data['results']['price'],
-          escrowPubkey: data['results']['escrowPubkey'],
-          owner: data['results']['owner'],
-          v2: data['results']['v2'],
+      if (result.length > 0) {
+        const val = result[0];
+        const data = {
+          price: val['price'],
+          escrowPubkey: val['pdaAddress'],
+          owner: val['seller'],
+          auctionHouse: val['auctionHouse'],
           market: MarketType.MagicEden,
         };
-        return result;
+        return data;
+      } else {
+        const res: any = await runMagicEdenAPI({
+          method: 'get',
+          url: `/tokens/${mint}`,
+          hideError: true,
+        });
+
+        if (res) {
+          const data = {
+            price: 0,
+            owner: res['owner'],
+            symbol: res['collection'],
+            market: MarketType.MagicEden,
+          };
+          return data;
+        }
       }
     } catch {}
     return null;

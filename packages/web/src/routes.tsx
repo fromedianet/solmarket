@@ -30,7 +30,7 @@ export function AppRoutes() {
           {/* <Route path="/admin" element={<AdminView />} /> */}
           <Route path="/art-create/:step_param" element={<ArtCreateView />} />
           <Route
-            path="/item-details/:market/:mint"
+            path="/item-details/:market/:symbol/:mint"
             element={<ItemDetailView />}
           />
           <Route path="/auctions" element={<AuctionsView />} />
