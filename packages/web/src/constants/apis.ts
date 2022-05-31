@@ -17,5 +17,5 @@ export const APIS = {
       : process.env.NEXT_ENV == 'development'
       ? 'https://staging.api.papercity.io'
       : 'http://localhost:5000',
-  magiceden_base_url: 'https://api-mainnet.magiceden.io/v2',
+  magiceden_base_url: 'https://api-mainnet.magiceden.io',
 };
