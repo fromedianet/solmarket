@@ -178,7 +178,6 @@ export const useNFTsAPI = () => {
         method: 'post',
         url: '/nfts/getNftByMint',
         data: JSON.stringify({ mint }),
-        hideError: true,
       });
       if ('data' in result) {
         return result['data'];
