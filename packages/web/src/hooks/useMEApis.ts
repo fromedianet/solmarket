@@ -4,7 +4,7 @@ import { QUERIES } from '../models/exCollection';
 import { ApiUtils } from '../utils/apiUtils';
 
 export const useMEApis = () => {
-  const { runOthersAPI, runMagicEdenAPI } = ApiUtils();
+  const { runOthersAPI } = ApiUtils();
 
   async function getFeaturedCollections(): Promise<any[]> {
     try {
@@ -149,9 +149,6 @@ export const useMEApis = () => {
     mint: string,
     market: string,
   ): Promise<any> {
-    if (market === MarketType.MagicEden) {
-      return await getNFTByMintForMagicEden(mint);
-    }
     try {
       const result: any = await runOthersAPI({
         method: 'get',
@@ -162,44 +159,6 @@ export const useMEApis = () => {
       }
     } catch {}
 
-    return null;
-  }
-
-  async function getNFTByMintForMagicEden(mint: string): Promise<any> {
-    try {
-      const result: any = await runMagicEdenAPI({
-        method: 'get',
-        url: `/tokens/${mint}/listings`,
-        hideError: true,
-      });
-      if (result.length > 0) {
-        const val = result[0];
-        const data = {
-          price: val['price'],
-          escrowPubkey: val['pdaAddress'],
-          owner: val['seller'],
-          auctionHouse: val['auctionHouse'],
-          market: MarketType.MagicEden,
-        };
-        return data;
-      } else {
-        const res: any = await runMagicEdenAPI({
-          method: 'get',
-          url: `/tokens/${mint}`,
-          hideError: true,
-        });
-
-        if (res) {
-          const data = {
-            price: 0,
-            owner: res['owner'],
-            symbol: res['collection'],
-            market: MarketType.MagicEden,
-          };
-          return data;
-        }
-      }
-    } catch {}
     return null;
   }
 
