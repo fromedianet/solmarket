@@ -103,7 +103,7 @@ export const CollectionInfo = (props: {
             title="Total Listed Count"
             value={
               props.stats.listedCount
-                ? formatAmount(props.stats.listedCount, 2, true)
+                ? formatAmount(props.stats.listedCount, 0, true)
                 : '--'
             }
             className="info-attribute"
