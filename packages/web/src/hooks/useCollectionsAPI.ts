@@ -281,6 +281,7 @@ export const useCollectionsAPI = () => {
         isAuth: false,
         method: 'get',
         url: '/collections/getAllCollections',
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -300,6 +301,7 @@ export const useCollectionsAPI = () => {
         method: 'post',
         url: '/collections/getNewCollections',
         data: JSON.stringify({ more }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -324,6 +326,7 @@ export const useCollectionsAPI = () => {
         isAuth: false,
         method: 'get',
         url: '/collections/featuredCollectionsCarousel',
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -342,6 +345,7 @@ export const useCollectionsAPI = () => {
         isAuth: false,
         method: 'get',
         url: '/collections/getLaunchpadCollections',
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
