@@ -11,6 +11,7 @@ export const useMEApis = () => {
       const result: any = await runOthersAPI({
         method: 'get',
         url: '/getFeaturedCollections',
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -44,6 +45,7 @@ export const useMEApis = () => {
         method: 'post',
         url: '/getPopularCollections',
         data: JSON.stringify(params),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -59,6 +61,7 @@ export const useMEApis = () => {
         method: 'post',
         url: '/getNewCollections',
         data: JSON.stringify({ more }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
