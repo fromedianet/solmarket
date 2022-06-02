@@ -27,7 +27,7 @@ export const ApiUtils = () => {
     }
     if (props.useCache) {
       const cached = await localCache.getItem(cacheKey);
-      if (cached !== null) {
+      if (cached) {
         return JSON.parse(cached.data);
       }
     }
@@ -73,13 +73,13 @@ export const ApiUtils = () => {
     useCache?: boolean;
   }) {
     axiosInstance.defaults.baseURL = APIS.base_api_url;
-    let cacheKey = APIS.base_others_api_url + props.url;
+    let cacheKey = APIS.base_api_url + props.url;
     if (props.data && typeof props.data === 'string') {
       cacheKey = cacheKey + props.data;
     }
     if (props.useCache) {
       const cached = await localCache.getItem(cacheKey);
-      if (cached !== null) {
+      if (cached) {
         return JSON.parse(cached.data);
       }
     }
