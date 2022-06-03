@@ -64,7 +64,7 @@ export const CachedImageContent = ({
       loading="lazy"
       wrapperStyle={{ ...style }}
       placeholder={<ThreeDots />}
-      crossOrigin="anonymous"
+      // crossOrigin="anonymous"
     />
   );
 };
