@@ -366,6 +366,7 @@ export const useCollectionsAPI = () => {
       method: 'post',
       url: '/collections/getCollectionBySymbol',
       data: JSON.stringify({ symbol }),
+      useCache: true,
     });
     if ('data' in result) {
       return result['data'];
@@ -407,6 +408,7 @@ export const useCollectionsAPI = () => {
         method: 'post',
         url: '/collections/getCollectionStatsBySymbol',
         data: JSON.stringify({ symbol }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -430,6 +432,7 @@ export const useCollectionsAPI = () => {
         method: 'post',
         url: '/collections/getMultiCollectionEscrowStats',
         data: JSON.stringify({ symbols }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
