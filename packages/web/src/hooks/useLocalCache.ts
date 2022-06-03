@@ -1,6 +1,6 @@
 import { useIndexedDB } from 'react-indexed-db';
 
-const expiry = 20 * 60 * 1000; // 20 minutes
+const expiry = 30 * 60 * 1000; // 30 minutes
 
 export const useLocalCache = () => {
   const db = useIndexedDB('cache');

@@ -34,29 +34,68 @@ export const useNFTsAPI = () => {
    */
   async function getListedNftsByQuery(param: QUERIES) {
     try {
-      const pcQuery = getQueryPrameter(param);
-      const meQuery = getQueryParameterForMagicEden(param);
-      const queryBody = {
-        pcQuery: pcQuery,
-        meQuery: meQuery,
-        sort: param.sort,
-      };
-      const result: any = await runAPI({
-        isAuth: false,
-        method: 'post',
-        url: '/nfts/getListedNftsByQuery',
-        data: JSON.stringify(queryBody),
-      });
-      if ('data' in result) {
-        return result['data'];
+      let data: any[] = [];
+      if (
+        param.type === MarketType.All ||
+        param.type === MarketType.PaperCity
+      ) {
+        const query = getQueryParameter(param);
+        const result: any = await runAPI({
+          isAuth: false,
+          method: 'post',
+          url: '/nfts/getListedNFTsByQuery',
+          data: JSON.stringify({ query }),
+        });
+        if ('data' in result) {
+          data = data.concat(result['data']);
+        }
       }
+
+      if (
+        param.type === MarketType.All ||
+        param.type === MarketType.MagicEden
+      ) {
+        const query = getQueryParameterForMagicEden(param);
+        const result: any = await runAPI({
+          isAuth: false,
+          method: 'post',
+          url: '/nfts/getListedNFTsForME',
+          data: JSON.stringify({ query }),
+          useCache: true,
+        });
+        if ('data' in result) {
+          data = data.concat(result['data']);
+        }
+      }
+
+      if (param.sort === 2) {
+        data.sort((a, b) => {
+          if (a.price > b.price) {
+            return 1;
+          } else if (a.price < b.price) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+      } else if (param.sort === 3) {
+        data.sort((a, b) => {
+          if (b.price > a.price) {
+            return 1;
+          } else if (b.price < a.price) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+      }
+
+      return data;
     } catch {}
     return [];
   }
 
-  function getQueryPrameter(param: QUERIES) {
-    if (param.type !== MarketType.All && param.type !== MarketType.PaperCity)
-      return null;
+  function getQueryParameter(param: QUERIES) {
     const queries = {
       skip: param.skip ? param.skip : 0,
       limit: 20,
@@ -107,8 +146,6 @@ export const useNFTsAPI = () => {
   }
 
   function getQueryParameterForMagicEden(param: QUERIES) {
-    if (param.type !== MarketType.All && param.type !== MarketType.MagicEden)
-      return null;
     const queries = {
       $skip: param.skip ? param.skip : 0,
       $limit: 20,

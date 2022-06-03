@@ -76,6 +76,7 @@ export const useMEApis = () => {
       const result: any = await runOthersAPI({
         method: 'get',
         url: `/getCollection/${market}/${symbol}`,
+        useCache: true,
       });
       return result;
     } catch {}
@@ -88,6 +89,7 @@ export const useMEApis = () => {
       const result: any = await runOthersAPI({
         method: 'get',
         url: `/getCollectionBySymbol/${symbol}`,
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -102,6 +104,7 @@ export const useMEApis = () => {
       const result: any = await runOthersAPI({
         method: 'get',
         url: `/getCollectionEscrowStats/${symbol}`,
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -119,6 +122,7 @@ export const useMEApis = () => {
         method: 'post',
         url: '/getMultiCollectionEscrowStats',
         data: JSON.stringify({ symbols }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -139,6 +143,7 @@ export const useMEApis = () => {
           method: 'post',
           url: '/getListedNftsByQuery',
           data: JSON.stringify(params),
+          useCache: true,
         });
         if ('data' in result) {
           return result['data'];
@@ -209,6 +214,7 @@ export const useMEApis = () => {
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
         data: JSON.stringify({ params, market }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -245,6 +251,7 @@ export const useMEApis = () => {
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
         data: JSON.stringify({ params, market }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
@@ -268,6 +275,7 @@ export const useMEApis = () => {
         method: 'post',
         url: '/getGlobalActivitiesByQuery',
         data: JSON.stringify({ params, market: MarketType.MagicEden }),
+        useCache: true,
       });
       if ('data' in result) {
         return result['data'];
