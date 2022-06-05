@@ -190,7 +190,7 @@ export const useMEApis = () => {
   ): Promise<any[]> {
     try {
       let params;
-      if (market === MarketType.MagicEden) {
+      if (market === MarketType.MagicEden || market === MarketType.PaperCity) {
         const queryData = {
           txType: {
             $in: ['exchange'],
@@ -200,6 +200,7 @@ export const useMEApis = () => {
           $skip: 0,
         };
         params = `?q=${encodeURI(JSON.stringify(queryData))}`;
+        market = MarketType.MagicEden;
       } else if (market === MarketType.Solanart) {
         params = `/nft/get-collection-transactions?network=mainnet&solana_nft_collection_api_id=snftcol-LjHSKp6nS627wIm&symbol=${symbol}`;
       } else if (market === MarketType.DigitalEyes) {

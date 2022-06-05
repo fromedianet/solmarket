@@ -61,7 +61,7 @@ export const ApiUtils = () => {
       }
     }
 
-    return null;
+    return {};
   }
 
   async function runAPI(props: {
@@ -135,7 +135,7 @@ export const ApiUtils = () => {
       }
     }
 
-    return null;
+    return {};
   }
 
   return {
