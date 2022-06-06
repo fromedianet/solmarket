@@ -1,6 +1,6 @@
 {
-  "name": "Solana NFT Marketplace",
-  "short_name": "SolMarket",
+  "name": "PaperCity",
+  "short_name": "PC",
   "display": "standalone",
   "start_url": "./",
   "theme_color": "#002140",
@@ -20,6 +20,10 @@
       "src": "/favicon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "any"
     }
   ]
 }
