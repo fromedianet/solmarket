@@ -9,7 +9,9 @@ import { SalesListView } from './SalesList';
 export const HomeView = () => {
   const localCache = useLocalCache();
   useEffect(() => {
-    localCache.clearAll().then(result => console.log('Clear all expired caches', result));
+    localCache
+      .clearAll()
+      .then(result => console.log('Clear all expired caches', result));
   }, []);
   // const { isLoading, store } = useMeta();
   // const { isConfigured } = useStore();

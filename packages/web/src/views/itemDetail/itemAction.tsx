@@ -23,6 +23,7 @@ export const ItemAction = (props: {
   onBuyNow: () => void;
   onPlaceBid: (a) => void;
   onCancelVisible: () => void;
+  onOpenMarketplace: () => void;
 }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
@@ -76,14 +77,21 @@ export const ItemAction = (props: {
           {!wallet.connected ? (
             <ConnectButton className="button" />
           ) : props.nft.market !== MarketType.PaperCity ? (
-            !isOwner &&
-            alreadyListed && (
+            !isOwner && alreadyListed ? (
               <Button
                 className="button"
                 onClick={props.onBuyNow}
                 disabled={props.loading}
               >
                 Buy Now
+              </Button>
+            ) : (
+              <Button
+                className="button"
+                onClick={props.onOpenMarketplace}
+                disabled={props.loading}
+              >
+                {`Go to ${props.nft.market}`}
               </Button>
             )
           ) : isOwner ? (

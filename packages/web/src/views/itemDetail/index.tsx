@@ -297,19 +297,25 @@ export const ItemDetailView = () => {
     );
   };
 
+  const openMarketPlace = () => {
+    let url = '';
+    if (nft.market === MarketType.MagicEden) {
+      url = `https://magiceden.io/item-details/${nft.mint}`;
+    } else if (nft.market === MarketType.Solanart) {
+      url = `https://solanart.io/nft/${nft.mint}`;
+    } else if (nft.market === MarketType.DigitalEyes) {
+      url = `https://digitaleyes.market/item/Solarians/${nft.mint}`;
+    } else if (nft.market === MarketType.AlphaArt) {
+      url = `https://alpha.art/t/${nft.mint}`;
+    }
+    window.open(url, '_blank');
+  };
+
   const onBuyNow = async () => {
     if (!wallet.publicKey || !nft) return;
     console.log('=========== onBuyNow ============', nft);
     if (nft.market !== MarketType.PaperCity && !nft.auctionHouse) {
-      let url = `https://magiceden.io/item-details/${nft.mint}`;
-      if (nft.market === MarketType.Solanart) {
-        url = `https://solanart.io/nft/${nft.mint}`;
-      } else if (nft.market === MarketType.DigitalEyes) {
-        url = `https://digitaleyes.market/item/Solarians/${nft.mint}`;
-      } else if (nft.market === MarketType.AlphaArt) {
-        url = `https://alpha.art/t/${nft.mint}`;
-      }
-      window.open(url, '_blank');
+      openMarketPlace();
       return;
     }
     // eslint-disable-next-line no-async-promise-executor
@@ -536,6 +542,7 @@ export const ItemDetailView = () => {
                 onCancelList={onCancelList}
                 onBuyNow={onBuyNow}
                 onPlaceBid={onPlaceBid}
+                onOpenMarketplace={openMarketPlace}
                 onCancelVisible={() => setCancelVisible(true)}
               />
               <BottomSection

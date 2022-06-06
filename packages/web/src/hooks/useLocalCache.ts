@@ -50,7 +50,7 @@ export const useLocalCache = () => {
   async function clearAll(): Promise<boolean> {
     try {
       const allItems = await db.getAll();
-      for (let i = 0; i < allItems.length; i ++) {
+      for (let i = 0; i < allItems.length; i++) {
         const item = allItems[i];
         const age = Date.now() - item.createdAt;
         if (age > expiry) {
