@@ -1,10 +1,14 @@
 /* eslint-disable no-undef */
 const withPlugins = require('next-compose-plugins');
 const withLess = require('next-with-less');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true'
+});
 
 const assetPrefix = process.env.ASSET_PREFIX || '';
 
 const plugins = [
+  [withBundleAnalyzer],
   [
     withLess,
     {
