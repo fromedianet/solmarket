@@ -73,7 +73,7 @@ export const AuctionHouseView = ({
       <div className="wallet-container">
         <div className="wallet-content">
           <div className="wallet-icon">
-            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} />
+            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} alt="sol"/>
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Treasury Balance</span>
@@ -89,7 +89,7 @@ export const AuctionHouseView = ({
         </div>
         <div className="wallet-content">
           <div className="wallet-icon">
-            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} />
+            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} alt="sol"/>
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Auction House Fee Balance</span>

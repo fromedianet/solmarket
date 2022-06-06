@@ -24,7 +24,7 @@ export const SideMenu = ({
               <div className="menu-item">
                 <span>Introduction</span>
                 {collection['completed_status'] >= 1 && (
-                  <img src="/icons/icon-check.svg" width={24} />
+                  <img src="/icons/icon-check.svg" width={24} alt="check icon"/>
                 )}
               </div>
             ),
@@ -36,7 +36,7 @@ export const SideMenu = ({
               <div className="menu-item">
                 <span>Collection</span>
                 {collection['completed_status'] >= 2 && (
-                  <img src="/icons/icon-check.svg" width={24} />
+                  <img src="/icons/icon-check.svg" width={24} alt="check icon" />
                 )}
               </div>
             ),
@@ -49,7 +49,7 @@ export const SideMenu = ({
               <div className="menu-item">
                 <span>Details</span>
                 {collection['completed_status'] >= 3 && (
-                  <img src="/icons/icon-check.svg" width={24} />
+                  <img src="/icons/icon-check.svg" width={24} alt="check icon" />
                 )}
               </div>
             ),
@@ -62,7 +62,7 @@ export const SideMenu = ({
               <div className="menu-item">
                 <span>Hash List</span>
                 {collection['completed_status'] >= 4 && (
-                  <img src="/icons/icon-check.svg" width={24} />
+                  <img src="/icons/icon-check.svg" width={24} alt="check icon" />
                 )}
               </div>
             ),
@@ -75,7 +75,7 @@ export const SideMenu = ({
               <div className="menu-item">
                 <span>Collection</span>
                 {collection['completed_status'] == 5 && (
-                  <img src="/icons/icon-check.svg" width={24} />
+                  <img src="/icons/icon-check.svg" width={24} alt="check icon" />
                 )}
               </div>
             ),

@@ -40,7 +40,7 @@ export const WalletInfo = () => {
 export const LogoLink = () => {
   return (
     <Link to={`/`} className="navbar-brand">
-      <img src={'/papercity-logo.png'} />
+      <img src={'/papercity-logo.png'} alt="app-logo"/>
     </Link>
   );
 };

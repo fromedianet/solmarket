@@ -640,11 +640,13 @@ export const ProfileView = () => {
               <img
                 src={`https://avatars.dicebear.com/api/jdenticon/${wallet.publicKey.toBase58()}.svg`}
                 className="profile-image"
+                alt="profile"
               />
             ) : (
               <img
                 src={`https://avatars.dicebear.com/api/jdenticon/unknown.svg`}
                 className="profile-image"
+                alt="profile"
               />
             )}
             {user?.displayName && <h1>{user.displayName}</h1>}
@@ -718,6 +720,7 @@ export const ProfileView = () => {
                   <img
                     src="/icons/refresh.svg"
                     style={{ width: 24, height: 24 }}
+                    alt="refresh"
                   />
                 )}
               </button>

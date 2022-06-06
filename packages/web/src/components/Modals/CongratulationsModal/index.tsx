@@ -31,7 +31,7 @@ const CongratulationsContent: React.FC<CongratulationsProps> = ({
   return (
     <div className="congratulations-root">
       <div className="emoji-frame">
-        <img src="/modals/confetti-emoji.svg" />
+        <img src="/modals/confetti-emoji.svg" alt="confetti"/>
       </div>
       <span className="title">{title || 'Congratulations'}</span>
       <span className="content">{content}</span>

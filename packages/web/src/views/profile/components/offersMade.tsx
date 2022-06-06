@@ -115,7 +115,7 @@ export const OffersMade = ({
       <div className="wallet-container">
         <div className="wallet-content">
           <div className="wallet-icon">
-            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} />
+            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} alt="sol"/>
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Bidding Wallet</span>
@@ -131,7 +131,7 @@ export const OffersMade = ({
         </div>
         <div className="wallet-content">
           <div className="wallet-icon">
-            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} />
+            <img src="/icons/sol.svg" style={{ width: 20, height: 20 }} alt="sol"/>
           </div>
           <div className="wallet-info">
             <span className="wallet-name">Main Wallet</span>
@@ -148,7 +148,7 @@ export const OffersMade = ({
           {loadingBalance ? (
             <Spin />
           ) : (
-            <img src="/icons/refresh.svg" style={{ width: 24, height: 24 }} />
+            <img src="/icons/refresh.svg" style={{ width: 24, height: 24 }} alt="refresh"/>
           )}
         </button>
       </div>
@@ -281,6 +281,7 @@ export const OffersMade = ({
               <img
                 src="/icons/check.svg"
                 style={{ width: 14, height: 14, marginLeft: 8 }}
+                alt="check"
               />
             </span>
             <Divider />
