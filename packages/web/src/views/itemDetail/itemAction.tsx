@@ -228,6 +228,7 @@ export const ItemAction = (props: {
               <img
                 src="/icons/check.svg"
                 style={{ width: 14, height: 14, marginLeft: 8 }}
+                alt="check"
               />
             </span>
             <Divider />

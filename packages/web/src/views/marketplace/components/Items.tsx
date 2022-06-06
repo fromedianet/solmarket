@@ -262,12 +262,14 @@ export const NFTCard = (props: {
           />
         </div>
         <div className="card-caption">
-          <h6>{props.item.name}</h6>
+          <span className="card-name">{props.item.name}</span>
           <div className="card-collection-name">
             <span>{props.collection}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
-          {props.item.price > 0 && <h6>{`${props.item.price} SOL`}</h6>}
+          {props.item.price > 0 && (
+            <span className="card-name">{`${props.item.price} SOL`}</span>
+          )}
         </div>
       </Link>
     </Card>

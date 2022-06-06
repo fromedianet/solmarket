@@ -30,7 +30,7 @@ export const ProfileCard = ({
         />
       </div>
       <div className="card-caption">
-        <h6>{item['name']}</h6>
+        <span className="card-name">{item['name']}</span>
         <Row style={{ width: '100%', marginTop: 8 }} gutter={8}>
           {item['volume'] > 0 && (
             <Col span={12}>

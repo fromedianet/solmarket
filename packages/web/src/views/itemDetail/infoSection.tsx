@@ -113,7 +113,7 @@ export const InfoSection = (props: {
             onClick={props.onRefresh}
             style={{ cursor: 'pointer', marginLeft: 'auto' }}
           >
-            <img width={20} src={'/icons/refresh.svg'} />
+            <img width={20} src={'/icons/refresh.svg'} alt="refresh" />
           </div>
         </div>
         <ItemAction
@@ -181,6 +181,7 @@ export const InfoSection = (props: {
                     <img
                       src="/icons/solscan.png"
                       style={{ width: 16, height: 16 }}
+                      alt="solscan"
                     />
                   </a>
                   <a
@@ -196,6 +197,7 @@ export const InfoSection = (props: {
                     <img
                       src="/icons/sol.svg"
                       style={{ width: 16, height: 16 }}
+                      alt="sol"
                     />
                   </a>
                   <CopySpan
@@ -220,6 +222,7 @@ export const InfoSection = (props: {
                     <img
                       src="/icons/solscan.png"
                       style={{ width: 16, height: 16 }}
+                      alt="solscan"
                     />
                   </a>
                   <a
@@ -235,6 +238,7 @@ export const InfoSection = (props: {
                     <img
                       src="/icons/sol.svg"
                       style={{ width: 16, height: 16 }}
+                      alt="sol"
                     />
                   </a>
                   <CopySpan
@@ -257,6 +261,7 @@ export const InfoSection = (props: {
                     <img
                       src="/icons/solscan.png"
                       style={{ width: 16, height: 16 }}
+                      alt="solscan"
                     />
                   </a>
                   <a
@@ -272,6 +277,7 @@ export const InfoSection = (props: {
                     <img
                       src="/icons/sol.svg"
                       style={{ width: 16, height: 16 }}
+                      alt="sol"
                     />
                   </a>
                   <CopySpan

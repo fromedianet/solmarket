@@ -19,7 +19,7 @@ export const ContentCard = (props: {
       cover={
         <div className={'card-cover'}>
           {imgSrc ? (
-            <img src={imgSrc} />
+            <img src={imgSrc} alt="card-cover" />
           ) : (
             <CreditCardOutlined
               style={{
@@ -102,7 +102,7 @@ export const InstructionsModal: React.FC<ModalProps> = ({
         onCancel={handleCancel}
         footer={null}
         className={'modal-box instructions-modal big-modal'}
-        closeIcon={<img src={'/modals/close.svg'} />}
+        closeIcon={<img src={'/modals/close.svg'} alt="close" />}
       >
         <ModalContent>
           <ContentCard

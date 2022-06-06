@@ -64,6 +64,7 @@ export const CachedImageContent = ({
       loading="lazy"
       wrapperStyle={{ ...style }}
       placeholder={<ThreeDots />}
+      alt={uri}
       // crossOrigin="anonymous"
     />
   );

@@ -7,7 +7,7 @@ export const DashboardHeader = () => {
   return (
     <nav className="header container">
       <Link to="/" className="logo">
-        <img src="/papercity-logo.png" height={50} />
+        <img src="/papercity-logo.png" height={50} alt="app-logo" />
       </Link>
       <div>
         <Link to="/dashboard" className="header-menu">

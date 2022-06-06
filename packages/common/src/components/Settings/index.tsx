@@ -28,6 +28,7 @@ export const Settings = ({
             border: '1px solid white',
             marginBottom: 4,
           }}
+          alt="publicKey"
         />
         {publicKey && (
           <CopySpan

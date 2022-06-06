@@ -19,7 +19,7 @@ export const TokenCircle = (props: {
         ...style,
       }}
     >
-      <img src={filePath} />
+      <img src={filePath} alt="token" />
     </span>
   );
 };

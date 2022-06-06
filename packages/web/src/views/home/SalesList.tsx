@@ -54,7 +54,7 @@ export const SalesListView = () => {
     const popular30 = await meApis.getPopularCollections({
       timeRange: '30d',
     });
-    const exNews = await meApis.getNewCollections(false);
+    const exNews = await meApis.getNewCollections();
 
     result['launchpad'] = featuredData['launchpad'] || [];
     result['upcoming'] = featuredData['upcoming'] || [];

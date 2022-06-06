@@ -31,7 +31,7 @@ export const HomeCard = ({
           />
         </div>
         <div className="card-caption">
-          <h6>{item['name']}</h6>
+          <span className="card-name">{item['name']}</span>
           <div className="note">
             <span className="symbol">{item['name']}</span>
             <img src="/icons/check-circle.svg" alt="check-circle" />
