@@ -97,7 +97,6 @@
     "@types/testing-library__react": "^10.2.0",
     "@types/three": "^0.139.0",
     "antd": "^4.20.0-alpha.1",
-    "babel-plugin-transform-remove-console": "^6.9.4",
     "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
     "npm-link-shared": "0.5.6",

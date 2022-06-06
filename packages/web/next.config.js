@@ -49,4 +49,7 @@ module.exports = withPlugins(plugins, {
     }
     return config;
   },
+  compiler: {
+    removeConsole: true,
+  },
 });
