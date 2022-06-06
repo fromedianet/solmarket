@@ -11,6 +11,7 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../models/offer';
+import { MarketType } from '../../constants';
 
 export const ItemAction = (props: {
   nft: any;
@@ -74,7 +75,7 @@ export const ItemAction = (props: {
         <div className="btn-container">
           {!wallet.connected ? (
             <ConnectButton className="button" />
-          ) : props.nft.market ? (
+          ) : props.nft.market !== MarketType.PaperCity ? (
             !isOwner &&
             alreadyListed && (
               <Button
