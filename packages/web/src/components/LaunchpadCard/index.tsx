@@ -26,7 +26,7 @@ export const LaunchpadCard = ({
           />
         </div>
         <div className="card-caption">
-          <h6>{item['name']}</h6>
+          <span className="card-name">{item['name']}</span>
           {showCountdown ? (
             <div className="countdown">
               {isEnded ? (

@@ -113,7 +113,7 @@ export const InfoSection = (props: {
             onClick={props.onRefresh}
             style={{ cursor: 'pointer', marginLeft: 'auto' }}
           >
-            <img width={20} src={'/icons/refresh.svg'} alt="refresh"/>
+            <img width={20} src={'/icons/refresh.svg'} alt="refresh" />
           </div>
         </div>
         <ItemAction

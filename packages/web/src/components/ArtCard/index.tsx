@@ -98,13 +98,13 @@ export const ArtCard = (props: ArtCardProps) => {
           />
         </div>
         <div className="card-caption">
-          <h6>{artName}</h6>
+          <span className="card-name">{artName}</span>
           <div className="card-collection-name">
             <span>{collectionName || symbol}</span>
             <img src="/icons/check.svg" alt="check" />
           </div>
           {!noEvent && instantSalePrice > 0 && (
-            <h6>{`${instantSalePrice} SOL`}</h6>
+            <span className="card-name">{`${instantSalePrice} SOL`}</span>
           )}
         </div>
       </>

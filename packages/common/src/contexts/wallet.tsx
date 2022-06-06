@@ -77,7 +77,11 @@ export const WalletModal: FC = () => {
           onClick={() => handleConnectWallet(phantomWallet.name)}
         >
           Phantom
-          <img src={phantomWallet?.icon} className="end-icon" alt="wallet-icon"/>
+          <img
+            src={phantomWallet?.icon}
+            className="end-icon"
+            alt="wallet-icon"
+          />
         </Button>
         <Collapse className="modal-collapse" expandIconPosition="right">
           <Panel header="Other Wallets" key="1">
@@ -90,7 +94,11 @@ export const WalletModal: FC = () => {
                   onClick={() => handleConnectWallet(wallet.name)}
                 >
                   {wallet.name}
-                  <img src={wallet?.icon} className="end-icon" alt="wallet-icon"/>
+                  <img
+                    src={wallet?.icon}
+                    className="end-icon"
+                    alt="wallet-icon"
+                  />
                 </Button>
               );
             })}
