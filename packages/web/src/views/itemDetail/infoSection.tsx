@@ -30,6 +30,7 @@ export const InfoSection = (props: {
   onBuyNow: () => void;
   onPlaceBid: (a) => void;
   onCancelVisible: () => void;
+  onOpenMarketplace: () => void;
 }) => {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
@@ -125,6 +126,7 @@ export const InfoSection = (props: {
           onBuyNow={props.onBuyNow}
           onPlaceBid={props.onPlaceBid}
           onCancelVisible={props.onCancelVisible}
+          onOpenMarketplace={props.onOpenMarketplace}
         />
         <Collapse
           expandIconPosition="right"

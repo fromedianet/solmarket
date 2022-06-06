@@ -11,6 +11,7 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PriceInput } from '../../components/PriceInput';
 import { Link } from 'react-router-dom';
 import { Offer } from '../../models/offer';
+import { MarketType } from '../../constants';
 
 export const ItemAction = (props: {
   nft: any;
@@ -22,6 +23,7 @@ export const ItemAction = (props: {
   onBuyNow: () => void;
   onPlaceBid: (a) => void;
   onCancelVisible: () => void;
+  onOpenMarketplace: () => void;
 }) => {
   const [form] = Form.useForm();
   const wallet = useWallet();
@@ -74,15 +76,22 @@ export const ItemAction = (props: {
         <div className="btn-container">
           {!wallet.connected ? (
             <ConnectButton className="button" />
-          ) : props.nft.market ? (
-            !isOwner &&
-            alreadyListed && (
+          ) : props.nft.market !== MarketType.PaperCity ? (
+            !isOwner && alreadyListed ? (
               <Button
                 className="button"
                 onClick={props.onBuyNow}
                 disabled={props.loading}
               >
                 Buy Now
+              </Button>
+            ) : (
+              <Button
+                className="button"
+                onClick={props.onOpenMarketplace}
+                disabled={props.loading}
+              >
+                {`Go to ${props.nft.market}`}
               </Button>
             )
           ) : isOwner ? (
