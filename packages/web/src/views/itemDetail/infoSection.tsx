@@ -103,7 +103,7 @@ export const InfoSection = (props: {
               )}`}
               className="collection-name"
             >
-              <img width={20} src={'/icons/check.svg'} />
+              <img width={20} src={'/icons/check.svg'} alt="check"/>
               <span>{props.nft.symbol}</span>
             </Link>
           ) : (
