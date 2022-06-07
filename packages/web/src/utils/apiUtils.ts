@@ -1,5 +1,6 @@
 import { notify } from '@oyster/common';
 import axios, { Method } from 'axios';
+import CryptoJS from 'crypto-js';
 import { APIS } from '../constants';
 import { useAuthToken } from '../contexts/authProvider';
 import { useLocalCache } from '../hooks/useLocalCache';
@@ -25,6 +26,7 @@ export const ApiUtils = () => {
     if (props.data && typeof props.data === 'string') {
       cacheKey = cacheKey + props.data;
     }
+    cacheKey = CryptoJS.SHA256(cacheKey).toString(CryptoJS.enc.Base64);
     if (props.useCache) {
       const cached = await localCache.getItem(cacheKey);
       if (cached) {
@@ -77,6 +79,7 @@ export const ApiUtils = () => {
     if (props.data && typeof props.data === 'string') {
       cacheKey = cacheKey + props.data;
     }
+    cacheKey = CryptoJS.SHA256(cacheKey).toString(CryptoJS.enc.Base64);
     if (props.useCache) {
       const cached = await localCache.getItem(cacheKey);
       if (cached) {

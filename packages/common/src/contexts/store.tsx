@@ -45,19 +45,19 @@ export const StoreProvider: FC<{
       const storeAddress = await getStoreID(ownerAddress);
       setProgramIds(storeAddress); // fallback
       setStore({ storeAddress, isReady: true });
-      console.log(`CUSTOM STORE: ${storeAddress}`);
+      // console.log(`CUSTOM STORE: ${storeAddress}`);
       return storeAddress;
     },
     [],
   );
 
   useEffect(() => {
-    console.log(`STORE_OWNER_ADDRESS: ${initOwnerAddress}`);
+    // console.log(`STORE_OWNER_ADDRESS: ${initOwnerAddress}`);
     if (initOwnerAddress && !initStoreAddress) {
       setStoreForOwner(initOwnerAddress);
     } else {
       setProgramIds(initStoreAddress); // fallback
-      console.log(`CUSTOM STORE FROM ENV: ${initStoreAddress}`);
+      // console.log(`CUSTOM STORE FROM ENV: ${initStoreAddress}`);
     }
   }, [initOwnerAddress]);
 

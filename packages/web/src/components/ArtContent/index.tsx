@@ -53,12 +53,12 @@ export const CachedImageContent = ({
   preview?: boolean;
   style?: React.CSSProperties;
 }) => {
-  const { cachedBlob } = useCachedImage(uri || '');
+  // const { cachedBlob } = useCachedImage(uri || '');
 
   return (
     <Image
       fallback="/image-placeholder.svg"
-      src={cachedBlob}
+      src={uri}
       preview={preview}
       wrapperClassName={className}
       loading="lazy"

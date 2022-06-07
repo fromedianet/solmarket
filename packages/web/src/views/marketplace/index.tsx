@@ -133,6 +133,7 @@ export const MarketplaceView = () => {
               <img
                 src="/icons/list.svg"
                 style={{ width: '24px', marginRight: '8px' }}
+                alt="list"
               />
               Items
             </span>
@@ -171,6 +172,7 @@ export const MarketplaceView = () => {
               <img
                 src="/icons/activity.svg"
                 style={{ width: '24px', marginRight: '8px' }}
+                alt="activity"
               />
               Activities
             </span>
