@@ -97,6 +97,7 @@ export const AppBar = () => {
               placeholder="Search Collections"
               filterOption={false}
               showSearch={true}
+              aira-label="search"
               onSelect={val => navigate(val)}
               onSearch={val => onSearch(val)}
               suffixIcon={<SearchOutlined />}

@@ -713,6 +713,7 @@ export const ProfileView = () => {
                   marginLeft: 24,
                 }}
                 disabled={loading}
+                aira-label="refresh"
               >
                 {loading ? (
                   <Spin />
