@@ -13,7 +13,6 @@ import {
   useMeta,
 } from '@oyster/common';
 import { WhitelistedCreator } from '@oyster/common/dist/lib/models/metaplex/index';
-import { Cache } from 'three';
 import { useInView } from 'react-intersection-observer';
 
 export const metadataToArt = (
@@ -133,11 +132,11 @@ export const useCachedImage = (uri: string, cacheMesh?: boolean) => {
         return;
       }
 
-      if (cacheMesh) {
-        // extra caching for meshviewer
-        Cache.enabled = true;
-        Cache.add(uri, await blob.arrayBuffer());
-      }
+      // if (cacheMesh) {
+      //   // extra caching for meshviewer
+      //   Cache.enabled = true;
+      //   Cache.add(uri, await blob.arrayBuffer());
+      // }
       const blobURI = URL.createObjectURL(blob);
       cachedImages.set(uri, blobURI);
       setCachedBlob(blobURI);

@@ -43,33 +43,10 @@ export default class MetaplexDocument extends Document {
           <meta name="theme-color" content="#000000" />
           <meta name="description" content="Paper City" />
           <link rel="manifest" href="/manifest.json" />
-          <link
-            rel="stylesheet"
-            href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-            integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
-            crossOrigin="anonymous"
-          />
         </Head>
         <body>
           <Main />
           <NextScript />
-          <script
-            async
-            src="https://platform.twitter.com/widgets.js"
-            charSet="utf-8"
-          />
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function () {
-                  var s = document.createElement("script");
-                  s.src = "https://stackpile.io/stack_162299.js"; s.async = true;
-                  var e = document.getElementsByTagName("script")[0]; e.parentNode.insertBefore(s, e);
-                })();
-          `,
-            }}
-          />
         </body>
       </Html>
     );
