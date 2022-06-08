@@ -24,7 +24,7 @@ export const CollectionsView = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [title, setTitle] = useState('');
-  const [timeRange, setTimeRange] = useState('30d');
+  const [timeRange, setTimeRange] = useState('1d');
   const [filters, setFilters] = useState<ExCollection[]>([]);
   const [items, setItems] = useState<ExCollection[]>([]);
   const PER_PAGE = 20;

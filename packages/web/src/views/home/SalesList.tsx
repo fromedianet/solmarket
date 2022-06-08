@@ -20,7 +20,7 @@ export const SalesListView = () => {
     new: [],
   });
   const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
-  const [popularStatus, setPopularStatus] = useState('7d');
+  const [popularStatus, setPopularStatus] = useState('30d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
   const meApis = useMEApis();
 
