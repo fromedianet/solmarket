@@ -7,7 +7,7 @@ export const DashboardHeader = () => {
   return (
     <nav className="header container">
       <Link to="/" className="logo">
-        <img src="/papercity-logo.png" height={50} alt="app-logo" />
+        <img src="/papercity-logo.png" width={160} height={50} alt="app-logo" />
       </Link>
       <div>
         <Link to="/dashboard" className="header-menu">
@@ -18,13 +18,10 @@ export const DashboardHeader = () => {
             Admin
           </Link>
         )}
-        <a className="header-menu" onClick={removeAuthToken}>
+        <span className="header-menu" onClick={removeAuthToken}>
           Log out
-        </a>
+        </span>
       </div>
-      {/* <Link to="/api/logout" className="signout">
-        Sign out
-      </Link> */}
     </nav>
   );
 };
