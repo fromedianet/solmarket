@@ -88,30 +88,39 @@ export const ProfileView = () => {
 
   useEffect(() => {
     if (socket && wallet.publicKey) {
-      socket.on('syncedAuctionHouse', (params: any[]) => {
+      const auctionHouseListener = (params: any[]) => {
         if (params.some(k => k.wallet === wallet.publicKey!.toBase58())) {
           setRefresh(Date.now());
         }
-      });
+      };
 
-      socket.on('syncedAcceptOffer', params => {
+      const acceptOfferListener = (params: any[]) => {
         if (params.some(k => k.wallet === wallet.publicKey!.toBase58())) {
           setRefresh(Date.now());
         }
-      });
+      };
 
-      socket.emit('syncGetNFTsByOwner', {
-        wallet: wallet.publicKey.toBase58(),
-      });
-
-      socket.on('syncedNFTsByOwner', (params: any) => {
+      const nftsListener = (params: any) => {
         if (params.wallet === wallet.publicKey?.toBase58()) {
           loadNFTs().then(res => {
             setMyItems(res.myItems);
             setListedItems(res.listedItems);
           });
         }
+      };
+
+      socket.on('syncedAuctionHouse', auctionHouseListener);
+      socket.on('syncedAcceptOffer', acceptOfferListener);
+      socket.on('syncedNFTsByOwner', nftsListener);
+      socket.emit('syncGetNFTsByOwner', {
+        wallet: wallet.publicKey.toBase58(),
       });
+
+      return () => {
+        socket.off('syncedAuctionHouse', auctionHouseListener);
+        socket.off('syncedAcceptOffer', acceptOfferListener);
+        socket.off('syncedNFTsByOwner', nftsListener);
+      };
     }
   }, [socket, wallet]);
 

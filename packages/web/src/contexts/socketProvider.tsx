@@ -14,12 +14,15 @@ interface SocketConfig {
 const SocketContext = createContext<SocketConfig>(null!);
 
 export const SocketProvider: FC = ({ children }) => {
-  const [socket, setSocket] = useState<Socket>();
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const sk = io(APIS.socket_url);
-    setSocket(sk);
-  }, []);
+    const newSocket = io(APIS.socket_url);
+    setSocket(newSocket);
+    return () => {
+      newSocket.close();
+    };
+  }, [setSocket]);
 
   return (
     <SocketContext.Provider value={{ socket: socket! }}>

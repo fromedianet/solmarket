@@ -50,19 +50,26 @@ export const ItemDetailView = () => {
   const meApis = useMEApis();
 
   useEffect(() => {
-    if (nft) {
-      if (socket && !nft.market) {
-        socket.on('syncedAuctionHouse', (params: any[]) => {
+    if (nft && socket) {
+      if (nft.market === MarketType.PaperCity) {
+        const auctionHouseListener = (params: any[]) => {
           if (params.some(k => k.mint === nft.mint)) {
             setRefresh(Date.now());
           }
-        });
+        };
 
-        socket.on('syncedNFTsByOwner', (params: any) => {
+        const nftsListener = (params: any) => {
           if (params.wallet === wallet.publicKey?.toBase58()) {
             setRefresh(Date.now());
           }
-        });
+        };
+        socket.on('syncedAuctionHouse', auctionHouseListener);
+        socket.on('syncedNFTsByOwner', nftsListener);
+
+        return () => {
+          socket.off('syncedAuctionHouse', auctionHouseListener);
+          socket.off('syncedNFTsByOwner', nftsListener);
+        };
       }
     }
   }, [socket, nft]);
