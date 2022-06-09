@@ -54,10 +54,7 @@
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
     "@types/bs58": "^4.0.1",
-    "@types/jest": "^27.4.1",
     "@types/mime": "^2.0.3",
-    "@types/node": "^17.0.25",
-    "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^14.1.1",
     "@types/react-router-dom": "^5.3.3",

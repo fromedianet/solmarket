@@ -19,11 +19,7 @@
     "lint": "prettier -c 'packages/*/{src,test}/**/*.{ts,tsx}' && npm run lint:eslint",
     "lint:eslint": "eslint 'packages/*/{src,test}/**/*.{ts,tsx}'",
     "lint:fix": "prettier --write 'packages/*/{src,test}/**/*.{ts,tsx}' && eslint --fix 'packages/*/{src,test}/**/*.{ts,tsx}'",
-    "format:fix": "lerna run format:fix",
-    "deploy": "run-s deploy:docs build deploy:apps && gh-pages -d docs",
-    "deploy:docs": "lerna run docs",
-    "deploy:apps": "lerna run deploy:app",
-    "test": "lerna run test --concurrency 1 --stream"
+    "format:fix": "lerna run format:fix"
   },
   "lint-staged": {
     "packages/*/{src,test}/**/*.{ts,tsx}": [
@@ -53,7 +49,6 @@
     ]
   },
   "dependencies": {
-    "@metaplex/arweave-cost": "^1.0.4",
     "cross-env": "^7.0.3",
     "next": "^12.1.5",
     "react": "18.0.0",
@@ -66,22 +61,16 @@
     "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
-    "@types/webgl2": "^0.0.6",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
-    "gh-pages": "^3.2.3",
     "husky": "^7.0.4",
-    "jest": "^27.5.1",
-    "jest-config": "^27.5.1",
     "lerna": "^4.0.0",
     "lint-staged": "^12.4.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
-    "ts-jest": "^27.1.4",
-    "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
 }
