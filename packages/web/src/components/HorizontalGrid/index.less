@@ -3,7 +3,8 @@
 }
 
 .react-horizontal-scrolling-menu--wrapper {
-  display: flex;
+  position: relative;
+  // display: flex;
   align-items: center;
 
   .arrow {
@@ -13,8 +14,14 @@
     z-index: 9999;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 20px;
     background: @bg-primary-color;
+    color: @text-secondary-color;
+
+    &:hover {
+      color: white;
+      background: @bg-secondary-color;
+    }
   }
 
   .tw-opacity-0 {
@@ -26,12 +33,11 @@
   }
 
   .left-arrow {
-    color: @text-secondary-color;
+    left: 0px;
   }
 
   .right-arrow {
-    color: @text-secondary-color;
-    right: 40px;
+    right: 0px;
   }
 }
 

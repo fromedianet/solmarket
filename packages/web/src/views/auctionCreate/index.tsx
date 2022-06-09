@@ -27,7 +27,6 @@ import {
   SafetyDepositDraft,
 } from '../../actions/createAuctionManager';
 import BN from 'bn.js';
-import { constants } from '@oyster/common';
 import useWindowDimensions from '../../utils/layout';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { CategoryStep } from './steps/CategoryStep';
@@ -49,7 +48,6 @@ import { WaitingStep } from './steps/WaitingStep';
 import { Congrats } from './steps/Congrats';
 
 const { Step } = Steps;
-const { ZERO } = constants;
 
 export enum AuctionCategory {
   InstantSale,
@@ -183,7 +181,7 @@ export const AuctionCreateView = () => {
 
       winnerLimit = new WinnerLimit({
         type: WinnerLimitType.Unlimited,
-        usize: ZERO,
+        usize: new BN(0),
       });
     } else if (attributes.category === AuctionCategory.InstantSale) {
       const { items, editions } = attributes;
@@ -217,7 +215,7 @@ export const AuctionCreateView = () => {
       }
       winnerLimit = new WinnerLimit({
         type: WinnerLimitType.Unlimited,
-        usize: ZERO,
+        usize: new BN(0),
       });
     } else if (
       attributes.category === AuctionCategory.Limited ||
