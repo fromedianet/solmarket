@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar } from 'antd';
 import { Artist } from '../../types';
-import { Identicon } from '@oyster/common';
 
 const MetaAvatarItem = (props: {
   creator: Artist;
@@ -18,10 +17,13 @@ const MetaAvatarItem = (props: {
       size={size}
       src={
         noImage ? (
-          <Identicon
+          <img
+            src={`https://avatars.dicebear.com/api/jdenticon/${creator.address}.svg`}
+            style={{
+              width: size,
+              borderRadius: '50%',
+            }}
             alt={alt}
-            address={creator.address}
-            style={{ width: size }}
           />
         ) : (
           image

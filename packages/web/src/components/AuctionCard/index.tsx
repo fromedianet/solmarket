@@ -18,7 +18,6 @@ import {
   BidderMetadata,
   MAX_METADATA_LEN,
   MAX_EDITION_LEN,
-  Identicon,
   fromLamports,
   useWalletModal,
   VaultState,
@@ -598,9 +597,13 @@ export const AuctionCard = ({
                 style={{ marginBottom: 0 }}
                 amount={balance.balance}
                 customPrefix={
-                  <Identicon
-                    address={wallet?.publicKey?.toBase58()}
-                    style={{ width: 36 }}
+                  <img
+                    src={`https://avatars.dicebear.com/api/jdenticon/${wallet?.publicKey?.toBase58()}.svg`}
+                    style={{
+                      width: 36,
+                      borderRadius: 18,
+                    }}
+                    alt="publicKey"
                   />
                 }
               />
