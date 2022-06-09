@@ -3,3 +3,5 @@ dist
 .eslintcache
 build
 .env
+packages/common/src/styles.css
+packages/common/src/contexts/wallet.css
