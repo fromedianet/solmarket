@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Spin, Button, Divider } from 'antd';
 import { Link, useParams } from 'react-router-dom';
+import Head from 'next/head';
 import { BottomSection } from './bottomSection';
 import { InfoSection } from './infoSection';
 import { EmptyView } from '../../components/EmptyView';
@@ -538,6 +539,14 @@ export const ItemDetailView = () => {
             <Spin />
           ) : nft ? (
             <>
+              <Head>
+                <meta property="og:title" content={nft.name} />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content={window.location.href} />
+                <meta property="og:image" content={nft.image} />
+                <meta property="og:description" content={nft.description} />
+                <meta property="og:site_name" content="PaperCity" />
+              </Head>
               <InfoSection
                 nft={nft}
                 loading={loading}

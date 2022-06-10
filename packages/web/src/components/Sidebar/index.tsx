@@ -2,14 +2,9 @@ import React from 'react';
 import { Menu, Layout } from 'antd';
 import { useGetSidebarState, useSetSidebarState } from '../../contexts';
 import {
-  // BarChartOutlined,
   BarsOutlined,
-  // BellOutlined,
-  CopyrightOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
-  // ShoppingOutlined,
-  TagOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -95,24 +90,6 @@ export const Sidebar = () => {
             ],
           },
           {
-            key: 'launchpad',
-            label: 'Launchpad',
-            icon: <TagOutlined style={{ fontSize: 20 }} />,
-            onClick: () => navigate('/launchpad'),
-          },
-          {
-            key: 'creators',
-            label: 'Creators',
-            icon: <CopyrightOutlined style={{ fontSize: 20 }} />,
-            children: [
-              {
-                key: 'dashboard',
-                label: 'Apply for listing',
-                onClick: () => window.open('/dashboard', '_blank'),
-              },
-            ],
-          },
-          {
             key: 'community',
             label: 'Community',
             icon: <UsergroupAddOutlined style={{ fontSize: 20 }} />,
@@ -120,16 +97,12 @@ export const Sidebar = () => {
               {
                 key: 'twitter',
                 label: 'Twitter',
-                onClick: () => {},
+                onClick: () =>
+                  window.open('https://twitter.com/papercityio', '_blank'),
               },
               {
                 key: 'discord',
                 label: 'Discord',
-                onClick: () => {},
-              },
-              {
-                key: 'blog',
-                label: 'Blog',
                 onClick: () => {},
               },
             ],
@@ -142,7 +115,7 @@ export const Sidebar = () => {
               {
                 key: 'faq',
                 label: 'FAQ',
-                onClick: () => {},
+                onClick: () => navigate('/faq'),
               },
             ],
           },

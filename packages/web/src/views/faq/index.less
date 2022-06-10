@@ -1,0 +1,52 @@
+.faq-page {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    color: @text-primary-color;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .collapse-container {
+    &.ant-collapse {
+      background: transparent;
+      border: none;
+
+      & > .ant-collapse-item {
+        border: 1px solid @border-primary-color;
+        background: @bg-secondary-color;
+        border-radius: 8px;
+        margin-bottom: 16px;
+      }
+
+      & > .ant-collapse-item > .ant-collapse-header {
+        color: @text-primary-color;
+        font-size: 20px;
+        font-weight: 600;
+        flex-direction: row-reverse;
+        align-items: center;
+
+        div {
+          &:first-child {
+            margin-right: auto;
+          }
+        }
+
+        .ant-collapse-extra {
+          margin-right: 8px;
+          margin-left: 0px;
+        }
+      }
+
+      .ant-collapse-content {
+        background: transparent;
+        border-top: 1px solid @border-primary-color;
+        color: @text-primary-color;
+        font-size: 16px;
+      }
+
+    }
+  }
+}
