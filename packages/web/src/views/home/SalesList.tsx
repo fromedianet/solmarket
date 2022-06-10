@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { CardLoader } from '../../components/MyLoader';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { HomeCard } from '../../components/HomeCard';
 import { ExCollection } from '../../models/exCollection';
 import { useMEApis } from '../../hooks/useMEApis';
+import { NFTCard } from '../marketplace/components/Items';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
@@ -20,6 +22,7 @@ export const SalesListView = () => {
   const [recentListings, setRecentListings] = useState([]);
   const [popularStatus, setPopularStatus] = useState('30d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
+  const { getRecentListings, getRecentSales } = useNFTsAPI();
   const meApis = useMEApis();
 
   useEffect(() => {
@@ -31,6 +34,16 @@ export const SalesListView = () => {
       })
       .finally(() => {
         setLoading(false);
+      });
+    
+    getRecentSales()
+      .then((res: any[]) => {
+        setRecentSales(res);
+      });
+
+    getRecentListings()
+      .then((res: any[]) => {
+        setRecentListings(res);
       });
   }, []);
 
@@ -148,6 +161,46 @@ export const SalesListView = () => {
                     link={`/marketplace/${
                       item.market ? item.market : 'papercity'
                     }/${item['symbol']}`}
+                  />
+                ))}
+              />
+            )}
+      </div>
+      <div className="home-section">
+        <div className="section-header">
+          <span className="section-title">Recent Sales</span>
+        </div>
+        {loading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : recentSales && (
+              <HorizontalGrid
+                childrens={recentSales.map((item, index) => (
+                  <NFTCard
+                    key={index}
+                    item={item}
+                    itemId={item.mint}
+                    collection={item.collectionName}
+                    className="w-200"
+                  />
+                ))}
+              />
+            )}
+      </div>
+      <div className="home-section">
+        <div className="section-header">
+          <span className="section-title">Recent Listings</span>
+        </div>
+        {loading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : recentListings && (
+              <HorizontalGrid
+                childrens={recentListings.map((item, index) => (
+                  <NFTCard
+                    key={index}
+                    item={item}
+                    itemId={item.mint}
+                    collection={item.collectionName}
+                    className="w-200"
                   />
                 ))}
               />
