@@ -541,7 +541,7 @@ export const ItemDetailView = () => {
             <>
               <Head>
                 <meta property="og:title" content={nft.name} />
-                <meta property="og:type" content="website" />
+                <meta property="og:type" content="article" />
                 <meta property="og:url" content={window.location.href} />
                 <meta property="og:image" content={nft.image} />
                 <meta property="og:description" content={nft.description} />
