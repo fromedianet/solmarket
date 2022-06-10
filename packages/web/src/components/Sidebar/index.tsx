@@ -97,7 +97,8 @@ export const Sidebar = () => {
               {
                 key: 'twitter',
                 label: 'Twitter',
-                onClick: () => { window.open('https://twitter.com/papercityio', '_blank') },
+                onClick: () =>
+                  window.open('https://twitter.com/papercityio', '_blank'),
               },
               {
                 key: 'discord',
@@ -114,7 +115,7 @@ export const Sidebar = () => {
               {
                 key: 'faq',
                 label: 'FAQ',
-                onClick: () => {},
+                onClick: () => navigate('/faq'),
               },
             ],
           },
