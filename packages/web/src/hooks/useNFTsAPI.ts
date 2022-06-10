@@ -264,11 +264,41 @@ export const useNFTsAPI = () => {
     return null;
   }
 
+  async function getRecentSales(): Promise<any[]> {
+    try {
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'get',
+        url: '/nfts/recentSales',
+      });
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+    return [];
+  }
+
+  async function getRecentListings(): Promise<any[]> {
+    try {
+      const result: any = await runAPI({
+        isAuth: false,
+        method: 'get',
+        url: '/nfts/recentListings',
+      });
+      if ('data' in result) {
+        return result['data'];
+      }
+    } catch {}
+    return [];
+  }
+
   return {
     createNft,
     getListedNftsByQuery,
     getNftByMint,
     getNFTsByWallet,
     updateInfo,
+    getRecentListings,
+    getRecentSales,
   };
 };
