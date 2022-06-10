@@ -11,21 +11,20 @@
 
   .collapse-container {
     &.ant-collapse {
-      background: @bg-body;
+      background: transparent;
       border: none;
 
       & > .ant-collapse-item {
-        border: none;
-        margin-bottom: 8px;
+        border: 1px solid @border-primary-color;
+        background: @bg-secondary-color;
+        border-radius: 8px;
+        margin-bottom: 16px;
       }
 
       & > .ant-collapse-item > .ant-collapse-header {
         color: @text-primary-color;
-        border: 1px solid @border-primary-color;
-        border-radius: 8px;
-        margin-bottom: 4px;
         font-size: 20px;
-        font-weight: 500;
+        font-weight: 600;
         flex-direction: row-reverse;
         align-items: center;
 
@@ -42,11 +41,14 @@
       }
 
       .ant-collapse-content {
-        background: @bg-secondary-color;
-        border: 1px solid @border-primary-color;
-        border-radius: 8px;
+        background: transparent;
+        border: none;
         color: @text-primary-color;
         font-size: 16px;
+
+        .ant-collapse-content-box {
+          padding: 4px 16px 16px 16px;
+        }
       }
 
     }
