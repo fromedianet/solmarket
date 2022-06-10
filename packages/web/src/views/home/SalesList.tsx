@@ -4,24 +4,25 @@ import { Link } from 'react-router-dom';
 import { CardLoader } from '../../components/MyLoader';
 import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
+import { useNFTsAPI } from '../../hooks/useNFTsAPI';
 import { HomeCard } from '../../components/HomeCard';
 import { ExCollection } from '../../models/exCollection';
-import { CarouselView } from './components/carousel';
 import { useMEApis } from '../../hooks/useMEApis';
+import { NFTCard } from '../marketplace/components/Items';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState({
-    launchpad: [],
-    upcoming: [],
     popular1: [],
     popular7: [],
     popular30: [],
     new: [],
   });
-  const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
+  const [recentSales, setRecentSales] = useState([]);
+  const [recentListings, setRecentListings] = useState([]);
   const [popularStatus, setPopularStatus] = useState('30d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
+  const { getRecentListings, getRecentSales } = useNFTsAPI();
   const meApis = useMEApis();
 
   useEffect(() => {
@@ -34,12 +35,20 @@ export const SalesListView = () => {
       .finally(() => {
         setLoading(false);
       });
+    
+    getRecentSales()
+      .then((res: any[]) => {
+        setRecentSales(res);
+      });
+
+    getRecentListings()
+      .then((res: any[]) => {
+        setRecentListings(res);
+      });
   }, []);
 
   async function loadAllData() {
     const result = {};
-    const carousels = await meApis.getFeaturedCollections();
-    setCarouselData(carousels);
 
     // Own marketplace
     const featuredData = await featuredCollectionsCarousel();
@@ -56,8 +65,6 @@ export const SalesListView = () => {
     });
     const exNews = await meApis.getNewCollections();
 
-    result['launchpad'] = featuredData['launchpad'] || [];
-    result['upcoming'] = featuredData['upcoming'] || [];
     let newData: ExCollection[] = featuredData['new'] || [];
     newData = newData.concat(exNews);
     result['new'] = newData;
@@ -70,27 +77,6 @@ export const SalesListView = () => {
 
   return (
     <div className="main-area">
-      {loading ? <CardLoader /> : <CarouselView data={carouselData} />}
-      <div className="home-section">
-        <div className="section-header">
-          <span className="section-title">Launchpad Drops</span>
-        </div>
-        {loading
-          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : collections['launchpad'] && (
-              <HorizontalGrid
-                childrens={collections['launchpad'].map((item, index) => (
-                  <HomeCard
-                    key={index}
-                    item={item}
-                    itemId={item['_id']}
-                    link={`/launchpad/${item['symbol']}`}
-                    showCountdown={true}
-                  />
-                ))}
-              />
-            )}
-      </div>
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Popular Collections</span>
@@ -158,25 +144,6 @@ export const SalesListView = () => {
       </div>
       <div className="home-section">
         <div className="section-header">
-          <span className="section-title">Upcoming Launches</span>
-        </div>
-        {loading
-          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : collections['upcoming'] && (
-              <HorizontalGrid
-                childrens={collections['upcoming'].map((item, index) => (
-                  <HomeCard
-                    key={index}
-                    item={item}
-                    itemId={item['_id']}
-                    link={`/launchpad/${item['symbol']}`}
-                  />
-                ))}
-              />
-            )}
-      </div>
-      <div className="home-section">
-        <div className="section-header">
           <span className="section-title">New Collections</span>
           <Link to="/collections?type=new" className="see-all">
             See All
@@ -194,6 +161,46 @@ export const SalesListView = () => {
                     link={`/marketplace/${
                       item.market ? item.market : 'papercity'
                     }/${item['symbol']}`}
+                  />
+                ))}
+              />
+            )}
+      </div>
+      <div className="home-section">
+        <div className="section-header">
+          <span className="section-title">Recent Sales</span>
+        </div>
+        {loading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : recentSales && (
+              <HorizontalGrid
+                childrens={recentSales.map((item, index) => (
+                  <NFTCard
+                    key={index}
+                    item={item}
+                    itemId={item.mint}
+                    collection={item.collectionName}
+                    className="w-200"
+                  />
+                ))}
+              />
+            )}
+      </div>
+      <div className="home-section">
+        <div className="section-header">
+          <span className="section-title">Recent Listings</span>
+        </div>
+        {loading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : recentListings && (
+              <HorizontalGrid
+                childrens={recentListings.map((item, index) => (
+                  <NFTCard
+                    key={index}
+                    item={item}
+                    itemId={item.mint}
+                    collection={item.collectionName}
+                    className="w-200"
                   />
                 ))}
               />
