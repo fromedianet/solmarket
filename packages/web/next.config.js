@@ -34,6 +34,7 @@ module.exports = withPlugins(plugins, {
     NEXT_CG_SPL_TOKEN_IDS: process.env.CG_SPL_TOKEN_IDS,
     NEXT_ENV: process.env.REACT_ENV,
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
+    NEXT_OPEN_GRAPH_API_KEY: process.env.OPEN_GRAPH_API_KEY,
   },
   async rewrites() {
     return [

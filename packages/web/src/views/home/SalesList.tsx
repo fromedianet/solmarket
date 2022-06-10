@@ -35,16 +35,14 @@ export const SalesListView = () => {
       .finally(() => {
         setLoading(false);
       });
-    
-    getRecentSales()
-      .then((res: any[]) => {
-        setRecentSales(res);
-      });
 
-    getRecentListings()
-      .then((res: any[]) => {
-        setRecentListings(res);
-      });
+    getRecentSales().then((res: any[]) => {
+      setRecentSales(res);
+    });
+
+    getRecentListings().then((res: any[]) => {
+      setRecentListings(res);
+    });
   }, []);
 
   async function loadAllData() {
