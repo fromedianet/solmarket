@@ -6,20 +6,18 @@ import { HorizontalGrid } from '../../components/HorizontalGrid';
 import { useCollectionsAPI } from '../../hooks/useCollectionsAPI';
 import { HomeCard } from '../../components/HomeCard';
 import { ExCollection } from '../../models/exCollection';
-import { CarouselView } from './components/carousel';
 import { useMEApis } from '../../hooks/useMEApis';
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState({
-    launchpad: [],
-    upcoming: [],
     popular1: [],
     popular7: [],
     popular30: [],
     new: [],
   });
-  const [carouselData, setCarouselData] = useState<ExCollection[]>([]);
+  const [recentSales, setRecentSales] = useState([]);
+  const [recentListings, setRecentListings] = useState([]);
   const [popularStatus, setPopularStatus] = useState('30d');
   const { featuredCollectionsCarousel } = useCollectionsAPI();
   const meApis = useMEApis();
@@ -38,8 +36,6 @@ export const SalesListView = () => {
 
   async function loadAllData() {
     const result = {};
-    const carousels = await meApis.getFeaturedCollections();
-    setCarouselData(carousels);
 
     // Own marketplace
     const featuredData = await featuredCollectionsCarousel();
@@ -56,8 +52,6 @@ export const SalesListView = () => {
     });
     const exNews = await meApis.getNewCollections();
 
-    result['launchpad'] = featuredData['launchpad'] || [];
-    result['upcoming'] = featuredData['upcoming'] || [];
     let newData: ExCollection[] = featuredData['new'] || [];
     newData = newData.concat(exNews);
     result['new'] = newData;
@@ -70,27 +64,6 @@ export const SalesListView = () => {
 
   return (
     <div className="main-area">
-      {loading ? <CardLoader /> : <CarouselView data={carouselData} />}
-      <div className="home-section">
-        <div className="section-header">
-          <span className="section-title">Launchpad Drops</span>
-        </div>
-        {loading
-          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : collections['launchpad'] && (
-              <HorizontalGrid
-                childrens={collections['launchpad'].map((item, index) => (
-                  <HomeCard
-                    key={index}
-                    item={item}
-                    itemId={item['_id']}
-                    link={`/launchpad/${item['symbol']}`}
-                    showCountdown={true}
-                  />
-                ))}
-              />
-            )}
-      </div>
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Popular Collections</span>
@@ -155,25 +128,6 @@ export const SalesListView = () => {
             ))}
           />
         )}
-      </div>
-      <div className="home-section">
-        <div className="section-header">
-          <span className="section-title">Upcoming Launches</span>
-        </div>
-        {loading
-          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : collections['upcoming'] && (
-              <HorizontalGrid
-                childrens={collections['upcoming'].map((item, index) => (
-                  <HomeCard
-                    key={index}
-                    item={item}
-                    itemId={item['_id']}
-                    link={`/launchpad/${item['symbol']}`}
-                  />
-                ))}
-              />
-            )}
       </div>
       <div className="home-section">
         <div className="section-header">
