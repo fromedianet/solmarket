@@ -1,13 +1,18 @@
 import dynamic from "next/dynamic";
 import React from "react";
 
-const OpenGraphHead = dynamic(() => import("../../../../components/OpenGraphHead"), {
-  ssr: true,
-});
+const OpenGraphHead = dynamic(
+  () => import("../../../../components/OpenGraphHead"),
+  {
+    ssr: true,
+  }
+);
 const Providers = dynamic(() => import("../../../../contexts/providers"), {
   ssr: false,
 });
-const ItemDetailView = dynamic(() => import("../../../../views/itemDetail"), { ssr: false });
+const ItemDetailView = dynamic(() => import("../../../../views/itemDetail"), {
+  ssr: false,
+});
 
 function ItemDetailPage({ market, symbol, mint, metaTags }) {
   return (
@@ -37,15 +42,13 @@ export async function getServerSideProps({ query }) {
     ogUrl: `https://papercity.io`,
     ogImage: "https://papercity-bucket.s3.amazonaws.com/papercity_logo.png",
   };
-  const res = await fetch(`https://api.papercity.io/api/nfts/getNftByMint`, 
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ mint })
+  const res = await fetch(`https://api.papercity.io/api/nfts/getNftByMint`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  )
+    body: JSON.stringify({ mint }),
+  });
   const data = await res.json();
   if (data.data) {
     metaTags = {
@@ -53,7 +56,7 @@ export async function getServerSideProps({ query }) {
       ogDescription: data.data.description,
       ogUrl: `https://papercity.io/item-details/${market}/${symbol}/${mint}`,
       ogImage: data.data.image,
-    }
+    };
   }
 
   return {

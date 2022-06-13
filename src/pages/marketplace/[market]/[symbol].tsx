@@ -2,9 +2,12 @@ import dynamic from "next/dynamic";
 import React from "react";
 import { MarketType } from "../../../constants";
 
-const OpenGraphHead = dynamic(() => import("../../../components/OpenGraphHead"), {
-  ssr: true,
-});
+const OpenGraphHead = dynamic(
+  () => import("../../../components/OpenGraphHead"),
+  {
+    ssr: true,
+  }
+);
 const MarketplaceView = dynamic(() => import("../../../views/marketplace"), {
   ssr: false,
 });
@@ -40,15 +43,16 @@ export async function getServerSideProps({ query }) {
     ogImage: "https://papercity-bucket.s3.amazonaws.com/papercity_logo.png",
   };
   if (market === MarketType.PaperCity) {
-    const res = await fetch(`https://api.papercity.io/api/collections/getCollectionBySymbol`, 
+    const res = await fetch(
+      `https://api.papercity.io/api/collections/getCollectionBySymbol`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ symbol })
-      },
-    )
+        body: JSON.stringify({ symbol }),
+      }
+    );
     const data = await res.json();
     if (data.data) {
       metaTags = {
@@ -56,10 +60,12 @@ export async function getServerSideProps({ query }) {
         ogDescription: data.data.description,
         ogUrl: `https://papercity.io/marketplace/${market}/${symbol}`,
         ogImage: data.data.image,
-      }
+      };
     }
   } else {
-    const res = await fetch(`https://othersapi.papercity.io/api/getCollectionBySymbol/${market}/${symbol}`);
+    const res = await fetch(
+      `https://othersapi.papercity.io/api/getCollectionBySymbol/${market}/${symbol}`
+    );
     const data = await res.json();
     if (data.data) {
       metaTags = {
@@ -67,7 +73,7 @@ export async function getServerSideProps({ query }) {
         ogDescription: data.data.description,
         ogUrl: `https://papercity.io/marketplace/${market}/${symbol}`,
         ogImage: data.data.image,
-      }
+      };
     }
   }
 

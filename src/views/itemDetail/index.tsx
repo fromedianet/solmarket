@@ -21,9 +21,9 @@ import { AUCTION_HOUSE_ID } from "../../utils/ids";
 import { MetaplexModal } from "../../components/MetaplexModal";
 
 export default function ItemDetailView(props: {
-  market: string,
-  symbol: string,
-  mint: string,
+  market: string;
+  symbol: string;
+  mint: string;
 }) {
   const [market, setMarket] = useState<string>(
     props.market || MarketType.PaperCity
@@ -640,4 +640,4 @@ export default function ItemDetailView(props: {
       </MetaplexModal>
     </div>
   );
-};
+}

@@ -43,7 +43,7 @@ import { MetaplexModal } from "../../components/MetaplexModal";
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
-export const ProfileView = () => {
+export default function ProfileView() {
   const wallet = useWallet();
   const { socket } = useSocket();
   const { authToken, user } = useAuthToken();
@@ -835,4 +835,4 @@ export const ProfileView = () => {
       </MetaplexModal>
     </div>
   );
-};
+}

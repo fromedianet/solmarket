@@ -1,0 +1,95 @@
+@modal-button-color: #404144;
+@modal-button-color-hover: darken(@modal-button-color, 5%);
+
+p {
+  color: #6d6d6d;
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-size: 0.9rem;
+}
+
+.ant-collapse-ghost
+  > .ant-collapse-item
+  > .ant-collapse-content
+  > .ant-collapse-content-box {
+  padding: 0 8px;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+  vertical-align: middle !important;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 8px;
+}
+.ant-modal-body .modal-top-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ant-modal-body .modal-top-content .logo {
+  margin: 20px 0 16px 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.ant-modal-body .modal-top-content .text {
+  font-size: 32px;
+  color: white;
+  font-weight: 600;
+}
+.ant-modal-body .modal-btn-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.ant-modal-body .wallet-adapter-btn {
+  width: 100%;
+  background-color: @modal-button-color!important;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  margin-bottom: 8px;
+  &:hover {
+    background-color: @modal-button-color-hover!important;
+    color: white;
+  }
+}
+.ant-modal-body .wallet-adapter-btn .end-icon {
+  margin-left: 8px;
+  width: 24px;
+  height: 24px;
+}
+.ant-collapse.modal-collapse {
+  background-color: transparent;
+  border: none;
+  margin-top: 8px;
+}
+.ant-collapse.modal-collapse > .ant-collapse-item {
+  border: none;
+}
+.ant-collapse.modal-collapse > .ant-collapse-item > .ant-collapse-header {
+  background-color: @modal-button-color;
+  border: none;
+  border-radius: 6px !important;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+.modal-collapse > .ant-collapse-item > .ant-collapse-content {
+  background-color: transparent;
+  border: none;
+}
+.modal-collapse .ant-collapse-content > .ant-collapse-content-box {
+  padding: 8px 0;
+}
