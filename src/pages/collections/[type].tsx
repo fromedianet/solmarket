@@ -23,7 +23,7 @@ export default function CollectionsPage() {
     ogUrl: `https://papercity.io/collections/${type}`,
     ogImage: "https://papercity-bucket.s3.amazonaws.com/papercity_logo.png",
   };
-  console.log("Collections page", type);
+
   return (
     <>
       <OpenGraphHead
