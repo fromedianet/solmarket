@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Spin, Button, Divider } from "antd";
 import Head from "next/head";
@@ -21,16 +20,16 @@ import { useMEApis } from "../../hooks/useMEApis";
 import { AUCTION_HOUSE_ID } from "../../utils/ids";
 import { MetaplexModal } from "../../components/MetaplexModal";
 
-export const ItemDetailView = () => {
-  const { query } = useRouter();
-  // @ts-ignore
+export default function ItemDetailView(props: {
+  market: string,
+  symbol: string,
+  mint: string,
+}) {
   const [market, setMarket] = useState<string>(
-    query.market || MarketType.PaperCity
+    props.market || MarketType.PaperCity
   );
-  // @ts-ignore
-  const symbol: string = query.symbol || "";
-  // @ts-ignore
-  const mint: string = query.mint || "";
+  const symbol: string = props.symbol || "";
+  const mint: string = props.mint || "";
   const wallet = useWallet();
   const connection = useConnection();
   const { socket } = useSocket();
