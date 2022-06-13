@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { MenuOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
@@ -20,9 +19,9 @@ export const WalletInfo = () => {
     <div className="wallet">
       <div className="wallet-info">
         <button className="profile-btn">
-          <Link href={"/profile"}>
+          <a href={"/profile"}>
             <UserOutlined />
-          </Link>
+          </a>
         </button>
         {!connected ? (
           <ConnectButton className="connect-btn" />
@@ -40,9 +39,9 @@ export const WalletInfo = () => {
 
 export const LogoLink = () => {
   return (
-    <Link href={`/`}>
+    <a href={`/`}>
       <img src={"/papercity-logo.png"} alt="app-logo" height="60" />
-    </Link>
+    </a>
   );
 };
 

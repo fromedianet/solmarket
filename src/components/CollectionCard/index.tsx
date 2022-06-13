@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { Card, CardProps } from "antd";
 import { ArtContent } from "../ArtContent";
@@ -16,7 +15,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
 
   return (
     <Card className="collection-card" hoverable={true} bordered={false}>
-      <Link href={props.link}>
+      <a href={props.link}>
         <>
           <div className="image-over image-container">
             <ArtContent
@@ -32,7 +31,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
             {description && <span className="description">{description}</span>}
           </div>
         </>
-      </Link>
+      </a>
     </Card>
   );
 };

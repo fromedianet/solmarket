@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
@@ -24,7 +23,7 @@ const UserActions = (props: { onClick?: any }) => {
     <div style={{ display: "flex", flexDirection: "column" }}>
       {authToken ? (
         <>
-          <Link href={`/profile`}>
+          <a href={`/profile`}>
             <Button
               onClick={() => {
                 props.onClick ? props.onClick() : null;
@@ -33,7 +32,7 @@ const UserActions = (props: { onClick?: any }) => {
             >
               Sell
             </Button>
-          </Link>
+          </a>
         </>
       ) : (
         <Button onClick={async () => await authentication()} style={btnStyle}>

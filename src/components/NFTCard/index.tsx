@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { Card } from "antd";
 import { ArtContent } from "../ArtContent";
@@ -17,7 +16,7 @@ export const NFTCard = (props: {
       style={{ maxWidth: 250 }}
       bordered={false}
     >
-      <Link href={url}>
+      <a href={url}>
         <>
           <div className="image-over art-image-container">
             <ArtContent
@@ -39,7 +38,7 @@ export const NFTCard = (props: {
             )}
           </div>
         </>
-      </Link>
+      </a>
     </Card>
   );
 };

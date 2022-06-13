@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { Row, Col, Collapse, Skeleton, Statistic } from "antd";
 import { NFT } from "../../models/exCollection";
@@ -99,7 +98,7 @@ export const InfoSection = (props: {
         </div>
         <div className="collection-container">
           {props.nft.symbol ? (
-            <Link
+            <a
               href={`/marketplace/${props.nft.market}/${encodeURI(
                 props.nft.symbol
               )}`}
@@ -108,7 +107,7 @@ export const InfoSection = (props: {
                 <img width={20} src={"/icons/check.svg"} alt="check" />
                 <span>{props.nft.symbol}</span>
               </a>
-            </Link>
+            </a>
           ) : (
             <span className="collection-name">Unverified</span>
           )}

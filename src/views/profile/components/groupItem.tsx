@@ -19,13 +19,14 @@ export const GroupItem = ({
           alt={item.collection.symbol}
         />
         {item.collection.symbol && item.collection.symbol !== "undefined" ? (
-          <Link
+          <a
             href={`/marketplace/${
               item.collection.symbol ? "magiceden" : "papercity"
             }/${item.collection.symbol}`}
+            className="link"
           >
-            <a className="link">{item.collection.name}</a>
-          </Link>
+            {item.collection.name}
+          </a>
         ) : (
           <span className="link">{item.collection.name}</span>
         )}

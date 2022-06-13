@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { useState } from "react";
 import { Button, Row, Col, Form, Spin, Divider } from "antd";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -287,9 +286,9 @@ export const ItemAction = (props: {
             </div>
             <span className="bottom-label">
               By selecting &quot;Make offer&quot;, you agree to{" "}
-              <Link href="">
+              <a href="">
                 <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </Link>
+              </a>
             </span>
           </div>
         </div>

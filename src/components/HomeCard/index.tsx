@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { Card } from "antd";
 import { ArtContent } from "../ArtContent";
@@ -14,7 +13,7 @@ export const HomeCard = ({
 }) => {
   return (
     <Card className={`home-card`} hoverable={true} bordered={false}>
-      <Link href={link}>
+      <a href={link}>
         <>
           <div className="image-over image-container">
             <ArtContent
@@ -33,7 +32,7 @@ export const HomeCard = ({
             </div>
           </div>
         </>
-      </Link>
+      </a>
     </Card>
   );
 };

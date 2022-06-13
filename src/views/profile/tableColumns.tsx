@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { CheckCircleFilled, ExclamationCircleFilled } from "@ant-design/icons";
 import TimeAgo from "javascript-time-ago";
@@ -43,11 +42,11 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <Link
+        <a
           href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
         >
-          <a>{record.name}</a>
-        </Link>
+          {record.name}
+        </a>
       ),
     },
     {
@@ -144,12 +143,12 @@ export const OffersMadeColumns = (props: {
             }}
             alt="image"
           />
-          <Link
+          <a
             href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
             style={{ cursor: "pointer", marginLeft: 16 }}
           >
-            <a>{record.name}</a>
-          </Link>
+            {record.name}
+          </a>
         </div>
       ),
     },
@@ -248,12 +247,12 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
             }}
             alt="image"
           />
-          <Link
+          <a
             href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
             style={{ cursor: "pointer", marginLeft: 16 }}
           >
-            <a>{record.name}</a>
-          </Link>
+            {record.name}
+          </a>
         </div>
       ),
     },

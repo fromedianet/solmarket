@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
   Dropdown,
@@ -255,9 +254,7 @@ export const OffersMade = ({
             </div>
             <span className="bottom-label">
               By selecting &quot;Deposit&quot;, you agree to{" "}
-              <Link href="">
-                <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </Link>
+              <a href="" style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>
@@ -315,9 +312,7 @@ export const OffersMade = ({
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{" "}
-              <Link href="">
-                <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </Link>
+              <a href="" style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>
@@ -379,9 +374,7 @@ export const OffersMade = ({
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{" "}
-              <Link href="">
-                <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </Link>
+              <a href="" style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>

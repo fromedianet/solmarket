@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Spin, Button, Divider } from "antd";
@@ -633,9 +632,9 @@ export const ItemDetailView = () => {
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{" "}
-              <Link href="">
+              <a href="">
                 <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </Link>
+              </a>
             </span>
           </div>
         </div>

@@ -41,11 +41,11 @@ export const Activities = (props: { transactions: Transaction[] }) => {
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <Link
+        <a
           href={`/item-details/${record.market}/${record.collection}/${record.mint}`}
         >
           <a>{record.name}</a>
-        </Link>
+        </a>
       ),
     },
     {

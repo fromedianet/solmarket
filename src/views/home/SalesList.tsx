@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Radio } from "antd";
 import { CardLoader } from "../../components/CardLoader";
@@ -93,9 +92,9 @@ export const SalesListView = () => {
               30 days
             </Radio.Button>
           </Radio.Group>
-          <Link href="/collections/popular">
-            <a className="see-all">See All</a>
-          </Link>
+          <a href="/collections/popular" className="see-all">
+            See All
+          </a>
         </div>
         {loading ? (
           [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
@@ -143,9 +142,9 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">New Collections</span>
-          <Link href="/collections/new">
-            <a className="see-all">See All</a>
-          </Link>
+          <a href="/collections/new" className="see-all">
+            See All
+          </a>
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
