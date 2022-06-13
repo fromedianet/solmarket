@@ -96,7 +96,7 @@ export const FilterSidebar = (props: {
             <ArrowLeftOutlined className="filter-icon" />
           </div>
           <Collapse
-            expandIconPosition="right"
+            expandIconPosition="end"
             className="filter-container"
             defaultActiveKey={["status", "price", "attributes"]}
             expandIcon={({ isActive }) =>

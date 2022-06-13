@@ -83,7 +83,7 @@ export const WalletModal: FC = () => {
             alt="wallet-icon"
           />
         </Button>
-        <Collapse className="modal-collapse" expandIconPosition="right">
+        <Collapse className="modal-collapse" expandIconPosition="end">
           <Panel header="Other Wallets" key="1">
             {wallets.map((wallet, index) => {
               if (wallet.name === "Phantom") return null;
@@ -116,23 +116,23 @@ export const WalletModalProvider: FC<{ children: ReactNode }> = ({
   const [connected, setConnected] = useState(!!publicKey);
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    if (publicKey) {
-      const base58 = publicKey.toBase58();
-      const keyToDisplay =
-        base58.length > 20
-          ? `${base58.substring(0, 7)}.....${base58.substring(
-              base58.length - 7,
-              base58.length
-            )}`
-          : base58;
+  // useEffect(() => {
+  //   if (publicKey) {
+  //     const base58 = publicKey.toBase58();
+  //     const keyToDisplay =
+  //       base58.length > 20
+  //         ? `${base58.substring(0, 7)}.....${base58.substring(
+  //             base58.length - 7,
+  //             base58.length
+  //           )}`
+  //         : base58;
 
-      notify({
-        message: "Connected to wallet",
-        description: keyToDisplay,
-      });
-    }
-  }, [publicKey]);
+  //     notify({
+  //       message: "Connected to wallet",
+  //       description: keyToDisplay,
+  //     });
+  //   }
+  // }, [publicKey]);
 
   useEffect(() => {
     if (!publicKey && connected) {

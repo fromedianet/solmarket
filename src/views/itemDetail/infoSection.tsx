@@ -53,7 +53,7 @@ export const InfoSection = (props: {
         </div>
         <Collapse
           className="price-history"
-          expandIconPosition="right"
+          expandIconPosition="end"
           defaultActiveKey={"price"}
         >
           <Panel
@@ -132,7 +132,7 @@ export const InfoSection = (props: {
           onOpenMarketplace={props.onOpenMarketplace}
         />
         <Collapse
-          expandIconPosition="right"
+          expandIconPosition="end"
           className="art-info"
           defaultActiveKey={["attributes", "details"]}
         >

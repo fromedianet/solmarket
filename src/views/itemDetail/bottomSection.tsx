@@ -141,7 +141,7 @@ export const BottomSection = (props: {
 
   return (
     <Collapse
-      expandIconPosition="right"
+      expandIconPosition="end"
       className="art-info bottom-section"
       defaultActiveKey={["activities", "more"]}
     >
