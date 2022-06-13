@@ -72,14 +72,6 @@ export const useCollection = (market: string, symbol: string) => {
     }
   }
 
-  // async function loadCollectionEscrowStatsBySymbol(symbol: string, id: string) {
-  //   if (id === '1') {
-  //     return await getCollectionStatsBySymbol(symbol);
-  //   } else {
-  //     return await meApis.getCollectionEscrowStats(symbol);
-  //   }
-  // }
-
   async function loadTransactionsBySymbol(symbol: string) {
     let data = await getTransactionsBySymbol(symbol);
     const exData = await meApis.getTransactionsBySymbol(symbol, market);

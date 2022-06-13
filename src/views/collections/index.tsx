@@ -21,7 +21,6 @@ export default function CollectionsView({ type }: { type: string }) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [title, setTitle] = useState("");
-  const [timeRange, setTimeRange] = useState("1d");
   const [filters, setFilters] = useState<ExCollection[]>([]);
   const [items, setItems] = useState<ExCollection[]>([]);
   const PER_PAGE = 20;
@@ -44,7 +43,7 @@ export default function CollectionsView({ type }: { type: string }) {
     } else {
       setTitle("All Collections");
     }
-  }, [type, timeRange]);
+  }, [type]);
 
   useEffect(() => {
     setHasMore(true);
@@ -58,10 +57,7 @@ export default function CollectionsView({ type }: { type: string }) {
       const exData = await meApis.getNewCollections(true);
       data = data.concat(exData);
     } else if (type === "popular") {
-      data = await meApis.getPopularCollections({
-        more: true,
-        timeRange: timeRange,
-      });
+      data = await meApis.getPopularCollections(true);
     } else {
       data = await getAllCollections();
       const exData = await meApis.getAllCollections();
@@ -118,25 +114,6 @@ export default function CollectionsView({ type }: { type: string }) {
               allowClear
             />
           </Col>
-          {type === "popular" && (
-            <Col span={24} md={24} lg={10} className="radio-content">
-              <Radio.Group
-                defaultValue={timeRange}
-                buttonStyle="solid"
-                className="section-radio"
-              >
-                <Radio.Button value="1d" onClick={() => setTimeRange("1d")}>
-                  24 hours
-                </Radio.Button>
-                <Radio.Button value="7d" onClick={() => setTimeRange("7d")}>
-                  7 days
-                </Radio.Button>
-                <Radio.Button value="30d" onClick={() => setTimeRange("30d")}>
-                  30 days
-                </Radio.Button>
-              </Radio.Group>
-            </Col>
-          )}
           {type === "all" && (
             <Col span={24} md={24} lg={10} className="radio-content">
               <Select

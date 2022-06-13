@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Radio } from "antd";
 import { CardLoader } from "../../components/CardLoader";
 import { HorizontalGrid } from "../../components/HorizontalGrid";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
@@ -12,14 +11,11 @@ import { NFTCard } from "../../components/NFTCard";
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState({
-    popular1: [],
-    popular7: [],
-    popular30: [],
+    popular: [],
     new: [],
   });
   const [recentSales, setRecentSales] = useState<any[]>([]);
   const [recentListings, setRecentListings] = useState<any[]>([]);
-  const [popularStatus, setPopularStatus] = useState("30d");
   const { featuredCollectionsCarousel } = useCollectionsAPI();
   const { getRecentListings, getRecentSales } = useNFTsAPI();
   const meApis = useMEApis();
@@ -51,23 +47,13 @@ export const SalesListView = () => {
     const featuredData = await featuredCollectionsCarousel();
 
     // MagicEden
-    const popular1 = await meApis.getPopularCollections({
-      timeRange: "1d",
-    });
-    const popular7 = await meApis.getPopularCollections({
-      timeRange: "7d",
-    });
-    const popular30 = await meApis.getPopularCollections({
-      timeRange: "30d",
-    });
+    const popular = await meApis.getPopularCollections(false);
     const exNews = await meApis.getNewCollections();
 
     let newData: ExCollection[] = featuredData["new"] || [];
     newData = newData.concat(exNews);
     result["new"] = newData;
-    result["popular1"] = popular1;
-    result["popular7"] = popular7;
-    result["popular30"] = popular30;
+    result["popular"] = popular;
 
     return result;
   }
@@ -77,56 +63,15 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Popular Collections</span>
-          <Radio.Group
-            defaultValue={popularStatus}
-            buttonStyle="solid"
-            className="section-radio"
-          >
-            <Radio.Button value="1d" onClick={() => setPopularStatus("1d")}>
-              24 hours
-            </Radio.Button>
-            <Radio.Button value="7d" onClick={() => setPopularStatus("7d")}>
-              7 days
-            </Radio.Button>
-            <Radio.Button value="30d" onClick={() => setPopularStatus("30d")}>
-              30 days
-            </Radio.Button>
-          </Radio.Group>
           <a href="/collections/popular" className="see-all">
             See All
           </a>
         </div>
         {loading ? (
           [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-        ) : popularStatus === "1d" ? (
+        ) : collections["popular"] && (
           <HorizontalGrid
-            childrens={collections["popular1"].map((item: any, index) => (
-              <HomeCard
-                key={index}
-                item={item}
-                itemId={item["_id"]}
-                link={`/marketplace/${
-                  item.market ? item.market : "papercity"
-                }/${item["symbol"]}`}
-              />
-            ))}
-          />
-        ) : popularStatus === "7d" ? (
-          <HorizontalGrid
-            childrens={collections["popular7"].map((item: any, index) => (
-              <HomeCard
-                key={index}
-                item={item}
-                itemId={item["_id"]}
-                link={`/marketplace/${
-                  item.market ? item.market : "papercity"
-                }/${item["symbol"]}`}
-              />
-            ))}
-          />
-        ) : (
-          <HorizontalGrid
-            childrens={collections["popular30"].map((item: any, index) => (
+            childrens={collections["popular"].map((item: any, index) => (
               <HomeCard
                 key={index}
                 item={item}

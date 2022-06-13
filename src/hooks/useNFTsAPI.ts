@@ -59,7 +59,7 @@ export const useNFTsAPI = () => {
         const result: any = await runAPI({
           isAuth: false,
           method: "post",
-          url: "/nfts/getListedNFTsForME",
+          url: "/me/getListedNFTsByQuery",
           data: JSON.stringify({ query }),
           useCache: true,
         });

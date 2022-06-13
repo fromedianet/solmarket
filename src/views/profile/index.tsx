@@ -169,11 +169,6 @@ export default function ProfileView() {
       items1 = res.filter((k) => k.price === 0);
       items2 = res.filter((k) => k.price > 0);
 
-      const exRes = await meApis.getNFTsByEscrowOwner(
-        wallet.publicKey.toBase58()
-      );
-      items2 = items2.concat(exRes);
-
       items1.forEach((k) => {
         if (k.symbol && !symbols.includes(k.symbol)) {
           symbols.push(k.symbol);
