@@ -21,7 +21,6 @@ export const ApiUtils = () => {
     useCache?: boolean;
     showError?: boolean;
   }) {
-    axiosInstance.defaults.baseURL = APIS.base_others_api_url;
     let cacheKey = APIS.base_others_api_url + props.url;
     if (props.data && typeof props.data === "string") {
       cacheKey = cacheKey + props.data;
@@ -37,7 +36,7 @@ export const ApiUtils = () => {
     try {
       const res = await axiosInstance.request({
         method: props.method,
-        url: props.url,
+        url: APIS.base_others_api_url + props.url,
         data: props.data,
       });
       if (res.status === 200) {
@@ -74,7 +73,6 @@ export const ApiUtils = () => {
     showError?: boolean;
     useCache?: boolean;
   }) {
-    axiosInstance.defaults.baseURL = APIS.base_api_url;
     let cacheKey = APIS.base_api_url + props.url;
     if (props.data && typeof props.data === "string") {
       cacheKey = cacheKey + props.data;
@@ -100,7 +98,7 @@ export const ApiUtils = () => {
     try {
       const res = await axiosInstance.request({
         method: props.method,
-        url: props.url,
+        url: APIS.base_api_url + props.url,
         data: props.data,
       });
 
