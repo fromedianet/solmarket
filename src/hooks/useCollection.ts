@@ -68,7 +68,8 @@ export const useCollection = (market: string, symbol: string) => {
       const stats = await getCollectionStatsBySymbol(symbol);
       return { collection, stats };
     } else {
-      return await meApis.getCollection(symbol, market);
+      const result: any = await meApis.getCollection(symbol, market);
+      return { ...result.data };
     }
   }
 
