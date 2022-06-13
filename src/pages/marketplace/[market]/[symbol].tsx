@@ -31,9 +31,14 @@ function MarketplacePage({ market, symbol, metaTags }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, res }) {
   const market: string = query.market;
   const symbol: string = query.symbol;
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=43200, stale-while-revalidate=60"
+  );
 
   let metaTags = {
     ogTitle: "PaperCity",
@@ -43,7 +48,7 @@ export async function getServerSideProps({ query }) {
     ogImage: "https://papercity-bucket.s3.amazonaws.com/papercity_logo.png",
   };
   if (market === MarketType.PaperCity) {
-    const res = await fetch(
+    const result = await fetch(
       `https://api.papercity.io/api/collections/getCollectionBySymbol`,
       {
         method: "POST",
@@ -53,7 +58,7 @@ export async function getServerSideProps({ query }) {
         body: JSON.stringify({ symbol }),
       }
     );
-    const data = await res.json();
+    const data = await result.json();
     if (data.data) {
       metaTags = {
         ogTitle: data.data.name,
@@ -63,10 +68,10 @@ export async function getServerSideProps({ query }) {
       };
     }
   } else {
-    const res = await fetch(
+    const result = await fetch(
       `https://othersapi.papercity.io/api/getCollectionBySymbol/${market}/${symbol}`
     );
-    const data = await res.json();
+    const data = await result.json();
     if (data.data) {
       metaTags = {
         ogTitle: data.data.name,

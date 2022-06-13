@@ -30,10 +30,15 @@ function ItemDetailPage({ market, symbol, mint, metaTags }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, res }) {
   const market: string = query.market;
   const symbol: string = query.symbol;
   const mint: string = query.mint;
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=43200, stale-while-revalidate=60"
+  );
 
   let metaTags = {
     ogTitle: "PaperCity",
@@ -42,14 +47,14 @@ export async function getServerSideProps({ query }) {
     ogUrl: `https://papercity.io`,
     ogImage: "https://papercity-bucket.s3.amazonaws.com/papercity_logo.png",
   };
-  const res = await fetch(`https://api.papercity.io/api/nfts/getNftByMint`, {
+  const result = await fetch(`https://api.papercity.io/api/nfts/getNftByMint`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ mint }),
   });
-  const data = await res.json();
+  const data = await result.json();
   if (data.data) {
     metaTags = {
       ogTitle: data.data.name,
