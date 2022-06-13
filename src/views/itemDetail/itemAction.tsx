@@ -286,9 +286,7 @@ export const ItemAction = (props: {
             </div>
             <span className="bottom-label">
               By selecting &quot;Make offer&quot;, you agree to{" "}
-              <a href="">
-                <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </a>
+              <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>

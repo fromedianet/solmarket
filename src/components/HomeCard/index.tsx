@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "antd";
+import { useRouter } from "next/router";
 import { ArtContent } from "../ArtContent";
 
 export const HomeCard = ({
@@ -11,9 +12,10 @@ export const HomeCard = ({
   link: string;
   itemId: string;
 }) => {
+  const router = useRouter();
   return (
     <Card className={`home-card`} hoverable={true} bordered={false}>
-      <a href={link}>
+      <a onClick={() => router.push(link)}>
         <>
           <div className="image-over image-container">
             <ArtContent

@@ -631,9 +631,7 @@ export default function ItemDetailView(props: {
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{" "}
-              <a href="">
-                <a style={{ fontWeight: 600 }}>Terms of Service</a>
-              </a>
+              <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>

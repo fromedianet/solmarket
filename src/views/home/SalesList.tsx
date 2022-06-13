@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { CardLoader } from "../../components/CardLoader";
 import { HorizontalGrid } from "../../components/HorizontalGrid";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
@@ -9,6 +10,7 @@ import { useMEApis } from "../../hooks/useMEApis";
 import { NFTCard } from "../../components/NFTCard";
 
 export const SalesListView = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState({
     popular: [],
@@ -63,31 +65,37 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Popular Collections</span>
-          <a href="/collections/popular" className="see-all">
+          <a
+            onClick={() => router.push("/collections/popular")}
+            className="see-all"
+          >
             See All
           </a>
         </div>
-        {loading ? (
-          [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-        ) : collections["popular"] && (
-          <HorizontalGrid
-            childrens={collections["popular"].map((item: any, index) => (
-              <HomeCard
-                key={index}
-                item={item}
-                itemId={item["_id"]}
-                link={`/marketplace/${
-                  item.market ? item.market : "papercity"
-                }/${item["symbol"]}`}
+        {loading
+          ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
+          : collections["popular"] && (
+              <HorizontalGrid
+                childrens={collections["popular"].map((item: any, index) => (
+                  <HomeCard
+                    key={index}
+                    item={item}
+                    itemId={item["_id"]}
+                    link={`/marketplace/${
+                      item.market ? item.market : "papercity"
+                    }/${item["symbol"]}`}
+                  />
+                ))}
               />
-            ))}
-          />
-        )}
+            )}
       </div>
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">New Collections</span>
-          <a href="/collections/new" className="see-all">
+          <a
+            onClick={() => router.push("/collections/new")}
+            className="see-all"
+          >
             See All
           </a>
         </div>

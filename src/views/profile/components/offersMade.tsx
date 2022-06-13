@@ -254,9 +254,7 @@ export const OffersMade = ({
             </div>
             <span className="bottom-label">
               By selecting &quot;Deposit&quot;, you agree to{" "}
-              <a href="" style={{ fontWeight: 600 }}>
-                Terms of Service
-              </a>
+              <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>
@@ -314,9 +312,7 @@ export const OffersMade = ({
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{" "}
-              <a href="" style={{ fontWeight: 600 }}>
-                Terms of Service
-              </a>
+              <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>
@@ -378,9 +374,7 @@ export const OffersMade = ({
             </div>
             <span className="bottom-label">
               By selecting &quot;Cancel offer&quot;, you agree to{" "}
-              <a href="" style={{ fontWeight: 600 }}>
-                Terms of Service
-              </a>
+              <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
         </div>

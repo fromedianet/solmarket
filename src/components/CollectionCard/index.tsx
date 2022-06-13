@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardProps } from "antd";
+import { useRouter } from "next/router";
 import { ArtContent } from "../ArtContent";
 import { ExCollection } from "../../models/exCollection";
 
@@ -12,10 +13,11 @@ export interface CollectionCardProps extends CardProps {
 
 export const CollectionCard = (props: CollectionCardProps) => {
   const { name, description, image } = props.item;
+  const router = useRouter();
 
   return (
     <Card className="collection-card" hoverable={true} bordered={false}>
-      <a href={props.link}>
+      <a onClick={() => router.push(props.link)}>
         <>
           <div className="image-over image-container">
             <ArtContent

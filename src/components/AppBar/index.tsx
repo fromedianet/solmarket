@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { MenuOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { Select } from "antd";
@@ -14,12 +14,13 @@ const { Option } = Select;
 
 export const WalletInfo = () => {
   const { connected } = useWallet();
+  const router = useRouter();
 
   return (
     <div className="wallet">
       <div className="wallet-info">
         <button className="profile-btn">
-          <a href={"/profile"}>
+          <a onClick={() => router.push("/profile")}>
             <UserOutlined />
           </a>
         </button>
@@ -38,8 +39,9 @@ export const WalletInfo = () => {
 };
 
 export const LogoLink = () => {
+  const router = useRouter();
   return (
-    <a href={`/`}>
+    <a onClick={() => router.push(`/`)}>
       <img src={"/papercity-logo.png"} alt="app-logo" height="60" />
     </a>
   );
