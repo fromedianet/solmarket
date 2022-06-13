@@ -1,7 +1,10 @@
-node_modules
+target
+.next
+.node_modules
+.env
+.env.production
 dist
 .eslintcache
 build
-.env
-packages/common/src/styles.css
-packages/common/src/contexts/wallet.css
+yarn-error.log
+node_modules
