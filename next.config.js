@@ -42,6 +42,6 @@ module.exports = withPlugins(plugins, {
     return config;
   },
   compiler: {
-    removeConsole: false,
+    removeConsole: true,
   },
 });
