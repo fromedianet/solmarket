@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { Tooltip } from "antd";
 import { NFT } from "../../../models/exCollection";
@@ -10,6 +10,7 @@ export const GroupItem = ({
 }: {
   item: { collection: any; nfts: NFT[] };
 }) => {
+  const router = useRouter();
   return (
     <div className="group-item-container">
       <div className="collection-container">
@@ -20,9 +21,13 @@ export const GroupItem = ({
         />
         {item.collection.symbol && item.collection.symbol !== "undefined" ? (
           <a
-            href={`/marketplace/${
-              item.collection.symbol ? "magiceden" : "papercity"
-            }/${item.collection.symbol}`}
+            onClick={() =>
+              router.push(
+                `/marketplace/${
+                  item.collection.symbol ? "magiceden" : "papercity"
+                }/${item.collection.symbol}`
+              )
+            }
             className="link"
           >
             {item.collection.name}

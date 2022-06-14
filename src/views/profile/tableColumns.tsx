@@ -5,13 +5,14 @@ import en from "javascript-time-ago/locale/en.json";
 import { ENDPOINT_NAME } from "../../contexts";
 import { shortenAddress } from "../../utils/utils";
 import { CopySpan } from "../../components/CopySpan";
+import { NextRouter } from "next/router";
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo("en-US");
 
-export const ActivityColumns = (network: ENDPOINT_NAME) => {
+export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
   const getColor = (txType) => {
     if (txType === "SALE" || txType === "Auction Settled") {
       return "#2fc27d";
@@ -43,7 +44,11 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       key: "name",
       render: (text, record) => (
         <a
-          href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
+          onClick={() =>
+            router.push(
+              `/item-details/${record.market}/${record.symbol}/${record.mint}`
+            )
+          }
         >
           {record.name}
         </a>
@@ -122,6 +127,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
 };
 
 export const OffersMadeColumns = (props: {
+  router: NextRouter;
   balance: number;
   onCancel: (p) => void;
   onDeposit: (b) => void;
@@ -144,7 +150,11 @@ export const OffersMadeColumns = (props: {
             alt="image"
           />
           <a
-            href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
+            onClick={() =>
+              props.router.push(
+                `/item-details/${record.market}/${record.symbol}/${record.mint}`
+              )
+            }
             style={{ cursor: "pointer", marginLeft: 16 }}
           >
             {record.name}
@@ -229,7 +239,10 @@ export const OffersMadeColumns = (props: {
   ];
 };
 
-export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
+export const OffersReceivedColumns = (props: {
+  router: NextRouter;
+  onAccept: (p) => void;
+}) => {
   return [
     {
       title: "Name",
@@ -248,7 +261,11 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
             alt="image"
           />
           <a
-            href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
+            onClick={() =>
+              props.router.push(
+                `/item-details/${record.market}/${record.symbol}/${record.mint}`
+              )
+            }
             style={{ cursor: "pointer", marginLeft: 16 }}
           >
             {record.name}
