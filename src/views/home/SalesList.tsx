@@ -5,7 +5,6 @@ import { HorizontalGrid } from "../../components/HorizontalGrid";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { useNFTsAPI } from "../../hooks/useNFTsAPI";
 import { HomeCard } from "../../components/HomeCard";
-import { ExCollection } from "../../models/exCollection";
 import { useMEApis } from "../../hooks/useMEApis";
 import { NFTCard } from "../../components/NFTCard";
 
@@ -15,10 +14,10 @@ export const SalesListView = () => {
   const [collections, setCollections] = useState({
     popular: [],
     new: [],
+    recentSales: [],
+    recentListings: [],
   });
-  const [recentSales, setRecentSales] = useState<any[]>([]);
-  const [recentListings, setRecentListings] = useState<any[]>([]);
-  const { featuredCollectionsCarousel } = useCollectionsAPI();
+  const { getNewCollections } = useCollectionsAPI();
   const { getRecentListings, getRecentSales } = useNFTsAPI();
   const meApis = useMEApis();
 
@@ -32,30 +31,20 @@ export const SalesListView = () => {
       .finally(() => {
         setLoading(false);
       });
-
-    getRecentSales().then((res: any[]) => {
-      setRecentSales(res);
-    });
-
-    getRecentListings().then((res: any[]) => {
-      setRecentListings(res);
-    });
   }, []);
 
   async function loadAllData() {
-    const result = {};
-
-    // Own marketplace
-    const featuredData = await featuredCollectionsCarousel();
-
-    // MagicEden
+    const newCollections = await getNewCollections(false);
     const popular = await meApis.getPopularCollections(false);
-    const exNews = await meApis.getNewCollections();
+    const recentSales = await getRecentSales();
+    const recentListings = await getRecentListings();
 
-    let newData: ExCollection[] = featuredData["new"] || [];
-    newData = newData.concat(exNews);
-    result["new"] = newData;
-    result["popular"] = popular;
+    const result = {
+      popular: popular,
+      new: newCollections,
+      recentSales: recentSales,
+      recentListings: recentListings,
+    }
 
     return result;
   }
@@ -122,9 +111,9 @@ export const SalesListView = () => {
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : recentSales && (
+          : collections['recentSales'] && (
               <HorizontalGrid
-                childrens={recentSales.map((item, index) => (
+                childrens={collections['recentSales'].map((item: any, index) => (
                   <NFTCard
                     key={index}
                     item={item}
@@ -142,9 +131,9 @@ export const SalesListView = () => {
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : recentListings && (
+          : collections['recentListings'] && (
               <HorizontalGrid
-                childrens={recentListings.map((item, index) => (
+                childrens={collections['recentListings'].map((item: any, index) => (
                   <NFTCard
                     key={index}
                     item={item}

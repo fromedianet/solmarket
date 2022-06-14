@@ -53,11 +53,12 @@ export const useMEApis = () => {
     return [];
   }
 
-  async function getNewCollections(more?: boolean): Promise<any[]> {
+  async function getNewCollections(more: boolean): Promise<any[]> {
     try {
-      const result: any = await runOthersAPI({
+      const result: any = await runAPI({
+        isAuth: false,
         method: "post",
-        url: "/getNewCollections",
+        url: "/me/getNewCollections",
         data: JSON.stringify({ more }),
         useCache: true,
       });
