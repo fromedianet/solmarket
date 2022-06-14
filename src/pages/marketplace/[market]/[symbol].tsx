@@ -47,39 +47,25 @@ export async function getServerSideProps({ query, res }) {
     ogUrl: `https://papercity.io`,
     ogImage: "https://papercity-bucket.s3.amazonaws.com/papercity_logo.png",
   };
-  if (market === MarketType.PaperCity) {
-    const result = await fetch(
-      `https://api.papercity.io/api/collections/getCollectionBySymbol`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ symbol }),
-      }
-    );
-    const data = await result.json();
-    if (data.data) {
-      metaTags = {
-        ogTitle: data.data.name,
-        ogDescription: data.data.description,
-        ogUrl: `https://papercity.io/marketplace/${market}/${symbol}`,
-        ogImage: data.data.image,
-      };
+
+  const result = await fetch(
+    `https://api.papercity.io/api/collections/getCollectionBySymbol`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ symbol }),
     }
-  } else {
-    const result = await fetch(
-      `https://othersapi.papercity.io/api/getCollectionBySymbol/${market}/${symbol}`
-    );
-    const data = await result.json();
-    if (data.data) {
-      metaTags = {
-        ogTitle: data.data.name,
-        ogDescription: data.data.description,
-        ogUrl: `https://papercity.io/marketplace/${market}/${symbol}`,
-        ogImage: data.data.image,
-      };
-    }
+  );
+  const data = await result.json();
+  if (data.data) {
+    metaTags = {
+      ogTitle: data.data.name,
+      ogDescription: data.data.description,
+      ogUrl: `https://papercity.io/marketplace/${market}/${symbol}`,
+      ogImage: data.data.image,
+    };
   }
 
   return {
