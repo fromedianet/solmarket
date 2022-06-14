@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import React from "react";
 import { Table } from "antd";
 import TimeAgo from "javascript-time-ago";
@@ -43,7 +43,11 @@ export const Activities = (props: { transactions: Transaction[] }) => {
       key: "name",
       render: (text, record) => (
         <a
-          onClick={() => router.push(`/item-details/${record.market}/${record.collection}/${record.mint}`)}
+          onClick={() =>
+            router.push(
+              `/item-details/${record.market}/${record.collection}/${record.mint}`
+            )
+          }
         >
           {record.name}
         </a>

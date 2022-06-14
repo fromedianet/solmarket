@@ -44,7 +44,11 @@ export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
       key: "name",
       render: (text, record) => (
         <a
-          onClick={() => router.push(`/item-details/${record.market}/${record.symbol}/${record.mint}`)}
+          onClick={() =>
+            router.push(
+              `/item-details/${record.market}/${record.symbol}/${record.mint}`
+            )
+          }
         >
           {record.name}
         </a>
@@ -146,7 +150,11 @@ export const OffersMadeColumns = (props: {
             alt="image"
           />
           <a
-            onClick={() => props.router.push(`/item-details/${record.market}/${record.symbol}/${record.mint}`)}
+            onClick={() =>
+              props.router.push(
+                `/item-details/${record.market}/${record.symbol}/${record.mint}`
+              )
+            }
             style={{ cursor: "pointer", marginLeft: 16 }}
           >
             {record.name}
@@ -231,7 +239,10 @@ export const OffersMadeColumns = (props: {
   ];
 };
 
-export const OffersReceivedColumns = (props: { router: NextRouter, onAccept: (p) => void }) => {
+export const OffersReceivedColumns = (props: {
+  router: NextRouter;
+  onAccept: (p) => void;
+}) => {
   return [
     {
       title: "Name",
@@ -250,7 +261,11 @@ export const OffersReceivedColumns = (props: { router: NextRouter, onAccept: (p)
             alt="image"
           />
           <a
-            onClick={() => props.router.push(`/item-details/${record.market}/${record.symbol}/${record.mint}`)}
+            onClick={() =>
+              props.router.push(
+                `/item-details/${record.market}/${record.symbol}/${record.mint}`
+              )
+            }
             style={{ cursor: "pointer", marginLeft: 16 }}
           >
             {record.name}

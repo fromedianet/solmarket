@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import React from "react";
 import { Row, Col, Collapse, Skeleton, Statistic } from "antd";
 import { NFT } from "../../models/exCollection";
@@ -101,9 +101,13 @@ export const InfoSection = (props: {
         <div className="collection-container">
           {props.nft.symbol ? (
             <a
-              onClick={() => router.push(`/marketplace/${props.nft.market}/${encodeURI(
-                props.nft.symbol
-              )}`)}
+              onClick={() =>
+                router.push(
+                  `/marketplace/${props.nft.market}/${encodeURI(
+                    props.nft.symbol
+                  )}`
+                )
+              }
               className="collection-name"
             >
               <img width={20} src={"/icons/check.svg"} alt="check" />
