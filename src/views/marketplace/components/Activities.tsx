@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { useRouter } from 'next/router';
 import React from "react";
 import { Table } from "antd";
 import TimeAgo from "javascript-time-ago";
@@ -14,6 +14,7 @@ TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo("en-US");
 
 export const Activities = (props: { transactions: Transaction[] }) => {
+  const router = useRouter();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
 
@@ -42,9 +43,9 @@ export const Activities = (props: { transactions: Transaction[] }) => {
       key: "name",
       render: (text, record) => (
         <a
-          href={`/item-details/${record.market}/${record.collection}/${record.mint}`}
+          onClick={() => router.push(`/item-details/${record.market}/${record.collection}/${record.mint}`)}
         >
-          <a>{record.name}</a>
+          {record.name}
         </a>
       ),
     },

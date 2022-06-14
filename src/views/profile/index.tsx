@@ -1,4 +1,5 @@
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -44,6 +45,7 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export default function ProfileView() {
+  const router = useRouter();
   const wallet = useWallet();
   const { socket } = useSocket();
   const { authToken, user } = useAuthToken();
@@ -78,9 +80,10 @@ export default function ProfileView() {
   const { getMultiCollectionEscrowStats } = useCollectionsAPI();
   const meApis = useMEApis();
 
-  const activityColumns = ActivityColumns(network);
+  const activityColumns = ActivityColumns(network, router);
 
   const offersReceivedColumns = OffersReceivedColumns({
+    router: router,
     onAccept: (data: Offer) => onAcceptOffer(data),
   });
 
