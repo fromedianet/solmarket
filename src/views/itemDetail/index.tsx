@@ -153,7 +153,13 @@ export default function ItemDetailView(props: {
   async function getTransactions(): Promise<any[]> {
     let data = await getTransactionsByMint(mint);
     const exData = await meApis.getTransactionsByMint(mint, market);
-    data = data.concat(exData);
+    let txs = data.map((k) => k.transaction);
+    exData.forEach((item) => {
+      if (!txs.includes(item.transaction)) {
+        data.push(item);
+        txs.push(item.transaction);
+      }
+    });
     data.sort((a, b) => {
       if (b.blockTime > a.blockTime) {
         return 1;

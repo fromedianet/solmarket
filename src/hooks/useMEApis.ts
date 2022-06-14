@@ -222,7 +222,7 @@ export const useMEApis = () => {
   ): Promise<any[]> {
     try {
       let params;
-      if (market === MarketType.MagicEden) {
+      if (market === MarketType.MagicEden || market === MarketType.PaperCity) {
         const queryData = {
           $match: { mint: mint },
           $sort: { blockTime: -1, createdAt: -1 },
