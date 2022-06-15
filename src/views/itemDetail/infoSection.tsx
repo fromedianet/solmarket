@@ -21,7 +21,7 @@ import { shortenAddress } from "../../utils/utils";
 const { Panel } = Collapse;
 
 export const InfoSection = (props: {
-  nft: NFT;
+  nft: any;
   biddingBalance: number;
   priceData: any[];
   loading: boolean;
@@ -44,8 +44,8 @@ export const InfoSection = (props: {
           <ArtContent
             className="artwork-image"
             uri={props.nft.image}
-            // @ts-ignore
-            animationURL={props.nft.animationURL}
+            animationURL={props.nft.animation_url}
+            style={{ width: "100%" }}
             active={true}
             allowMeshRender={true}
             artview={true}

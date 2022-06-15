@@ -298,9 +298,7 @@ export const ArtContent = ({
     setCategoryState(category);
   }, [category]);
 
-  const animationUrlExt = new URLSearchParams(
-    getLast((animationURLState || "").split("?"))
-  ).get("ext");
+  const animationUrlExt = getLast((animationURLState || "").split("."));
 
   if (
     allowMeshRender &&
@@ -334,7 +332,7 @@ export const ArtContent = ({
   }
 
   const content =
-    categoryState === "video" ? (
+    categoryState === "video" || animationUrlExt === "mp4" ? (
       <VideoArtContent
         className={className}
         style={style}
