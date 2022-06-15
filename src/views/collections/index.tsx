@@ -54,14 +54,10 @@ export default function CollectionsView({ type }: { type: string }) {
     let data: ExCollection[] = [];
     if (type === "new") {
       data = await getNewCollections(true);
-      const exData = await meApis.getNewCollections(true);
-      data = data.concat(exData);
     } else if (type === "popular") {
       data = await meApis.getPopularCollections(true);
     } else {
       data = await getAllCollections();
-      const exData = await meApis.getAllCollections();
-      data = data.concat(exData);
     }
     return data;
   }
@@ -122,9 +118,6 @@ export default function CollectionsView({ type }: { type: string }) {
                 onSelect={(val) => onChangeMarket(val)}
               >
                 <Select.Option value={MarketType.All}>All</Select.Option>
-                <Select.Option value={MarketType.PaperCity}>
-                  PaperCity
-                </Select.Option>
                 <Select.Option value={MarketType.MagicEden}>
                   MagicEden
                 </Select.Option>

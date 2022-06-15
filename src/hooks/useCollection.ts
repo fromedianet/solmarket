@@ -25,15 +25,14 @@ export const useCollection = (market: string, symbol: string) => {
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const { getCollectionBySymbol, getCollectionStatsBySymbol } =
-    useCollectionsAPI();
+  const { getCollectionAndStats } = useCollectionsAPI();
   const { getListedNftsByQuery } = useNFTsAPI();
   const { getTransactionsBySymbol } = useTransactionsAPI();
   const meApis = useMEApis();
 
   useEffect(() => {
     // For own marketplace
-    loadCollectionBySymbol(symbol, market).then((res) => {
+    getCollectionAndStats(symbol, market).then((res) => {
       if (res) {
         if (res["collection"]) {
           setCollection(res["collection"]);
@@ -61,17 +60,6 @@ export const useCollection = (market: string, symbol: string) => {
       setTransactions(res);
     });
   }, [market, symbol]);
-
-  async function loadCollectionBySymbol(symbol: string, market: string) {
-    if (market === MarketType.PaperCity) {
-      const collection = await getCollectionBySymbol(symbol);
-      const stats = await getCollectionStatsBySymbol(symbol);
-      return { collection, stats };
-    } else {
-      const result: any = await meApis.getCollection(symbol, market);
-      return { ...result.data };
-    }
-  }
 
   async function loadTransactionsBySymbol(symbol: string) {
     let data = await getTransactionsBySymbol(symbol);

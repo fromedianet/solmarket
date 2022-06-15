@@ -179,7 +179,7 @@ export default function MarketplaceView(props: {
             </span>
           }
         >
-          <Activities transactions={transactions} />
+          <Activities transactions={transactions} symbol={symbol} />
         </TabPane>
       </Tabs>
     </div>
