@@ -108,7 +108,7 @@ export const AppBar = () => {
                 >
                   <img
                     src={item.image}
-                    className="creator-icon"
+                    className="creator-icon placeholder"
                     alt={item.name}
                   />
                   <span>{item.name}</span>

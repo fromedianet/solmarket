@@ -33,6 +33,7 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
       render: (text, record) => (
         <img
           src={record.image}
+          className="placeholder"
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
           alt={record.name}
           loading="lazy"
@@ -143,6 +144,7 @@ export const OffersMadeColumns = (props: {
               objectFit: "cover",
               borderRadius: 4,
             }}
+            className="placeholder"
             alt={record.name}
           />
           <Link
@@ -246,6 +248,7 @@ export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
               objectFit: "cover",
               borderRadius: 4,
             }}
+            className="placeholder"
             alt={record.name}
           />
           <Link

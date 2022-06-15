@@ -20,7 +20,7 @@ export const NFTCard = (props: {
         <a>
           <div className="image-over art-image-container">
             <img
-              className="art-image no-event"
+              className="art-image no-event placeholder"
               src={props.item.image}
               alt={props.item.name}
               title={props.item.name}

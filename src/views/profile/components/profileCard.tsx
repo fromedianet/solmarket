@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, Row, Col } from "antd";
-import { ArtContent } from "../../../components/ArtContent";
 import { formatAmount } from "../../../utils/utils";
 
 export const ProfileCard = ({
@@ -22,10 +21,11 @@ export const ProfileCard = ({
     >
       <div className="image-over image-container">
         <img
-          className="image no-event"
+          className="image no-event placeholder"
           src={item["image"] || ""}
           alt={item["name"]}
           title={item["name"]}
+          loading="lazy"
         />
       </div>
       <div className="card-caption">

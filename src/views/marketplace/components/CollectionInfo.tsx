@@ -38,7 +38,7 @@ export const CollectionInfo = (props: {
                 <img
                   src="/icons/website.svg"
                   className="info-icon"
-                  alt="twitter"
+                  alt={props.collection.website}
                 />
               </a>
             )}
@@ -52,7 +52,7 @@ export const CollectionInfo = (props: {
                 <img
                   src="/icons/discord.svg"
                   className="info-icon"
-                  alt="twitter"
+                  alt={props.collection.discord}
                 />
               </a>
             )}
@@ -66,7 +66,7 @@ export const CollectionInfo = (props: {
                 <img
                   src="/icons/twitter2.svg"
                   className="info-icon"
-                  alt="twitter"
+                  alt={props.collection.twitter}
                 />
               </a>
             )}

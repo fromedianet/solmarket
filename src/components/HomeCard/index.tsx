@@ -1,6 +1,5 @@
 import React from "react";
 import { Card } from "antd";
-import { useRouter } from "next/router";
 import Link from "next/link";
 
 export const HomeCard = ({
@@ -12,7 +11,6 @@ export const HomeCard = ({
   link: string;
   itemId: string;
 }) => {
-  const router = useRouter();
   return (
     <Card className={`home-card`} hoverable={true} bordered={false}>
       <Link href={link}>
@@ -20,7 +18,7 @@ export const HomeCard = ({
           <div className="image-over image-container">
             <img
               src={item["image"]}
-              className="image no-event"
+              className="image no-event placeholder"
               alt={item["name"]}
               title={item["name"]}
               loading="lazy"

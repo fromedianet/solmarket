@@ -40,6 +40,7 @@ export const Activities = (props: {
       render: (text, record) => (
         <img
           src={record.image}
+          className="placeholder"
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
           alt={record.name}
           loading="lazy"
