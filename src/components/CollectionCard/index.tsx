@@ -20,7 +20,7 @@ export const CollectionCard = (props: CollectionCardProps) => {
           <div className="image-over image-container">
             <img
               src={image}
-              className="image no-event placeholder"
+              className="image no-event image-placeholder"
               alt={name}
               title={name}
               loading="lazy"

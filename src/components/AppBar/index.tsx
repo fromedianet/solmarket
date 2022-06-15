@@ -43,7 +43,7 @@ export const LogoLink = () => {
   return (
     <Link href="/">
       <a>
-        <img src={"/papercity-logo.png"} alt="app-logo" height="60" />
+        <img src={"/papercity-logo.png"} alt="app-logo" width={192} height={60} />
       </a>
     </Link>
   );
@@ -108,7 +108,7 @@ export const AppBar = () => {
                 >
                   <img
                     src={item.image}
-                    className="creator-icon placeholder"
+                    className="creator-icon image-placeholder"
                     alt={item.name}
                   />
                   <span>{item.name}</span>

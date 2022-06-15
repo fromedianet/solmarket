@@ -20,7 +20,7 @@ export const NFTCard = (props: {
         <a>
           <div className="image-over art-image-container">
             <img
-              className="art-image no-event placeholder"
+              className="art-image no-event image-placeholder"
               src={props.item.image}
               alt={props.item.name}
               title={props.item.name}
@@ -31,7 +31,7 @@ export const NFTCard = (props: {
             <span className="card-name">{props.item.name}</span>
             <div className="card-collection-name">
               <span>{props.collection}</span>
-              <img src="/icons/check.svg" alt="check" />
+              <img src="/icons/check.svg" alt="check" width={16} height={16} />
             </div>
             {props.item.price > 0 && (
               <span className="card-name">{`${props.item.price} SOL`}</span>
