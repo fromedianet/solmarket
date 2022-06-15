@@ -10,6 +10,13 @@ import { ConnectButton } from "../../components/ConnectButton";
 import { MetaplexModal } from "../../components/MetaplexModal";
 import { formatAmount } from "../../utils/utils";
 
+const MarketNames = {
+  magiceden: "MagicEden",
+  solanart: "Solanart",
+  digital_eyes: "DigitalEyes",
+  alpha_art: "AlphaArt"
+}
+
 export const ItemAction = (props: {
   nft: any;
   loading: boolean;
@@ -88,7 +95,7 @@ export const ItemAction = (props: {
                 onClick={props.onOpenMarketplace}
                 disabled={props.loading}
               >
-                {`Go to ${props.nft.market}`}
+                {`Go to ${MarketNames[props.nft.market]}`}
               </Button>
             )
           ) : isOwner ? (

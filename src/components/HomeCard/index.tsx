@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "antd";
-import { useRouter } from "next/router";
-import { ArtContent } from "../ArtContent";
+import Link from "next/link";
 
 export const HomeCard = ({
   item,
@@ -12,18 +11,17 @@ export const HomeCard = ({
   link: string;
   itemId: string;
 }) => {
-  const router = useRouter();
   return (
     <Card className={`home-card`} hoverable={true} bordered={false}>
-      <a onClick={() => router.push(link)}>
-        <>
+      <Link href={link}>
+        <a>
           <div className="image-over image-container">
-            <ArtContent
-              className="image no-event"
-              uri={item["image"] || ""}
-              preview={false}
-              artview={true}
-              allowMeshRender={false}
+            <img
+              src={item["image"]}
+              className="image no-event placeholder"
+              alt={item["name"]}
+              title={item["name"]}
+              loading="lazy"
             />
           </div>
           <div className="card-caption">
@@ -33,8 +31,8 @@ export const HomeCard = ({
               <img src="/icons/check-circle.svg" alt="check-circle" />
             </div>
           </div>
-        </>
-      </a>
+        </a>
+      </Link>
     </Card>
   );
 };

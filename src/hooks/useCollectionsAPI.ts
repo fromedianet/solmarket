@@ -46,7 +46,10 @@ export const useCollectionsAPI = () => {
   /**
    * Get collection by symbol
    */
-  async function getCollectionAndStats(symbol: string, market: string): Promise<any> {
+  async function getCollectionAndStats(
+    symbol: string,
+    market: string
+  ): Promise<any> {
     try {
     } catch {}
     const result: any = await runAPI({

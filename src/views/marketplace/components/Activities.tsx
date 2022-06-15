@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 import React from "react";
 import { Table } from "antd";
 import TimeAgo from "javascript-time-ago";
@@ -13,8 +13,10 @@ TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo("en-US");
 
-export const Activities = (props: { transactions: Transaction[], symbol: string }) => {
-  const router = useRouter();
+export const Activities = (props: {
+  transactions: Transaction[];
+  symbol: string;
+}) => {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
 
@@ -35,22 +37,26 @@ export const Activities = (props: { transactions: Transaction[], symbol: string 
       title: "",
       dataIndex: "image",
       key: "image",
-      render: (uri) => <img src={uri} width={40} alt="image" />,
+      render: (text, record) => (
+        <img
+          src={record.image}
+          className="placeholder"
+          style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
+          alt={record.name}
+          loading="lazy"
+        />
+      ),
     },
     {
       title: "NAME",
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <a
-          onClick={() =>
-            router.push(
-              `/item-details/${record.market}/${props.symbol}/${record.mint}`
-            )
-          }
+        <Link
+          href={`/item-details/${record.market}/${props.symbol}/${record.mint}`}
         >
-          {record.name}
-        </a>
+          <a>{record.name}</a>
+        </Link>
       ),
     },
     {

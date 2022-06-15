@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Button, Popover } from "antd";
@@ -19,13 +19,12 @@ const btnStyle: React.CSSProperties = {
 const UserActions = (props: { onClick?: any }) => {
   const { authToken } = useAuthToken();
   const { authentication } = useAuthAPI();
-  const router = useRouter();
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {authToken ? (
-        <>
-          <a onClick={() => router.push(`/profile`)}>
+        <Link href="/profile">
+          <a>
             <Button
               onClick={() => {
                 props.onClick ? props.onClick() : null;
@@ -35,7 +34,7 @@ const UserActions = (props: { onClick?: any }) => {
               Sell
             </Button>
           </a>
-        </>
+        </Link>
       ) : (
         <Button onClick={async () => await authentication()} style={btnStyle}>
           Sign in

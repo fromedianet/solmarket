@@ -47,7 +47,15 @@ export const BottomSection = (props: {
       title: "",
       dataIndex: "image",
       key: "image",
-      render: (uri) => <img src={uri} width={40} alt="image" />,
+      render: (rext, record) => (
+        <img
+          src={record.image}
+          className="placeholder"
+          style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
+          alt={record.name}
+          loading="lazy"
+        />
+      ),
     },
     {
       title: "NAME",
@@ -190,7 +198,7 @@ export const BottomSection = (props: {
             childrens={props.nftList.map((item, index) => (
               <NFTCard
                 key={index}
-                itemId={`${index}`}
+                itemId={index.toString()}
                 item={item}
                 collection={item.collection}
                 className="w-250"

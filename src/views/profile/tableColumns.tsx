@@ -1,18 +1,18 @@
 import React from "react";
+import Link from "next/link";
 import { CheckCircleFilled, ExclamationCircleFilled } from "@ant-design/icons";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { ENDPOINT_NAME } from "../../contexts";
 import { shortenAddress } from "../../utils/utils";
 import { CopySpan } from "../../components/CopySpan";
-import { NextRouter } from "next/router";
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo("en-US");
 
-export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
+export const ActivityColumns = (network: ENDPOINT_NAME) => {
   const getColor = (txType) => {
     if (txType === "SALE" || txType === "Auction Settled") {
       return "#2fc27d";
@@ -30,11 +30,13 @@ export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
       title: "",
       dataIndex: "image",
       key: "image",
-      render: (uri) => (
+      render: (text, record) => (
         <img
-          src={uri}
+          src={record.image}
+          className="placeholder"
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
-          alt="image"
+          alt={record.name}
+          loading="lazy"
         />
       ),
     },
@@ -43,15 +45,11 @@ export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <a
-          onClick={() =>
-            router.push(
-              `/item-details/${record.market}/${record.symbol}/${record.mint}`
-            )
-          }
+        <Link
+          href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
         >
-          {record.name}
-        </a>
+          <a>{record.name}</a>
+        </Link>
       ),
     },
     {
@@ -127,7 +125,6 @@ export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
 };
 
 export const OffersMadeColumns = (props: {
-  router: NextRouter;
   balance: number;
   onCancel: (p) => void;
   onDeposit: (b) => void;
@@ -147,18 +144,14 @@ export const OffersMadeColumns = (props: {
               objectFit: "cover",
               borderRadius: 4,
             }}
-            alt="image"
+            className="placeholder"
+            alt={record.name}
           />
-          <a
-            onClick={() =>
-              props.router.push(
-                `/item-details/${record.market}/${record.symbol}/${record.mint}`
-              )
-            }
-            style={{ cursor: "pointer", marginLeft: 16 }}
+          <Link
+            href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
           >
-            {record.name}
-          </a>
+            <a style={{ cursor: "pointer", marginLeft: 16 }}>{record.name}</a>
+          </Link>
         </div>
       ),
     },
@@ -239,10 +232,7 @@ export const OffersMadeColumns = (props: {
   ];
 };
 
-export const OffersReceivedColumns = (props: {
-  router: NextRouter;
-  onAccept: (p) => void;
-}) => {
+export const OffersReceivedColumns = (props: { onAccept: (p) => void }) => {
   return [
     {
       title: "Name",
@@ -258,18 +248,14 @@ export const OffersReceivedColumns = (props: {
               objectFit: "cover",
               borderRadius: 4,
             }}
-            alt="image"
+            className="placeholder"
+            alt={record.name}
           />
-          <a
-            onClick={() =>
-              props.router.push(
-                `/item-details/${record.market}/${record.symbol}/${record.mint}`
-              )
-            }
-            style={{ cursor: "pointer", marginLeft: 16 }}
+          <Link
+            href={`/item-details/${record.market}/${record.symbol}/${record.mint}`}
           >
-            {record.name}
-          </a>
+            <a style={{ cursor: "pointer", marginLeft: 16 }}>{record.name}</a>
+          </Link>
         </div>
       ),
     },

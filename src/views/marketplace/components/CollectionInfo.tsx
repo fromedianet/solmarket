@@ -1,6 +1,5 @@
 import React from "react";
 import { Row, Col, Statistic } from "antd";
-import { Image } from "antd";
 import ReadMore from "../../../components/ReadMore";
 import { ExCollection, ExCollectionStats } from "../../../models/exCollection";
 import { formatAmount } from "../../../utils/utils";
@@ -12,11 +11,12 @@ export const CollectionInfo = (props: {
   return (
     <div className="info-container">
       {props.collection && props.collection.image ? (
-        <Image
+        <img
           loading="lazy"
           className="info-image"
           src={props.collection.image}
-          alt="avatar"
+          alt={props.collection.name}
+          title={props.collection.name}
         />
       ) : (
         <img className="info-image" src="/image-placeholder.svg" alt="avatar" />
@@ -38,7 +38,7 @@ export const CollectionInfo = (props: {
                 <img
                   src="/icons/website.svg"
                   className="info-icon"
-                  alt="twitter"
+                  alt={props.collection.website}
                 />
               </a>
             )}
@@ -52,7 +52,7 @@ export const CollectionInfo = (props: {
                 <img
                   src="/icons/discord.svg"
                   className="info-icon"
-                  alt="twitter"
+                  alt={props.collection.discord}
                 />
               </a>
             )}
@@ -66,7 +66,7 @@ export const CollectionInfo = (props: {
                 <img
                   src="/icons/twitter2.svg"
                   className="info-icon"
-                  alt="twitter"
+                  alt={props.collection.twitter}
                 />
               </a>
             )}

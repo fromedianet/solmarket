@@ -1,7 +1,6 @@
 import React from "react";
+import Link from "next/link";
 import { Card } from "antd";
-import { useRouter } from "next/router";
-import { ArtContent } from "../ArtContent";
 
 export const NFTCard = (props: {
   item: any;
@@ -9,7 +8,6 @@ export const NFTCard = (props: {
   itemId?: string;
   className?: string;
 }) => {
-  const router = useRouter();
   const url = `/item-details/${props.item.market}/${props.item.symbol}/${props.item.mint}`;
   return (
     <Card
@@ -18,15 +16,15 @@ export const NFTCard = (props: {
       style={{ maxWidth: 250 }}
       bordered={false}
     >
-      <a onClick={() => router.push(url)}>
-        <>
+      <Link href={url}>
+        <a>
           <div className="image-over art-image-container">
-            <ArtContent
-              className="art-image no-event"
-              uri={props.item.image}
-              preview={false}
-              artview={true}
-              allowMeshRender={false}
+            <img
+              className="art-image no-event placeholder"
+              src={props.item.image}
+              alt={props.item.name}
+              title={props.item.name}
+              loading="lazy"
             />
           </div>
           <div className="card-caption">
@@ -39,8 +37,8 @@ export const NFTCard = (props: {
               <span className="card-name">{`${props.item.price} SOL`}</span>
             )}
           </div>
-        </>
-      </a>
+        </a>
+      </Link>
     </Card>
   );
 };
