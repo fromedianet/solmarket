@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "antd";
 import { useRouter } from "next/router";
-import { ArtContent } from "../ArtContent";
 
 export const NFTCard = (props: {
   item: any;
@@ -21,12 +20,12 @@ export const NFTCard = (props: {
       <a onClick={() => router.push(url)}>
         <>
           <div className="image-over art-image-container">
-            <ArtContent
+            <img
               className="art-image no-event"
-              uri={props.item.image}
-              preview={false}
-              artview={true}
-              allowMeshRender={false}
+              src={props.item.image}
+              alt={props.item.name}
+              title={props.item.name}
+              loading="lazy"
             />
           </div>
           <div className="card-caption">

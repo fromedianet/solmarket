@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardProps } from "antd";
 import { useRouter } from "next/router";
-import { ArtContent } from "../ArtContent";
 import { ExCollection } from "../../models/exCollection";
 
 export interface CollectionCardProps extends CardProps {
@@ -20,12 +19,12 @@ export const CollectionCard = (props: CollectionCardProps) => {
       <a onClick={() => router.push(props.link)}>
         <>
           <div className="image-over image-container">
-            <ArtContent
+            <img
+              src={image}
               className="image no-event"
-              uri={image}
-              preview={false}
-              artview={true}
-              allowMeshRender={false}
+              alt={name}
+              title={name}
+              loading="lazy"
             />
           </div>
           <div className="card-caption">

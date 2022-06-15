@@ -21,12 +21,11 @@ export const ProfileCard = ({
       onClick={() => onSelect(item["symbol"])}
     >
       <div className="image-over image-container">
-        <ArtContent
+        <img
           className="image no-event"
-          uri={item["image"] || ""}
-          preview={false}
-          artview={true}
-          allowMeshRender={false}
+          src={item["image"] || ""}
+          alt={item['name']}
+          title={item['name']}
         />
       </div>
       <div className="card-caption">

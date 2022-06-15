@@ -35,7 +35,7 @@ export const Activities = (props: { transactions: Transaction[], symbol: string 
       title: "",
       dataIndex: "image",
       key: "image",
-      render: (uri) => <img src={uri} width={40} alt="image" />,
+      render: (text, record) => <img src={record.image} width={40} alt={record.name} loading="lazy" />,
     },
     {
       title: "NAME",

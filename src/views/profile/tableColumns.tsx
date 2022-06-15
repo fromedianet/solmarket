@@ -30,11 +30,12 @@ export const ActivityColumns = (network: ENDPOINT_NAME, router: NextRouter) => {
       title: "",
       dataIndex: "image",
       key: "image",
-      render: (uri) => (
+      render: (text, record) => (
         <img
-          src={uri}
+          src={record.image}
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
-          alt="image"
+          alt={record.name}
+          loading="lazy"
         />
       ),
     },
@@ -147,7 +148,7 @@ export const OffersMadeColumns = (props: {
               objectFit: "cover",
               borderRadius: 4,
             }}
-            alt="image"
+            alt={record.name}
           />
           <a
             onClick={() =>
@@ -258,7 +259,7 @@ export const OffersReceivedColumns = (props: {
               objectFit: "cover",
               borderRadius: 4,
             }}
-            alt="image"
+            alt={record.name}
           />
           <a
             onClick={() =>

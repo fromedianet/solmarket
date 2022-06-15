@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "antd";
 import { useRouter } from "next/router";
-import { ArtContent } from "../ArtContent";
 
 export const HomeCard = ({
   item,
@@ -18,12 +17,12 @@ export const HomeCard = ({
       <a onClick={() => router.push(link)}>
         <>
           <div className="image-over image-container">
-            <ArtContent
+            <img
+              src={item['image']}
               className="image no-event"
-              uri={item["image"] || ""}
-              preview={false}
-              artview={true}
-              allowMeshRender={false}
+              alt={item['name']}
+              title={item['name']}
+              loading="lazy"
             />
           </div>
           <div className="card-caption">
