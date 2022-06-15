@@ -142,6 +142,12 @@ export default function ItemDetailView(props: {
             escrowPubkey: nftData.escrowPubkey || null,
             market: market,
           };
+        } else {
+          result = {
+            ...result,
+            symbol: symbol,
+            market: market,
+          }
         }
       }
     }
