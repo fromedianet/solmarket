@@ -1,4 +1,4 @@
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { MenuOutlined, SearchOutlined, UserOutlined } from "@ant-design/icons";
 import { Select } from "antd";
@@ -7,7 +7,6 @@ import { useSetSidebarState } from "../../contexts";
 import { CurrentUserBadge } from "../CurrentUserBadge";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { ExCollection } from "../../models/exCollection";
-import { useMEApis } from "../../hooks/useMEApis";
 import { ConnectButton } from "../ConnectButton";
 
 const { Option } = Select;
@@ -54,10 +53,9 @@ export const AppBar = () => {
   const { getAllCollections } = useCollectionsAPI();
   const [collections, setCollections] = useState<ExCollection[]>([]);
   const [filters, setFilters] = useState<ExCollection[]>([]);
-  const meApis = useMEApis();
 
   useEffect(() => {
-    loadCollections().then((res) => {
+    getAllCollections().then((res) => {
       setCollections(res);
     });
   }, []);
@@ -65,13 +63,6 @@ export const AppBar = () => {
   useEffect(() => {
     setFilters(collections);
   }, [collections]);
-
-  async function loadCollections() {
-    let data = await getAllCollections();
-    const exData = await meApis.getAllCollections();
-    data = data.concat(exData);
-    return data;
-  }
 
   const onSearch = (val: string) => {
     const searchKey = val.toLowerCase();

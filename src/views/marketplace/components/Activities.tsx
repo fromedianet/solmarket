@@ -13,7 +13,7 @@ TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo("en-US");
 
-export const Activities = (props: { transactions: Transaction[] }) => {
+export const Activities = (props: { transactions: Transaction[], symbol: string }) => {
   const router = useRouter();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
@@ -45,7 +45,7 @@ export const Activities = (props: { transactions: Transaction[] }) => {
         <a
           onClick={() =>
             router.push(
-              `/item-details/${record.market}/${record.collection}/${record.mint}`
+              `/item-details/${record.market}/${props.symbol}/${record.mint}`
             )
           }
         >
