@@ -21,11 +21,13 @@ export const ProfileCard = ({
     >
       <div className="image-over image-container">
         <img
-          className="image no-event placeholder"
+          className="image no-event image-placeholder"
           src={item["image"] || ""}
           alt={item["name"]}
           title={item["name"]}
           loading="lazy"
+          width={248}
+          height={248}
         />
       </div>
       <div className="card-caption">

@@ -15,7 +15,7 @@ export const GroupItem = ({
       <div className="collection-container">
         <img
           src={item.collection.image}
-          className="icon placeholder"
+          className="icon image-placeholder"
           alt={item.collection.symbol}
           loading="lazy"
         />
