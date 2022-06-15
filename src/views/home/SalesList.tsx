@@ -65,7 +65,7 @@ export const SalesListView = () => {
                   <HomeCard
                     key={index}
                     item={item}
-                    itemId={item["_id"]}
+                    itemId={index.toString()}
                     link={`/marketplace/${
                       item.market ? item.market : "papercity"
                     }/${item["symbol"]}`}
@@ -89,7 +89,7 @@ export const SalesListView = () => {
                   <HomeCard
                     key={index}
                     item={item}
-                    itemId={item["_id"]}
+                    itemId={index.toString()}
                     link={`/marketplace/${
                       item.market ? item.market : "papercity"
                     }/${item["symbol"]}`}
@@ -111,7 +111,7 @@ export const SalesListView = () => {
                     <NFTCard
                       key={index}
                       item={item}
-                      itemId={item.mint}
+                      itemId={index.toString()}
                       collection={item.collectionName}
                       className="w-200"
                     />
@@ -133,7 +133,7 @@ export const SalesListView = () => {
                     <NFTCard
                       key={index}
                       item={item}
-                      itemId={item.mint}
+                      itemId={index.toString()}
                       collection={item.collectionName}
                       className="w-200"
                     />

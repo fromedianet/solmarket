@@ -198,7 +198,7 @@ export const BottomSection = (props: {
             childrens={props.nftList.map((item, index) => (
               <NFTCard
                 key={index}
-                itemId={`${index}`}
+                itemId={index.toString()}
                 item={item}
                 collection={item.collection}
                 className="w-250"
