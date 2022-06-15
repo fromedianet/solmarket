@@ -121,7 +121,12 @@ export default function MarketplaceView(props: {
   return (
     <div className="collection-page">
       {collection && collection.banner && (
-        <img src={collection.banner} className="collection-background" loading="lazy" alt="banner"/>
+        <img
+          src={collection.banner}
+          className="collection-background"
+          loading="lazy"
+          alt="banner"
+        />
       )}
       <div className="collection-info">
         <CollectionInfo collection={collection} stats={collectionStats} />

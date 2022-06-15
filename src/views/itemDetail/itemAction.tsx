@@ -14,8 +14,8 @@ const MarketNames = {
   magiceden: "MagicEden",
   solanart: "Solanart",
   digital_eyes: "DigitalEyes",
-  alpha_art: "AlphaArt"
-}
+  alpha_art: "AlphaArt",
+};
 
 export const ItemAction = (props: {
   nft: any;

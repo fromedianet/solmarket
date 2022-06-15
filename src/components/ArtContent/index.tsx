@@ -332,7 +332,7 @@ export const ArtContent = ({
   }
 
   const content =
-    (categoryState === "video" || animationUrlExt === "mp4") ? (
+    categoryState === "video" || animationUrlExt === "mp4" ? (
       <VideoArtContent
         className={className}
         style={style}
