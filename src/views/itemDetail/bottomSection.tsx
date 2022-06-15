@@ -50,7 +50,7 @@ export const BottomSection = (props: {
       render: (rext, record) => (
         <img
           src={record.image}
-          className="placeholder"
+          className="image-placeholder"
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
           alt={record.name}
           loading="lazy"
