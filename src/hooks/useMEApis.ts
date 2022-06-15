@@ -6,36 +6,6 @@ import { ApiUtils } from "../utils/apiUtils";
 export const useMEApis = () => {
   const { runAPI, runOthersAPI } = ApiUtils();
 
-  async function getFeaturedCollections(): Promise<any[]> {
-    try {
-      const result: any = await runOthersAPI({
-        method: "get",
-        url: "/getFeaturedCollections",
-        useCache: true,
-      });
-      if ("data" in result) {
-        return result["data"];
-      }
-    } catch {}
-
-    return [];
-  }
-
-  async function getAllCollections(): Promise<any[]> {
-    try {
-      const result: any = await runOthersAPI({
-        method: "get",
-        url: "/getAllCollections",
-        useCache: true,
-      });
-      if ("data" in result) {
-        return result["data"];
-      }
-    } catch {}
-
-    return [];
-  }
-
   async function getPopularCollections(more: boolean): Promise<any[]> {
     try {
       const result: any = await runAPI({
@@ -51,62 +21,6 @@ export const useMEApis = () => {
     } catch {}
 
     return [];
-  }
-
-  async function getNewCollections(more: boolean): Promise<any[]> {
-    try {
-      const result: any = await runAPI({
-        isAuth: false,
-        method: "post",
-        url: "/me/getNewCollections",
-        data: JSON.stringify({ more }),
-        useCache: true,
-      });
-      if ("data" in result) {
-        return result["data"];
-      }
-    } catch {}
-
-    return [];
-  }
-
-  async function getCollection(symbol: string, market: string): Promise<any> {
-    try {
-      if (market === MarketType.MagicEden) {
-        const result: any = await runAPI({
-          isAuth: false,
-          method: "post",
-          url: "/me/getCollection",
-          data: JSON.stringify({ symbol }),
-          useCache: true,
-        });
-        return result;
-      } else {
-        const result: any = await runOthersAPI({
-          method: "get",
-          url: `/getCollection/${market}/${symbol}`,
-          useCache: true,
-        });
-        return result;
-      }
-    } catch {}
-
-    return null;
-  }
-
-  async function getCollectionBySymbol(symbol: string): Promise<any> {
-    try {
-      const result: any = await runOthersAPI({
-        method: "get",
-        url: `/getCollectionBySymbol/${symbol}`,
-        useCache: true,
-      });
-      if ("data" in result) {
-        return result["data"];
-      }
-    } catch {}
-
-    return null;
   }
 
   async function getMultiCollectionEscrowStats(
@@ -292,12 +206,7 @@ export const useMEApis = () => {
   }
 
   return {
-    getFeaturedCollections,
-    getAllCollections,
     getPopularCollections,
-    getNewCollections,
-    getCollection,
-    getCollectionBySymbol,
     getMultiCollectionEscrowStats,
     getListedNftsByQuery,
     getNFTByMintAddress,

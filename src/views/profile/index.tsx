@@ -77,7 +77,6 @@ export default function ProfileView() {
   } = useInstructionsAPI();
   const { getTransactionsByWallet, getOffersMade, getOffersReceived } =
     useTransactionsAPI();
-  const { getMultiCollectionEscrowStats } = useCollectionsAPI();
   const meApis = useMEApis();
 
   const activityColumns = ActivityColumns(network, router);
@@ -186,8 +185,7 @@ export default function ProfileView() {
 
       let tempCols: any = {};
       if (symbols.length > 0) {
-        const colRes = await getMultiCollectionEscrowStats(symbols);
-        tempCols = await meApis.getMultiCollectionEscrowStats(symbols);
+        const colRes = await meApis.getMultiCollectionEscrowStats(symbols);
         for (const [key, value] of Object.entries(colRes)) {
           if (!(key in tempCols)) {
             tempCols[key] = value;
