@@ -47,7 +47,9 @@ export const BottomSection = (props: {
       title: "",
       dataIndex: "image",
       key: "image",
-      render: (rext, record) => <img src={record.image} width={40} alt={record.name} loading="lazy" />,
+      render: (rext, record) => (
+        <img src={record.image} width={40} alt={record.name} loading="lazy" />
+      ),
     },
     {
       title: "NAME",

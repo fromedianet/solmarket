@@ -1,5 +1,4 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -25,7 +24,6 @@ import { useSocket } from "../../contexts/socketProvider";
 import { Message, Transaction } from "@solana/web3.js";
 import { OffersMade } from "./components/offersMade";
 import { useInstructionsAPI } from "../../hooks/useInstructionsAPI";
-import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { formatAmount, groupBy, shortenAddress } from "../../utils/utils";
 import { GroupItem } from "./components/groupItem";
 import { useMEApis } from "../../hooks/useMEApis";
@@ -45,7 +43,6 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export default function ProfileView() {
-  const router = useRouter();
   const wallet = useWallet();
   const { socket } = useSocket();
   const { authToken, user } = useAuthToken();
@@ -79,10 +76,9 @@ export default function ProfileView() {
     useTransactionsAPI();
   const meApis = useMEApis();
 
-  const activityColumns = ActivityColumns(network, router);
+  const activityColumns = ActivityColumns(network);
 
   const offersReceivedColumns = OffersReceivedColumns({
-    router: router,
     onAccept: (data: Offer) => onAcceptOffer(data),
   });
 

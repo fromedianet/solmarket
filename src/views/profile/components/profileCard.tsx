@@ -24,8 +24,8 @@ export const ProfileCard = ({
         <img
           className="image no-event"
           src={item["image"] || ""}
-          alt={item['name']}
-          title={item['name']}
+          alt={item["name"]}
+          title={item["name"]}
         />
       </div>
       <div className="card-caption">

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export const HomeCard = ({
   item,
@@ -14,14 +15,14 @@ export const HomeCard = ({
   const router = useRouter();
   return (
     <Card className={`home-card`} hoverable={true} bordered={false}>
-      <a onClick={() => router.push(link)}>
-        <>
+      <Link href={link}>
+        <a>
           <div className="image-over image-container">
             <img
-              src={item['image']}
+              src={item["image"]}
               className="image no-event"
-              alt={item['name']}
-              title={item['name']}
+              alt={item["name"]}
+              title={item["name"]}
               loading="lazy"
             />
           </div>
@@ -32,8 +33,8 @@ export const HomeCard = ({
               <img src="/icons/check-circle.svg" alt="check-circle" />
             </div>
           </div>
-        </>
-      </a>
+        </a>
+      </Link>
     </Card>
   );
 };

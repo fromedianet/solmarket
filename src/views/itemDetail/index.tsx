@@ -147,7 +147,7 @@ export default function ItemDetailView(props: {
             ...result,
             symbol: symbol,
             market: market,
-          }
+          };
         }
       }
     }

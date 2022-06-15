@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { CardLoader } from "../../components/CardLoader";
 import { HorizontalGrid } from "../../components/HorizontalGrid";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
@@ -9,7 +9,6 @@ import { useMEApis } from "../../hooks/useMEApis";
 import { NFTCard } from "../../components/NFTCard";
 
 export const SalesListView = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [collections, setCollections] = useState({
     popular: [],
@@ -44,7 +43,7 @@ export const SalesListView = () => {
       new: newCollections,
       recentSales: recentSales,
       recentListings: recentListings,
-    }
+    };
 
     return result;
   }
@@ -54,12 +53,9 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">Popular Collections</span>
-          <a
-            onClick={() => router.push("/collections/popular")}
-            className="see-all"
-          >
-            See All
-          </a>
+          <Link href="/collections/popular">
+            <a className="see-all">See All</a>
+          </Link>
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
@@ -81,12 +77,9 @@ export const SalesListView = () => {
       <div className="home-section">
         <div className="section-header">
           <span className="section-title">New Collections</span>
-          <a
-            onClick={() => router.push("/collections/new")}
-            className="see-all"
-          >
-            See All
-          </a>
+          <Link href="/collections/new">
+            <a className="see-all">See All</a>
+          </Link>
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
@@ -111,17 +104,19 @@ export const SalesListView = () => {
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : collections['recentSales'] && (
+          : collections["recentSales"] && (
               <HorizontalGrid
-                childrens={collections['recentSales'].map((item: any, index) => (
-                  <NFTCard
-                    key={index}
-                    item={item}
-                    itemId={item.mint}
-                    collection={item.collectionName}
-                    className="w-200"
-                  />
-                ))}
+                childrens={collections["recentSales"].map(
+                  (item: any, index) => (
+                    <NFTCard
+                      key={index}
+                      item={item}
+                      itemId={item.mint}
+                      collection={item.collectionName}
+                      className="w-200"
+                    />
+                  )
+                )}
               />
             )}
       </div>
@@ -131,17 +126,19 @@ export const SalesListView = () => {
         </div>
         {loading
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
-          : collections['recentListings'] && (
+          : collections["recentListings"] && (
               <HorizontalGrid
-                childrens={collections['recentListings'].map((item: any, index) => (
-                  <NFTCard
-                    key={index}
-                    item={item}
-                    itemId={item.mint}
-                    collection={item.collectionName}
-                    className="w-200"
-                  />
-                ))}
+                childrens={collections["recentListings"].map(
+                  (item: any, index) => (
+                    <NFTCard
+                      key={index}
+                      item={item}
+                      itemId={item.mint}
+                      collection={item.collectionName}
+                      className="w-200"
+                    />
+                  )
+                )}
               />
             )}
       </div>

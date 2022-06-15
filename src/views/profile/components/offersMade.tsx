@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import {
   Dropdown,
   Menu,
@@ -37,7 +36,6 @@ export const OffersMade = ({
   onDeposit: (a) => void;
   onWithdraw: (a) => void;
 }) => {
-  const router = useRouter();
   const [form] = Form.useForm();
   const { account } = useNativeAccount();
   const mainBalance = (account?.lamports || 0) / LAMPORTS_PER_SOL;
@@ -50,7 +48,6 @@ export const OffersMade = ({
 
   useEffect(() => {
     const columns = OffersMadeColumns({
-      router: router,
       balance: balance,
       onCancel: (data: Offer) => {
         setSelectedOffer(data);

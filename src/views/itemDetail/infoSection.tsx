@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 import React from "react";
 import { Row, Col, Collapse, Skeleton, Statistic } from "antd";
 import { NFT } from "../../models/exCollection";
@@ -34,7 +34,6 @@ export const InfoSection = (props: {
   onCancelVisible: () => void;
   onOpenMarketplace: () => void;
 }) => {
-  const router = useRouter();
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
 
@@ -100,19 +99,16 @@ export const InfoSection = (props: {
         </div>
         <div className="collection-container">
           {props.nft.symbol ? (
-            <a
-              onClick={() =>
-                router.push(
-                  `/marketplace/${props.nft.market}/${encodeURI(
-                    props.nft.symbol
-                  )}`
-                )
-              }
-              className="collection-name"
+            <Link
+              href={`/marketplace/${props.nft.market}/${encodeURI(
+                props.nft.symbol
+              )}`}
             >
-              <img width={20} src={"/icons/check.svg"} alt="check" />
-              <span>{props.nft.symbol}</span>
-            </a>
+              <a className="collection-name">
+                <img width={20} src={"/icons/check.svg"} alt="check" />
+                <span>{props.nft.symbol}</span>
+              </a>
+            </Link>
           ) : (
             <span className="collection-name">Unverified</span>
           )}
