@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Input, Radio, Select } from "antd";
+import { Row, Col, Input, Select } from "antd";
 import { CollectionCard } from "../../components/CollectionCard";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { CardLoader } from "../../components/CardLoader";
@@ -88,8 +88,6 @@ export default function CollectionsView({ type }: { type: string }) {
     setSelectedMarket(val);
     if (val === MarketType.All) {
       setFilters(collections);
-    } else if (val === MarketType.PaperCity) {
-      setFilters(collections.filter((item) => item.market === undefined));
     } else {
       setFilters(collections.filter((item) => item.market === val));
     }
@@ -110,7 +108,7 @@ export default function CollectionsView({ type }: { type: string }) {
               allowClear
             />
           </Col>
-          {type === "all" && (
+          {(type === "all" || type === "new") && (
             <Col span={24} md={24} lg={10} className="radio-content">
               <Select
                 className="select-container"
