@@ -86,6 +86,10 @@ export const useCollection = (market: string, symbol: string) => {
         }
       }
     });
+    data = data.map((k: any, index: number) => ({
+      ...k,
+      key: index,
+    }));
     return data;
   }
 

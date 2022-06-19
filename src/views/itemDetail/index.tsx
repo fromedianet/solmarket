@@ -181,6 +181,10 @@ export default function ItemDetailView(props: {
         }
       }
     });
+    data = data.map((k: any, index: number) => ({
+      ...k,
+      key: index,
+    }));
     return data;
   }
 

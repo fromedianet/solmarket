@@ -22,7 +22,7 @@ import { WalletSigner } from "./walletProvider";
 
 interface BlockhashAndFeeCalculator {
   blockhash: Blockhash;
-  feeCalculator: FeeCalculator;
+  lastValidBlockHeight: number;
 }
 
 export type ENDPOINT_NAME =
@@ -283,15 +283,16 @@ export const sendTransactionsInChunks = async (
         continue;
       }
       const transaction = new Transaction();
-      const block = await connection.getRecentBlockhash(commitment);
+      const block = await connection.getLatestBlockhash(commitment);
 
       instructions.forEach((instruction) => transaction.add(instruction));
       transaction.recentBlockhash = block.blockhash;
-      transaction.setSigners(
-        // fee payed by the wallet owner
-        wallet.publicKey,
-        ...signers.map((s) => s.publicKey)
-      );
+      transaction.feePayer = wallet.publicKey;
+      // transaction.setSigners(
+      //   // fee payed by the wallet owner
+      //   wallet.publicKey,
+      //   ...signers.map((s) => s.publicKey)
+      // );
       if (signers.length > 0) {
         transaction.partialSign(...signers);
       }
@@ -352,7 +353,7 @@ export const sendTransactions = async (
   const unsignedTxns: Transaction[] = [];
 
   if (!block) {
-    block = await connection.getRecentBlockhash(commitment);
+    block = await connection.getLatestBlockhash(commitment);
   }
 
   for (let i = 0; i < instructionSet.length; i++) {
@@ -366,11 +367,12 @@ export const sendTransactions = async (
     const transaction = new Transaction();
     instructions.forEach((instruction) => transaction.add(instruction));
     transaction.recentBlockhash = block.blockhash;
-    transaction.setSigners(
-      // fee payed by the wallet owner
-      wallet.publicKey,
-      ...signers.map((s) => s.publicKey)
-    );
+    transaction.feePayer = wallet.publicKey;
+    // transaction.setSigners(
+    //   // fee payed by the wallet owner
+    //   wallet.publicKey,
+    //   ...signers.map((s) => s.publicKey)
+    // );
 
     if (signers.length > 0) {
       transaction.partialSign(...signers);
@@ -450,17 +452,18 @@ export const sendTransactionsWithRecentBlock = async (
       continue;
     }
 
-    const block = await connection.getRecentBlockhash(commitment);
+    const block = await connection.getLatestBlockhash(commitment);
     await sleep(1200);
 
     const transaction = new Transaction();
     instructions.forEach((instruction) => transaction.add(instruction));
     transaction.recentBlockhash = block.blockhash;
-    transaction.setSigners(
-      // fee payed by the wallet owner
-      wallet.publicKey,
-      ...signers.map((s) => s.publicKey)
-    );
+    transaction.feePayer = wallet.publicKey;
+    // transaction.setSigners(
+    //   // fee payed by the wallet owner
+    //   wallet.publicKey,
+    //   ...signers.map((s) => s.publicKey)
+    // );
 
     if (signers.length > 0) {
       transaction.partialSign(...signers);
@@ -518,18 +521,19 @@ export const sendTransaction = async (
   let transaction = new Transaction();
   instructions.forEach((instruction) => transaction.add(instruction));
   transaction.recentBlockhash = (
-    block || (await connection.getRecentBlockhash(commitment))
+    block || (await connection.getLatestBlockhash(commitment))
   ).blockhash;
 
-  if (includesFeePayer) {
-    transaction.setSigners(...signers.map((s) => s.publicKey));
-  } else {
-    transaction.setSigners(
-      // fee payed by the wallet owner
-      wallet.publicKey,
-      ...signers.map((s) => s.publicKey)
-    );
-  }
+  transaction.feePayer = wallet.publicKey;
+  // if (includesFeePayer) {
+  //   transaction.setSigners(...signers.map((s) => s.publicKey));
+  // } else {
+  //   transaction.setSigners(
+  //     // fee payed by the wallet owner
+  //     wallet.publicKey,
+  //     ...signers.map((s) => s.publicKey)
+  //   );
+  // }
 
   if (signers.length > 0) {
     transaction.partialSign(...signers);
@@ -602,15 +606,16 @@ export const sendTransactionWithRetry = async (
     block || (await connection.getLatestBlockhash(commitment))
   ).blockhash;
 
-  if (includesFeePayer) {
-    transaction.setSigners(...signers.map((s) => s.publicKey));
-  } else {
-    transaction.setSigners(
-      // fee payed by the wallet owner
-      wallet.publicKey,
-      ...signers.map((s) => s.publicKey)
-    );
-  }
+  transaction.feePayer = wallet.publicKey;
+  // if (includesFeePayer) {
+  //   transaction.setSigners(...signers.map((s) => s.publicKey));
+  // } else {
+  //   transaction.setSigners(
+  //     // fee payed by the wallet owner
+  //     wallet.publicKey,
+  //     ...signers.map((s) => s.publicKey)
+  //   );
+  // }
 
   if (signers.length > 0) {
     transaction.partialSign(...signers);
@@ -830,8 +835,7 @@ async function awaitTransactionSignatureConfirmation(
     }
   });
 
-  //@ts-ignore
-  if (connection._signatureSubscriptions[subId])
+  if (subId > 0)
     connection.removeSignatureListener(subId);
   done = true;
   console.log("Returning status", status);
