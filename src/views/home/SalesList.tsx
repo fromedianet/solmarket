@@ -4,9 +4,9 @@ import { CardLoader } from "../../components/CardLoader";
 import { HorizontalGrid } from "../../components/HorizontalGrid";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { useNFTsAPI } from "../../hooks/useNFTsAPI";
-import { HomeCard } from "../../components/HomeCard";
+import HomeCard from "../../components/HomeCard";
 import { useMEApis } from "../../hooks/useMEApis";
-import { NFTCard } from "../../components/NFTCard";
+import NFTCard from "../../components/NFTCard";
 
 export const SalesListView = () => {
   const [loading, setLoading] = useState(false);

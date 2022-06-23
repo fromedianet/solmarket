@@ -3,7 +3,7 @@ import React from "react";
 import { Tooltip } from "antd";
 import { NFT } from "../../../models/exCollection";
 import { HorizontalGrid } from "../../../components/HorizontalGrid";
-import { NFTCard } from "../../../components/NFTCard";
+import NFTCard from "../../../components/NFTCard";
 
 export const GroupItem = ({
   item,
