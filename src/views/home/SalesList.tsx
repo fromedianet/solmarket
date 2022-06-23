@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { CardLoader } from "../../components/CardLoader";
+import CardLoader from "../../components/CardLoader";
 import { HorizontalGrid } from "../../components/HorizontalGrid";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { useNFTsAPI } from "../../hooks/useNFTsAPI";
