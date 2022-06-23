@@ -142,13 +142,13 @@ export const InfoSection = (props: {
             className="bg-secondary"
             extra={<img src="/icons/user.svg" width={24} alt="about" />}
           >
-            <div>
+            <>
               {props.nft.description || (
                 <div style={{ fontStyle: "italic" }}>
                   No description provided.
                 </div>
               )}
-            </div>
+            </>
           </Panel>
           <Panel
             header="Attributes"

@@ -599,7 +599,7 @@ export default function ItemDetailView(props: {
         visible={cancelVisible}
         onCancel={() => setCancelVisible(false)}
       >
-        <div>
+        <>
           <span className="header-text">
             {myOffer?.market ? "Cancel the offer (ME)" : "Cancel the offer"}
           </span>
@@ -650,7 +650,7 @@ export default function ItemDetailView(props: {
               <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
-        </div>
+        </>
       </MetaplexModal>
     </div>
   );

@@ -178,7 +178,7 @@ export const OffersMade = ({
         visible={depositVisible}
         onCancel={() => setDepositVisible(false)}
       >
-        <div>
+        <>
           <span className="header-text">Deposit</span>
           <div className="body-container">
             <span className="description">
@@ -257,14 +257,14 @@ export const OffersMade = ({
               <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
-        </div>
+        </>
       </MetaplexModal>
       <MetaplexModal
         className="cancel-modal"
         visible={cancelVisible}
         onCancel={() => setCancelVisible(false)}
       >
-        <div>
+        <>
           <span className="header-text">Cancel the offer</span>
           <div className="body-container">
             <span className="description">
@@ -315,14 +315,14 @@ export const OffersMade = ({
               <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
-        </div>
+        </>
       </MetaplexModal>
       <MetaplexModal
         className="withdraw-modal"
         visible={withdrawVisible}
         onCancel={() => setWithdrawVisible(false)}
       >
-        <div>
+        <>
           <span className="header-text">Withdraw all to main wallet</span>
           <div className="body-container">
             <span className="description">
@@ -377,7 +377,7 @@ export const OffersMade = ({
               <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
-        </div>
+        </>
       </MetaplexModal>
     </div>
   );

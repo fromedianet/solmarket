@@ -113,12 +113,12 @@ export const AuctionHouseView = ({
         </div>
       </div>
       {auctionHouseObj.feeAccountBalance < 0.01 && (
-        <div>
+        <>
           <span style={{ color: "#ffaa00" }}>
             Fee account balance is too small. You need to some SOLs (such as 1
             SOL) to Auction House Fee Account.
           </span>
-        </div>
+        </>
       )}
     </div>
   );
