@@ -1,7 +1,7 @@
 import React from "react";
 import ContentLoader from "react-content-loader";
 
-export const CardLoader = () => (
+const CardLoader = () => (
   <ContentLoader
     speed={2}
     width={223}
@@ -17,6 +17,8 @@ export const CardLoader = () => (
     {/* <rect x="9" y="320" rx="5" ry="6" width="232" height="54" />  */}
   </ContentLoader>
 );
+
+export default React.memo(CardLoader);
 
 export const ThreeDots = ({ style }: { style?: React.CSSProperties }) => (
   <ContentLoader

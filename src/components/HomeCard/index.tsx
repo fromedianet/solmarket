@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "antd";
 import Link from "next/link";
 
-export const HomeCard = ({
+const HomeCard = ({
   item,
   link,
   itemId,
@@ -36,3 +36,5 @@ export const HomeCard = ({
     </Card>
   );
 };
+
+export default React.memo(HomeCard);

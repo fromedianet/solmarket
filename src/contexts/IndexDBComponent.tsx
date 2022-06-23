@@ -9,5 +9,5 @@ export default function IndexDBComponent() {
     }
   }, [window]);
 
-  return <div></div>;
+  return <></>;
 }

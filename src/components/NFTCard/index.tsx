@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Card } from "antd";
 
-export const NFTCard = (props: {
+const NFTCard = (props: {
   item: any;
   collection: string;
   itemId?: string;
@@ -42,3 +42,5 @@ export const NFTCard = (props: {
     </Card>
   );
 };
+
+export default React.memo(NFTCard);

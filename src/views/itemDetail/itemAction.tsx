@@ -184,7 +184,7 @@ export const ItemAction = (props: {
         visible={showOfferModal}
         onCancel={() => setShowOfferModal(false)}
       >
-        <div>
+        <>
           <span className="header-text">Make an offer</span>
           <div className="body-container">
             <p className="description">
@@ -296,7 +296,7 @@ export const ItemAction = (props: {
               <a style={{ fontWeight: 600 }}>Terms of Service</a>
             </span>
           </div>
-        </div>
+        </>
       </MetaplexModal>
     </div>
   );

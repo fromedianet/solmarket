@@ -19,7 +19,7 @@ const plugins = [
 
 module.exports = withPlugins(plugins, {
   assetPrefix,
-  // reactStrictMode: false,
+  reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -42,6 +42,6 @@ module.exports = withPlugins(plugins, {
     return config;
   },
   compiler: {
-    removeConsole: false,
+    removeConsole: true,
   },
 });

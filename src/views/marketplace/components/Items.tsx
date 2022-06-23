@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { EmptyView } from "../../../components/EmptyView";
 import { ExCollection } from "../../../models/exCollection";
 import { MarketType } from "../../../constants";
-import { NFTCard } from "../../../components/NFTCard";
+import NFTCard from "../../../components/NFTCard";
 
 const { Search } = Input;
 const DELIMITER = "|&=&|";

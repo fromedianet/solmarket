@@ -9,7 +9,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useConnectionConfig } from "../../contexts";
 import { shortenAddress } from "../../utils/utils";
 import { CopySpan } from "../../components/CopySpan";
-import { NFTCard } from "../../components/NFTCard";
+import NFTCard from "../../components/NFTCard";
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);

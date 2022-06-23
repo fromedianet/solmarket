@@ -10,7 +10,7 @@ export interface CollectionCardProps extends CardProps {
   link: string;
 }
 
-export const CollectionCard = (props: CollectionCardProps) => {
+const CollectionCard = (props: CollectionCardProps) => {
   const { name, description, image } = props.item;
 
   return (
@@ -35,3 +35,5 @@ export const CollectionCard = (props: CollectionCardProps) => {
     </Card>
   );
 };
+
+export default React.memo(CollectionCard);
