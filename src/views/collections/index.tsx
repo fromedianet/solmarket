@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Input, Select } from "antd";
-import { CollectionCard } from "../../components/CollectionCard";
+import CollectionCard from "../../components/CollectionCard";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import { CardLoader } from "../../components/CardLoader";
 import InfiniteScroll from "react-infinite-scroll-component";
