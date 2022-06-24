@@ -132,7 +132,6 @@ export default function MarketplaceView(props: {
         <img
           src={collection.banner}
           className="collection-background"
-          loading="lazy"
           alt="banner"
         />
       )}

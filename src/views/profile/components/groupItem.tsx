@@ -17,7 +17,6 @@ const GroupItem = ({
           src={item.collection.image}
           className="icon image-placeholder"
           alt={item.collection.symbol}
-          loading="lazy"
         />
         {item.collection.symbol && item.collection.symbol !== "undefined" ? (
           <Link

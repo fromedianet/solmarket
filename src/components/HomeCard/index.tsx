@@ -21,7 +21,6 @@ const HomeCard = ({
               className="image no-event image-placeholder"
               alt={item["name"]}
               title={item["name"]}
-              loading="lazy"
             />
           </div>
           <div className="card-caption">

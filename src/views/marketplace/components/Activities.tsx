@@ -43,7 +43,6 @@ export const Activities = (props: {
           className="image-placeholder"
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
           alt={record.name}
-          loading="lazy"
         />
       ),
     },

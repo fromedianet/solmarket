@@ -23,7 +23,6 @@ const NFTCard = (props: {
               src={props.item.image}
               alt={props.item.name}
               title={props.item.name}
-              loading="lazy"
             />
           </div>
           <div className="card-caption">

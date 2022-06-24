@@ -36,7 +36,6 @@ export const ActivityColumns = (network: ENDPOINT_NAME) => {
           className="image-placeholder"
           style={{ width: 32, height: 32, objectFit: "cover", borderRadius: 4 }}
           alt={record.name}
-          loading="lazy"
         />
       ),
     },
