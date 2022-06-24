@@ -25,7 +25,7 @@ import { Message, Transaction } from "@solana/web3.js";
 import { OffersMade } from "./components/offersMade";
 import { useInstructionsAPI } from "../../hooks/useInstructionsAPI";
 import { formatAmount, groupBy, shortenAddress } from "../../utils/utils";
-import { GroupItem } from "./components/groupItem";
+import GroupItem from "./components/groupItem";
 import { useMEApis } from "../../hooks/useMEApis";
 import { AuctionHouseView } from "./components/auctionHouseView";
 import {
