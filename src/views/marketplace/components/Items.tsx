@@ -209,23 +209,15 @@ export const Items = (props: {
           className="ant-row"
           next={props.fetchMore}
           hasMore={props.hasMore}
+          style={{ justifyContent: 'center' }}
         >
           {props.list.length > 0 ? (
-            props.list.map((item, index) => (
-              <Col
-                key={index}
-                span={12}
-                md={8}
-                lg={8}
-                xl={6}
-                xxl={4}
-                style={{ padding: 8 }}
-              >
-                <NFTCard
-                  item={item}
-                  collection={props.collection?.name || item.symbol}
-                />
-              </Col>
+            props.list.map((item) => (
+              <NFTCard
+                key={item.mint}
+                item={item}
+                collection={props.collection?.name || item.symbol}
+              />
             ))
           ) : (
             <EmptyView />
