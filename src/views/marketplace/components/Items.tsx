@@ -121,7 +121,7 @@ export const Items = (props: {
             {props.loading ? (
               <Spin />
             ) : (
-              <img src="/icons/refresh.svg" alt="refresh" />
+              <img src="/icons/refresh.svg" alt="refresh" style={{ width: "24px", height: "24px" }} />
             )}
           </div>
           <Search
