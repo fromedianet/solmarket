@@ -93,18 +93,26 @@ export const AppBar = () => {
               placeholder="Search Collections"
               filterOption={false}
               showSearch={true}
-              aira-label="search"
               onSelect={(val) => router.push(val)}
               onSearch={(val) => onSearch(val)}
               suffixIcon={<SearchOutlined />}
               value={null}
+              aria-controls="rc_select_0_list"
+              aria-label="search listbox"
+              aria-labelledby="search listbox"
+              aria-multiline="false"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              aria-readonly="false"
             >
               {filters.map((item, index) => (
                 <Option
-                  key={index}
+                  key={item.symbol}
                   value={`/marketplace/${
                     item.market ? item.market : "papercity"
                   }/${item.symbol}`}
+                  role="option"
+                  id={`rc_select_0_list_${index}`}
                 >
                   <img
                     src={item.image}
