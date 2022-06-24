@@ -142,24 +142,16 @@ export default function CollectionsView({ type }: { type: string }) {
             next={fetchMoreData}
             hasMore={hasMore}
             className="ant-row"
+            style={{ justifyContent: 'center' }}
           >
-            {items.map((item, index) => (
-              <Col
-                key={index}
-                span={12}
-                md={8}
-                lg={8}
-                xl={6}
-                xxl={4}
-                style={{ padding: 8 }}
-              >
-                <CollectionCard
-                  item={item}
-                  link={`/marketplace/${
-                    item.market ? item.market : "papercity"
-                  }/${item.symbol}`}
-                />
-              </Col>
+            {items.map((item) => (
+              <CollectionCard
+                key={item.symbol}
+                item={item}
+                link={`/marketplace/${
+                  item.market ? item.market : "papercity"
+                }/${item.symbol}`}
+              />
             ))}
           </InfiniteScroll>
         ) : (
