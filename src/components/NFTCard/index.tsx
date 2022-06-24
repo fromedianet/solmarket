@@ -13,7 +13,6 @@ const NFTCard = (props: {
     <Card
       hoverable={true}
       className={`art-card ${props.className}`}
-      style={{ maxWidth: 250 }}
       bordered={false}
     >
       <Link href={url}>
