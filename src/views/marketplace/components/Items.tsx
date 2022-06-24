@@ -121,7 +121,7 @@ export const Items = (props: {
             {props.loading ? (
               <Spin />
             ) : (
-              <img src="/icons/refresh.svg" alt="refresh" />
+              <img src="/icons/refresh.svg" alt="refresh" style={{ width: "24px", height: "24px" }} />
             )}
           </div>
           <Search
@@ -141,10 +141,16 @@ export const Items = (props: {
             className="select-container"
             value={props.sort}
             onSelect={(val) => props.onSortChange(val)}
+            aria-label="sort nft"
+            aria-labelledby="sort nft"
+            aria-multiline="false"
+            aria-expanded="false"
+            aria-autocomplete="none"
+            aria-readonly="true"
           >
-            <Select.Option value={1}>Recently Listed</Select.Option>
-            <Select.Option value={2}>Price: Low to high</Select.Option>
-            <Select.Option value={3}>Price: High to low</Select.Option>
+            <Select.Option value={1} role="option">Recently Listed</Select.Option>
+            <Select.Option value={2} role="option">Price: Low to high</Select.Option>
+            <Select.Option value={3} role="option">Price: High to low</Select.Option>
           </Select>
         </Col>
         <Col span={24} md={8} className="control-container">
@@ -152,19 +158,25 @@ export const Items = (props: {
             className="select-container"
             value={props.type}
             onSelect={(val) => props.onTypeChange(val)}
+            aria-label="select market"
+            aria-labelledby="select market"
+            aria-multiline="false"
+            aria-expanded="false"
+            aria-autocomplete="none"
+            aria-readonly="true"
           >
-            <Select.Option value={MarketType.All}>All</Select.Option>
-            <Select.Option value={MarketType.PaperCity}>
+            <Select.Option value={MarketType.All} role="option">All</Select.Option>
+            <Select.Option value={MarketType.PaperCity} role="option">
               PaperCity
             </Select.Option>
-            <Select.Option value={MarketType.MagicEden}>
+            <Select.Option value={MarketType.MagicEden} role="option">
               MagicEden
             </Select.Option>
-            <Select.Option value={MarketType.Solanart}>Solanart</Select.Option>
-            <Select.Option value={MarketType.DigitalEyes}>
+            <Select.Option value={MarketType.Solanart} role="option">Solanart</Select.Option>
+            <Select.Option value={MarketType.DigitalEyes} role="option">
               DigitalEyes
             </Select.Option>
-            <Select.Option value={MarketType.AlphaArt}>AlphaArt</Select.Option>
+            <Select.Option value={MarketType.AlphaArt} role="option">AlphaArt</Select.Option>
           </Select>
         </Col>
       </Row>

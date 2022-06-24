@@ -145,7 +145,7 @@ export default function MarketplaceView(props: {
             <span>
               <img
                 src="/icons/list.svg"
-                style={{ width: "24px", marginRight: "8px" }}
+                style={{ width: "24px", height: "24px", marginRight: "8px" }}
                 alt="list"
               />
               Items
@@ -184,7 +184,7 @@ export default function MarketplaceView(props: {
             <span>
               <img
                 src="/icons/activity.svg"
-                style={{ width: "24px", marginRight: "8px" }}
+                style={{ width: "24px", height: "24px", marginRight: "8px" }}
                 alt="activity"
               />
               Activities

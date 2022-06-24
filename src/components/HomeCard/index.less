@@ -18,13 +18,14 @@
     background: transparent;
 
     .image-container {
-      width: 100%;
+      width: 200px;
+      height: 150px;
       border-radius: 16px;
       background: @bg-primary-color;
 
       .image {
         width: 100%;
-        aspect-ratio: 4/3;
+        height: 100%;
         object-fit: cover;
       }
     }
@@ -59,6 +60,17 @@
         overflow: hidden;
         margin-right: 4px;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-card {
+    width: 170px;
+
+    .image-container {
+      width: 170px;
+      height: 128px;
     }
   }
 }

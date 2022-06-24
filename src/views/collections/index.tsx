@@ -114,18 +114,25 @@ export default function CollectionsView({ type }: { type: string }) {
                 className="select-container"
                 value={selectedMarket}
                 onSelect={(val) => onChangeMarket(val)}
+                aria-controls="rc_select_1_list"
+                aria-label="select market"
+                aria-labelledby="select market"
+                aria-multiline="false"
+                aria-expanded="false"
+                aria-autocomplete="none"
+                aria-readonly="true"
               >
-                <Select.Option value={MarketType.All}>All</Select.Option>
-                <Select.Option value={MarketType.MagicEden}>
+                <Select.Option value={MarketType.All} role="option" id="rc_select_1_list_0">All</Select.Option>
+                <Select.Option value={MarketType.MagicEden} role="option">
                   MagicEden
                 </Select.Option>
-                <Select.Option value={MarketType.Solanart}>
+                <Select.Option value={MarketType.Solanart} role="option">
                   Solanart
                 </Select.Option>
-                <Select.Option value={MarketType.DigitalEyes}>
+                <Select.Option value={MarketType.DigitalEyes} role="option">
                   DigitalEyes
                 </Select.Option>
-                <Select.Option value={MarketType.AlphaArt}>
+                <Select.Option value={MarketType.AlphaArt} role="option">
                   AlphaArt
                 </Select.Option>
               </Select>
