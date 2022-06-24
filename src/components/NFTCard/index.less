@@ -20,13 +20,12 @@
     background: transparent;
 
     .art-image-container {
-      width: 100%;
       border-radius: 16px;
       background: @bg-primary-color;
 
       .art-image {
-        width: 100%;
-        aspect-ratio: 1/1;
+        width: 200px;
+        height: 200px;
         object-fit: cover;
       }
     }
@@ -71,5 +70,10 @@
 @media screen and (max-width: 768px) {
   .art-card {
     width: 170px;
+
+    .art-image {
+      width: 170px;
+      height: 170px;
+    }
   }
 }
