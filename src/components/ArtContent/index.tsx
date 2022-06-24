@@ -63,11 +63,9 @@ export const CachedImageContent = ({
       src={uri}
       preview={preview}
       wrapperClassName={className}
-      loading="lazy"
       wrapperStyle={{ ...style }}
       placeholder={<ThreeDots />}
       alt={uri}
-      // crossOrigin="anonymous"
     />
   );
 };

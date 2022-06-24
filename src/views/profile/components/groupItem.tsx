@@ -5,7 +5,7 @@ import { NFT } from "../../../models/exCollection";
 import { HorizontalGrid } from "../../../components/HorizontalGrid";
 import NFTCard from "../../../components/NFTCard";
 
-export const GroupItem = ({
+const GroupItem = ({
   item,
 }: {
   item: { collection: any; nfts: NFT[] };
@@ -17,7 +17,6 @@ export const GroupItem = ({
           src={item.collection.image}
           className="icon image-placeholder"
           alt={item.collection.symbol}
-          loading="lazy"
         />
         {item.collection.symbol && item.collection.symbol !== "undefined" ? (
           <Link
@@ -51,11 +50,11 @@ export const GroupItem = ({
         </Tooltip>
       </div>
       <HorizontalGrid
-        childrens={item.nfts.map((item, index) => (
+        childrens={item.nfts.map((item) => (
           <NFTCard
-            key={index}
+            key={item.mint}
             item={item}
-            itemId={index.toString()}
+            itemId={item.mint}
             collection={item.collectionName}
           />
         ))}
@@ -63,3 +62,5 @@ export const GroupItem = ({
     </div>
   );
 };
+
+export default React.memo(GroupItem);

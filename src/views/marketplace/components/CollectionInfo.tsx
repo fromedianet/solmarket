@@ -12,7 +12,6 @@ export const CollectionInfo = (props: {
     <div className="info-container">
       {props.collection && props.collection.image ? (
         <img
-          loading="lazy"
           className="info-image"
           src={props.collection.image}
           alt={props.collection.name}

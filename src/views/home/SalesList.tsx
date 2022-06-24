@@ -63,12 +63,12 @@ export const SalesListView = () => {
               <HorizontalGrid
                 childrens={collections["popular"].map((item: any, index) => (
                   <HomeCard
-                    key={index}
+                    key={item.symbol}
                     item={item}
-                    itemId={index.toString()}
+                    itemId={item.symbol}
                     link={`/marketplace/${
                       item.market ? item.market : "papercity"
-                    }/${item["symbol"]}`}
+                    }/${item.symbol}`}
                   />
                 ))}
               />
@@ -85,14 +85,14 @@ export const SalesListView = () => {
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
           : collections["new"] && (
               <HorizontalGrid
-                childrens={collections["new"].map((item: any, index) => (
+                childrens={collections["new"].map((item: any) => (
                   <HomeCard
-                    key={index}
+                    key={item.symbol}
                     item={item}
-                    itemId={index.toString()}
+                    itemId={item.symbol}
                     link={`/marketplace/${
                       item.market ? item.market : "papercity"
-                    }/${item["symbol"]}`}
+                    }/${item.symbol}`}
                   />
                 ))}
               />
@@ -107,13 +107,13 @@ export const SalesListView = () => {
           : collections["recentSales"] && (
               <HorizontalGrid
                 childrens={collections["recentSales"].map(
-                  (item: any, index) => (
+                  (item: any) => (
                     <NFTCard
-                      key={index}
+                      key={item.mint}
                       item={item}
-                      itemId={index.toString()}
+                      itemId={item.mint}
                       collection={item.collectionName}
-                      className="w-200"
+                      className="margin-0"
                     />
                   )
                 )}
@@ -129,13 +129,13 @@ export const SalesListView = () => {
           : collections["recentListings"] && (
               <HorizontalGrid
                 childrens={collections["recentListings"].map(
-                  (item: any, index) => (
+                  (item: any) => (
                     <NFTCard
-                      key={index}
+                      key={item.mint}
                       item={item}
-                      itemId={index.toString()}
+                      itemId={item.mint}
                       collection={item.collectionName}
-                      className="w-200"
+                      className="margin-0"
                     />
                   )
                 )}

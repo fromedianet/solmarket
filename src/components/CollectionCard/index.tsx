@@ -23,7 +23,6 @@ const CollectionCard = (props: CollectionCardProps) => {
               className="image no-event image-placeholder"
               alt={name}
               title={name}
-              loading="lazy"
             />
           </div>
           <div className="card-caption">
