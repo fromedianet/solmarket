@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Collapse } from "antd";
 
 const { Panel } = Collapse;
 
 export default function FAQView() {
+  useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
+  }, []);
+
   return (
     <div className="main-area">
       <div className="main-page">

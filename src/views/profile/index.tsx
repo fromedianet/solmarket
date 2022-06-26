@@ -83,6 +83,10 @@ export default function ProfileView() {
   });
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
+  }, []);
+
+  useEffect(() => {
     if (socket && wallet.publicKey) {
       const auctionHouseListener = (params: any[]) => {
         if (params.some((k) => k.wallet === wallet.publicKey!.toBase58())) {

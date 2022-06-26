@@ -13,9 +13,9 @@ export const APIS = {
       : "http://localhost:8000/api",
   socket_url:
     process.env.NEXT_ENV == "production"
-      ? "https://api.papercity.io"
+      ? "wss://api.papercity.io"
       : process.env.NEXT_ENV == "development"
-      ? "https://staging.api.papercity.io"
-      : "http://localhost:5000",
+      ? "wss://staging.api.papercity.io"
+      : "ws://localhost:5000",
   magiceden_base_url: "https://api-mainnet.magiceden.dev/v2",
 };

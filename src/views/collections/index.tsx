@@ -26,6 +26,10 @@ export default function CollectionsView({ type }: { type: string }) {
   const PER_PAGE = 20;
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
+  }, []);
+
+  useEffect(() => {
     setLoading(true);
     loadCollections(type)
       .then((res) => {
@@ -121,7 +125,13 @@ export default function CollectionsView({ type }: { type: string }) {
                 aria-autocomplete="none"
                 aria-readonly="true"
               >
-                <Select.Option value={MarketType.All} role="option" id="rc_select_1_list_0">All</Select.Option>
+                <Select.Option
+                  value={MarketType.All}
+                  role="option"
+                  id="rc_select_1_list_0"
+                >
+                  All
+                </Select.Option>
                 <Select.Option value={MarketType.MagicEden} role="option">
                   MagicEden
                 </Select.Option>
@@ -148,7 +158,7 @@ export default function CollectionsView({ type }: { type: string }) {
             next={fetchMoreData}
             hasMore={hasMore}
             className="ant-row"
-            style={{ justifyContent: 'center' }}
+            style={{ justifyContent: "center" }}
           >
             {items.map((item) => (
               <CollectionCard

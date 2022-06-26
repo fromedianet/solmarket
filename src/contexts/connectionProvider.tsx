@@ -835,8 +835,7 @@ async function awaitTransactionSignatureConfirmation(
     }
   });
 
-  if (subId > 0)
-    connection.removeSignatureListener(subId);
+  if (subId > 0) connection.removeSignatureListener(subId);
   done = true;
   console.log("Returning status", status);
   return status;

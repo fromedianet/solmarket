@@ -5,11 +5,7 @@ import { NFT } from "../../../models/exCollection";
 import { HorizontalGrid } from "../../../components/HorizontalGrid";
 import NFTCard from "../../../components/NFTCard";
 
-const GroupItem = ({
-  item,
-}: {
-  item: { collection: any; nfts: NFT[] };
-}) => {
+const GroupItem = ({ item }: { item: { collection: any; nfts: NFT[] } }) => {
   return (
     <div className="group-item-container">
       <div className="collection-container">

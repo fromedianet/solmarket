@@ -121,7 +121,11 @@ export const Items = (props: {
             {props.loading ? (
               <Spin />
             ) : (
-              <img src="/icons/refresh.svg" alt="refresh" style={{ width: "24px", height: "24px" }} />
+              <img
+                src="/icons/refresh.svg"
+                alt="refresh"
+                style={{ width: "24px", height: "24px" }}
+              />
             )}
           </div>
           <Search
@@ -147,9 +151,15 @@ export const Items = (props: {
             aria-autocomplete="none"
             aria-readonly="true"
           >
-            <Select.Option value={1} role="option">Recently Listed</Select.Option>
-            <Select.Option value={2} role="option">Price: Low to high</Select.Option>
-            <Select.Option value={3} role="option">Price: High to low</Select.Option>
+            <Select.Option value={1} role="option">
+              Recently Listed
+            </Select.Option>
+            <Select.Option value={2} role="option">
+              Price: Low to high
+            </Select.Option>
+            <Select.Option value={3} role="option">
+              Price: High to low
+            </Select.Option>
           </Select>
         </Col>
         <Col span={24} md={8} className="control-container">
@@ -163,18 +173,24 @@ export const Items = (props: {
             aria-autocomplete="none"
             aria-readonly="true"
           >
-            <Select.Option value={MarketType.All} role="option">All</Select.Option>
+            <Select.Option value={MarketType.All} role="option">
+              All
+            </Select.Option>
             <Select.Option value={MarketType.PaperCity} role="option">
               PaperCity
             </Select.Option>
             <Select.Option value={MarketType.MagicEden} role="option">
               MagicEden
             </Select.Option>
-            <Select.Option value={MarketType.Solanart} role="option">Solanart</Select.Option>
+            <Select.Option value={MarketType.Solanart} role="option">
+              Solanart
+            </Select.Option>
             <Select.Option value={MarketType.DigitalEyes} role="option">
               DigitalEyes
             </Select.Option>
-            <Select.Option value={MarketType.AlphaArt} role="option">AlphaArt</Select.Option>
+            <Select.Option value={MarketType.AlphaArt} role="option">
+              AlphaArt
+            </Select.Option>
           </Select>
         </Col>
       </Row>
@@ -219,7 +235,7 @@ export const Items = (props: {
           className="ant-row"
           next={props.fetchMore}
           hasMore={props.hasMore}
-          style={{ justifyContent: 'center' }}
+          style={{ justifyContent: "center" }}
         >
           {props.list.length > 0 ? (
             props.list.map((item) => (

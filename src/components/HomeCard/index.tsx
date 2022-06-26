@@ -27,7 +27,12 @@ const HomeCard = ({
             <span className="card-name">{item["name"]}</span>
             <div className="note">
               <span className="symbol">{item["name"]}</span>
-              <img src="/icons/check-circle.svg" alt="check-circle" width={16} height={16} />
+              <img
+                src="/icons/check-circle.svg"
+                alt="check-circle"
+                width={16}
+                height={16}
+              />
             </div>
           </div>
         </a>

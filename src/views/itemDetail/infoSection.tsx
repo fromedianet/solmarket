@@ -61,7 +61,12 @@ export const InfoSection = (props: {
             header="Price History"
             className="bg-secondary"
             extra={
-              <img src="/icons/activity.svg" width={24} height={24} alt="price history" />
+              <img
+                src="/icons/activity.svg"
+                width={24}
+                height={24}
+                alt="price history"
+              />
             }
           >
             {props.priceData.length > 0 && (
@@ -105,7 +110,12 @@ export const InfoSection = (props: {
               )}`}
             >
               <a className="collection-name">
-                <img width={20} height={20} src={"/icons/check.svg"} alt="check" />
+                <img
+                  width={20}
+                  height={20}
+                  src={"/icons/check.svg"}
+                  alt="check"
+                />
                 <span>{props.nft.symbol}</span>
               </a>
             </Link>
@@ -116,7 +126,12 @@ export const InfoSection = (props: {
             onClick={props.onRefresh}
             style={{ cursor: "pointer", marginLeft: "auto" }}
           >
-            <img width={20} height={20} src={"/icons/refresh.svg"} alt="refresh" />
+            <img
+              width={20}
+              height={20}
+              src={"/icons/refresh.svg"}
+              alt="refresh"
+            />
           </div>
         </div>
         <ItemAction
@@ -140,7 +155,9 @@ export const InfoSection = (props: {
             header={`About ${props.nft.name}`}
             key="about"
             className="bg-secondary"
-            extra={<img src="/icons/user.svg" width={24} height={24} alt="about" />}
+            extra={
+              <img src="/icons/user.svg" width={24} height={24} alt="about" />
+            }
           >
             <>
               {props.nft.description || (
@@ -153,7 +170,14 @@ export const InfoSection = (props: {
           <Panel
             header="Attributes"
             key="attributes"
-            extra={<img src="/icons/shield.svg" width={24} height={24} alt="attributes" />}
+            extra={
+              <img
+                src="/icons/shield.svg"
+                width={24}
+                height={24}
+                alt="attributes"
+              />
+            }
           >
             <Row gutter={[16, 16]}>
               {props.nft.attributes.map((item, index) => (
@@ -167,7 +191,14 @@ export const InfoSection = (props: {
             header="Details"
             key="details"
             className="bg-secondary"
-            extra={<img src="/icons/detail.svg" width={24} height={24} alt="details" />}
+            extra={
+              <img
+                src="/icons/detail.svg"
+                width={24}
+                height={24}
+                alt="details"
+              />
+            }
           >
             <div className="details-container">
               <div className="sub-container">

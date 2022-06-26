@@ -21,6 +21,7 @@ export const SalesListView = () => {
   const meApis = useMEApis();
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
     if (loading) return;
     setLoading(true);
     loadAllData()
@@ -106,17 +107,15 @@ export const SalesListView = () => {
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
           : collections["recentSales"] && (
               <HorizontalGrid
-                childrens={collections["recentSales"].map(
-                  (item: any) => (
-                    <NFTCard
-                      key={item.mint}
-                      item={item}
-                      itemId={item.mint}
-                      collection={item.collectionName}
-                      className="margin-0"
-                    />
-                  )
-                )}
+                childrens={collections["recentSales"].map((item: any) => (
+                  <NFTCard
+                    key={item.mint}
+                    item={item}
+                    itemId={item.mint}
+                    collection={item.collectionName}
+                    className="margin-0"
+                  />
+                ))}
               />
             )}
       </div>
@@ -128,17 +127,15 @@ export const SalesListView = () => {
           ? [...Array(2)].map((_, idx) => <CardLoader key={idx} />)
           : collections["recentListings"] && (
               <HorizontalGrid
-                childrens={collections["recentListings"].map(
-                  (item: any) => (
-                    <NFTCard
-                      key={item.mint}
-                      item={item}
-                      itemId={item.mint}
-                      collection={item.collectionName}
-                      className="margin-0"
-                    />
-                  )
-                )}
+                childrens={collections["recentListings"].map((item: any) => (
+                  <NFTCard
+                    key={item.mint}
+                    item={item}
+                    itemId={item.mint}
+                    collection={item.collectionName}
+                    className="margin-0"
+                  />
+                ))}
               />
             )}
       </div>
