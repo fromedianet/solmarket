@@ -173,7 +173,6 @@ export const FilterSidebar = (props: {
                     style={{ marginTop: 4, marginBottom: 4 }}
                     aria-label={attr.key}
                     aria-labelledby={attr.key}
-                    aria-multiline="false"
                     aria-expanded="false"
                     aria-autocomplete="none"
                     aria-readonly="true"

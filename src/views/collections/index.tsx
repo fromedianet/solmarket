@@ -117,7 +117,6 @@ export default function CollectionsView({ type }: { type: string }) {
                 aria-controls="rc_select_1_list"
                 aria-label="select market"
                 aria-labelledby="select market"
-                aria-multiline="false"
                 aria-expanded="false"
                 aria-autocomplete="none"
                 aria-readonly="true"

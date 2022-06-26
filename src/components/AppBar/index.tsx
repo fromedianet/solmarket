@@ -100,7 +100,6 @@ export const AppBar = () => {
               aria-controls="rc_select_0_list"
               aria-label="search listbox"
               aria-labelledby="search listbox"
-              aria-multiline="false"
               aria-expanded="false"
               aria-autocomplete="none"
               aria-readonly="false"
