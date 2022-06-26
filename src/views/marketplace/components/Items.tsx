@@ -143,7 +143,6 @@ export const Items = (props: {
             onSelect={(val) => props.onSortChange(val)}
             aria-label="sort nft"
             aria-labelledby="sort nft"
-            aria-multiline="false"
             aria-expanded="false"
             aria-autocomplete="none"
             aria-readonly="true"
@@ -160,7 +159,6 @@ export const Items = (props: {
             onSelect={(val) => props.onTypeChange(val)}
             aria-label="select market"
             aria-labelledby="select market"
-            aria-multiline="false"
             aria-expanded="false"
             aria-autocomplete="none"
             aria-readonly="true"
