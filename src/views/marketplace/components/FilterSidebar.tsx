@@ -120,8 +120,14 @@ export const FilterSidebar = (props: {
                 autoComplete="off"
               >
                 <Form.Item initialValue="SOL" name="symbol">
-                  <Select disabled aria-label="select token" aria-labelledby="select token">
-                    <Select.Option value="SOL" role="option">SOL</Select.Option>
+                  <Select
+                    disabled
+                    aria-label="select token"
+                    aria-labelledby="select token"
+                  >
+                    <Select.Option value="SOL" role="option">
+                      SOL
+                    </Select.Option>
                   </Select>
                 </Form.Item>
                 <Space
@@ -178,7 +184,11 @@ export const FilterSidebar = (props: {
                     aria-readonly="true"
                   >
                     {attr.numbers.map((value, idx) => (
-                      <Select.Option key={idx} value={value.value} role="option">
+                      <Select.Option
+                        key={idx}
+                        value={value.value}
+                        role="option"
+                      >
                         <div
                           style={{
                             display: "flex",

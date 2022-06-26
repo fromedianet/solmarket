@@ -43,7 +43,12 @@ export const LogoLink = () => {
   return (
     <Link href="/">
       <a>
-        <img src={"/papercity-logo.png"} alt="app-logo" width={192} height={60} />
+        <img
+          src={"/papercity-logo.png"}
+          alt="app-logo"
+          width={192}
+          height={60}
+        />
       </a>
     </Link>
   );

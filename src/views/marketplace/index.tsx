@@ -71,14 +71,14 @@ export default function MarketplaceView(props: {
     if (refresh) {
       setList(nfts);
     } else {
-      const newList = [ ...list ];
-      let mints = newList.map(k => k.mint);
-      nfts.forEach(item => {
+      const newList = [...list];
+      let mints = newList.map((k) => k.mint);
+      nfts.forEach((item) => {
         if (!mints.includes(item.mint)) {
           newList.push(item);
           mints.push(item.mint);
         }
-      })
+      });
       setList(newList);
     }
   }, [nfts]);
