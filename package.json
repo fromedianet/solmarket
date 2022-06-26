@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "start": "next dev",
+    "analyze": "source-map-explorer .next/static/**/*.js",
     "build": "next build",
+    "build:analyze": "yarn build && yarn analyze",
     "start:prod": "next start",
     "test": "jest --passWithNoTests",
     "format:fix": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\""
@@ -90,6 +92,7 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "npm-link-shared": "0.5.6",
     "prettier": "^2.6.2",
+    "source-map-explorer": "^2.5.2",
     "typescript": "^4.6.3",
     "use-media-antd-query": "^1.1.0",
     "webpack-dev-server": "4.8.1"
