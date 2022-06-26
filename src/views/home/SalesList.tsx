@@ -21,6 +21,7 @@ export const SalesListView = () => {
   const meApis = useMEApis();
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
     if (loading) return;
     setLoading(true);
     loadAllData()

@@ -68,6 +68,10 @@ export default function MarketplaceView(props: {
   });
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
+  }, []);
+
+  useEffect(() => {
     if (refresh) {
       setList(nfts);
     } else {

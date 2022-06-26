@@ -26,6 +26,10 @@ export default function CollectionsView({ type }: { type: string }) {
   const PER_PAGE = 20;
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
+  }, []);
+
+  useEffect(() => {
     setLoading(true);
     loadCollections(type)
       .then((res) => {

@@ -51,6 +51,10 @@ export default function ItemDetailView(props: {
   const meApis = useMEApis();
 
   useEffect(() => {
+    window.addEventListener("scroll", () => {}, { passive: true });
+  }, []);
+
+  useEffect(() => {
     if (nft && socket) {
       if (nft.market === MarketType.PaperCity) {
         const auctionHouseListener = (params: any[]) => {
