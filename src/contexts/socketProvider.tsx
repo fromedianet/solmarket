@@ -15,7 +15,7 @@ export function SocketProvider({ children }) {
     // @ts-ignore
     setSocket(newSocket);
     return () => {
-      newSocket.close();
+      newSocket.disconnect();
     };
   }, [setSocket]);
 
