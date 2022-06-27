@@ -28,4 +28,44 @@
     }
   }
 
+  .home-section {
+    width: 100%;
+    margin-top: 40px;
+  
+    .section-header {
+      display: flex;
+      align-items: center;
+  
+      .section-title {
+        color: @text-primary-color;
+        font-size: 30px;
+        font-weight: 700;
+      }
+  
+      .see-all {
+        margin-left: auto;
+        color: @text-primary-color;
+        padding: 4px 8px;
+        border: 2px solid @border-primary-color;
+        border-radius: 2px;
+      }
+  
+      @media (max-width: 768px) {
+        .section-title {
+          color: @text-primary-color;
+          font-size: 20px;
+          font-weight: 700;
+        }
+  
+        .see-all {
+          display: none;
+        }
+      }
+    }
+  
+    .home-collection {
+      width: 218px!important;
+    }
+  }
+
 }
