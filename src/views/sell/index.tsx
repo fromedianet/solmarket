@@ -1,4 +1,6 @@
+import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useEffect } from "react";
+import { ConnectButton } from "../../components";
 
 const description = `
   NFT stands for Non-Fungible Token. Basically that means that you have a one of a kind token which can be transferred from one wallet to the next with all these transactions recorded on the blockchain.\n
@@ -8,9 +10,17 @@ const description = `
 `;
 
 export default function SellView() {
+  const wallet = useWallet();
+
   useEffect(() => {
     window.addEventListener("scroll", () => {}, { passive: true });
   }, []);
+
+  useEffect(() => {
+    if (wallet.publicKey) {
+
+    }
+  }, [wallet]);
 
   return (
     <div className="main-area">
@@ -18,6 +28,14 @@ export default function SellView() {
         <div className="container sell-page">
           <h1>Sell your Solana NFT</h1>
           <NewLineText text={description} style={{ color: "#9ca3af" }}/>
+          {!wallet.connected ? (
+            <div className="connect-container">
+              <p>Connect wallet to see this page</p>
+              <ConnectButton className="connect-button" />
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>
