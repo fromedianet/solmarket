@@ -11,7 +11,7 @@ export function SocketProvider({ children }) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(APIS.socket_url, { transports: ["websocket"] });
+    const newSocket = io(APIS.socket_url);
     // @ts-ignore
     setSocket(newSocket);
     return () => {

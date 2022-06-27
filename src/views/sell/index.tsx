@@ -133,6 +133,6 @@ export default function SellView() {
 
 function NewLineText(props) {
   const { text, style } = props;
-  const newText = text.split('\n').map((str, index) => str.length > 0 ? <p key={index} style={style}>{str}</p> : <></>);
+  const newText = text.split('\n').map((str, index) => str.length > 0 ? <p key={index} style={style}>{str}</p> : null);
   return newText;
 }
