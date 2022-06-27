@@ -91,6 +91,12 @@ export const Sidebar = () => {
             ],
           },
           {
+            key: "sell",
+            label: "Sell your NFT",
+            icon: <ShopOutlined style={{ fontSize: 20 }} />,
+            onClick: () => router.push("/sell"),
+          },
+          {
             key: "community",
             label: "Community",
             icon: <UsergroupAddOutlined style={{ fontSize: 20 }} />,
@@ -107,12 +113,6 @@ export const Sidebar = () => {
                 onClick: () => {},
               },
             ],
-          },
-          {
-            key: "sell",
-            label: "Sell your NFT",
-            icon: <ShopOutlined style={{ fontSize: 20 }} />,
-            onClick: () => router.push("/sell"),
           },
           {
             key: "more",
