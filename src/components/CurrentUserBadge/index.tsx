@@ -23,7 +23,7 @@ const UserActions = (props: { onClick?: any }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {authToken ? (
-        <Link href="/profile">
+        <Link href="/sell">
           <a>
             <Button
               onClick={() => {
