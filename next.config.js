@@ -44,5 +44,4 @@ module.exports = withPlugins(plugins, {
   compiler: {
     removeConsole: true,
   },
-  productionBrowserSourceMaps: true,
 });
