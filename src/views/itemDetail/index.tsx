@@ -1,8 +1,6 @@
 import React, { lazy, useEffect, useState } from "react";
 import { Spin, Button, Divider } from "antd";
 import Head from "next/head";
-import { BottomSection } from "./bottomSection";
-import { InfoSection } from "./infoSection";
 import { getDateStringFromUnixTimestamp } from "../../utils/utils";
 import { useNFTsAPI } from "../../hooks/useNFTsAPI";
 import { Transaction as TransactionData } from "../../models/exCollection";
@@ -20,6 +18,8 @@ import { AUCTION_HOUSE_ID } from "../../utils/ids";
 import { MetaplexModal } from "../../components/MetaplexModal";
 
 const EmptyView = lazy(() => import("../../components/EmptyView"));
+const BottomSection = lazy(() => import("./bottomSection"));
+const InfoSection = lazy(() => import("./infoSection"));
 
 export default function ItemDetailView(props: {
   market: string;

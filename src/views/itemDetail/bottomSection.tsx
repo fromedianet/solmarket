@@ -19,14 +19,14 @@ const timeAgo = new TimeAgo("en-US");
 
 const { Panel } = Collapse;
 
-export const BottomSection = (props: {
+export default function BottomSection(props: {
   transactions: Transaction[];
   nft: any;
   nftList: any[];
   offers: Offer[];
   setMyOffer: (a) => void;
   onCancelVisible: () => void;
-}) => {
+}) {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
   const wallet = useWallet();
@@ -209,4 +209,4 @@ export const BottomSection = (props: {
       </Panel>
     </Collapse>
   );
-};
+}

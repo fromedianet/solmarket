@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import { Row, Col, Collapse, Skeleton, Statistic } from "antd";
-import { NFT } from "../../models/exCollection";
 import { ArtContent } from "../../components/ArtContent";
 import {
   LineChart,
@@ -20,7 +19,7 @@ import { shortenAddress } from "../../utils/utils";
 
 const { Panel } = Collapse;
 
-export const InfoSection = (props: {
+export default function InfoSection(props: {
   nft: any;
   biddingBalance: number;
   priceData: any[];
@@ -33,7 +32,7 @@ export const InfoSection = (props: {
   onPlaceBid: (a) => void;
   onCancelVisible: () => void;
   onOpenMarketplace: () => void;
-}) => {
+}) {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
 
@@ -336,4 +335,4 @@ export const InfoSection = (props: {
       </Col>
     </Row>
   );
-};
+}
