@@ -1,9 +1,10 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { ConnectButton, HorizontalGrid } from "../../components";
 import CardLoader from "../../components/CardLoader";
-import NFTCard from "../../components/NFTCard";
 import { useNFTsAPI } from "../../hooks/useNFTsAPI";
+
+const NFTCard = lazy(() => import("../../components/NFTCard"));
 
 const description = `
   NFT stands for Non-Fungible Token. Basically that means that you have a one of a kind token which can be transferred from one wallet to the next with all these transactions recorded on the blockchain.\n
@@ -19,7 +20,7 @@ export default function SellView() {
   const [data, setData] = useState({
     myItems: [],
     myListings: [],
-    listings: []
+    listings: [],
   });
 
   useEffect(() => {
@@ -38,8 +39,8 @@ export default function SellView() {
 
   async function loadData(pubkey: string) {
     const res = await getNFTsByWallet(pubkey);
-    const myItems = res.filter(k => k.price === 0);
-    const myListings = res.filter(k => k.price > 0);
+    const myItems = res.filter((k) => k.price === 0);
+    const myListings = res.filter((k) => k.price > 0);
     const listings = await getRecentListings();
 
     const result = {
@@ -55,7 +56,7 @@ export default function SellView() {
       <div className="main-page">
         <div className="container sell-page">
           <h1>Sell your Solana NFT</h1>
-          <NewLineText text={description} style={{ color: "#9ca3af" }}/>
+          <NewLineText text={description} style={{ color: "#9ca3af" }} />
           {!wallet.connected ? (
             <div className="connect-container">
               <p>Connect wallet to see this page</p>
@@ -133,6 +134,12 @@ export default function SellView() {
 
 function NewLineText(props) {
   const { text, style } = props;
-  const newText = text.split('\n').map((str, index) => str.length > 0 ? <p key={index} style={style}>{str}</p> : null);
+  const newText = text.split("\n").map((str, index) =>
+    str.length > 0 ? (
+      <p key={index} style={style}>
+        {str}
+      </p>
+    ) : null
+  );
   return newText;
 }

@@ -17,7 +17,7 @@ import { Offer } from "../../../models/offer";
 import { PriceInput } from "../../../components/PriceInput";
 import { useNativeAccount } from "../../../contexts";
 import { formatAmount } from "../../../utils/utils";
-import { MetaplexModal } from "../../../components/MetaplexModal";
+import MetaplexModal from "../../../components/MetaplexModal";
 
 export const OffersMade = ({
   offers,
@@ -187,7 +187,7 @@ export const OffersMade = ({
             </span>
             <Form form={form} layout="inline" onFinish={onFinish}>
               <Row style={{ width: "100%" }}>
-                <Col span={18}>
+                <Col span={17}>
                   <Form.Item name="price" rules={[{ validator: checkPrice }]}>
                     <PriceInput
                       addonAfter="SOL"
@@ -195,7 +195,7 @@ export const OffersMade = ({
                     />
                   </Form.Item>
                 </Col>
-                <Col span={6}>
+                <Col span={7}>
                   <Form.Item>
                     <Button
                       className="button"

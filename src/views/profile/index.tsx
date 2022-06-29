@@ -1,5 +1,5 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import {
   Button,
   Row,
@@ -37,8 +37,8 @@ import { notify } from "../../utils/notifications";
 import { AUCTION_HOUSE_ID } from "../../utils/ids";
 import { CopySpan } from "../../components/CopySpan";
 import { ConnectButton } from "../../components/ConnectButton";
-import { MetaplexModal } from "../../components/MetaplexModal";
 
+const MetaplexModal = lazy(() => import("../../components/MetaplexModal"));
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 

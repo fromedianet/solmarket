@@ -1,6 +1,6 @@
 import React from "react";
 
-export const EmptyView = () => {
+const EmptyView = () => {
   return (
     <div className="empty-container">
       <div className="empty-content">
@@ -13,3 +13,5 @@ export const EmptyView = () => {
     </div>
   );
 };
+
+export default React.memo(EmptyView);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { Layout, Tabs } from "antd";
 import { useSetSidebarState } from "../../contexts";
 import useWindowDimensions from "../../utils/layout";
