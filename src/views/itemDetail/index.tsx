@@ -15,8 +15,8 @@ import { sendTransaction, useConnection, useSocket } from "../../contexts";
 import { showEscrow } from "../../actions/showEscrow";
 import { useMEApis } from "../../hooks/useMEApis";
 import { AUCTION_HOUSE_ID } from "../../utils/ids";
-import { MetaplexModal } from "../../components/MetaplexModal";
 
+const MetaplexModal = lazy(() => import("../../components/MetaplexModal"));
 const EmptyView = lazy(() => import("../../components/EmptyView"));
 const BottomSection = lazy(() => import("./bottomSection"));
 const InfoSection = lazy(() => import("./infoSection"));

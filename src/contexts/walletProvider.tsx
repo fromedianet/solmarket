@@ -16,6 +16,7 @@ import { Button, Collapse } from "antd";
 import React, {
   createContext,
   FC,
+  lazy,
   ReactNode,
   useCallback,
   useContext,
@@ -23,8 +24,8 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { MetaplexModal } from "../components/MetaplexModal";
-import { notify } from "../utils/notifications";
+
+const MetaplexModal = lazy(() => import("../components/MetaplexModal"));
 
 const { Panel } = Collapse;
 

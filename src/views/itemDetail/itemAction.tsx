@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { lazy, useState } from "react";
 import { Button, Row, Col, Form, Spin, Divider } from "antd";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
@@ -7,8 +7,9 @@ import { Offer } from "../../models/offer";
 import { MarketType } from "../../constants";
 import { useNativeAccount } from "../../contexts";
 import { ConnectButton } from "../../components/ConnectButton";
-import { MetaplexModal } from "../../components/MetaplexModal";
 import { formatAmount } from "../../utils/utils";
+
+const MetaplexModal = lazy(() => import("../../components/MetaplexModal"));
 
 const MarketNames = {
   magiceden: "MagicEden",

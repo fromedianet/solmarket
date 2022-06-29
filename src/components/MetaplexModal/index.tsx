@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "antd";
 
-export const MetaplexModal = (props: any) => {
+export default function MetaplexModal(props: any) {
   const { children, bodyStyle, className, ...rest } = props;
 
   return (
@@ -18,4 +18,4 @@ export const MetaplexModal = (props: any) => {
       {children}
     </Modal>
   );
-};
+}

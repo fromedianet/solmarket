@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import {
   Dropdown,
   Menu,
@@ -17,7 +17,8 @@ import { Offer } from "../../../models/offer";
 import { PriceInput } from "../../../components/PriceInput";
 import { useNativeAccount } from "../../../contexts";
 import { formatAmount } from "../../../utils/utils";
-import { MetaplexModal } from "../../../components/MetaplexModal";
+
+const MetaplexModal = lazy(() => import("../../../components/MetaplexModal"));
 
 export const OffersMade = ({
   offers,
