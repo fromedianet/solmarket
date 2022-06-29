@@ -20,7 +20,7 @@ export default function SellView() {
   const [data, setData] = useState({
     myItems: [],
     myListings: [],
-    listings: []
+    listings: [],
   });
 
   useEffect(() => {
@@ -39,8 +39,8 @@ export default function SellView() {
 
   async function loadData(pubkey: string) {
     const res = await getNFTsByWallet(pubkey);
-    const myItems = res.filter(k => k.price === 0);
-    const myListings = res.filter(k => k.price > 0);
+    const myItems = res.filter((k) => k.price === 0);
+    const myListings = res.filter((k) => k.price > 0);
     const listings = await getRecentListings();
 
     const result = {
@@ -56,7 +56,7 @@ export default function SellView() {
       <div className="main-page">
         <div className="container sell-page">
           <h1>Sell your Solana NFT</h1>
-          <NewLineText text={description} style={{ color: "#9ca3af" }}/>
+          <NewLineText text={description} style={{ color: "#9ca3af" }} />
           {!wallet.connected ? (
             <div className="connect-container">
               <p>Connect wallet to see this page</p>
@@ -134,6 +134,12 @@ export default function SellView() {
 
 function NewLineText(props) {
   const { text, style } = props;
-  const newText = text.split('\n').map((str, index) => str.length > 0 ? <p key={index} style={style}>{str}</p> : null);
+  const newText = text.split("\n").map((str, index) =>
+    str.length > 0 ? (
+      <p key={index} style={style}>
+        {str}
+      </p>
+    ) : null
+  );
   return newText;
 }
