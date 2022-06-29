@@ -10,7 +10,7 @@ const EmptyView = lazy(() => import("../../../components/EmptyView"));
 const { Search } = Input;
 const DELIMITER = "|&=&|";
 
-export const Items = (props: {
+export default function Items(props: {
   collection: ExCollection | undefined;
   list: any[];
   loading: boolean;
@@ -33,7 +33,7 @@ export const Items = (props: {
   updateFilters: (p, a, s) => void;
   fetchMore: () => void;
   onRefresh: () => void;
-}) => {
+}) {
   const searchRef = useRef(null);
   const [priceFilter, setPriceFilter] = useState(props.filter.price);
   const [attributeFilter, setAttributeFilter] = useState(
@@ -253,4 +253,4 @@ export const Items = (props: {
       }
     </div>
   );
-};
+}
