@@ -1,9 +1,10 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { ConnectButton, HorizontalGrid } from "../../components";
 import CardLoader from "../../components/CardLoader";
-import NFTCard from "../../components/NFTCard";
 import { useNFTsAPI } from "../../hooks/useNFTsAPI";
+
+const NFTCard = lazy(() => import("../../components/NFTCard"));
 
 const description = `
   NFT stands for Non-Fungible Token. Basically that means that you have a one of a kind token which can be transferred from one wallet to the next with all these transactions recorded on the blockchain.\n

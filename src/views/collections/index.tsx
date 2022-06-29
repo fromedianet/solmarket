@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { Row, Col, Input, Select } from "antd";
-import CollectionCard from "../../components/CollectionCard";
+// import CollectionCard from "../../components/CollectionCard";
 import { useCollectionsAPI } from "../../hooks/useCollectionsAPI";
 import CardLoader from "../../components/CardLoader";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -8,6 +8,8 @@ import { EmptyView } from "../../components/EmptyView";
 import { ExCollection } from "../../models/exCollection";
 import { useMEApis } from "../../hooks/useMEApis";
 import { MarketType } from "../../constants";
+
+const CollectionCard = lazy(() => import("../../components/CollectionCard"));
 
 const { Search } = Input;
 

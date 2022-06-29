@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Collapse, Table } from "antd";
 import { Transaction } from "../../models/exCollection";
 import TimeAgo from "javascript-time-ago";
@@ -9,7 +9,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useConnectionConfig } from "../../contexts";
 import { shortenAddress } from "../../utils/utils";
 import { CopySpan } from "../../components/CopySpan";
-import NFTCard from "../../components/NFTCard";
+
+const NFTCard = lazy(() => import("../../components/NFTCard"));
 
 TimeAgo.setDefaultLocale(en.locale);
 TimeAgo.addLocale(en);

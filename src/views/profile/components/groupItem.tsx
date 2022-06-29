@@ -1,9 +1,10 @@
 import Link from "next/link";
-import React from "react";
+import React, { lazy } from "react";
 import { Tooltip } from "antd";
 import { NFT } from "../../../models/exCollection";
 import { HorizontalGrid } from "../../../components/HorizontalGrid";
-import NFTCard from "../../../components/NFTCard";
+
+const NFTCard = lazy(() => import("../../../components/NFTCard"));
 
 const GroupItem = ({ item }: { item: { collection: any; nfts: NFT[] } }) => {
   return (
