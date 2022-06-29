@@ -20,7 +20,7 @@ import { ExAttribute } from "../../../models/exCollection";
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
-export default function FilterSidebar(props: {
+export const FilterSidebar = (props: {
   attributes: ExAttribute[];
   filter: {
     price: {
@@ -32,7 +32,7 @@ export default function FilterSidebar(props: {
     status: boolean;
   };
   updateFilters: (p, a, s) => void;
-}) {
+}) => {
   const [collapsed, setCollapsed] = useState(false);
   const [attributeFilter, setAttributeFilter] = useState(
     props.filter.attributes
@@ -215,4 +215,4 @@ export default function FilterSidebar(props: {
       )}
     </Sider>
   );
-}
+};

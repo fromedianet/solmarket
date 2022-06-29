@@ -2,13 +2,13 @@ import React, { lazy, useEffect, useState } from "react";
 import { Layout, Tabs } from "antd";
 import { useSetSidebarState } from "../../contexts";
 import useWindowDimensions from "../../utils/layout";
+import { CollectionInfo } from "./components/CollectionInfo";
+import { FilterSidebar } from "./components/FilterSidebar";
+import { Items } from "./components/Items";
+import { Activities } from "./components/Activities";
 import { useCollection } from "../../hooks/useCollection";
 import { MarketType } from "../../constants";
 
-const CollectionInfo = lazy(() => import("./components/CollectionInfo"));
-const FilterSidebar = lazy(() => import("./components/FilterSidebar"));
-const Items = lazy(() => import("./components/Items"));
-const Activities = lazy(() => import("./components/Activities"));
 const { Content } = Layout;
 const { TabPane } = Tabs;
 

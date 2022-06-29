@@ -25,7 +25,9 @@ import { Message, Transaction } from "@solana/web3.js";
 import { OffersMade } from "./components/offersMade";
 import { useInstructionsAPI } from "../../hooks/useInstructionsAPI";
 import { formatAmount, groupBy, shortenAddress } from "../../utils/utils";
+import GroupItem from "./components/groupItem";
 import { useMEApis } from "../../hooks/useMEApis";
+import { AuctionHouseView } from "./components/auctionHouseView";
 import {
   sendTransaction,
   useConnection,
@@ -36,8 +38,6 @@ import { AUCTION_HOUSE_ID } from "../../utils/ids";
 import { CopySpan } from "../../components/CopySpan";
 import { ConnectButton } from "../../components/ConnectButton";
 
-const GroupItem = lazy(() => import("./components/groupItem"));
-const AuctionHouseView = lazy(() => import("./components/auctionHouseView"));
 const MetaplexModal = lazy(() => import("../../components/MetaplexModal"));
 const { TabPane } = Tabs;
 const { TextArea } = Input;

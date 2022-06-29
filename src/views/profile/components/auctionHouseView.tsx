@@ -3,13 +3,13 @@ import { Dropdown, Menu } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { formatAmount } from "../../../utils/utils";
 
-export default function AuctionHouseView({
+export const AuctionHouseView = ({
   auctionHouseObj,
   onWithdrawTreasury,
 }: {
   auctionHouseObj: any;
   onWithdrawTreasury: (a) => void;
-}) {
+}) => {
   const menu = (
     <Menu
       items={[
@@ -122,4 +122,4 @@ export default function AuctionHouseView({
       )}
     </div>
   );
-}
+};

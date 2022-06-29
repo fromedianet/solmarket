@@ -13,10 +13,10 @@ TimeAgo.addLocale(en);
 // Create formatter (English).
 const timeAgo = new TimeAgo("en-US");
 
-export default function Activities(props: {
+export const Activities = (props: {
   transactions: Transaction[];
   symbol: string;
-}) {
+}) => {
   const endpoint = useConnectionConfig();
   const network = endpoint.endpoint.name;
 
@@ -116,4 +116,4 @@ export default function Activities(props: {
       pagination={{ position: ["bottomLeft"], pageSize: 10 }}
     />
   );
-}
+};

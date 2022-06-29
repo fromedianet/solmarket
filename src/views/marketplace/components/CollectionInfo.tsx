@@ -4,10 +4,10 @@ import ReadMore from "../../../components/ReadMore";
 import { ExCollection, ExCollectionStats } from "../../../models/exCollection";
 import { formatAmount } from "../../../utils/utils";
 
-export default function CollectionInfo(props: {
+export const CollectionInfo = (props: {
   collection: ExCollection | undefined;
   stats: ExCollectionStats;
-}) {
+}) => {
   return (
     <div className="info-container">
       {props.collection && props.collection.image ? (
@@ -120,4 +120,4 @@ export default function CollectionInfo(props: {
       </div>
     </div>
   );
-}
+};
