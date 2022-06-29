@@ -1,11 +1,11 @@
 import React, { lazy, useEffect, useRef, useState } from "react";
 import { Row, Col, Select, Tag, Input, Spin } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { EmptyView } from "../../../components/EmptyView";
 import { ExCollection } from "../../../models/exCollection";
 import { MarketType } from "../../../constants";
 
 const NFTCard = lazy(() => import("../../../components/NFTCard"));
+const EmptyView = lazy(() => import("../../../components/EmptyView"));
 
 const { Search } = Input;
 const DELIMITER = "|&=&|";
