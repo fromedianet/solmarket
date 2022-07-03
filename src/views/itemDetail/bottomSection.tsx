@@ -201,7 +201,6 @@ export default function BottomSection(props: {
                 itemId={index.toString()}
                 item={item}
                 collection={item.collection}
-                className="w-250"
               />
             ))}
           />
